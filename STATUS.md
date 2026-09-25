@@ -66,3 +66,11 @@ Run the GNIS coordinate through NOAA NGS NCAT using the NAD83 realization suppor
 
 ### Next smallest action
 Science: unchanged — M1-06 NCAT/NADCON transform (see above). Automation: create the `AGENT_ENABLED` repo variable (set to `false` until workflows exist), then implement and test `scripts/score.py` against the §9 fixtures before any workflow is enabled.
+
+## Tier 0 scorer — 2026-09-24
+- Added `scripts/score.py` (GOVERNANCE.md §3 rule, §4 output shape; stdlib only, no network/model calls) and `scripts/test_score.py` (stdlib unittest, pytest-compatible).
+- Command run: `python3 scripts/test_score.py -v` → 8 tests, all OK (5 §9 fixtures + exact-50, exact-75, upvote-cap edges). pytest is not installed; not added (dependency changes are owner decisions).
+- Note: GOVERNANCE.md labels data availability "0–30 pts" but the rule awards at most 20, so the real maximum score is 90. Implemented as written; owner to decide whether to amend the label or the rule.
+
+### Next smallest action
+Owner: create repo variable `AGENT_ENABLED=false` (GitHub → Settings → Secrets and variables → Actions → Variables). Then `scripts/validate.py` + `scripts/test_validate.py` against the §9 validation fixtures. Science: M1-06 unchanged.
