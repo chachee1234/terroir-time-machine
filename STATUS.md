@@ -110,3 +110,12 @@ Owner: decide whether to add `jsonschema` as a validation dependency. Next Tier 
 
 ### Next smallest action
 Owner: confirm or change the region folder layout. Tier 0 scripts named in GOVERNANCE.md still missing: `scripts/digest.py`. Then the GitHub Actions workflows (all gated on `AGENT_ENABLED`, currently false). Science: M1-06 unchanged.
+
+## Tier 0 digest — 2026-09-24
+- Owner confirmed the region layout `regions/<id>/SCENES.json` used by `scripts/deploy.py`.
+- Added `scripts/digest.py` and `scripts/test_digest.py` (stdlib only, no network). Reads `gh issue list --json number,title,state,labels,closedAt,comments` on stdin; reports issues closed and regions generated in the last 7 days, top 5 `backlog` issues by latest posted "Score: N/100", open `type:audit-flag` issues, open `generation-failed` issues as alerts, and `--tests`/`--alert` inputs. Avg confidence and Pages uptime are printed as "not measured" (no deterministic source yet).
+- Commands run: `.venv/bin/python scripts/test_{score,validate,deploy,digest}.py` → all OK (10 + 13 + 7 + 5 tests).
+- GOVERNANCE.md inconsistency noted, not changed: §3 table says digest assembly Sunday 4 PM UTC; §5 Workflow E and §13 say 17:00 (after the 16:00 audit). Workflow will use 17:00 unless the owner says otherwise.
+
+### Next smallest action
+All Tier 0 scripts named in GOVERNANCE.md exist. Next: GitHub Actions workflows (issue intake, Monday generation, Sunday audit, Sunday digest), each gated on `AGENT_ENABLED` (currently false) — needs owner review before merge because workflow YAML is a security-sensitive change. Science: M1-06 unchanged.
