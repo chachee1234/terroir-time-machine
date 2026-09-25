@@ -83,3 +83,12 @@ Owner: create repo variable `AGENT_ENABLED=false` (GitHub → Settings → Secre
 
 ### Next smallest action
 `scripts/validate.py` + `scripts/test_validate.py` against the §9 validation fixtures. Science: M1-06 unchanged.
+
+## Tier 0 validator — 2026-09-24
+- Added `scripts/validate.py` and `scripts/test_validate.py` (stdlib only). Validates `SCENES.json` (the actual data contract; GOVERNANCE.md §9's "TIMELINE.json" refers to it) with the SCENES_README.md semantic checks: unique IDs; older_ma ≥ younger_ma; scenes and keyframes oldest→youngest; keyframes inside scene interval; claim/asset/source/model/anchor references resolve; asset files exist and match bytes/SHA-256; source IDs missing from SOURCES.md → warning.
+- Commands run: `python3 scripts/test_validate.py -v` → 11 tests OK (§9 fixtures: repo manifest passes, missing ledger entry warns, 750 Ma in 1000–500 passes, 100 Ma in 50–40 fails). `python3 scripts/validate.py` → PASS, 0 errors, 1 warning (jsonschema not installed, full schema check skipped). `python3 scripts/test_score.py` → OK.
+- Not implemented: release-mode gates (review status, rights, nonempty manifest), claim time/scope coverage of frames, visual-class/label semantics. These remain planned M2 checks, not passed.
+- Full JSON Schema validation needs the `jsonschema` package; not installed (dependency changes are owner decisions).
+
+### Next smallest action
+Owner: decide whether to add `jsonschema` as a validation dependency. Next Tier 0 piece: `scripts/deploy.py` with a `--dry-run` test (§9). Science: M1-06 unchanged.
