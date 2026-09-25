@@ -1,0 +1,82 @@
+# Workflow C (GOVERNANCE.md §5): Monday generation and deploy. Tier 0 only, no model calls.
+# Commits only regions/<id> and docs/regions/<id> via scripts/deploy.py (§3 commit scope).
+name: Monday generation
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: generation
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    if: vars.AGENT_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Install validation dependency
+        run: python3 -m pip install --quiet -r requirements.txt
+
+      - name: Generate and deploy approved regions
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PAGES_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: |
+          if [ ! -f src/pipeline/generate_region.py ]; then
+            echo "::notice::src/pipeline/generate_region.py not implemented yet; nothing to generate."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          gh issue list --repo "$REPO" --label approved --state open --json number --jq '.[].number' \
+            > "$RUNNER_TEMP/approved.txt"
+          if [ ! -s "$RUNNER_TEMP/approved.txt" ]; then
+            echo "No approved regions."
+            exit 0
+          fi
+
+          fail() {
+            printf '❌ %s\n\n```\n%s\n```\n' "$2" "$3" > "$RUNNER_TEMP/fail.md"
+            gh issue comment "$1" --repo "$REPO" --body-file "$RUNNER_TEMP/fail.md"
+            gh issue edit "$1" --repo "$REPO" --add-label generation-failed
+            git reset --quiet --hard
+            git clean -fdq -- regions docs
+          }
+
+          while read -r n; do
+            id="issue-$n"
+            if [ ! -f "data/$id.json" ]; then
+              fail "$n" "Data file not found." "data/$id.json"; continue
+            fi
+            if ! out=$(python3 src/pipeline/generate_region.py "data/$id.json" "regions/$id" 2>&1); then
+              fail "$n" "Generation failed." "$(echo "$out" | tail -20)"; continue
+            fi
+            score=$(gh issue view "$n" --repo "$REPO" --json comments | python3 -c '
+          import json, sys
+          sys.path.insert(0, "scripts")
+          from digest import latest_score
+          s = latest_score(json.load(sys.stdin))
+          print("" if s is None else s)')
+            if [ -z "$score" ]; then
+              fail "$n" "No posted score found on the issue." "expected a 'Score: N/100' comment"; continue
+            fi
+            if ! out=$(python3 scripts/deploy.py "$id" "$score" 2>&1); then
+              fail "$n" "Validation or deploy failed." "$(echo "$out" | tail -20)"; continue
+            fi
+            gh issue comment "$n" --repo "$REPO" --body "✅ Generated & deployed! Live at: $PAGES_URL/regions/$id/"
+            gh issue edit "$n" --repo "$REPO" --remove-label approved --add-label generated
+            gh issue close "$n" --repo "$REPO"
+          done < "$RUNNER_TEMP/approved.txt"
+          echo "Generation run complete."

@@ -119,3 +119,15 @@ Owner: confirm or change the region folder layout. Tier 0 scripts named in GOVER
 
 ### Next smallest action
 All Tier 0 scripts named in GOVERNANCE.md exist. Next: GitHub Actions workflows (issue intake, Monday generation, Sunday audit, Sunday digest), each gated on `AGENT_ENABLED` (currently false) — needs owner review before merge because workflow YAML is a security-sensitive change. Science: M1-06 unchanged.
+
+## Automation workflows (branch `automation-workflows`, for owner review) — 2026-09-24
+- Added `.github/workflows/region-intake.yml` (Workflows A/B), `monday-generation.yml` (C), `sunday-audit.yml` (D), `sunday-digest.yml` (E). Every job is gated at job level on `vars.AGENT_ENABLED == 'true'` (currently false). Top-level `permissions: {}`; each job requests only what it needs; model jobs are read-only and separate from the jobs that write issues. Actions pinned to commit SHAs (claude-code-action v1 `9171db3`, checkout v7 `3d3c42e`).
+- Model jobs: Haiku `claude-haiku-4-5-20251001` (max 3 turns) and Opus `claude-opus-5-5` (max 3 turns), auth via `CLAUDE_CODE_OAUTH_TOKEN` secret, tools limited to Read, output forced to a JSON schema (`--json-schema` → `structured_output`).
+- Added helpers: `scripts/intake.py` (+ `test_intake.py`, 7 tests), `scripts/ensure_labels.sh`, `scripts/summarize_tests.py`.
+- Commands run: `.venv/bin/python -m unittest discover -s scripts -p 'test_*.py'` → 42 tests OK. Workflow lint (scratch venv, PyYAML): all 4 files parse; `bash -n` OK on every run step; embedded Python compiles; both JSON schemas pass `Draft202012Validator.check_schema`. Inline audit formatter, comment classifier and test summarizer exercised with sample input.
+- NOT run on GitHub: no workflow has executed. `CLAUDE_CODE_OAUTH_TOKEN` secret not yet created. `src/pipeline/generate_region.py` does not exist (Monday job exits with a notice).
+- Decisions made, for owner review: effort comes from a developer label `effort:<hours>h` (absent → scored as high effort, cannot auto-approve); upvotes = 👍 reactions on the issue; model runs only for maintainer-applied `region-request` labels and owner/member/collaborator comments (quota protection); digest posted as an issue labeled `digest` (GOVERNANCE allows discussion or email); region ID = `issue-<number>`, data file `data/issue-<number>.json`, generator called as `generate_region.py <data file> <output dir>`.
+- GOVERNANCE.md issues found, not changed: §7 kill-switch snippet uses a step-level `exit 0`, which does not stop later steps — workflows use a job-level `if` instead. Needs-data 7-day auto-close (§3 table) not implemented.
+
+### Next smallest action
+Owner: review and merge the `automation-workflows` pull request; add repo secret `CLAUDE_CODE_OAUTH_TOKEN` (`claude setup-token`). Keep `AGENT_ENABLED=false` until then; first live test via workflow_dispatch of the digest (no model use). Science: M1-06 unchanged.
