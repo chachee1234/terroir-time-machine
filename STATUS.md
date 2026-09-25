@@ -92,3 +92,11 @@ Owner: create repo variable `AGENT_ENABLED=false` (GitHub → Settings → Secre
 
 ### Next smallest action
 Owner: decide whether to add `jsonschema` as a validation dependency. Next Tier 0 piece: `scripts/deploy.py` with a `--dry-run` test (§9). Science: M1-06 unchanged.
+
+## Validation dependency — 2026-09-24
+- Owner approved adding `jsonschema`. Added `requirements.txt` (`jsonschema==4.26.0`), a local `.venv/` (git-ignored) created with `python3 -m venv .venv && .venv/bin/pip install jsonschema`.
+- Added 2 schema tests to `scripts/test_validate.py` (skip when jsonschema is absent).
+- Commands run: `.venv/bin/python scripts/validate.py` → PASS, 0 errors, 0 warnings. `.venv/bin/python scripts/test_validate.py` → 13 tests OK. `python3 scripts/test_validate.py` (system Python, no jsonschema) → OK, 2 skipped.
+
+### Next smallest action
+`scripts/deploy.py` with a `--dry-run` test (GOVERNANCE.md §9). Science: M1-06 unchanged.

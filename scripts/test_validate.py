@@ -11,7 +11,7 @@ import tempfile
 import unittest
 
 sys.path.insert(0, os.path.dirname(__file__))
-from validate import ROOT, ledger_ids, validate  # noqa: E402
+from validate import ROOT, ledger_ids, schema_errors, validate  # noqa: E402
 
 
 def scene(scene_id, older, younger, keyframe_ages=(), asset_ids=()):
@@ -92,6 +92,21 @@ class References(unittest.TestCase):
 
             missing = dict(good, path="assets/none.bin")
             self.assertIn("file not found", validate(manifest(assets=[missing]), root)[0][0])
+
+
+class Schema(unittest.TestCase):
+    def setUp(self):
+        self.schema_path = os.path.join(ROOT, "SCENES.schema.json")
+        if schema_errors({}, self.schema_path) is None:
+            self.skipTest("jsonschema not installed")
+
+    def test_repository_manifest_matches_schema(self):
+        with open(os.path.join(ROOT, "SCENES.json")) as fh:
+            self.assertEqual(schema_errors(json.load(fh), self.schema_path), [])
+
+    def test_unknown_field_and_bad_mode_rejected(self):
+        errors = schema_errors(dict(manifest(), mode="draft", bogus=1), self.schema_path)
+        self.assertEqual(len(errors), 2)
 
 
 class Ledger(unittest.TestCase):
