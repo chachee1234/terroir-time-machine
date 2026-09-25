@@ -18,7 +18,7 @@ class GovernanceFixtures(unittest.TestCase):
         self.assertEqual(result["recommendation"], recommendation)
 
     def test_linked_source_low_effort(self):
-        self.check(score([BACON_DOI], 1.5, 0), 70, "backlog")
+        self.check(score([BACON_DOI], 1.5, 0), 80, "auto-approve")
 
     def test_no_sources_high_effort(self):
         self.check(score([], 10, 0), 0, "needs-data")
@@ -26,11 +26,14 @@ class GovernanceFixtures(unittest.TestCase):
     def test_cited_only_mid_effort(self):
         self.check(score([ATWATER_CITED], 4, 3), 41, "needs-data")
 
+    def test_linked_source_mid_effort(self):
+        self.check(score([ATWATER_DOI], 4, 3), 61, "backlog")
+
     def test_backlog_boundary(self):
-        self.check(score([ATWATER_DOI], 4, 3), 51, "backlog")
+        self.check(score([ATWATER_DOI], 10, 10), 50, "backlog")
 
     def test_auto_approve_boundary(self):
-        self.check(score([BACON_DOI], 1.5, 3), 76, "auto-approve")
+        self.check(score([ATWATER_DOI], 4, 10), 75, "auto-approve")
 
 
 class ThresholdEdges(unittest.TestCase):
@@ -48,6 +51,9 @@ class ThresholdEdges(unittest.TestCase):
 
     def test_upvotes_capped_at_20(self):
         self.assertEqual(score([], 10, 50)["feasibility_score"], 20)
+
+    def test_maximum_is_100(self):
+        self.assertEqual(score([BACON_DOI], 1, 10)["feasibility_score"], 100)
 
 
 if __name__ == "__main__":

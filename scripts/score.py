@@ -28,10 +28,10 @@ def score(sources, effort_hours, upvotes=0, data_completeness=None):
     reasons = []
     missing = []
 
-    # Data availability (0-20 as written in the rule)
+    # Data availability (0-30)
     if sources and all(_has_link(s) for s in sources):
-        points += 20
-        reasons.append("data: all sources linked (+20)")
+        points += 30
+        reasons.append("data: all sources linked (+30)")
     elif sources:
         points += 10
         reasons.append("data: sources cited, not all linked (+10)")

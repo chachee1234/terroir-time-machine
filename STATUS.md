@@ -74,3 +74,12 @@ Science: unchanged — M1-06 NCAT/NADCON transform (see above). Automation: crea
 
 ### Next smallest action
 Owner: create repo variable `AGENT_ENABLED=false` (GitHub → Settings → Secrets and variables → Actions → Variables). Then `scripts/validate.py` + `scripts/test_validate.py` against the §9 validation fixtures. Science: M1-06 unchanged.
+
+## Governance v1.1 — 2026-09-24
+- Owner confirmed repo variable `AGENT_ENABLED=false` is created.
+- Owner decision: all-linked sources award raised 20 → 30 (maximum score now 100). Updated GOVERNANCE.md §3 rule, §9 fixtures (80, 0, 41, 61, boundaries 50 and 75), version header; `scripts/score.py` and `scripts/test_score.py` updated to match.
+- Command run: `python3 scripts/test_score.py -v` → 10 tests, all OK.
+- Tagged `governance-v1.1` per GOVERNANCE.md §12.
+
+### Next smallest action
+`scripts/validate.py` + `scripts/test_validate.py` against the §9 validation fixtures. Science: M1-06 unchanged.

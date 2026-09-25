@@ -2,8 +2,9 @@
 
 **Terroir Time Machine — Autonomous Operations Policy**
 
+Version: 1.1  
 Effective: September 20, 2026  
-Last revised: [auto-updated by system]  
+Last revised: September 24, 2026 (v1.1: all-linked sources award raised from 20 to 30 so the maximum score is 100)  
 Authority: Developer + Claude Agent (within defined rules)
 
 ---
@@ -67,7 +68,7 @@ function score(location, sources, effort_hours, upvotes, data_completeness):
   
   # Data availability (0–30 pts)
   if sources.length > 0 and sources all have DOI/URL:
-    points += 20
+    points += 30
   elif sources.length > 0 and some have citations:
     points += 10
   elif data_completeness == "partial":
@@ -514,11 +515,12 @@ git push
 python -m pytest scripts/test_score.py
 
 # Fixtures (expected values follow the §3 scoring rule exactly):
-# - score(sources=["Bacon2002" w/ DOI], effort=1.5, upvotes=0) → 70 (20+30+0+20) → backlog
+# - score(sources=["Bacon2002" w/ DOI], effort=1.5, upvotes=0) → 80 (30+30+0+20) → auto-approve
 # - score(sources=[], effort=10, upvotes=0, completeness="none") → 0 (0+0+0+0) → needs-data
 # - score(sources=["Atwater1998" citation only, no DOI], effort=4, upvotes=3) → 41 (10+15+6+10) → needs-data
-# - score(sources=["Atwater1998" w/ DOI], effort=4, upvotes=3) → 51 (20+15+6+10) → backlog
-# - score(sources=["Bacon2002" w/ DOI], effort=1.5, upvotes=3) → 76 (20+30+6+20) → auto-approve
+# - score(sources=["Atwater1998" w/ DOI], effort=4, upvotes=3) → 61 (30+15+6+10) → backlog
+# - score(sources=["Atwater1998" w/ DOI], effort=10, upvotes=10) → 50 (30+0+20+0) → backlog (boundary)
+# - score(sources=["Atwater1998" w/ DOI], effort=4, upvotes=10) → 75 (30+15+20+10) → auto-approve (boundary)
 
 # Test validate.py
 python -m pytest scripts/test_validate.py
