@@ -142,3 +142,14 @@ Owner: review and merge the `automation-workflows` pull request; add repo secret
 
 ### Next smallest action
 Owner: review/merge the `fix-intake-schema` PR, then re-trigger issue #3 (remove and re-add `region-request`). Expected: Score 70/100 → backlog. Science: M1-06 unchanged.
+
+## Intake repair 2 of 2 (branch `fix-structured-output-tool`) — 2026-09-25
+- PR #4 merged (`588158f`). Re-triggered intake on issue #3: run 36107308738 failed with the same annotation ("--json-schema was provided but Claude did not return structured_output. Result subtype: success").
+- Correction: the repair-1 diagnosis was wrong. The unsupported-keyword list came from the raw Claude API structured-outputs page; claude-code-action's own example (`examples/test-failure-analysis.yml` at `9171db3`) uses `minimum`/`maximum`. The repair-1 schema and Tier 0 range checks are still valid and kept.
+- New diagnosis (evidence, not yet confirmed by a run): structured output is returned through Claude Code's built-in `StructuredOutput` tool (tool name confirmed in the Claude Code 2.1.282 binary). Both workflows set `--allowedTools Read`; the official example sets no allowlist. Fix: `--allowedTools Read,StructuredOutput` in intake and audit; intake `--max-turns` 3 → 5 so schema-validation retries fit (audit stays at GOVERNANCE.md's 3).
+- `scripts/test_workflows.py` replaced: now checks every `--json-schema` step allows `StructuredOutput`, models match GOVERNANCE.md, no write/shell/web tools. Confirmed it fails on the pre-fix workflows (both files) and passes after.
+- Commands run: `.venv/bin/python -m unittest discover -s scripts -p 'test_*.py'` → 49 tests OK.
+- AGENTS.md limit: this is the second repair. If the next intake run still has no structured_output, stop and hold a blocked checkpoint for owner direction; do not attempt a third blind fix.
+
+### Next smallest action
+Owner: merge the `fix-structured-output-tool` PR, re-trigger issue #3. Expected: "🟡 Score: 70/100. Backlog." and label `backlog`. Science: M1-06 unchanged.

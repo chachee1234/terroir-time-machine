@@ -1,61 +1,60 @@
-"""Checks the --json-schema values in .github/workflows against structured-output limits.
+"""Checks the Claude steps in .github/workflows.
 
-Structured outputs reject numeric and string-length constraints and type arrays, and
-require additionalProperties: false on every object. An unsupported schema makes the
-model finish without structured_output, which fails the intake and audit jobs.
-Runs under pytest or `python3 scripts/test_workflows.py`.
+Structured output is returned through Claude Code's built-in `StructuredOutput`
+tool. A step that passes --json-schema together with an --allowedTools list that
+omits StructuredOutput finishes without structured_output (seen in intake runs
+36106437203 and 36107308738). Runs under pytest or `python3 scripts/test_workflows.py`.
 """
 
 import glob
 import json
 import os
 import re
+import shlex
 import unittest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SCHEMA_ARG = re.compile(r"--json-schema '(.*?)'", re.S)
-UNSUPPORTED = {"minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf",
-               "minLength", "maxLength", "pattern"}
+CLAUDE_ARGS = re.compile(r"claude_args: >-\n((?:\s{12}.*\n?)+)")
 
 
-def workflow_schemas():
+def claude_steps():
+    """Yield (workflow file, parsed claude_args tokens) for each Claude step."""
     for path in sorted(glob.glob(os.path.join(ROOT, ".github", "workflows", "*.yml"))):
         with open(path, encoding="utf-8") as fh:
-            for match in SCHEMA_ARG.finditer(fh.read()):
-                yield os.path.basename(path), json.loads(match.group(1))
+            for match in CLAUDE_ARGS.finditer(fh.read()):
+                folded = " ".join(line.strip() for line in match.group(1).splitlines())
+                yield os.path.basename(path), shlex.split(folded)
 
 
-def problems(node, where="$"):
-    found = []
-    if isinstance(node, dict):
-        for key in UNSUPPORTED & node.keys():
-            found.append(f"{where}: unsupported keyword '{key}'")
-        if isinstance(node.get("type"), list):
-            found.append(f"{where}: type array {node['type']}; use anyOf")
-        if node.get("type") == "object" and node.get("additionalProperties") is not False:
-            found.append(f"{where}: object without additionalProperties: false")
-        for key, value in node.items():
-            found.extend(problems(value, f"{where}.{key}"))
-    elif isinstance(node, list):
-        for i, value in enumerate(node):
-            found.extend(problems(value, f"{where}[{i}]"))
-    return found
+def flag(tokens, name):
+    return tokens[tokens.index(name) + 1] if name in tokens else None
 
 
-class WorkflowSchemas(unittest.TestCase):
-    def test_schemas_found(self):
-        self.assertEqual(sorted(name for name, _ in workflow_schemas()),
-                         ["region-intake.yml", "sunday-audit.yml"])
+class ClaudeSteps(unittest.TestCase):
+    def test_steps_found(self):
+        self.assertEqual(sorted(name for name, _ in claude_steps()), ["region-intake.yml", "sunday-audit.yml"])
 
-    def test_schemas_use_supported_features_only(self):
-        for name, schema in workflow_schemas():
+    def test_structured_output_tool_allowed(self):
+        for name, tokens in claude_steps():
             with self.subTest(workflow=name):
-                self.assertEqual(problems(schema), [])
+                self.assertIsNotNone(flag(tokens, "--json-schema"))
+                self.assertIn("StructuredOutput", flag(tokens, "--allowedTools").split(","))
 
-    def test_checker_catches_old_intake_schema(self):
-        old = {"type": "object", "properties": {"lat": {"type": ["number", "null"], "minimum": -90},
-                                                "src": {"type": "object"}}}
-        self.assertEqual(len(problems(old)), 4)
+    def test_schemas_are_json(self):
+        for name, tokens in claude_steps():
+            with self.subTest(workflow=name):
+                self.assertEqual(json.loads(flag(tokens, "--json-schema"))["type"], "object")
+
+    def test_models_match_governance(self):
+        models = {name: flag(tokens, "--model") for name, tokens in claude_steps()}
+        self.assertEqual(models, {"region-intake.yml": "claude-haiku-4-5-20251001",
+                                  "sunday-audit.yml": "claude-opus-5-5"})
+
+    def test_no_write_or_shell_tools(self):
+        for name, tokens in claude_steps():
+            with self.subTest(workflow=name):
+                allowed = set(flag(tokens, "--allowedTools").split(","))
+                self.assertEqual(allowed & {"Bash", "Edit", "Write", "WebFetch", "WebSearch"}, set())
 
 
 if __name__ == "__main__":

@@ -62,8 +62,8 @@ jobs:
             or "none" if there are no comments.
           claude_args: >-
             --model claude-haiku-4-5-20251001
-            --max-turns 3
-            --allowedTools Read
+            --max-turns 5
+            --allowedTools Read,StructuredOutput
             --disallowedTools Bash,Edit,Write,NotebookEdit,WebFetch,WebSearch
             --json-schema '{"type":"object","additionalProperties":false,
             "required":["location_name","latitude","longitude","gnis_id","cited_sources","data_types","claimed_ages","extraction_confidence","comment_class"],
