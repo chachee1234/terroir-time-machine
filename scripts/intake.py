@@ -36,8 +36,21 @@ def effort_from_labels(labels):
     return None
 
 
+def _number(value):
+    return value if isinstance(value, (int, float)) and not isinstance(value, bool) else None
+
+
+def _in_range(value, low, high):
+    value = _number(value)
+    return value if value is not None and low <= value <= high else None
+
+
 def parse_extraction(raw):
-    """Return the extraction dict, or None if it is missing or malformed."""
+    """Return the extraction dict with GOVERNANCE.md §3 field rules applied, or None if unusable.
+
+    Range rules live here rather than in the model's JSON schema, because
+    structured outputs do not support numeric constraints.
+    """
     try:
         data = json.loads(raw) if raw else None
     except json.JSONDecodeError:
@@ -46,6 +59,22 @@ def parse_extraction(raw):
         return None
     if not data.get("location_name") or not isinstance(data.get("cited_sources"), list):
         return None
+    confidence = _in_range(data.get("extraction_confidence"), 0, 1)
+    if confidence is None:
+        return None
+
+    data["extraction_confidence"] = confidence
+    data["latitude"] = _in_range(data.get("latitude"), -90, 90)
+    data["longitude"] = _in_range(data.get("longitude"), -180, 180)
+    gnis = data.get("gnis_id")
+    data["gnis_id"] = gnis if isinstance(gnis, int) and not isinstance(gnis, bool) and gnis > 0 else None
+    ages = []
+    for age in data.get("claimed_ages") or []:
+        age_ma = _number(age.get("age_ma")) if isinstance(age, dict) else None
+        uncertainty = _number(age.get("uncertainty_ma")) if isinstance(age, dict) else None
+        if age_ma is not None and age_ma > 0 and (uncertainty is None or 0 <= uncertainty < age_ma):
+            ages.append(age)
+    data["claimed_ages"] = ages
     return data
 
 

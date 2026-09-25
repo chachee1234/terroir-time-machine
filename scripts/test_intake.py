@@ -55,6 +55,25 @@ class IntakeTests(unittest.TestCase):
         self.assertEqual(result["label"], "approved")
         self.assertEqual(result["remove"], ["backlog"])
 
+    def test_range_rules_applied_in_tier0(self):
+        from intake import parse_extraction
+        raw = json.loads(extraction([LINKED], ages=[
+            {"age_ma": 0.0077, "uncertainty_ma": 0.0001, "citation": "ok"},
+            {"age_ma": -5, "uncertainty_ma": None, "citation": "negative"},
+            {"age_ma": 2, "uncertainty_ma": 3, "citation": "uncertainty >= age"},
+        ]))
+        raw.update(latitude=123.0, longitude=-122.1, gnis_id=0)
+        data = parse_extraction(json.dumps(raw))
+        self.assertIsNone(data["latitude"])
+        self.assertEqual(data["longitude"], -122.1)
+        self.assertIsNone(data["gnis_id"])
+        self.assertEqual([a["citation"] for a in data["claimed_ages"]], ["ok"])
+
+    def test_confidence_out_of_range_is_failed_extraction(self):
+        raw = json.loads(extraction([LINKED]))
+        raw["extraction_confidence"] = 1.7
+        self.assertEqual(decide(json.dumps(raw), 0, [])["label"], "extraction-failed")
+
     def test_comment_score_is_digest_parseable(self):
         sys.path.insert(0, os.path.dirname(__file__))
         from digest import latest_score

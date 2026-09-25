@@ -132,3 +132,13 @@ All Tier 0 scripts named in GOVERNANCE.md exist. Next: GitHub Actions workflows 
 ### Next smallest action
 Owner: review and merge the `automation-workflows` pull request; add repo secret `CLAUDE_CODE_OAUTH_TOKEN` (`claude setup-token`). Keep `AGENT_ENABLED=false` until then; first live test via workflow_dispatch of the digest (no model use). Science: M1-06 unchanged.
 - GOVERNANCE.md v1.2 (owner-approved, on this branch): `claude setup-token` tokens are valid 1 year (as printed by Claude Code 2.1.282); rotation reminder at 11 months; rotate immediately on exposure. Tag `governance-v1.2` to be applied after merge to main.
+
+## First live runs + intake schema fix (branch `fix-intake-schema`) — 2026-09-25
+- Owner enabled automation (`AGENT_ENABLED=true`, `CLAUDE_CODE_OAUTH_TOKEN` secret added). PR #1 merged (`eecaa43`); tag `governance-v1.2` pushed on `7c80f4d`.
+- Sunday digest via workflow_dispatch: run 36105325034 success; issue #2 posted, tests 42/42 on the runner.
+- Region intake on issue #3 (Crater Lake test): run 36106437203 failed. Auth worked; Haiku finished with result subtype success but no `structured_output` (annotation: "--json-schema was provided but Claude did not return structured_output"). Cause: extraction schema used features structured outputs do not support (numeric min/max, type arrays, nested objects without `additionalProperties: false`). Issue left unchanged, as designed.
+- Fix: schema rewritten with supported features only (anyOf for nullables, strict nested objects); range rules moved to Tier 0 `scripts/intake.py` (lat/lon out of range → null, confidence outside 0–1 → extraction-failed, age ≤ 0 or uncertainty ≥ age dropped, gnis_id ≤ 0 → null); failure message no longer blames only the token. Added `scripts/test_workflows.py` to reject unsupported schema features in any workflow.
+- Commands run: `.venv/bin/python -m unittest discover -s scripts -p 'test_*.py'` → 47 tests OK; region-intake.yml parses (PyYAML).
+
+### Next smallest action
+Owner: review/merge the `fix-intake-schema` PR, then re-trigger issue #3 (remove and re-add `region-request`). Expected: Score 70/100 → backlog. Science: M1-06 unchanged.
