@@ -2,9 +2,9 @@
 
 **Terroir Time Machine — Autonomous Operations Policy**
 
-Version: 1.1  
+Version: 1.2  
 Effective: September 20, 2026  
-Last revised: September 24, 2026 (v1.1: all-linked sources award raised from 20 to 30 so the maximum score is 100)  
+Last revised: September 24, 2026 (v1.2: OAuth token lifetime is 1 year, rotate yearly; v1.1: all-linked sources award raised from 20 to 30 so the maximum score is 100)  
 Authority: Developer + Claude Agent (within defined rules)
 
 ---
@@ -36,8 +36,9 @@ TTM is an autonomous open-source application for geological history exploration.
 - Separate from API billing; no "overage fees"
 
 **Token rotation:**
-- OAuth tokens expire (duration TBD by Anthropic, typically 90 days)
-- Calendar reminder: `Rotate CLAUDE_CODE_OAUTH_TOKEN` every 60 days
+- Tokens from `claude setup-token` are valid for 1 year (stated by the CLI at creation)
+- Calendar reminder: `Rotate CLAUDE_CODE_OAUTH_TOKEN` 11 months after creation (one month before expiry)
+- Rotate immediately if a token is ever exposed (pasted in chat, logs, screenshots)
 - Test token validity in Phase 2 before adding Haiku to critical path
 
 ---
@@ -441,7 +442,7 @@ if turns >= 3:
 
 ### **Token Expiry**
 
-OAuth token from `claude setup-token` expires (duration TBD, assume 90 days).
+OAuth token from `claude setup-token` expires 1 year after creation.
 
 If token invalid:
 ```
@@ -451,7 +452,7 @@ GitHub Actions: claude-code-action returns "auth failed"
 → Developer runs: claude setup-token, updates secret
 ```
 
-**Reminder:** Calendar task "Rotate CLAUDE_CODE_OAUTH_TOKEN" every 60 days.
+**Reminder:** Calendar task "Rotate CLAUDE_CODE_OAUTH_TOKEN" 11 months after each rotation.
 
 ### **Rollback Always Available**
 
