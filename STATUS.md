@@ -100,3 +100,13 @@ Owner: decide whether to add `jsonschema` as a validation dependency. Next Tier 
 
 ### Next smallest action
 `scripts/deploy.py` with a `--dry-run` test (GOVERNANCE.md §9). Science: M1-06 unchanged.
+
+## Tier 0 deploy step — 2026-09-24
+- Added `scripts/deploy.py` (Workflow C deploy; stdlib + optional jsonschema) and `scripts/test_deploy.py`.
+- Behavior: `deploy.py <region_id> <score> [--dry-run] [--no-push]`. Checks region ID format, score 0–100, `regions/<id>/SCENES.json` exists and passes validate + schema; refuses if any working-tree change is outside `regions/`/`docs/` (GOVERNANCE.md §3 commit scope). Then copies to `docs/regions/<id>`, commits only those paths ("Auto-generated: <id>, Score: <n>"), tags `auto-YYYYMMDD-HHMMSS-<id>`, pushes main and the tag. `--dry-run` performs only the read-only checks.
+- Commands run: `.venv/bin/python scripts/test_deploy.py --dry-run -v` → 7 tests OK (all in throwaway temp git repos; no push). Score/validate suites re-run OK under `.venv` and system Python. `python3 scripts/deploy.py nope 80 --dry-run` → correctly refused (missing region).
+- Assumption to confirm: a generated region is a folder `regions/<id>/` containing its own `SCENES.json`; asset paths are resolved from the repo root. The generator (`src/pipeline/generate_region.py`) does not exist yet, so this layout is provisional.
+- Not done: never run against this repo for real; no workflow calls it yet.
+
+### Next smallest action
+Owner: confirm or change the region folder layout. Tier 0 scripts named in GOVERNANCE.md still missing: `scripts/digest.py`. Then the GitHub Actions workflows (all gated on `AGENT_ENABLED`, currently false). Science: M1-06 unchanged.
