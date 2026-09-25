@@ -1,0 +1,844 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:terroir-time-machine:scenes:1.0",
+  "title": "Terroir Time Machine scene manifest",
+  "description": "Authoring schema. Release requires semantic gates in ACCEPTANCE_TESTS.md; schema validity alone does not approve science.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "mode": {
+      "enum": [
+        "authoring",
+        "release"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      },
+      "minItems": 0
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim"
+      },
+      "minItems": 0
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/asset"
+      },
+      "minItems": 0
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/scene"
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "schema_version",
+    "mode",
+    "sources",
+    "claims",
+    "assets",
+    "scenes"
+  ],
+  "$defs": {
+    "interval": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "older_ma": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "younger_ma": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "precision_note": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "older_ma",
+        "younger_ma",
+        "precision_note"
+      ]
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "approved",
+            "rejected"
+          ]
+        },
+        "reviewer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "date": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scope_note": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "status",
+        "reviewer",
+        "date",
+        "scope_note"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+        },
+        "citation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verification": {
+          "enum": [
+            "candidate",
+            "metadata_verified",
+            "content_verified"
+          ]
+        },
+        "checked_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rights": {
+          "enum": [
+            "allowed",
+            "prohibited",
+            "unresolved"
+          ]
+        },
+        "rights_note": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rights_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "citation",
+        "url",
+        "version",
+        "verification",
+        "checked_scope",
+        "rights",
+        "rights_note",
+        "rights_url"
+      ]
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "support_note": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "source_id",
+        "locator",
+        "support_note"
+      ]
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_class": {
+          "enum": [
+            "observed",
+            "interpreted",
+            "modeled"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "global",
+            "regional",
+            "local"
+          ]
+        },
+        "time": {
+          "$ref": "#/$defs/interval"
+        },
+        "confidence": {
+          "enum": [
+            "high",
+            "moderate",
+            "low"
+          ]
+        },
+        "confidence_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidenceRef"
+          },
+          "minItems": 1
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "review": {
+          "$ref": "#/$defs/review"
+        }
+      },
+      "required": [
+        "id",
+        "statement",
+        "evidence_class",
+        "scope",
+        "time",
+        "confidence",
+        "confidence_reason",
+        "evidence",
+        "limitations",
+        "review"
+      ]
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference_frame": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+          },
+          "minItems": 1
+        },
+        "limitations": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "reference_frame",
+        "source_ids",
+        "limitations"
+      ]
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^assets/(?!.*\\.\\.)(?!.*://)[A-Za-z0-9_./-]+$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "semantic_role": {
+          "enum": [
+            "scientific",
+            "aesthetic"
+          ]
+        },
+        "claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "source_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "recipe": {
+          "type": "string",
+          "minLength": 1
+        },
+        "crs_and_datum": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resolution_note": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rights": {
+          "enum": [
+            "allowed",
+            "prohibited",
+            "unresolved"
+          ]
+        },
+        "attribution": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "sha256",
+        "bytes",
+        "semantic_role",
+        "claim_ids",
+        "source_ids",
+        "recipe",
+        "crs_and_datum",
+        "resolution_note",
+        "rights",
+        "attribution"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "semantic_role": {
+                "const": "scientific"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "claim_ids": {
+                "minItems": 1
+              },
+              "source_ids": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "place_source_id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+        }
+      },
+      "required": [
+        "longitude",
+        "latitude",
+        "label",
+        "place_source_id"
+      ]
+    },
+    "frame": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "age_ma": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "asset_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "age_ma",
+        "asset_ids"
+      ]
+    },
+    "presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "renderer": {
+          "enum": [
+            "globe",
+            "terrain",
+            "schematic",
+            "text"
+          ]
+        },
+        "duration_seconds": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 120
+        },
+        "transition": {
+          "enum": [
+            "cut",
+            "fade",
+            "model_interpolation"
+          ]
+        },
+        "vertical_exaggeration": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "exaggeration_label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reduced_motion": {
+          "const": "static"
+        },
+        "aesthetic_note": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "renderer",
+        "duration_seconds",
+        "transition",
+        "vertical_exaggeration",
+        "exaggeration_label",
+        "reduced_motion",
+        "aesthetic_note"
+      ]
+    },
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "time": {
+          "$ref": "#/$defs/interval"
+        },
+        "time_basis": {
+          "enum": [
+            "editorial_window",
+            "evidence_interval",
+            "modern_epoch"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "global",
+            "regional",
+            "local"
+          ]
+        },
+        "visual_class": {
+          "enum": [
+            "measured",
+            "reconstruction",
+            "illustration",
+            "gap"
+          ]
+        },
+        "visible_label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "narrative": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "asset_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "model": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/model"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "local_anchor": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/anchor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "modern_data_epoch": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "keyframes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/frame"
+          },
+          "minItems": 0
+        },
+        "presentation": {
+          "$ref": "#/$defs/presentation"
+        },
+        "review": {
+          "$ref": "#/$defs/review"
+        },
+        "qualified_geometry_review": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/review"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "time",
+        "time_basis",
+        "scope",
+        "visual_class",
+        "visible_label",
+        "narrative",
+        "claim_ids",
+        "asset_ids",
+        "limitations",
+        "model",
+        "local_anchor",
+        "modern_data_epoch",
+        "keyframes",
+        "presentation",
+        "review",
+        "qualified_geometry_review"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "scope": {
+                "const": "global"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "local_anchor": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "time": {
+                "properties": {
+                  "older_ma": {
+                    "exclusiveMinimum": 0
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "local_anchor": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "visual_class": {
+                "const": "gap"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "asset_ids": {
+                "maxItems": 0
+              },
+              "keyframes": {
+                "maxItems": 0
+              },
+              "model": {
+                "type": "null"
+              },
+              "presentation": {
+                "properties": {
+                  "renderer": {
+                    "const": "text"
+                  },
+                  "transition": {
+                    "enum": [
+                      "cut",
+                      "fade"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "visual_class": {
+                "const": "measured"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "time_basis": {
+                "const": "modern_epoch"
+              },
+              "time": {
+                "properties": {
+                  "older_ma": {
+                    "const": 0
+                  },
+                  "younger_ma": {
+                    "const": 0
+                  }
+                }
+              },
+              "modern_data_epoch": {
+                "type": "string",
+                "minLength": 1
+              },
+              "claim_ids": {
+                "minItems": 1
+              },
+              "asset_ids": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "visual_class": {
+                "const": "reconstruction"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "model": {
+                "$ref": "#/$defs/model"
+              },
+              "claim_ids": {
+                "minItems": 1
+              },
+              "asset_ids": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "visual_class": {
+                "const": "illustration"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "local_anchor": {
+                "type": "null"
+              },
+              "claim_ids": {
+                "minItems": 1
+              },
+              "presentation": {
+                "properties": {
+                  "renderer": {
+                    "const": "schematic"
+                  },
+                  "transition": {
+                    "enum": [
+                      "cut",
+                      "fade"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "scope": {
+                "const": "local"
+              },
+              "visual_class": {
+                "const": "reconstruction"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "qualified_geometry_review": {
+                "$ref": "#/$defs/review"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
