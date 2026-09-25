@@ -1,7 +1,7 @@
 # Status
 
-Updated: 2026-09-12
-Mode: SPECIFICATION_ONLY
+Updated: 2026-09-24
+Mode: GOVERNED_AUTOMATION (see AGENTS.md, GOVERNANCE.md)
 Current milestone: M1 — Evidence feasibility
 Current task: M1-05 — GNIS anchor + original SIM 2956 point intersection
 State: DONE WITH ONE TRANSFORMATION CHECK PENDING
@@ -56,3 +56,13 @@ Run exactly one authoritative NAD83-to-NAD27 transformation for the GNIS point u
 
 ### Next smallest action
 Run the GNIS coordinate through NOAA NGS NCAT using the NAD83 realization supported by an authoritative GNIS datum statement. If GNIS continues to specify only generic NAD83, either obtain a USGS clarification/metadata statement identifying the realization or preserve this transformation ambiguity while keeping the Tswt result as partial. Do not invent a realization.
+
+## Repository setup + governance — 2026-09-24
+- Added GOVERNANCE.md (autonomous operations policy v1.0). Corrections vs. the drafted text: Opus model ID set to `claude-opus-5-5`; §9 score fixtures recomputed from the §3 rule (70, 0, 41, plus boundary cases 51 and 76); commit scope clarified (only Workflow C may push validated `regions/`/`docs/` output to main); boundary-score wording fixed; audit timing corrected to "the day before" Monday generation.
+- Added `.gitignore` (`.DS_Store`). Renamed `SOURCES(1)(7).md` → `SOURCES.md` and `STATUS(1)(7).md` → `STATUS.md`.
+- Initial commit `5e02e6c` pushed to https://github.com/chachee1234/terroir-time-machine (`git push -u origin main`, run by owner).
+- Owner switched mode to GOVERNED_AUTOMATION (approved 2026-09-24); AGENTS.md updated to authorize only the automation GOVERNANCE.md defines.
+- No workflows, scripts, pipeline code, labels, secrets or Pages settings exist yet. No scientific checks changed; the M1-06 datum-transform item above is still the open science task.
+
+### Next smallest action
+Science: unchanged — M1-06 NCAT/NADCON transform (see above). Automation: create the `AGENT_ENABLED` repo variable (set to `false` until workflows exist), then implement and test `scripts/score.py` against the §9 fixtures before any workflow is enabled.
