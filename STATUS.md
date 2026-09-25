@@ -131,3 +131,4 @@ All Tier 0 scripts named in GOVERNANCE.md exist. Next: GitHub Actions workflows 
 
 ### Next smallest action
 Owner: review and merge the `automation-workflows` pull request; add repo secret `CLAUDE_CODE_OAUTH_TOKEN` (`claude setup-token`). Keep `AGENT_ENABLED=false` until then; first live test via workflow_dispatch of the digest (no model use). Science: M1-06 unchanged.
+- GOVERNANCE.md v1.2 (owner-approved, on this branch): `claude setup-token` tokens are valid 1 year (as printed by Claude Code 2.1.282); rotation reminder at 11 months; rotate immediately on exposure. Tag `governance-v1.2` to be applied after merge to main.
