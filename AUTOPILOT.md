@@ -22,21 +22,16 @@ Change `ON` to `OFF` (a one-line commit on `main`, or on the Start-from branch) 
 - AWS Open Data Terrain Tiles (G19), UC Davis AVA Project (CC0), USGS UCERF3 via GEM (CC BY-SA 4.0), USGS/CGS geologic maps (public domain), USDA NRCS SSURGO via Soil Data Access (public domain), California DWR/Land IQ crop mapping (check the dataset's stated licence first), Sentinel-2 L2A via Earth Search STAC (Copernicus open licence, attribution required), USDA NAIP (public domain).
 - Not allowed without an owner instruction: Esri imagery, commercial basemaps, county parcel data, any source needing an account or a key.
 
+## Region order (owner rule, 2026-09-27)
+Sonoma first, then branch out to the next AVA that touches a mapped one; when nothing touches, move to the closest AVA. `python3 scripts/region_order.py` computes the list into `prototype/assets/regions/order.json` from the UC Davis AVA outlines. A frame-sized parent AVA is mapped before its members (Northern Sonoma before Russian River Valley and Alexander Valley), and AVAs nested in a mapped frame become its close-ups. Re-run the script whenever a region is finished (pass all finished ids with `--mapped`) and take the first entry.
+
 ## Queue
-Engine first (ROADMAP_REGIONS.md, "Make the engine region-agnostic first"):
-- [ ] E1. Anchor and origin: move `GNIS_UTM`, the site lat/lon and the pin text into the region file; Napa and the 30 km block look unchanged.
-- [ ] E2. Faults and towns as data: `data/regions/<id>/faults.json` and `places.json`, with a Tier 0 script that clips UCERF3/GEM traces to a frame.
-- [ ] E3. Chapters as data: `scenes.json` per region; the volcano chapters become optional.
-- [ ] E4. UTM zone as a region field in `fetch_tiles.py`, `fetch_terrain.py` and the viewer.
-- [ ] E5. `ava_extract.py --parent <ava_id>`; `data/regions/index.json`; globe.html reads the index.
-Phase 1 regions (one step each: region file + terrain + boundaries, then faults, then story):
-- [ ] R1. Sonoma Valley: joint Napa–Sonoma frame (region file, `fetch_tiles.py`, AVAs, close-ups).
-- [ ] R2. Sonoma Valley: faults (Rodgers Creek, Bennett Valley) and generic chapters.
-- [ ] R3. Northern Sonoma frame (Russian River Valley, Alexander Valley, Dry Creek): terrain, AVAs, close-ups.
-- [ ] R4. Northern Sonoma: faults (Maacama, Healdsburg) and chapters.
-- [ ] R5. Anderson Valley frame: terrain, AVAs, close-ups, Franciscan chapter.
-Present-day detail:
-- [ ] D1. Soils: SSURGO map units for the Napa section column and a "Today" soils drape (Soil Data Access query script, cached).
+Region work comes first. Each region takes three steps; any engine change a step needs is done inside that step, keeping Napa and the 30 km block unchanged.
+- [ ] R1. Sonoma Valley: region file (frame = AVA bounding box plus 2 km, anchor, close-ups for its nested AVAs), `fetch_tiles.py` terrain and close-ups, AVA outlines. This needs the anchor and UTM zone to come from the region file (ROADMAP_REGIONS.md items 1 and 4).
+- [ ] R2. Sonoma Valley: mapped faults (Rodgers Creek, Bennett Valley; UCERF3 via GEM) as `faults.json`, towns as `places.json`, and generic chapters in `scenes.json` (ROADMAP_REGIONS.md items 2 and 3).
+- [ ] R3. Sonoma Valley: switch its marker to live on the globe, add it to the Places list, headless check of every chapter and close-up.
+- [ ] R4+. Next region from `prototype/assets/regions/order.json` (currently Petaluma Gap, then Northern Sonoma with Russian River Valley and Alexander Valley as close-ups), three steps each as above.
+Present-day detail, done between regions when a region step is blocked:
+- [ ] D1. Soils: SSURGO map units for the section column and a "Today" soils drape (Soil Data Access query script, cached).
 - [ ] D2. Vineyards: replace the schematic vine tint with mapped vineyards (DWR/Land IQ, if its licence allows; else NASS CDL, public domain).
-- [ ] D3. Globe: raise California to z9 (≈1 km) and add a z6 global relief option, keeping page weight under 8 MB.
-Then Phase 2 regions from ROADMAP_REGIONS.md, one step each, in the listed order.
+- [ ] D3. Globe: raise California to z9 (≈1 km), keeping page weight under 8 MB.
