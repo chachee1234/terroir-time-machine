@@ -85,6 +85,11 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .xsec .foot{padding:4px 12px 8px;font-size:11px;color:var(--muted);line-height:1.35}
 body.xs-open .compass{top:calc(var(--xsb,320px) + 10px)}
 body.xs-open .legend{top:calc(var(--xsb,320px) + 82px)}
+.locator{position:absolute;z-index:2;right:16px;bottom:calc(126px + env(safe-area-inset-bottom,0px));width:132px;padding:6px 8px 6px;background:var(--panel);border:1px solid var(--line);border-radius:6px;pointer-events:none;font-size:10.5px;color:var(--muted);transition:opacity .4s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.locator b{display:block;color:var(--ink);font-weight:500;font-size:11px;margin-bottom:3px}
+.locator svg{display:block;width:100%;height:auto}
+.plc.ava{color:#ffe7a8;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.plc.ava::before{display:none}
 @media (max-width:640px){
   .brand{font-size:17px}
   .card{bottom:calc(128px + env(safe-area-inset-bottom,0px));padding:12px 14px}
@@ -99,6 +104,7 @@ body.xs-open .legend{top:calc(var(--xsb,320px) + 82px)}
   .xsec{top:calc(150px + env(safe-area-inset-top,0px))}
   .xsec canvas{height:150px}
   body.xs-open .compass,body.xs-open .legend{display:none}
+  .locator{display:none}
 }
 @media (max-height:560px){ .card p{display:none} }
 </style>
@@ -113,6 +119,7 @@ body.xs-open .legend{top:calc(var(--xsb,320px) + 82px)}
   <div class="chips">
     <span class="chip" id="scaleChip">Planet</span>
     <span class="chip" id="clsChip"><i></i><span>Reconstruction</span></span>
+    <button class="chip tog" id="avaBtn" aria-pressed="true">AVAs</button>
     <button class="chip tog" id="xsBtn" aria-pressed="false" aria-controls="xsec">Section</button>
   </div>
 </div>
@@ -137,10 +144,12 @@ body.xs-open .legend{top:calc(var(--xsb,320px) + 82px)}
   <div id="lgEdge"><i style="--c:#ffc76b"></i>Continent edge, stylized</div>
   <div id="lgSut"><i style="--c:#ff5a3c"></i>Collision zone / margin</div>
   <div id="lgStream"><i style="--c:#6fb6e8"></i>Streams, from terrain</div>
+  <div id="lgAva"><i style="--c:#ffd27a"></i>AVA boundary</div>
   <div id="lgTopo"><i style="--c:#5a3d22;height:1.5px"></i>Contours, 50 m</div>
 </div>
 <div class="scalebar" id="scalebar" hidden><span>5 km</span><div id="sbar"></div></div>
 <div id="plcs"></div>
+<div class="locator" id="locator" style="opacity:0" aria-hidden="true"><b>Napa Valley AVA</b><svg id="locSvg" viewBox="0 0 100 130"></svg><span>Box: area shown in 3D</span></div>
 <aside class="xsec" id="xsec" hidden aria-label="Cross-section under Mount St. Helena">
   <header><span><b>Cross-section</b> · SW to NE through the site</span><button id="xsX" aria-label="Close cross-section">×</button></header>
   <canvas id="xsCv"></canvas>
@@ -236,7 +245,7 @@ const CH = [
  {age:1.0, span:[1.4,0.45], dur:9, tag:"1 Ma", t:"Uplift and erosion", cls:"illus",
   b:"Faults keep squeezing and lifting the Mayacamas while rain and streams tear the old volcano down. Watch the channels: runoff gathers into streams that cut back into the slopes, and the gravel they carry spreads over the valley floors. The hard welded tuff resists and is left standing high."},
  {age:0, key:1, span:[0.0002,0], dur:10, tag:"Today", t:"The last two centuries to today", cls:"approx",
-  b:"The peak rises about 1,320 m above Knights Valley and the head of Napa Valley. Vineyards spread across the valley floors from the mid-1800s. Volcanic soils on its flanks and river-laid gravels on the valley floors are part of the terroir of the vineyards below. Contours every 50 m; streams traced from the terrain."}
+  b:"The peak rises about 1,320 m above Knights Valley and the head of Napa Valley. Vineyards spread across the valley floors from the mid-1800s. Volcanic soils on its flanks and river-laid gravels on the valley floors are part of the terroir of the vineyards below. Contours every 50 m; streams traced from the terrain. The gold line is the Napa Valley AVA and the pale lines are AVAs inside it, like Calistoga and Diamond Mountain District; the inset shows how much of the valley this block covers."}
 ];
 CH.forEach(c=>{ c.trig = c.span ? c.span[0] : c.age; c.p = pOf(c.trig); });
 const P_SWITCH = pOf(180);
@@ -475,7 +484,7 @@ const lUni = {
   uSun:{value:new THREE.Vector3(-0.5,0.75,-0.4).normalize()}, uSunCol:{value:new THREE.Color(1,.96,.9)},
   uFog:{value:new THREE.Color(.6,.7,.8)}, uVolc:{value:0}, uLava:{value:0}, uAsh:{value:0}, uVines:{value:0}, uGold:{value:0}, uBase:{value:BASE},
   uThr:{value:0}, uThrAct:{value:0}, uThrOff:{value:0}, uSS:{value:0}, uSSAct:{value:0}, uErode:{value:0}, uTopo:{value:0},
-  uDem:demTex, uDemOn:{value:0}, uDemTexel:{value:1}, uDemCell:{value:1}
+  uDem:demTex, uDemOn:{value:0}, uDemTexel:{value:1}, uDemCell:{value:1}, uAva:{value:null}, uAvaOn:{value:0}
 };
 const TERRAIN_VS = `
 attribute float h0,h1,h2,h3,h4,h5; attribute float aTop;
@@ -524,7 +533,7 @@ const terrainMat = new THREE.ShaderMaterial({
   vertexShader:TERRAIN_VS.replace("attribute float aTop;","attribute float aFlow,aDist; varying float vFlow; varying float vDist;").replace("aTop>0.5","true").replace("vS=aTop;","vS=1.0; vFlow=aFlow; vDist=aDist;"),
   fragmentShader:GLSL_NOISE+FAULT_GLSL+`
   uniform vec3 uSun,uSunCol,uFog,uWb; uniform float uVE,uVolc,uLava,uAsh,uVines,uGold,uTime,uErode,uTopo;
-  uniform sampler2D uDem; uniform float uDemOn,uDemTexel,uDemCell;
+  uniform sampler2D uDem,uAva; uniform float uDemOn,uDemTexel,uDemCell,uAvaOn;
   varying vec3 vW; varying float vH; varying float vS; varying float vR; varying float vFlow; varying float vDist;
   `+LIGHT_FOG+`
   void main(){
@@ -577,6 +586,7 @@ const terrainMat = new THREE.ShaderMaterial({
     float flowT=0.65+0.35*sin(vDist*5.0-uTime*3.2);
     vec3 wcol=mix(vec3(0.16,0.38,0.55),vec3(0.55,0.80,0.95),flowT*0.6);
     lit=mix(lit,wcol*(0.55+0.45*max(dot(vec3(0.0,1.0,0.0),uSun),0.0)),chan*smoothstep(0.02,0.3,vH+0.2)*0.9);
+    if(uAvaOn>0.0){ vec4 av=texture2D(uAva,vec2((vW.x+15.0)/30.0,(vW.z+15.0)/30.0)); lit=mix(lit,av.rgb,av.a*uAvaOn); }
     // underwater tint
     lit=mix(lit,vec3(0.03,0.10,0.16),clamp(-vH*0.55,0.0,0.92));
     // lava glow at the vent
@@ -738,6 +748,40 @@ const rain = (function(){
   }catch(e){ /* stays procedural */ }
 })();
 let realDEM=false;
+
+/* ---------------- AVA boundaries (UC Davis AVA Project, CC0): draped outlines, labels, valley locator */
+const AVA={on:true, data:null, labels:[], tex:null};
+$("avaBtn").onclick=()=>{ AVA.on=!AVA.on; $("avaBtn").setAttribute("aria-pressed",AVA.on); };
+(async function loadAVA(){
+  try{
+    const d=await fetch("assets/ava.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
+    let c=[531.89263,4280.12975];                       // GNIS centre (UTM km) if terrain.json is missing
+    try{ const m=await fetch("assets/terrain.json").then(r=>r.json()); c=m.aoi.center_utm.map(v=>v/1000); }catch(e){}
+    const toS=([e,n])=>[e-c[0], -(n-c[1])];            // scene km: x east, z south
+    AVA.data=d.avas.map(a=>({name:a.name, parent:a.id==="napa_valley", rings:a.rings.map(r=>r.map(toS))}));
+    const S=2048, cv=document.createElement("canvas"); cv.width=cv.height=S; const g=cv.getContext("2d");
+    const P=([x,z])=>[(x+15)/30*S,(z+15)/30*S];
+    g.lineJoin="round";
+    AVA.data.slice().reverse().forEach(a=>{ a.rings.forEach(r=>{ g.beginPath(); r.forEach((q,i)=>{ const [px,py]=P(q); i?g.lineTo(px,py):g.moveTo(px,py); }); g.closePath();
+      if(a.parent){ g.strokeStyle="rgba(20,14,4,.55)"; g.lineWidth=11; g.stroke(); g.strokeStyle="#ffd27a"; g.lineWidth=5.5; g.stroke(); }
+      else { g.fillStyle="rgba(255,236,190,.07)"; g.fill(); g.setLineDash([14,9]); g.strokeStyle="rgba(20,14,4,.5)"; g.lineWidth=6; g.stroke(); g.strokeStyle="rgba(255,240,205,.92)"; g.lineWidth=2.6; g.stroke(); g.setLineDash([]); } }); });
+    const t=new THREE.CanvasTexture(cv); t.flipY=false; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); lUni.uAva.value=t;
+    // label each AVA at the mean of its vertices that fall inside the block
+    AVA.data.forEach(a=>{ const inside=a.rings.flat().filter(([x,z])=>Math.abs(x)<14&&Math.abs(z)<14); if(inside.length<3) return;
+      const x=inside.reduce((s,q)=>s+q[0],0)/inside.length, z=inside.reduce((s,q)=>s+q[1],0)/inside.length;
+      const q={x,z,el:mkLab(a.parent?"Napa Valley AVA":a.name,"plc ava")}; q.i=Math.round((z+SIZE/2)/SIZE*(N-1))*N+Math.round((x+SIZE/2)/SIZE*(N-1)); AVA.labels.push(q); });
+    // locator: whole valley, with the 30 km block
+    const all=AVA.data.flatMap(a=>a.rings.flat()).concat([[-15,-15],[15,15]]);
+    const xs=all.map(q=>q[0]), zs=all.map(q=>q[1]); const x0=Math.min(...xs), x1=Math.max(...xs), z0=Math.min(...zs), z1=Math.max(...zs);
+    const k=Math.min(96/(x1-x0),126/(z1-z0)), ox=(100-(x1-x0)*k)/2, oz=(130-(z1-z0)*k)/2;
+    const L=([x,z])=>((x-x0)*k+ox).toFixed(1)+","+((z-z0)*k+oz).toFixed(1);
+    let svg=""; AVA.data.slice().reverse().forEach(a=>a.rings.forEach(r=>{ const step=Math.max(1,Math.floor(r.length/140));
+      svg+=`<polygon points="${r.filter((_,i)=>i%step===0).map(L).join(" ")}" fill="${a.parent?"rgba(255,210,122,.14)":"none"}" stroke="${a.parent?"#ffd27a":"rgba(255,240,205,.45)"}" stroke-width="${a.parent?1.2:0.5}"/>`; }));
+    svg+=`<rect x="${((-15-x0)*k+ox).toFixed(1)}" y="${((-15-z0)*k+oz).toFixed(1)}" width="${(30*k).toFixed(1)}" height="${(30*k).toFixed(1)}" fill="none" stroke="#ff7a2f" stroke-width="1.4"/>`;
+    svg+=`<circle cx="${((0-x0)*k+ox).toFixed(1)}" cy="${((0-z0)*k+oz).toFixed(1)}" r="1.8" fill="#ece6d9"/>`;
+    $("locSvg").innerHTML=svg;
+  }catch(e){ /* AVA layer is optional */ }
+})();
 
 /* =================================================================== state from age */
 const LSTAGE_A = [170,30,8,3.2,2.87,2.84,0], LSTAGE_S=[0,1,2,3,3,4,5];
@@ -1043,6 +1087,7 @@ function frame(now){
     setCompass(screenAngle(pl3.set(0,st.hc*VE,0),nrm.set(0,0,-1),lCam));
     // legend
     const lf=lUni.uSS.value>0.05, lh=lUni.uThr.value>0.05, ls=lUni.uErode.value>0.05, lt=lUni.uTopo.value>0.05;
+    $("lgAva").hidden=!(lUni.uAvaOn.value>0.05);
     $("lgEdge").hidden=true; $("lgSut").hidden=true; $("lgThr").hidden=!lh;
     $("lgFault").hidden=!lf; $("lgStream").hidden=!ls; $("lgTopo").hidden=!lt; legend.style.opacity=(lf||lh||ls||lt)?1:0;
     // 5 km scale bar measured at the summit, across the screen
@@ -1054,6 +1099,10 @@ function frame(now){
     FLAB.forEach(q=>placeLab(q,lUni.uSS.value>0.3,lUni.uSS.value));
     const pOn=a<170; PLAB.forEach(q=>{ const t=q.t(a); if(q.el.textContent!==t) q.el.textContent=t; placeLab(q,pOn,Math.min(1,sm(170,150,a)*1.0)); });
     GLAB.forEach(q=>q.el.hidden=true);
+    const avaOp=AVA.on&&AVA.data ? lUni.uTopo.value : 0; lUni.uAvaOn.value=avaOp;
+    AVA.labels.forEach(q=>placeLab(q,avaOp>0.3,avaOp));
+    $("locator").style.opacity=(AVA.data&&lUni.uTopo.value>0.3)?Math.min(1,lUni.uTopo.value):0;
+    $("lgAva").hidden=!(avaOp>0.05);
     PLACES.forEach(q=>{ let hh=0; for(let k=0;k<6;k++) hh+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][q.i];
       pl3.set(q.x,hh*VE+0.1,q.z).project(lCam); const vis=to>0.05&&pl3.z<1;
       q.el.hidden=!vis; if(vis){ q.el.style.opacity=to.toFixed(2); q.el.style.left=((pl3.x+1)/2*innerWidth)+"px"; q.el.style.top=((1-pl3.y)/2*innerHeight)+"px"; } });
@@ -1061,7 +1110,7 @@ function frame(now){
   if(!st.local){
     const d=markerDir; nrm.set(0,1,0).addScaledVector(d,-d.y).normalize();
     setCompass(screenAngle(marker.position,nrm,gCam));
-    ["lgFault","lgThr","lgStream","lgTopo"].forEach(id=>$(id).hidden=true); $("lgEdge").hidden=false; $("lgSut").hidden=false; legend.style.opacity=1;
+    ["lgFault","lgThr","lgStream","lgTopo","lgAva"].forEach(id=>$(id).hidden=true); $("locator").style.opacity=0; AVA.labels.forEach(q=>q.el.hidden=true); $("lgEdge").hidden=false; $("lgSut").hidden=false; legend.style.opacity=1;
     sbar.hidden=true; PLACES.forEach(q=>q.el.hidden=true); FLAB.forEach(q=>q.el.hidden=true); PLAB.forEach(q=>q.el.hidden=true);
     // plate names
     GLAB.forEach((q,i)=>{ const c=gUni.uC.value[i]; pl3.copy(c).multiplyScalar(1.02); const face=pl3.dot(cv0.copy(gCam.position).normalize())>0.35;

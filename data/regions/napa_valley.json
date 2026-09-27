@@ -1,0 +1,11 @@
+{
+  "id": "napa_valley",
+  "name": "Napa Valley AVA",
+  "description": "Bounding box of the Napa Valley AVA (UC Davis AVA Project, data/ava/) padded by 2 km; ~55 x 72 km. Frame for the expanded viewer, not a geological boundary.",
+  "epsg": 26910,
+  "bbox_utm": [528800.0, 4221300.0, 584100.0, 4293300.0],
+  "cell_m": 30,
+  "browser_cells": 512,
+  "assets_dir": "prototype/assets/regions/napa_valley",
+  "boundary": "data/ava/napa_valley_avas.geojson"
+}
