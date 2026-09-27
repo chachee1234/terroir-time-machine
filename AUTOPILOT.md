@@ -5,7 +5,7 @@ Owner instruction (2026-09-27): "compose prompt to autonomously keep expanding t
 **Switch:** `Autopilot: ON`
 Change `ON` to `OFF` (a one-line commit on `main`, or on the Start-from branch) and every run stops before doing anything. The routine can also be paused or deleted at claude.ai → Code → Routines.
 
-**Start from:** `globe-timeline` (switch to `main` once the open PR stack is merged)
+**Start from:** `napa-valley-scene` (switch to `main` once PR #9 is merged)
 **Working branch:** `autopilot` (one PR, never merged by the routine)
 
 ## Rules for each run
