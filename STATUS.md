@@ -153,3 +153,7 @@ Owner: review/merge the `fix-intake-schema` PR, then re-trigger issue #3 (remove
 
 ### Next smallest action
 Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on the terrain as a labeled mapped layer. Science: M1-06 unchanged.
+
+## Cinematic viewer (branch `cinematic-viewer`) — 2026-09-27
+- Added `prototype/timemachine.html` (1.8 Ga → today, globe to 30 km diorama, labeled stylized/illustrated/terrain classes) and `ROADMAP_CINEMATIC.md` (Phase 1, step 1). Added `<meta charset="utf-8">` so `·`, `◀`, `≈`, `×` don't render garbled under `python3 -m http.server`.
+- Checked with `cd prototype && python3 -m http.server 8000` in headless Chromium (SwiftShader), 4× speed: played to "Today" and the Replay state, final shot loaded `assets/terrain.bin` ("USGS 3DEP terrain · 1,323 m"), no page or console errors. The sandbox blocks the three.js CDNs, so r128 was served from the identical npm package. Not tested: 60 fps on the MacBook Air, touch devices.
