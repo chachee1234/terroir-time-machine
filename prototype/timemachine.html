@@ -64,10 +64,14 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .compass svg{width:100%;height:100%;display:block}
 .legend{position:absolute;z-index:2;right:16px;top:calc(124px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;align-items:flex-end;gap:4px;pointer-events:none;font-size:11.5px;color:var(--muted);text-shadow:0 1px 6px rgba(0,0,0,.9);transition:opacity .4s}
 .legend div{display:flex;align-items:center;gap:6px}
+.legend div[hidden]{display:none}
 .legend i{display:inline-block;width:18px;height:3px;border-radius:2px;background:var(--c)}
 .scalebar{position:absolute;z-index:2;right:16px;bottom:calc(92px + env(safe-area-inset-bottom,0px));font:11px var(--mono);color:var(--ink);text-align:center;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.9)}
 .scalebar div{height:5px;border:1.5px solid var(--ink);border-top:0;margin-top:2px}
 .plc{position:absolute;z-index:2;transform:translate(-50%,-50%);pointer-events:none;font-size:11.5px;white-space:nowrap;color:#f3eee4;text-shadow:0 1px 5px rgba(0,0,0,.95),0 0 2px rgba(0,0,0,.9);letter-spacing:.03em}
+.plc.plate{font-family:var(--serif);font-size:13px;color:#ffe2b8}
+.plc.plate::before,.plc.flt::before{display:none}
+.plc.flt{color:#ffb4a0;font-size:11px;font-weight:500}
 .plc::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#f3eee4;margin-right:5px;vertical-align:1px;box-shadow:0 0 0 1px rgba(0,0,0,.6)}
 .chip.tog{pointer-events:auto;cursor:pointer;color:var(--ink);font:inherit;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
 .chip.tog[aria-pressed="true"]{border-color:var(--magma);color:var(--magma)}
@@ -128,7 +132,10 @@ body.xs-open .legend{top:calc(var(--xsb,320px) + 82px)}
    <text id="cW" x="-21" y="0" fill="#ece6d9" stroke="#0c0f11" stroke-width="2.4" paint-order="stroke">W</text>
   </g></g></svg></div>
 <div class="legend" id="legend" style="opacity:0">
-  <div id="lgFault"><i style="--c:#ff5a3c"></i>Fault, schematic</div>
+  <div id="lgFault"><i style="--c:#ff5a3c"></i>Fault, mapped trace (UCERF3)</div>
+  <div id="lgThr"><i style="--c:#8a3a2c"></i>Old thrust, schematic</div>
+  <div id="lgEdge"><i style="--c:#ffc76b"></i>Continent edge, stylized</div>
+  <div id="lgSut"><i style="--c:#ff5a3c"></i>Collision zone / margin</div>
   <div id="lgStream"><i style="--c:#6fb6e8"></i>Streams, from terrain</div>
   <div id="lgTopo"><i style="--c:#5a3d22;height:1.5px"></i>Contours, 50 m</div>
 </div>
@@ -219,9 +226,9 @@ const CH = [
  {age:66, tag:"66 Ma", t:"A distant impact darkens the sky", cls:"illus",
   b:"An asteroid strikes what is now Mexico. The dust dims sunlight worldwide and ends the age of dinosaurs. Here, the scraped-up seafloor keeps accumulating under the waves."},
  {age:28, key:1, tag:"28 Ma", t:"The San Andreas system is born", cls:"illus",
-  b:"The spreading ridge between the Pacific and Farallon plates reaches the trench. Subduction shuts off piece by piece and a sliding boundary, the San Andreas system, takes over. The pile of old seafloor starts rising out of the sea. The old thrust faults go quiet, and new vertical faults cut through; the moving dashes show the two sides sliding past each other."},
+  b:"The spreading ridge between the Pacific and Farallon plates reaches the trench. Subduction shuts off piece by piece and a sliding boundary, the San Andreas system, takes over. The pile of old seafloor starts rising out of the sea."},
  {age:8, key:1, tag:"8 Ma", t:"The Sonoma Volcanics begin", cls:"illus",
-  b:"A gap opens in the sinking plate and hot mantle rises through it. Volcanoes erupt across what is now Sonoma and Napa for about five million years, generally younger toward the north."},
+  b:"A gap opens in the sinking plate and hot mantle rises through it. Volcanoes erupt across what is now Sonoma and Napa for about five million years, generally younger toward the north. Subduction here has ended and the old thrusts go quiet. The bright lines are today's mapped Maacama and Collayomi faults, part of the Pacific–North American plate boundary zone; the dashes show their right-lateral slip."},
  {age:3.0, span:[3.45,2.95], tag:"≈3.0 Ma", t:"The Mount St. Helena volcano", cls:"illus",
   b:"Thick rhyolite lava builds the summit area, dated to about 3 million years ago. The volcanic center swells into the highest point for miles. Its true height and shape at this moment are unknown; this peak is an artist's version."},
  {age:2.85, key:1, span:[2.93,2.83], tag:"≈2.85 Ma", t:"Caldera eruption", cls:"illus",
@@ -259,14 +266,14 @@ gCtl.enablePan=false; gCtl.minDistance=1.3; gCtl.maxDistance=6; gCtl.enableDampi
 // Continent "blobs": [age Ma, lat, lon] keyframes, oldest first. Hand-built, loosely
 // following published supercontinent cycles (Columbia, Rodinia, Pangaea). Stylized.
 const PLATES = [
- {n:"Laurentia", r:.42, k:[[1800,10,-20],[1100,-5,-10],[750,0,-20],[540,-5,-60],[400,0,-40],[250,20,-25],[180,30,-40],[100,40,-70],[50,45,-90],[0,48,-100]]},
- {n:"Baltica",   r:.30, k:[[1800,22,12],[1100,-20,22],[750,-30,20],[540,-40,10],[400,-10,0],[250,38,10],[180,42,10],[100,46,15],[0,52,22]]},
- {n:"Siberia",   r:.50, k:[[1800,42,-2],[1100,12,32],[750,16,42],[540,20,80],[400,30,60],[250,55,60],[180,55,72],[100,55,86],[0,55,95]]},
- {n:"Amazonia",  r:.36, k:[[1800,-22,-32],[1100,-25,-5],[750,-35,-40],[540,-40,-30],[400,-40,-20],[250,-20,-25],[180,-15,-30],[100,-15,-40],[50,-15,-55],[0,-15,-60]]},
- {n:"Africa",    r:.42, k:[[1800,-40,12],[1100,-40,22],[750,-50,0],[540,-50,0],[400,-45,5],[250,-10,10],[180,-5,10],[100,0,15],[0,5,20]]},
- {n:"Australia", r:.26, k:[[1800,25,40],[1100,20,-35],[750,25,-45],[540,-10,90],[400,-20,100],[250,-45,70],[180,-50,80],[100,-55,100],[50,-45,120],[0,-25,135]]},
- {n:"Antarctica",r:.32, k:[[1800,5,50],[1100,15,-50],[750,20,-60],[540,-30,80],[400,-50,60],[250,-60,50],[180,-65,50],[100,-75,60],[0,-85,0]]},
- {n:"India",     r:.17, k:[[1800,-5,62],[1100,35,-30],[750,-15,60],[540,-20,60],[400,-30,50],[250,-35,45],[180,-35,50],[100,-20,60],[50,5,72],[0,20,78]]}
+ {n:"Laurentia", lb:"Laurentia · ancestral North America", r:.42, k:[[1800,10,-20],[1100,-5,-10],[750,0,-20],[540,-5,-60],[400,0,-40],[250,20,-25],[180,30,-40],[100,40,-70],[50,45,-90],[0,48,-100]]},
+ {n:"Baltica", lb:"Baltica · northern Europe",   r:.30, k:[[1800,22,12],[1100,-20,22],[750,-30,20],[540,-40,10],[400,-10,0],[250,38,10],[180,42,10],[100,46,15],[0,52,22]]},
+ {n:"Siberia", lb:"Siberia",   r:.50, k:[[1800,42,-2],[1100,12,32],[750,16,42],[540,20,80],[400,30,60],[250,55,60],[180,55,72],[100,55,86],[0,55,95]]},
+ {n:"Amazonia", lb:"Amazonia · South America",  r:.36, k:[[1800,-22,-32],[1100,-25,-5],[750,-35,-40],[540,-40,-30],[400,-40,-20],[250,-20,-25],[180,-15,-30],[100,-15,-40],[50,-15,-55],[0,-15,-60]]},
+ {n:"Africa", lb:"Congo–Kalahari · Africa",    r:.42, k:[[1800,-40,12],[1100,-40,22],[750,-50,0],[540,-50,0],[400,-45,5],[250,-10,10],[180,-5,10],[100,0,15],[0,5,20]]},
+ {n:"Australia", lb:"Australia", r:.26, k:[[1800,25,40],[1100,20,-35],[750,25,-45],[540,-10,90],[400,-20,100],[250,-45,70],[180,-50,80],[100,-55,100],[50,-45,120],[0,-25,135]]},
+ {n:"Antarctica", lb:"East Antarctica",r:.32, k:[[1800,5,50],[1100,15,-50],[750,20,-60],[540,-30,80],[400,-50,60],[250,-60,50],[180,-65,50],[100,-75,60],[0,-85,0]]},
+ {n:"India", lb:"India",     r:.17, k:[[1800,-5,62],[1100,35,-30],[750,-15,60],[540,-20,60],[400,-30,50],[250,-35,45],[180,-35,50],[100,-20,60],[50,5,72],[0,20,78]]}
 ];
 const D2R = Math.PI/180;
 function ll2v(lat,lon,out){ lat*=D2R; lon*=D2R; return (out||new THREE.Vector3()).set(Math.cos(lat)*Math.cos(lon), Math.sin(lat), -Math.cos(lat)*Math.sin(lon)); }
@@ -279,19 +286,23 @@ function plateAt(pl,a,out){
 
 const gUni = {
   uC:{value:PLATES.map(()=>new THREE.Vector3())}, uR:{value:PLATES.map(p=>p.r)},
-  uGreen:{value:0}, uCap:{value:1}, uIceAll:{value:0}, uDesert:{value:0}, uSun:{value:new THREE.Vector3(1,0,0)}, uTime:{value:0}
+  uGreen:{value:0}, uCap:{value:1}, uIceAll:{value:0}, uDesert:{value:0}, uSun:{value:new THREE.Vector3(1,0,0)}, uTime:{value:0},
+  uWest:{value:new THREE.Vector3(1,0,0)}, uRift:{value:0}, uSubd:{value:0}, uEdges:{value:1}
 };
 const globeMat = new THREE.ShaderMaterial({
-  uniforms:gUni,
+  uniforms:gUni, extensions:{derivatives:true},
   vertexShader:`varying vec3 vN; void main(){ vN=normalize(position); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
   fragmentShader:GLSL_NOISE+`
-  uniform vec3 uC[8]; uniform float uR[8]; uniform float uGreen,uCap,uIceAll,uDesert; uniform vec3 uSun;
+  uniform vec3 uC[8]; uniform float uR[8]; uniform float uGreen,uCap,uIceAll,uDesert,uTime,uRift,uSubd,uEdges; uniform vec3 uSun,uWest;
+  float fl(float d,float w){ return 1.0-smoothstep(w*0.5,w,abs(d)); }
   varying vec3 vN;
   float smax(float a,float b,float k){ float h=clamp(0.5+0.5*(a-b)/k,0.0,1.0); return mix(b,a,h)+k*h*(1.0-h); }
   void main(){
     vec3 n=normalize(vN);
     float f=-1.0;
-    for(int i=0;i<8;i++){ f=smax(f, uR[i]-acos(clamp(dot(n,uC[i]),-1.0,1.0)), 0.09); }
+    float d1=-9.0, d2=-9.0, dL=-9.0;
+    for(int i=0;i<8;i++){ float di=uR[i]-acos(clamp(dot(n,uC[i]),-1.0,1.0)); f=smax(f, di, 0.09);
+      if(i==0) dL=di; if(di>d1){ d2=d1; d1=di; } else if(di>d2){ d2=di; } }
     float e=f+(fbm(n*3.1)-0.5)*0.24+(fbm(n*11.0)-0.5)*0.07;
     float land=smoothstep(0.0,0.012,e);
     vec3 deep=vec3(0.02,0.07,0.18), shallow=vec3(0.06,0.30,0.42);
@@ -309,6 +320,20 @@ const globeMat = new THREE.ShaderMaterial({
     float diff=clamp(dot(n,uSun),0.0,1.0);
     float spec=pow(max(dot(reflect(-uSun,n),V),0.0),48.0)*(1.0-land)*(1.0-ice)*0.6;
     col=col*(0.08+1.0*diff)+vec3(1.0,0.95,0.85)*spec;
+    // plate edges (stylized craton outlines), collision sutures where two plates meet
+    float w1=max(fwidth(d1)*1.6,0.004);
+    float edge=fl(d1,w1)*step(d2,-0.015);
+    float sut=fl(d1-d2,max(fwidth(d1-d2)*1.6,0.005))*step(-0.02,d2);
+    vec3 lc2=vec3(1.0,0.78,0.42)*(0.35+0.65*diff+0.25);
+    col=mix(col,lc2,edge*0.55*uEdges);
+    col=mix(col,vec3(1.0,0.35,0.2)*(0.5+0.5*diff+0.3),sut*0.95*uEdges);
+    // Laurentia's western margin: rift (dashed) then subduction (teeth)
+    float wside=smoothstep(0.0,0.25,dot(normalize(n-uC[0]*dot(n,uC[0])),uWest));
+    float mar=fl(dL,max(fwidth(dL)*2.2,0.006))*wside;
+    float along=atan(n.y,length(n.xz))*60.0+atan(n.z,n.x)*20.0;
+    col=mix(col,vec3(1.0,0.55,0.25),mar*uRift*step(0.45,fract(along)));
+    float teeth=step(0.0,-dL)*step(-dL,0.03)*wside*step(fract(along*1.2),0.35);
+    col=mix(col,vec3(1.0,0.3,0.18)*(1.0+0.3*sin(uTime*3.0)),max(mar,teeth)*uSubd);
     gl_FragColor=vec4(col,1.0);
   }`
 });
@@ -470,11 +495,26 @@ vec3 shade(vec3 col, vec3 N){
 }
 vec3 fogit(vec3 col){ float f=smoothstep(45.0,140.0,distance(vW,cameraPosition)); return mix(col,uFog,f); }
 `;
-// Schematic faults in coordinates across (c, km, + toward NE) the N40W Mayacamas trend.
-// Thrusts dip ~30° NE (the subduction-era accretionary wedge); strike-slip faults are vertical.
+// Mapped active faults: Maacama and Collayomi traces from the USGS UCERF3 fault model (via the GEM
+// Global Active Faults Database, CC BY-SA 4.0), in scene km (x east, z south of the GNIS point),
+// ordered SE→NW. Shown as vertical planes (UCERF3 dips: Maacama 63°, Collayomi 90°).
+const FAULTS=[
+ {n:"Maacama Fault", r:"≈8 mm/yr", pts:[[-1.13,18.79],[-9.52,5.92],[-14.66,-1.27],[-28.25,-16.19]], lab:[-12.1,2.3]},
+ {n:"Collayomi Fault", r:"≈0.5 mm/yr", pts:[[6.34,-6.33],[1.96,-9.38],[-6.19,-14.91],[-13.73,-24.45]], lab:[-2.2,-12.2]}
+];
+const SEG=[], SEGC=[];
+FAULTS.forEach(fl=>{ let cum=0; for(let i=0;i<fl.pts.length-1;i++){ const [ax,az]=fl.pts[i],[bx,bz]=fl.pts[i+1]; SEG.push(new THREE.Vector4(ax,az,bx,bz)); SEGC.push(cum); cum+=Math.hypot(bx-ax,bz-az); } });
+lUni.uSeg={value:SEG}; lUni.uSegC={value:SEGC};
+// Ancient thrusts: schematic, across (c, km, + toward NE) the N40W Mayacamas trend, dipping ~30° NE.
 const FAULT_GLSL = `
-uniform float uThr,uThrAct,uThrOff,uSS,uSSAct;
-const float TH0=-9.5, TH1=-3.5, TH2=3.0, TH3=10.5; const float SS0=-7.0, SS1=8.0; const float COTD=1.732;
+uniform float uThr,uThrAct,uThrOff,uSS,uSSAct; uniform vec4 uSeg[${SEG.length}]; uniform float uSegC[${SEG.length}];
+const float TH0=-9.5, TH1=-3.5, TH2=3.0, TH3=10.5; const float COTD=1.732;
+// nearest mapped fault: x = distance (km), y = distance along trace, z = side (+1 NE, -1 SW)
+vec3 nearFault(vec2 p){ vec3 best=vec3(99.0,0.0,1.0);
+  for(int i=0;i<${SEG.length};i++){ vec2 a=uSeg[i].xy, b=uSeg[i].zw, d=b-a; float L=length(d);
+    float t=clamp(dot(p-a,d)/(L*L),0.0,1.0); float dist=length(p-a-d*t);
+    if(dist<best.x) best=vec3(dist,uSegC[i]+t*L,sign(d.x*(p.y-a.y)-d.y*(p.x-a.x))); }
+  return best; }
 float acrossC(vec3 w){ return 0.766*w.x-0.643*w.z; }
 float alongC(vec3 w){ return -0.643*w.x-0.766*w.z; }
 float fline(float d,float px){ float w=max(px*1.2,0.05); return 1.0-smoothstep(w*0.5,w,abs(d)); }
@@ -553,13 +593,9 @@ const terrainMat = new THREE.ShaderMaterial({
     teeth=max(teeth,step(0.0,cc-TH3)*step(cc-TH3,0.45)*step(fract(al*0.9),0.3));
     vec3 fcA=vec3(1.0,0.35,0.22), fcI=vec3(0.45,0.16,0.12);
     lit=mix(lit,mix(fcI,fcA,uThrAct)*(1.0+0.4*uThrAct*sin(uTime*3.0)),uThr*max(th,teeth*0.85*uThrAct));
-    float ss=0.0;
-    for(int k=0;k<2;k++){ float c0=k==0?SS0:SS1;
-      ss=max(ss,fline(cc-c0,px));
-      float d1=cc-c0-0.32, d2=cc-c0+0.32;
-      ss=max(ss,fline(d1,px)*step(0.5,fract(al*0.8-uTime*0.35*uSSAct))*0.9);
-      ss=max(ss,fline(d2,px)*step(0.5,fract(al*0.8+uTime*0.35*uSSAct))*0.9);
-    }
+    vec3 nf=nearFault(vW.xz); float pw=fwidth(vW.x)+fwidth(vW.z);
+    float ss=fline(nf.x,pw);
+    ss=max(ss,fline(nf.x-0.3,pw)*step(0.5,fract(nf.y*0.8+nf.z*uTime*0.35*uSSAct))*0.9);
     lit=mix(lit,mix(fcI,fcA,uSSAct),uSS*ss);
     gl_FragColor=vec4(fogit(lit),1.0);
   }`
@@ -610,7 +646,7 @@ const terrain = new THREE.Mesh(geo, terrainMat); lScene.add(terrain);
       vec3 fcA=vec3(1.0,0.35,0.22), fcI=vec3(0.45,0.16,0.12);
       float pulse=0.5+0.5*sin((y*COTD-cc)*1.5+uTime*2.5);
       lit=mix(lit,mix(fcI,fcA,uThrAct*(0.6+0.4*pulse)),uThr*th);
-      float ssl=max(fline(cc-SS0,fwidth(cc)),fline(cc-SS1,fwidth(cc)));
+      vec3 nf=nearFault(vW.xz); float ssl=fline(nf.x,fwidth(vW.x)+fwidth(vW.z));
       lit=mix(lit,mix(fcI,fcA,uSSAct),uSS*ssl);
       gl_FragColor=vec4(fogit(lit),1.0);
     }`
@@ -742,6 +778,8 @@ function apply(a,p){
   if(!local){
     PLATES.forEach((pl,i)=>plateAt(pl,a,gUni.uC.value[i]));
     const c=gUni.uC.value[0], east=new THREE.Vector3(c.z,0,-c.x).normalize();
+    gUni.uWest.value.copy(east).multiplyScalar(-1);
+    gUni.uRift.value = band(a,760,540,30); gUni.uSubd.value = sm(270,240,a);
     markerDir.copy(c).multiplyScalar(Math.cos(0.3)).addScaledVector(east,-Math.sin(0.3)).normalize();
     marker.position.copy(markerDir).multiplyScalar(1.03);
     gUni.uGreen.value = sm(470,390,a);
@@ -759,8 +797,8 @@ function apply(a,p){
   ash.material.uniforms.uE.value = Math.max(dome*0.3, big);
   lUni.uAsh.value = a<2.86 ? sm(2.2,2.86,a) : big*0.6;
   lUni.uVines.value = sm(0.00017,0.00004,a);                  // vineyards spread from the mid-1800s
-  lUni.uThr.value = sm(175,150,a)*lerp(0.35,1,sm(20,30,a)); lUni.uThrAct.value = sm(24,31,a); lUni.uThrOff.value = 0.12*sm(170,40,a);
-  lUni.uSS.value = sm(30,26,a); lUni.uSSAct.value = sm(30,26,a);
+  lUni.uThr.value = sm(175,150,a)*lerp(0.35,1,sm(6,10,a)); lUni.uThrAct.value = sm(7,10,a); lUni.uThrOff.value = 0.12*sm(170,40,a);
+  lUni.uSS.value = sm(9.5,7.5,a); lUni.uSSAct.value = sm(9.5,7.5,a);
   lUni.uErode.value = sm(2.8,0.5,a);
   lUni.uTopo.value = sm(0.01,0.0002,a);                       // contours from the last ~10 ka into the last two centuries
   rain.material.uniforms.uAmt.value = band(a,1.45,0.4,0.12);
@@ -850,7 +888,12 @@ function xsToggle(on){ xs.open=on; xs.el.hidden=!on; xs.btn.setAttribute("aria-p
 xs.btn.onclick=()=>xsToggle(!xs.open); $("xsX").onclick=()=>xsToggle(false);
 function xsSize(){ const r=xs.cv.getBoundingClientRect(), d=Math.min(devicePixelRatio,2); xs.w=r.width; xs.h=r.height; xs.cv.width=Math.round(r.width*d); xs.cv.height=Math.round(r.height*d); xs.ctx.setTransform(d,0,0,d,0,0); }
 addEventListener("resize",()=>{ if(xs.open) xsSize(); });
-const XS_M=140, XS_TH=[-9.5,-3.5,3.0,10.5], XS_SS=[-7.0,8.0], XS_COTD=1.732;
+const XS_M=140, XS_TH=[-9.5,-3.5,3.0,10.5], XS_COTD=1.732;
+// where each mapped trace crosses the SW–NE profile line (x=0.766c, z=-0.643c)
+const XS_SS=[]; FAULTS.forEach(fl=>{ for(let i=0;i<fl.pts.length-1;i++){ const [ax,az]=fl.pts[i],[bx,bz]=fl.pts[i+1];
+  const dx=bx-ax, dz=bz-az, ux=0.766, uz=-0.643, den=ux*dz-uz*dx; if(Math.abs(den)<1e-9) continue;
+  const c=(ax*dz-az*dx)/den, t=Math.abs(dx)>Math.abs(dz)?(c*ux-ax)/dx:(c*uz-az)/dz;
+  if(t>=0&&t<=1&&Math.abs(c)<14.5) XS_SS.push({c,n:fl.n.replace(" Fault","")}); } });
 const xsIdx=new Int32Array(XS_M), xsC=new Float32Array(XS_M), xsHs=new Float32Array(XS_M);
 for(let i=0;i<XS_M;i++){ const c=-14.5+29*i/(XS_M-1), x=0.766*c, z=-0.643*c; xsC[i]=c;
   xsIdx[i]=Math.round((z+SIZE/2)/SIZE*(N-1))*N+Math.round((x+SIZE/2)/SIZE*(N-1)); }
@@ -862,7 +905,7 @@ function drawSection(a,w){
   g.clearRect(0,0,W,Hh);
   const ve=((Hh-22)/(top-bot))/((SW-6)/29), veTxt="Vertical scale exaggerated "+ve.toFixed(0)+"×.";
   if(a>=180){ g.fillStyle=XC.mut; g.font="12px "+getComputedStyle(document.body).fontFamily; g.textAlign="center";
-    wrapText(g,"The section fills in once the view drops to the 30 km block around the site.",W/2-110,Hh/2-6,220,15); g.textAlign="left";
+    wrapText(g,"The section fills in once the view drops to the 30 km block around the site.",W/2,Hh/2-6,220,15); g.textAlign="left";
     $("xsNote").textContent="Planet scale: the site does not exist yet as a place you could cut through."; return; }
   g.fillStyle="rgba(170,190,205,.10)"; g.fillRect(0,0,SW+6,Y(0));
   for(let i=0;i<XS_M;i++){ let h=0; const v=xsIdx[i]; for(let k=0;k<6;k++) h+=w[k]*H[k][v]; xsHs[i]=h; }
@@ -888,7 +931,7 @@ function drawSection(a,w){
   g.lineWidth=1.6;
   if(thr>0.02){ g.globalAlpha=Math.min(1,thr*1.3); g.strokeStyle=tha>0.5?XC.fa:XC.fi;
     for(const t of XS_TH){ g.beginPath(); g.moveTo(X(t-top*XS_COTD),Y(top)); g.lineTo(X(t-bot*XS_COTD),Y(bot)); g.stroke(); } }
-  if(ss>0.02){ g.globalAlpha=ss; g.strokeStyle=XC.fa; for(const t of XS_SS){ g.beginPath(); g.moveTo(X(t),Y(top)); g.lineTo(X(t),Y(bot)); g.stroke(); } }
+  if(ss>0.02){ g.globalAlpha=ss; g.strokeStyle=XC.fa; for(const t of XS_SS){ g.beginPath(); g.moveTo(X(t.c),Y(top)); g.lineTo(X(t.c),Y(bot)); g.stroke(); } }
   g.globalAlpha=1; g.restore();
   // sea
   if(water>0.02){ g.save(); g.globalAlpha=water; g.beginPath(); g.moveTo(X(xsC[0]),Y(0));
@@ -902,6 +945,7 @@ function drawSection(a,w){
   g.fillText("SW",8,Hh-5); g.textAlign="right"; g.fillText("NE",SW,Hh-5); g.textAlign="center";
   const px5=5/29*(SW-6); g.fillText("5 km",6+SW/2,Hh-5); g.fillStyle=XC.mut; g.fillRect(6+SW/2-px5/2,Hh-17,px5,1.5);
   g.textAlign="left"; g.fillText("sea level",8,Y(0)-3);
+  if(ss>0.3){ g.fillStyle=XC.fa; g.textAlign="center"; XS_SS.forEach(t=>g.fillText(t.n,X(t.c),Y(bot)-4)); g.textAlign="left"; }
   // column under the point
   const cx=SW+14, cw=colW-14, ct=6, ch=Hh-22;
   g.fillStyle=XC.ink; g.font="600 10.5px "+getComputedStyle(document.body).fontFamily; g.fillText("Under the site",cx,ct+8);
@@ -919,7 +963,7 @@ function drawSection(a,w){
     g.fillStyle=XC.ink; const tx=r[0]?r[0]+"  "+r[1]:r[1]; wrapText(g,tx,cx+24,yy+10,cw-26,11); yy+=hh; });
   $("xsNote").textContent = a<0.05
     ? "Soil horizons are schematic, typical of thin volcanic mountain soils, not a soil survey. Summit rock Tswt is mapped (USGS SIM 2956). "+veTxt
-    : "Illustration: layer shapes and fault positions are schematic, drawn from the same model as the 3D block. "+veTxt;
+    : "Illustration: layer shapes and the old thrusts are schematic. Maacama and Collayomi crossings are from mapped traces (USGS UCERF3). "+veTxt;
 }
 let xsBottom=0;
 function xsPlace(){ const b=Math.round(xs.el.getBoundingClientRect().bottom); if(b!==xsBottom){ xsBottom=b; document.body.style.setProperty("--xsb",b+"px"); } }
@@ -940,6 +984,15 @@ const PLACES=[{t:"Calistoga",x:4.72,z:10.01},{t:"Middletown",x:1.56,z:-9.24},{t:
 PLACES.forEach(q=>{ q.el=document.createElement("div"); q.el.className="plc"; q.el.textContent=q.t; q.el.hidden=true; $("plcs").appendChild(q.el);
   const col=Math.round((q.x+SIZE/2)/SIZE*(N-1)), row=Math.round((q.z+SIZE/2)/SIZE*(N-1)); q.i=row*N+col; });
 const pl3=new THREE.Vector3(), camR=new THREE.Vector3();
+const mkLab=(t,cls)=>{ const e=document.createElement("div"); e.className=cls; e.textContent=t; e.hidden=true; $("plcs").appendChild(e); return e; };
+const GLAB=PLATES.map(pl=>({el:mkLab(pl.lb,"plc plate")}));
+const FLAB=FAULTS.map(fl=>{ const q={x:fl.lab[0], z:fl.lab[1], el:mkLab(fl.n+" · "+fl.r,"plc flt")}; q.i=Math.round((q.z+SIZE/2)/SIZE*(N-1))*N+Math.round((q.x+SIZE/2)/SIZE*(N-1)); return q; });
+// plate names at the block's SW and NE edges (along the across-trend line)
+const PLAB=[{x:-13.2, z:13.2, t:a=>a>8?"Farallon plate, sinking east →":"← Pacific plate lies ≈55 km west, across the San Andreas"},
+            {x:12.5, z:-12.5, t:a=>"North American plate"}].map(q=>{ q.el=mkLab("","plc plate"); q.i=Math.round((q.z+SIZE/2)/SIZE*(N-1))*N+Math.round((q.x+SIZE/2)/SIZE*(N-1)); return q; });
+function placeLab(q,show,op){ let hh=0; for(let k=0;k<6;k++) hh+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][q.i];
+  pl3.set(q.x,Math.max(hh,0)*VE+0.25,q.z).project(lCam); const vis=show&&pl3.z<1; q.el.hidden=!vis;
+  if(vis){ q.el.style.opacity=op.toFixed(2); q.el.style.left=((pl3.x+1)/2*innerWidth)+"px"; q.el.style.top=((1-pl3.y)/2*innerHeight)+"px"; } }
 let last=performance.now(), T=0;
 function frame(now){
   const dt=Math.min(0.05,(now-last)/1000); last=now; T+=dt;
@@ -989,14 +1042,18 @@ function frame(now){
     // compass: which way is north on screen
     setCompass(screenAngle(pl3.set(0,st.hc*VE,0),nrm.set(0,0,-1),lCam));
     // legend
-    const lf=lUni.uThr.value+lUni.uSS.value>0.05, ls=lUni.uErode.value>0.05, lt=lUni.uTopo.value>0.05;
-    $("lgFault").hidden=!lf; $("lgStream").hidden=!ls; $("lgTopo").hidden=!lt; legend.style.opacity=(lf||ls||lt)?1:0;
+    const lf=lUni.uSS.value>0.05, lh=lUni.uThr.value>0.05, ls=lUni.uErode.value>0.05, lt=lUni.uTopo.value>0.05;
+    $("lgEdge").hidden=true; $("lgSut").hidden=true; $("lgThr").hidden=!lh;
+    $("lgFault").hidden=!lf; $("lgStream").hidden=!ls; $("lgTopo").hidden=!lt; legend.style.opacity=(lf||lh||ls||lt)?1:0;
     // 5 km scale bar measured at the summit, across the screen
     camR.setFromMatrixColumn(lCam.matrixWorld,0); camR.y=0; camR.normalize();
     cv0.set(0,st.hc*VE,0).project(lCam); cv1.set(0,st.hc*VE,0).addScaledVector(camR,5).project(lCam);
     const px5=Math.abs(cv1.x-cv0.x)/2*innerWidth; sbar.hidden=!(px5>12&&px5<innerWidth*0.4); $("sbar").style.width=px5.toFixed(0)+"px";
     // town labels fade in with the topo detail
     const to=lUni.uTopo.value;
+    FLAB.forEach(q=>placeLab(q,lUni.uSS.value>0.3,lUni.uSS.value));
+    const pOn=a<170; PLAB.forEach(q=>{ const t=q.t(a); if(q.el.textContent!==t) q.el.textContent=t; placeLab(q,pOn,Math.min(1,sm(170,150,a)*1.0)); });
+    GLAB.forEach(q=>q.el.hidden=true);
     PLACES.forEach(q=>{ let hh=0; for(let k=0;k<6;k++) hh+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][q.i];
       pl3.set(q.x,hh*VE+0.1,q.z).project(lCam); const vis=to>0.05&&pl3.z<1;
       q.el.hidden=!vis; if(vis){ q.el.style.opacity=to.toFixed(2); q.el.style.left=((pl3.x+1)/2*innerWidth)+"px"; q.el.style.top=((1-pl3.y)/2*innerHeight)+"px"; } });
@@ -1004,7 +1061,11 @@ function frame(now){
   if(!st.local){
     const d=markerDir; nrm.set(0,1,0).addScaledVector(d,-d.y).normalize();
     setCompass(screenAngle(marker.position,nrm,gCam));
-    legend.style.opacity=0; sbar.hidden=true; PLACES.forEach(q=>q.el.hidden=true);
+    ["lgFault","lgThr","lgStream","lgTopo"].forEach(id=>$(id).hidden=true); $("lgEdge").hidden=false; $("lgSut").hidden=false; legend.style.opacity=1;
+    sbar.hidden=true; PLACES.forEach(q=>q.el.hidden=true); FLAB.forEach(q=>q.el.hidden=true); PLAB.forEach(q=>q.el.hidden=true);
+    // plate names
+    GLAB.forEach((q,i)=>{ const c=gUni.uC.value[i]; pl3.copy(c).multiplyScalar(1.02); const face=pl3.dot(cv0.copy(gCam.position).normalize())>0.35;
+      pl3.project(gCam); q.el.hidden=!face; if(face){ q.el.style.left=((pl3.x+1)/2*innerWidth)+"px"; q.el.style.top=((1-pl3.y)/2*innerHeight)+"px"; } });
   }
   if(!pin.hidden){ pin.style.left=((pv.x+1)/2*innerWidth)+"px"; pin.style.top=((1-pv.y)/2*innerHeight-6)+"px"; }
   requestAnimationFrame(frame);
