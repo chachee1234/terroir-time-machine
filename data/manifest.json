@@ -1,0 +1,23 @@
+{
+  "datasets": [
+    {
+      "id": "dem-3dep-aoi",
+      "source": "USGS 3D Elevation Program (3DEP) Bare Earth DEM dynamic service",
+      "service": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer",
+      "request_url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=516892.63%2C4265129.75%2C546892.63%2C4295129.75&bboxSR=26910&imageSR=26910&size=1000%2C1000&format=tiff&pixelType=F32&compression=None&interpolation=RSP_BilinearInterpolation&noData=-9999&f=image",
+      "fetched": "2026-09-27",
+      "rights": "USGS-produced data, public domain in the U.S.; credit: U.S. Geological Survey",
+      "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N)",
+      "vertical": "meters; service reports 3DEP bare-earth elevation (NAVD88 per 3DEP standard; not re-verified here)",
+      "note": "Dynamic multi-resolution mosaic resampled by the service with bilinear interpolation; the underlying source dataset and survey epoch vary by location and are not recorded by this request.",
+      "raw_file": "data/raw/mt_st_helena_3dep_30m.tif",
+      "raw_sha256": "0beb986cb80f2d971a2ec743c147ecf1afb72b56b641a493a0b9f6e13c93c2ed",
+      "derived": [
+        {
+          "file": "prototype/assets/terrain.bin",
+          "sha256": "8051c88fdcb20aecce340415b2220fbbfa6a5a24115aec44806c366ef34de12e"
+        }
+      ]
+    }
+  ]
+}

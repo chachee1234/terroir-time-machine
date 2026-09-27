@@ -39,7 +39,7 @@ header{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-conte
 main{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 380px;min-height:0}
 .stage{position:relative;background:var(--stage);display:flex;flex-direction:column;min-height:360px}
 .stage svg{flex:1;width:100%;height:100%;display:block}
-.cap{position:absolute;left:16px;top:16px;right:16px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}
+.cap{position:absolute;z-index:2;left:16px;top:16px;right:16px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}
 .label{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--c);padding:6px 10px;font-size:14px;max-width:420px}
 .story{padding:16px;background:var(--surface);border-top:1px solid var(--line)}
 .story h2{margin:0 0 4px;font-size:22px}
@@ -75,6 +75,16 @@ footer{border-top:1px solid var(--line);background:var(--surface);padding:10px 1
 }
 @media (prefers-reduced-motion: reduce){ .anim{animation:none!important} }
 .paused .anim{animation-play-state:paused}
+#terrain{position:relative;flex:1;min-height:0;display:none}
+#terrain canvas{display:block;width:100%;height:100%;touch-action:none}
+.terrain-on #terrain{display:block}
+.terrain-on svg#view{display:none}
+.pin{position:absolute;transform:translate(-50%,-100%);background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:4px 8px;font-size:13px;pointer-events:none;white-space:nowrap}
+.pin b{display:block;font-size:14px}
+.tbar{position:absolute;right:16px;bottom:12px;display:flex;gap:8px;align-items:center;font-size:13px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+.tbar .btn{min-height:36px;padding:4px 10px}
+.tinfo{position:absolute;left:16px;bottom:12px;font-size:12px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:4px 8px;max-width:60%}
+@media (max-width:860px){ #terrain{flex:none;aspect-ratio:1/1;margin-top:64px} .tinfo{max-width:calc(100% - 32px);bottom:56px} }
 @keyframes flow{from{transform:translateX(-40px)}to{transform:translateX(40px)}}
 @keyframes rise{0%{opacity:.2}50%{opacity:.7}100%{opacity:.2}}
 </style>
@@ -93,6 +103,11 @@ footer{border-top:1px solid var(--line);background:var(--surface);padding:10px 1
   <section class="stage" aria-label="Scene view">
     <div class="cap"><div class="label" id="classLabel"></div></div>
     <svg id="view" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="viewDesc"><desc id="viewDesc"></desc><g id="art"></g></svg>
+    <div id="terrain" role="img" aria-label="3D measured terrain of the 30 km area around Mount St. Helena. Drag to rotate, scroll or pinch to zoom.">
+      <div class="pin" id="pin" hidden></div>
+      <div class="tinfo">USGS 3DEP bare-earth DEM · 30 km across · 134 m cells (downsampled from 30 m) · north is away from you at start</div>
+      <div class="tbar"><span>Vertical exaggeration</span><button class="btn" id="ve" aria-pressed="false">1×</button><button class="btn" id="resetCam">Reset view</button></div>
+    </div>
     <div class="story">
       <h2 id="title"></h2>
       <p id="body"></p>
@@ -120,6 +135,7 @@ footer{border-top:1px solid var(--line);background:var(--surface);padding:10px 1
 <script>
 const SRC = {
   G15: {cite:"U.S. Geological Survey / U.S. Board on Geographic Names, GNIS domestic names, official feature-detail export for Mount Saint Helena.", loc:"Feature ID 232163; class Summit; Sonoma County, CA; primary coordinate (NAD83); Landform Point Type ‘High Point’."},
+  G16: {cite:"U.S. Geological Survey, 3D Elevation Program (3DEP) Bare Earth DEM dynamic service, exportImage, fetched 2026-09-27.", url:"https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer", loc:"30 km square in NAD83 / UTM 10N centered on the GNIS point; 30 m cells, bilinear; request URL and SHA-256 in data/manifest.json."},
   G07: {cite:"Graymer, R.W., et al., 2007, Geologic Map and Map Database of Eastern Sonoma and Western Napa Counties, California: USGS Scientific Investigations Map 2956, v1.0.", url:"https://doi.org/10.3133/sim2956", loc:"Digital Database Package sim2956c.tgz, coverage eswn-geol.e00, label ID 636 / polygon 584, PTYPE Tswt; pamphlet description of map units, Sonoma Volcanics."}
 };
 const CLS = {
@@ -129,12 +145,12 @@ const CLS = {
 };
 const SCENES = [
   {id:"intro", rail:"Today", age:"0 Ma (modern reference)", scope:"Local · ~30 km AOI", cls:"measured",
-   label:"Measured/mapped data · GNIS feature point · terrain pending",
+   label:"Measured/mapped data · USGS 3DEP terrain, fetched 2026 · GNIS feature point",
    title:"Mount St. Helena today",
    body:"The northern peak of the Mayacamas Mountains, above Napa and Sonoma valleys. This journey steps from global deep-time context to the modern mountain, and shows where the evidence runs out.",
-   art:"locator", desc:"Locator frame with a 30 km area of interest and the GNIS feature point. Measured terrain not yet rendered.",
+   art:"locator", terrain:"intro", desc:"Locator frame with a 30 km area of interest and the GNIS feature point (shown only if 3D terrain cannot load).",
    claims:[{st:"verified", text:"The official GNIS feature point for Mount Saint Helena (ID 232163) is 38.6691784 N, −122.6333914 W (NAD83).", src:["G15"], lim:"Stored precision is not positional accuracy. GNIS’s ‘High Point’ designation is not an independent survey of the highest point.", conf:"High: primary federal record."},
-           {st:"gap", text:"Measured terrain (DEM) for the area of interest has not been prepared yet.", src:[], lim:"Planned for milestone M3. No substitute terrain is drawn.", conf:"n/a"}]},
+           {st:"verified", text:"The terrain is USGS 3DEP bare-earth elevation for a 30 km square, 32–1,421 m. The DEM cell at the GNIS point reads 1,316 m.", src:["G16"], lim:"Shown at 134 m cells (downsampled from 30 m), so fine ridges are smoothed. 3DEP mixes survey dates and sources, which this request doesn’t record. The square is a design extent, not a geological boundary.", conf:"High for modern bare-earth shape at this resolution."}]},
   {id:"deep-time", rail:"1000–250 Ma", age:"1000–250 Ma (editorial window)", scope:"Global", cls:"gap",
    label:"Local reconstruction unavailable for this interval",
    title:"Deep time: global plate context",
@@ -162,10 +178,10 @@ const SCENES = [
    art:"gap", desc:"Hatched evidence-gap panel.",
    claims:[{st:"gap", text:"No source dates the present mountain morphology.", src:[], lim:"No continuous uplift or erosion rate is invented.", conf:"n/a"}]},
   {id:"modern", rail:"0 Ma", age:"0 Ma (modern reference)", scope:"Local · ~30 km AOI", cls:"measured",
-   label:"Measured/mapped data · GNIS feature point + SIM 2956 unit · terrain pending",
+   label:"Measured/mapped data · USGS 3DEP terrain + GNIS point + SIM 2956 unit",
    title:"Modern terrain and geology",
-   body:"Back to today. The present-day reference point sits on mapped welded ash-flow tuff. Once the measured elevation model is prepared (M3), this view becomes 3D terrain with the geologic map draped over it.",
-   art:"locator2", desc:"Locator frame with the GNIS point labeled as mapped unit Tswt. Measured terrain not yet rendered.",
+   body:"Back to today. This is measured modern terrain. The present-day reference point sits on mapped welded ash-flow tuff. Draping the full geologic map over the terrain is the next step.",
+   art:"locator2", terrain:"modern", desc:"Locator frame with the GNIS point labeled as mapped unit Tswt. Measured terrain not yet rendered.",
    claims:[{st:"verified", text:"GNIS feature point 38.6691784 N, −122.6333914 W (NAD83), feature ID 232163.", src:["G15"], lim:"Feature point, not a surveyed summit.", conf:"High."},
            {st:"partial", text:"The point lies within mapped unit Tswt (welded ash-flow tuff).", src:["G07"], lim:"Pending authoritative datum transform; 1:100,000 map scale.", conf:"Moderate."}]}
 ];
@@ -228,6 +244,9 @@ function render(){
   const lab = $("classLabel"); lab.textContent = s.label; lab.style.setProperty("--c", `var(${c.color})`);
   $("title").textContent = s.title; $("body").textContent = s.body;
   $("viewDesc").textContent = s.desc; $("art").innerHTML = art(s.art);
+  const t = !!(s.terrain && window.terrainShow);
+  document.querySelector(".stage").classList.toggle("terrain-on", t);
+  if(t) window.terrainShow(s.terrain);
   $("cta").innerHTML = idx===0 ? `<button class="btn primary" id="start">Start journey</button>` : "";
   if(idx===0) $("start").onclick = () => go(1);
   $("claims").innerHTML = s.claims.map(cl => `<div class="claim"><span class="st ${cl.st}">${cl.st}</span><p>${cl.text}</p>
@@ -264,6 +283,88 @@ function fromHash(){
 addEventListener("hashchange", fromHash);
 document.body.classList.add("paused");
 fromHash();
+window.rerender = render;
+</script>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/controls/OrbitControls.js":"./vendor/OrbitControls.js"}}</script>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const box = document.getElementById("terrain"), pin = document.getElementById("pin");
+try {
+  const [meta, buf] = await Promise.all([
+    fetch("assets/terrain.json").then(r => { if(!r.ok) throw new Error("terrain.json " + r.status); return r.json(); }),
+    fetch("assets/terrain.bin").then(r => { if(!r.ok) throw new Error("terrain.bin " + r.status); return r.arrayBuffer(); })
+  ]);
+  const n = meta.browser_grid.cells, h = new Int16Array(buf);
+  if(h.length !== n*n) throw new Error("terrain grid size mismatch");
+  const sizeKm = (meta.aoi.bbox_utm[2] - meta.aoi.bbox_utm[0]) / 1000;
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  box.prepend(renderer.domElement);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(getComputedStyle(document.body).getPropertyValue("--stage").trim() || "#ece6d9");
+  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 500);
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.maxPolarAngle = Math.PI * 0.47; controls.minDistance = 4; controls.maxDistance = 90;
+
+  // PlaneGeometry vertex rows run +y→−y, so grid row 0 (north) maps to −z after rotateX.
+  const geo = new THREE.PlaneGeometry(sizeKm, sizeKm, n - 1, n - 1);
+  const pos = geo.attributes.position, colors = new Float32Array(n * n * 3);
+  const lo = meta.stats_raw_m.min, hi = meta.stats_raw_m.max;
+  const ramp = [[0,[0.42,0.50,0.38]],[0.35,[0.60,0.58,0.42]],[0.7,[0.66,0.55,0.44]],[1,[0.86,0.83,0.78]]];
+  for(let i = 0; i < n*n; i++){
+    const t = (h[i] - lo) / (hi - lo);
+    let k = 1; while(k < ramp.length - 1 && t > ramp[k][0]) k++;
+    const [t0,c0] = ramp[k-1], [t1,c1] = ramp[k], f = Math.min(1, Math.max(0, (t - t0) / (t1 - t0)));
+    for(let j = 0; j < 3; j++) colors[i*3+j] = c0[j] + (c1[j] - c0[j]) * f;
+  }
+  geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  geo.rotateX(-Math.PI / 2);
+  const mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ vertexColors: true }));
+  scene.add(mesh);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x444433, 1.1));
+  const sun = new THREE.DirectionalLight(0xffffff, 2.2); sun.position.set(-20, 25, -20); scene.add(sun); // from the NW, as in standard hillshade
+
+  const c = Math.floor(n / 2), centerElev = h[c * n + c];
+  const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1, 8), new THREE.MeshBasicMaterial({ color: 0x1f5f7a }));
+  const dot = new THREE.Mesh(new THREE.SphereGeometry(0.18, 16, 12), new THREE.MeshBasicMaterial({ color: 0x1f5f7a }));
+  scene.add(stem, dot);
+
+  let ve = 1, mode = "intro";
+  function applyVE(){
+    for(let i = 0; i < n*n; i++) pos.setY(i, h[i] / 1000 * ve);
+    pos.needsUpdate = true; geo.computeVertexNormals();
+    const top = centerElev / 1000 * ve;
+    stem.scale.y = 1.2; stem.position.set(0, top + 0.6, 0); dot.position.set(0, top + 1.2, 0);
+  }
+  function resetCam(){ camera.position.set(0, 14, 24); controls.target.set(0, 0.4, 0); controls.update(); }
+  function size(){ const r = box.getBoundingClientRect(); if(!r.width) return; renderer.setSize(r.width, r.height, false); camera.aspect = r.width / r.height; camera.updateProjectionMatrix(); draw(); }
+  function draw(){
+    renderer.render(scene, camera);
+    const p = dot.position.clone().project(camera), r = box.getBoundingClientRect();
+    pin.hidden = p.z > 1;
+    pin.style.left = ((p.x + 1) / 2 * r.width) + "px"; pin.style.top = ((1 - p.y) / 2 * r.height - 14) + "px";
+  }
+  controls.addEventListener("change", draw);
+  new ResizeObserver(size).observe(box);
+  document.getElementById("ve").onclick = e => { ve = ve === 1 ? 2 : 1; e.target.textContent = ve + "×"; e.target.setAttribute("aria-pressed", ve !== 1); applyVE(); draw(); };
+  document.getElementById("resetCam").onclick = () => { resetCam(); draw(); };
+  window.terrainShow = m => {
+    mode = m;
+    pin.innerHTML = "<b>GNIS feature point</b>" + (m === "modern" ? "on mapped unit Tswt (partial)" : "Mount Saint Helena");
+    requestAnimationFrame(size);
+  };
+  applyVE(); resetCam();
+  window.rerender();
+} catch(err) {
+  // No WebGL or missing asset: keep the SVG locator and all text; say why.
+  console.warn("terrain unavailable:", err);
+  const note = document.createElement("p"); note.className = "note";
+  note.textContent = "3D terrain could not load (" + err.message + "). Showing the flat locator instead.";
+  document.querySelector(".story").appendChild(note);
+}
 </script>
 </body>
 </html>

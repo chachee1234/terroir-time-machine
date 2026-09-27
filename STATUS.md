@@ -142,3 +142,14 @@ Owner: review and merge the `automation-workflows` pull request; add repo secret
 
 ### Next smallest action
 Owner: review/merge the `fix-intake-schema` PR, then re-trigger issue #3 (remove and re-add `region-request`). Expected: Score 70/100 → backlog. Science: M1-06 unchanged.
+
+## UI prototype + modern terrain (branch `ui-prototype`) — 2026-09-27
+- Owner asked to see an MVP UI and approved fetching terrain for the AOI.
+- Added `prototype/index.html`: static tour (6 stops, play/pause, keyboard, scene URL, evidence panel, reduced-motion) using only M1 ledger facts; unsupported chapters render as labeled gaps. Not the M2 Vite/TypeScript app.
+- Added `scripts/fetch_terrain.py` (stdlib; downloads with curl because this Mac's python.org build lacks CA certs). One 3DEP request; raw file in git-ignored `data/raw/`; `data/manifest.json` records URL + hashes; browser grid `prototype/assets/terrain.bin` (224×224 Int16, ≈99.5k triangles). Source recorded as G16 in SOURCES.md.
+- Vendored Three.js 0.186.1 (MIT) `three.module.js`, `three.core.js`, `OrbitControls.js`, LICENSE into `prototype/vendor/` (~2 MB uncompressed).
+- Checked in the browser pane at desktop width and 375×812: terrain renders, rotate/zoom, 1×/2× vertical exaggeration labeled, reset view; gap scenes hide terrain and pin; no horizontal scroll; no console errors. Not tested: WebGL-failure fallback, touch devices, performance on a reference device.
+- Commands: `python3 scripts/fetch_terrain.py` then `--from-raw --out-cells 224`.
+
+### Next smallest action
+Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on the terrain as a labeled mapped layer. Science: M1-06 unchanged.
