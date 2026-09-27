@@ -1,0 +1,385 @@
+{
+ "rule": "start with --start; then the unmapped region touching a mapped one, nearest to the last mapped; when none touches, the closest unmapped region",
+ "source": "prototype/assets/globe/ca_avas.json (UC Davis AVA Project, CC0)",
+ "params": {
+  "start": "sonoma_valley",
+  "mapped": "napa_valley",
+  "max_km": 80.0,
+  "touch_km": 1.5,
+  "limit": 40
+ },
+ "order": [
+  {
+   "id": "sonoma_valley",
+   "name": "Sonoma Valley",
+   "rule": "owner's choice",
+   "gap_km": 0.0,
+   "size_km": 39.3,
+   "close_ups": [
+    "bennett_valley",
+    "los_carneros",
+    "moon_mountain_district_sonoma_county",
+    "sonoma_mountain"
+   ]
+  },
+  {
+   "id": "petaluma_gap",
+   "name": "Petaluma Gap",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 57.4,
+   "close_ups": []
+  },
+  {
+   "id": "northern_sonoma",
+   "name": "Northern Sonoma",
+   "rule": "parent of Russian River Valley, which touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 61.0,
+   "close_ups": [
+    "alexander_valley",
+    "chalk_hill",
+    "dry_creek_valley",
+    "knights_valley",
+    "pine_mountain_cloverdale_peak",
+    "rockpile",
+    "russian_river_valley"
+   ]
+  },
+  {
+   "id": "fountaingrove_district",
+   "name": "Fountaingrove District",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 17.5,
+   "close_ups": []
+  },
+  {
+   "id": "crystal_springs_of_napa_valley",
+   "name": "Crystal Springs of Napa Valley ",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 8.9,
+   "close_ups": []
+  },
+  {
+   "id": "solano_county_green_valley",
+   "name": "Solano County Green Valley",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 12.1,
+   "close_ups": []
+  },
+  {
+   "id": "suisun_valley",
+   "name": "Suisun Valley",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 11.7,
+   "close_ups": []
+  },
+  {
+   "id": "west_sonoma_coast",
+   "name": "West Sonoma Coast",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 62.3,
+   "close_ups": []
+  },
+  {
+   "id": "fort_ross_seaview",
+   "name": "Fort Ross-Seaview",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 17.7,
+   "close_ups": []
+  },
+  {
+   "id": "mendocino",
+   "name": "Mendocino",
+   "rule": "parent of Yorkville Highlands, which touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 58.2,
+   "close_ups": [
+    "anderson_valley",
+    "cole_ranch",
+    "mcdowell_valley",
+    "mendocino_ridge",
+    "potter_valley",
+    "redwood_valley",
+    "yorkville_highlands"
+   ]
+  },
+  {
+   "id": "benmore_valley",
+   "name": "Benmore Valley",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 3.4,
+   "close_ups": []
+  },
+  {
+   "id": "eagle_peak_mendocino_county",
+   "name": "Eagle Peak Mendocino County",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 15.2,
+   "close_ups": []
+  },
+  {
+   "id": "guenoc_valley",
+   "name": "Guenoc Valley",
+   "rule": "closest (nothing touching)",
+   "gap_km": 3.6,
+   "size_km": 6.3,
+   "close_ups": []
+  },
+  {
+   "id": "clear_lake",
+   "name": "Clear Lake",
+   "rule": "closest (nothing touching)",
+   "gap_km": 5.5,
+   "size_km": 41.7,
+   "close_ups": [
+    "big_valley_district_lake_county",
+    "high_valley",
+    "kelsey_bench_lake_county",
+    "red_hills_lake_county",
+    "upper_lake_valley"
+   ]
+  },
+  {
+   "id": "long_valley-lake_county",
+   "name": "Long Valley-Lake County",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 13.0,
+   "close_ups": []
+  },
+  {
+   "id": "winters_highlands",
+   "name": "Winters Highlands",
+   "rule": "closest (nothing touching)",
+   "gap_km": 8.7,
+   "size_km": 12.7,
+   "close_ups": []
+  },
+  {
+   "id": "capay_valley",
+   "name": "Capay Valley",
+   "rule": "closest (nothing touching)",
+   "gap_km": 8.8,
+   "size_km": 34.3,
+   "close_ups": []
+  },
+  {
+   "id": "dunnigan_hills",
+   "name": "Dunnigan Hills",
+   "rule": "closest (nothing touching)",
+   "gap_km": 3.3,
+   "size_km": 26.5,
+   "close_ups": []
+  },
+  {
+   "id": "comptche",
+   "name": "Comptche",
+   "rule": "closest (nothing touching)",
+   "gap_km": 10.4,
+   "size_km": 4.4,
+   "close_ups": []
+  },
+  {
+   "id": "contra_costa",
+   "name": "Contra Costa",
+   "rule": "closest (nothing touching)",
+   "gap_km": 12.1,
+   "size_km": 54.5,
+   "close_ups": []
+  },
+  {
+   "id": "lamorinda",
+   "name": "Lamorinda",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 14.9,
+   "close_ups": []
+  },
+  {
+   "id": "livermore_valley",
+   "name": "Livermore Valley",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 40.4,
+   "close_ups": []
+  },
+  {
+   "id": "santa_clara_valley",
+   "name": "Santa Clara Valley",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 74.9,
+   "close_ups": [
+    "pacheco_pass",
+    "san_ysidro_district"
+   ]
+  },
+  {
+   "id": "santa_cruz_mountains",
+   "name": "Santa Cruz Mountains",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 67.3,
+   "close_ups": [
+    "ben_lomond_mountain"
+   ]
+  },
+  {
+   "id": "tracy_hills",
+   "name": "Tracy Hills",
+   "rule": "closest (nothing touching)",
+   "gap_km": 10.9,
+   "size_km": 21.1,
+   "close_ups": []
+  },
+  {
+   "id": "river_junction",
+   "name": "River Junction",
+   "rule": "closest (nothing touching)",
+   "gap_km": 5.7,
+   "size_km": 3.8,
+   "close_ups": []
+  },
+  {
+   "id": "lodi",
+   "name": "Lodi",
+   "rule": "closest (nothing touching)",
+   "gap_km": 13.4,
+   "size_km": 71.2,
+   "close_ups": [
+    "alta_mesa",
+    "borden_ranch",
+    "clements_hills",
+    "cosumnes_river",
+    "jahant",
+    "mokelumne_river",
+    "sloughhouse"
+   ]
+  },
+  {
+   "id": "clarksburg",
+   "name": "Clarksburg",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 38.4,
+   "close_ups": [
+    "merritt_island"
+   ]
+  },
+  {
+   "id": "el_dorado",
+   "name": "El Dorado",
+   "rule": "closest (nothing touching)",
+   "gap_km": 11.2,
+   "size_km": 56.1,
+   "close_ups": [
+    "fair_play"
+   ]
+  },
+  {
+   "id": "california_shenandoah_valley",
+   "name": "California Shenandoah Valley",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 9.6,
+   "close_ups": []
+  },
+  {
+   "id": "fiddletown",
+   "name": "Fiddletown",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 9.9,
+   "close_ups": []
+  },
+  {
+   "id": "gabilan_mountains",
+   "name": "Gabilan Mountains",
+   "rule": "closest (nothing touching)",
+   "gap_km": 14.0,
+   "size_km": 43.9,
+   "close_ups": [
+    "chalone",
+    "mt__harlan"
+   ]
+  },
+  {
+   "id": "cienega_valley",
+   "name": "Cienega Valley",
+   "rule": "parent of Lime Kiln Valley, which touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 9.0,
+   "close_ups": [
+    "lime_kiln_valley"
+   ]
+  },
+  {
+   "id": "san_benito",
+   "name": "San Benito",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 18.9,
+   "close_ups": [
+    "lime_kiln_valley",
+    "paicines"
+   ]
+  },
+  {
+   "id": "arroyo_seco",
+   "name": "Arroyo Seco",
+   "rule": "closest (nothing touching)",
+   "gap_km": 6.1,
+   "size_km": 21.9,
+   "close_ups": []
+  },
+  {
+   "id": "santa_lucia_highlands",
+   "name": "Santa Lucia Highlands",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 23.1,
+   "close_ups": []
+  },
+  {
+   "id": "carmel_valley",
+   "name": "Carmel Valley",
+   "rule": "closest (nothing touching)",
+   "gap_km": 11.8,
+   "size_km": 14.2,
+   "close_ups": []
+  },
+  {
+   "id": "san_bernabe",
+   "name": "San Bernabe",
+   "rule": "closest (nothing touching)",
+   "gap_km": 12.1,
+   "size_km": 13.7,
+   "close_ups": []
+  },
+  {
+   "id": "san_lucas",
+   "name": "San Lucas",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 16.1,
+   "close_ups": []
+  },
+  {
+   "id": "san_antonio_valley",
+   "name": "San Antonio Valley",
+   "rule": "closest (nothing touching)",
+   "gap_km": 3.5,
+   "size_km": 42.2,
+   "close_ups": []
+  }
+ ]
+}

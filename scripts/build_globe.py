@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Assets for the MVP globe (prototype/globe.html): Earth relief, California relief, California AVAs.
+"""Globe assets for the viewer (prototype/timemachine.html): Earth relief, California relief, California AVAs.
 
 Tier 0, stdlib only. Terrain comes from the AWS Open Data Terrain Tiles (Terrarium PNGs, same source
 and cache as fetch_tiles.py); AVA outlines from the UC Davis AVA Project (CC0). Outputs:

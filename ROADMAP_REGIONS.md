@@ -14,7 +14,7 @@ Owner request (2026-09-27): more detail in Napa, zoom to places across the Napa 
 | Geologic story (chapters, section panel) | done; Mount St. Helena centred | not started |
 | Soils (USDA SSURGO) | not started | not started |
 
-The globe (`prototype/globe.html`) already shows every planned region in its phase colour. The viewer (`prototype/timemachine.html`) runs Napa and the old 30 km block.
+Everything runs in one program, `prototype/timemachine.html`: at Today the globe shows every California AVA coloured by the expansion order (`scripts/region_order.py`), and the Regions button or a region name flies there. `globe.html` only forwards old links.
 
 ## What changed: terrain no longer needs the Mac
 
@@ -44,7 +44,11 @@ Acceptance: Napa and the 30 km block look the same as before, and a stub region 
 7. **Story.** Write `scenes.json` with each chapter's visual class and sources. Unsupported chapters stay labelled gaps (SCIENCE_RULES).
 8. **Check.** Headless run of every chapter and close-up with no console errors, a STATUS.md entry, and the globe marker switched to live.
 
-## Order and what is new in each region
+## Order (owner rule, 2026-09-27)
+
+Sonoma first, then the next AVA touching a mapped one, then the closest when nothing touches. `scripts/region_order.py` computes it into `prototype/assets/regions/order.json`; currently Sonoma Valley, Petaluma Gap, Northern Sonoma (Russian River Valley, Alexander Valley and Dry Creek as close-ups), Fountaingrove District, Crystal Springs, Solano County Green Valley, Suisun Valley, West Sonoma Coast, Fort Ross-Seaview, Mendocino (Anderson Valley as a close-up). The phase notes below describe what is geologically new in each area.
+
+## What is new in each area
 
 ### Phase 1: Sonoma and Mendocino
 | Region | Frame | New story or data |
@@ -91,5 +95,5 @@ These are planning layers, not legal descriptions, surveys or title guarantees; 
 
 ## Decisions for the owner
 
-- Phase 1 order: I recommend Sonoma Valley first, as a joint Napa–Sonoma frame, because it reuses Napa's geology and terrain work. Then Northern Sonoma, then Anderson Valley.
-- Whether the globe becomes the landing page (open `globe.html` first and fly into a region) or stays a separate entry.
+- Phase 1 order: decided 2026-09-27 (Sonoma first, then neighbours; see above).
+- Decided 2026-09-27: the globe and the time machine are one program.
