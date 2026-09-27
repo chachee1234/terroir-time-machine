@@ -35,6 +35,25 @@
           "sha256": "23083ad146dbc961b7420d140d4563326b5320597dc1fc531e3a9a98b57bcf02"
         }
       ]
+    },
+    {
+      "id": "dem-3dep-napa_valley",
+      "source": "USGS 3D Elevation Program (3DEP) Bare Earth DEM dynamic service",
+      "service": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer",
+      "request_url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=528800.00%2C4221300.00%2C584100.00%2C4293300.00&bboxSR=26910&imageSR=26910&size=1843%2C2400&format=tiff&pixelType=F32&compression=None&interpolation=RSP_BilinearInterpolation&noData=-9999&f=image",
+      "fetched": "2026-09-27",
+      "rights": "USGS-produced data, public domain in the U.S.; credit: U.S. Geological Survey",
+      "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N)",
+      "vertical": "meters; service reports 3DEP bare-earth elevation (NAVD88 per 3DEP standard; not re-verified here)",
+      "note": "Dynamic multi-resolution mosaic resampled by the service with bilinear interpolation; the underlying source dataset and survey epoch vary by location and are not recorded by this request.",
+      "raw_file": "data/raw/napa_valley_3dep_30m.tif",
+      "raw_sha256": "ea4e33c5837fc31ccbdfaf55e7a1902ee87acb6993bfb3c69ffb6603f38da4ae",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/terrain.bin",
+          "sha256": "79a7d369115dfaad99fcccfa1590845786b1382c76a4c4a0ae1d8a1a8449e548"
+        }
+      ]
     }
   ]
 }
