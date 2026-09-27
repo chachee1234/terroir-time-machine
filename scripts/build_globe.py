@@ -4,7 +4,7 @@
 Tier 0, stdlib only. Terrain comes from the AWS Open Data Terrain Tiles (Terrarium PNGs, same source
 and cache as fetch_tiles.py); AVA outlines from the UC Davis AVA Project (CC0). Outputs:
 
-  prototype/assets/globe/relief.png      2048 x 1024 equirectangular elevation, 8-bit (see relief.json)
+  prototype/assets/globe/relief.png      4096 x 2048 equirectangular elevation, 8-bit (see relief.json)
   prototype/assets/globe/california.bin  Int16 metres on a 0.02 degree lat/lon grid, row 0 = north
   prototype/assets/globe/california.json grid metadata and provenance
   prototype/assets/globe/ca_avas.json    current California AVAs, simplified to ~200 m, [lon, lat]
@@ -142,6 +142,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--ava-file", help="local copy of the UC Davis avas.geojson")
     ap.add_argument("--offline", action="store_true", help="use cached tiles only")
+    ap.add_argument("--earth-zoom", type=int, default=4, help="tile zoom for the Earth relief (4 = 256 tiles)")
+    ap.add_argument("--earth-width", type=int, default=4096, help="Earth relief width in pixels (height is half)")
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
 
@@ -161,15 +163,15 @@ def main():
     print(f"{len(avas)} California AVAs", flush=True)
     m8 = california(a.offline)
     print(f"California grid from {len(m8.files)} z8 tiles", flush=True)
-    m3 = earth(a.offline)
-    print(f"Earth relief from {len(m3.files)} z3 tiles", flush=True)
+    m3 = earth(a.offline, w=a.earth_width, h=a.earth_width // 2, z=a.earth_zoom)
+    print(f"Earth relief from {len(m3.files)} z{a.earth_zoom} tiles", flush=True)
 
     man_path = ROOT / "data" / "manifest.json"
     man = json.loads(man_path.read_text())
     man["datasets"] = [d for d in man["datasets"] if d.get("id") != "globe-assets"]
     man["datasets"].append({"id": "globe-assets", "source": "AWS Open Data Terrain Tiles (Terrarium) + UC Davis AVA Project",
                             "url_template": TEMPLATE, "ava_url": AVA_URL, "rights": RIGHTS + " AVA outlines: CC0 1.0.",
-                            "tiles_sha256": {"z3": m3.digest(), "z8": m8.digest()},
+                            "tiles_sha256": {f"z{a.earth_zoom}": m3.digest(), "z8": m8.digest()},
                             "fetched": datetime.date.today().isoformat(),
                             "derived": [{"file": str(p.relative_to(ROOT)), "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
                                         for p in sorted(OUT.iterdir()) if p.suffix in (".png", ".bin", ".json")]})

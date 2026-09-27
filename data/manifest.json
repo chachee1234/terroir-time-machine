@@ -146,7 +146,7 @@
       "ava_url": "https://raw.githubusercontent.com/UCDavisLibrary/ava/master/avas_aggregated_files/avas.geojson",
       "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md AVA outlines: CC0 1.0.",
       "tiles_sha256": {
-        "z3": "e391a21b610d4b237a2777bb003ec1cd38483517e42e4082078f491710a2e561",
+        "z4": "67249c97e35a4b7c7f52d0c903409015789e45b1b4add66e81968ca169643938",
         "z8": "6a337f2746bfcdc8bb4710e4072cf911f00b98b0486a374bbed6ea7c63c9a3fd"
       },
       "fetched": "2026-09-27",
@@ -165,11 +165,11 @@
         },
         {
           "file": "prototype/assets/globe/relief.json",
-          "sha256": "85ae672b6c23280b1a5cb354ac1901ad6e3f2270eea0cfc372d5f72c1b122cfb"
+          "sha256": "479c556700fbdda07713d45200341b7c31ac40e94ca6ad2969623d7999eb344d"
         },
         {
           "file": "prototype/assets/globe/relief.png",
-          "sha256": "f3dae99e87360451b157df9b2a13f9c9052b5d4d7e0891bf7467c20071b1f9c3"
+          "sha256": "55baedd80623a1aa1ac522a853de91e07eb5d369e5cb8b8110550c347358e9e4"
         }
       ]
     }
