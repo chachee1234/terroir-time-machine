@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terroir Time Machine — UI prototype</title>
+<style>
+:root{
+  --bg:#f6f3ec; --surface:#fffdf8; --ink:#1f1c17; --muted:#5d564b; --line:#d9d1c1;
+  --accent:#8a3b12; --accent-ink:#fff;
+  --measured:#1f5f7a; --recon:#5b3f8c; --illus:#8a5a00; --gap:#6b6b6b;
+  --stage:#ece6d9; --hatch:#d6cdbb;
+  --ok:#2d6a3e; --partial:#8a5a00; --no:#8b2c2c;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16140f; --surface:#1f1c16; --ink:#efe9dc; --muted:#b3aa99; --line:#3a352b;
+    --accent:#e0874f; --accent-ink:#1a120c;
+    --measured:#6fb6d4; --recon:#b29ae6; --illus:#e3b04f; --gap:#a8a8a8;
+    --stage:#24211a; --hatch:#322d24;
+    --ok:#7cc38e; --partial:#e3b04f; --no:#e38b8b;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column;min-height:100vh}
+a{color:var(--accent)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.draft{background:var(--ink);color:var(--bg);font-size:13px;text-align:center;padding:6px 16px}
+header{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--surface)}
+.brand{font-weight:700;letter-spacing:.01em}
+.brand small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:14px;background:var(--bg)}
+.chip b{font-weight:600}
+.cls{display:inline-flex;align-items:center;gap:6px}
+.cls i{width:10px;height:10px;border-radius:2px;display:inline-block}
+main{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 380px;min-height:0}
+.stage{position:relative;background:var(--stage);display:flex;flex-direction:column;min-height:360px}
+.stage svg{flex:1;width:100%;height:100%;display:block}
+.cap{position:absolute;left:16px;top:16px;right:16px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}
+.label{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--c);padding:6px 10px;font-size:14px;max-width:420px}
+.story{padding:16px;background:var(--surface);border-top:1px solid var(--line)}
+.story h2{margin:0 0 4px;font-size:22px}
+.story p{margin:0;color:var(--muted);max-width:70ch}
+.intro-cta{margin-top:12px}
+.btn{min-height:44px;min-width:44px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:var(--surface);cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+aside{border-left:1px solid var(--line);background:var(--surface);overflow:auto;padding:16px}
+aside h3{margin:0 0 8px;font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.claim{border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:12px;background:var(--bg)}
+.claim p{margin:0 0 8px}
+.st{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:4px;border:1.5px solid currentColor;display:inline-block;margin-bottom:6px}
+.st.verified{color:var(--ok)} .st.partial{color:var(--partial)} .st.gap{color:var(--no)}
+dl{margin:0;font-size:14px;display:grid;grid-template-columns:auto 1fr;gap:2px 10px}
+dt{color:var(--muted)} dd{margin:0}
+.src{font-size:14px;margin:0 0 10px;padding-left:12px;border-left:2px solid var(--line)}
+footer{border-top:1px solid var(--line);background:var(--surface);padding:10px 16px}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rail{flex:1;display:flex;gap:4px;min-width:280px;list-style:none;margin:0;padding:0}
+.rail li{flex:1}
+.rail button{width:100%;min-height:44px;border:1px solid var(--line);background:var(--bg);border-radius:6px;cursor:pointer;padding:4px 6px;font-size:13px;line-height:1.2;text-align:left}
+.rail button[aria-current="step"]{border-color:var(--accent);box-shadow:inset 0 -4px 0 var(--accent);font-weight:600}
+.rail small{display:block;color:var(--muted);font-weight:400}
+.note{font-size:12px;color:var(--muted);margin-top:6px}
+.toggle-ev{display:none}
+@media (max-width:860px){
+  main{grid-template-columns:1fr}
+  .stage svg{flex:none;height:auto;aspect-ratio:8/5;margin-top:64px}
+  aside{border-left:0;border-top:1px solid var(--line);display:none}
+  aside.open{display:block}
+  .toggle-ev{display:inline-block}
+  .rail small{display:none}
+}
+@media (prefers-reduced-motion: reduce){ .anim{animation:none!important} }
+.paused .anim{animation-play-state:paused}
+@keyframes flow{from{transform:translateX(-40px)}to{transform:translateX(40px)}}
+@keyframes rise{0%{opacity:.2}50%{opacity:.7}100%{opacity:.2}}
+</style>
+</head>
+<body>
+<div class="draft" role="note">UI prototype · draft content · claims below are from the M1 ledger and are <b>not yet scientifically reviewed</b></div>
+<header>
+  <div class="brand">Terroir Time Machine<small>Mount St. Helena, California — not Mount St. Helens, Washington</small></div>
+  <div class="meta" aria-live="polite">
+    <span class="chip">Age <b id="age"></b></span>
+    <span class="chip">Scope <b id="scope"></b></span>
+    <span class="chip cls"><i id="clsSwatch"></i><b id="cls"></b></span>
+  </div>
+</header>
+<main>
+  <section class="stage" aria-label="Scene view">
+    <div class="cap"><div class="label" id="classLabel"></div></div>
+    <svg id="view" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="viewDesc"><desc id="viewDesc"></desc><g id="art"></g></svg>
+    <div class="story">
+      <h2 id="title"></h2>
+      <p id="body"></p>
+      <div class="intro-cta" id="cta"></div>
+    </div>
+  </section>
+  <aside id="evidence" aria-label="Evidence panel">
+    <h3>Evidence for this scene</h3>
+    <div id="claims"></div>
+    <h3>Sources</h3>
+    <div id="sources"></div>
+  </aside>
+</main>
+<footer>
+  <div class="controls">
+    <button class="btn" id="prev" aria-label="Previous chapter">◀</button>
+    <button class="btn" id="play" aria-pressed="false">Play</button>
+    <button class="btn" id="next" aria-label="Next chapter">▶</button>
+    <ol class="rail" id="rail" aria-label="Chapters, oldest to youngest"></ol>
+    <button class="btn toggle-ev" id="toggleEv" aria-controls="evidence" aria-expanded="false">Evidence</button>
+  </div>
+  <div class="note">Chapter spacing is not proportional to elapsed time. Playback is presentation pacing, never geological rate. Ma = million years ago; 0 = modern reference.</div>
+</footer>
+
+<script>
+const SRC = {
+  G15: {cite:"U.S. Geological Survey / U.S. Board on Geographic Names, GNIS domestic names, official feature-detail export for Mount Saint Helena.", loc:"Feature ID 232163; class Summit; Sonoma County, CA; primary coordinate (NAD83); Landform Point Type ‘High Point’."},
+  G07: {cite:"Graymer, R.W., et al., 2007, Geologic Map and Map Database of Eastern Sonoma and Western Napa Counties, California: USGS Scientific Investigations Map 2956, v1.0.", url:"https://doi.org/10.3133/sim2956", loc:"Digital Database Package sim2956c.tgz, coverage eswn-geol.e00, label ID 636 / polygon 584, PTYPE Tswt; pamphlet description of map units, Sonoma Volcanics."}
+};
+const CLS = {
+  measured:{name:"Measured/mapped data", color:"--measured"},
+  illustration:{name:"Illustrative process", color:"--illus"},
+  gap:{name:"Evidence gap", color:"--gap"}
+};
+const SCENES = [
+  {id:"intro", rail:"Today", age:"0 Ma (modern reference)", scope:"Local · ~30 km AOI", cls:"measured",
+   label:"Measured/mapped data · GNIS feature point · terrain pending",
+   title:"Mount St. Helena today",
+   body:"The northern peak of the Mayacamas Mountains, above Napa and Sonoma valleys. This journey steps from global deep-time context to the modern mountain, and shows where the evidence runs out.",
+   art:"locator", desc:"Locator frame with a 30 km area of interest and the GNIS feature point. Measured terrain not yet rendered.",
+   claims:[{st:"verified", text:"The official GNIS feature point for Mount Saint Helena (ID 232163) is 38.6691784 N, −122.6333914 W (NAD83).", src:["G15"], lim:"Stored precision is not positional accuracy. GNIS’s ‘High Point’ designation is not an independent survey of the highest point.", conf:"High: primary federal record."},
+           {st:"gap", text:"Measured terrain (DEM) for the area of interest has not been prepared yet.", src:[], lim:"Planned for milestone M3. No substitute terrain is drawn.", conf:"n/a"}]},
+  {id:"deep-time", rail:"1000–250 Ma", age:"1000–250 Ma (editorial window)", scope:"Global", cls:"gap",
+   label:"Local reconstruction unavailable for this interval",
+   title:"Deep time: global plate context",
+   body:"Continents assembled and broke apart during this window. This scene will show a licensed plate-model reconstruction at globe scale. It will never pin today’s mountain on an ancient map.",
+   art:"globe", desc:"An empty globe outline with no location marker. No plate model has been licensed yet.",
+   claims:[{st:"gap", text:"No plate-reconstruction model has been selected and rights-cleared yet.", src:[], lim:"Once one is selected, frames will be labeled ‘Model reconstruction · model/version’. There is no modern Napa pin at this scale.", conf:"n/a"}]},
+  {id:"regional", rail:"250–10 Ma", age:"250–10 Ma (editorial window)", scope:"Western North America", cls:"gap",
+   label:"Local reconstruction unavailable for this interval",
+   title:"Regional context",
+   body:"The western edge of North America changed through subduction and faulting. The regional sources for this window haven’t been reviewed yet, so the scene is shown as an honest gap.",
+   art:"gap", desc:"Hatched evidence-gap panel.",
+   claims:[{st:"gap", text:"No reviewed regional claim covers this window yet.", src:[], lim:"No single source is assumed to cover the whole interval.", conf:"n/a"}]},
+  {id:"volcanic", rail:"10–2.5 Ma", age:"10–2.5 Ma (editorial window)", scope:"Sonoma volcanic field · local unit", cls:"illustration",
+   label:"Illustrative process · geometry and timing are schematic",
+   title:"Sonoma Volcanics: welded ash-flow tuff",
+   body:"The rock mapped at the GNIS point is welded ash-flow tuff, part of the Sonoma Volcanics. Hot ash flows settle and compact into rock. The drawing shows the process only. It does not show where the vent was, how large the flow was, or exactly when it happened.",
+   art:"ashflow", desc:"Schematic cross-section: an ash cloud moves across the ground and leaves a compacted layer labeled welded tuff. Not a reconstruction of any real place.",
+   claims:[{st:"partial", text:"The GNIS feature point falls inside SIM 2956 polygon 584, unit Tswt: welded ash-flow tuff, with minor partly welded and unwelded ash-flow tuff.", src:["G07","G15"], lim:"PARTIAL: used an approximate NAD83→NAD27 datum shift because the NADCON 5 grid wasn’t available. The nearest mapped contact (with Tslt) is about 336 m away, under that same transform. Map scale is 1:100,000.", conf:"Moderate: primary map database, pending authoritative datum transform."},
+           {st:"verified", text:"Tswt is a unit of the Sonoma Volcanics, which the map assigns to the Pliocene and late Miocene.", src:["G07"], lim:"This is a field-wide range, not the eruption date of this polygon or the age of the mountain.", conf:"High for the map-unit description."},
+           {st:"gap", text:"No numeric date has been established for polygon 584.", src:[], lim:"The regional Sonoma Volcanics age range is deliberately not assigned to the summit.", conf:"n/a"}]},
+  {id:"landscape", rail:"2.5–0 Ma", age:"2.5–0 Ma (editorial window)", scope:"Local", cls:"gap",
+   label:"Local reconstruction unavailable for this interval",
+   title:"Shaping the modern landscape",
+   body:"Uplift and erosion turned the volcanic rocks into today’s ridge. No reviewed source dates when the mountain took its present shape, so this scene fades through a labeled gap. No terrain is morphed in its place.",
+   art:"gap", desc:"Hatched evidence-gap panel.",
+   claims:[{st:"gap", text:"No source dates the present mountain morphology.", src:[], lim:"No continuous uplift or erosion rate is invented.", conf:"n/a"}]},
+  {id:"modern", rail:"0 Ma", age:"0 Ma (modern reference)", scope:"Local · ~30 km AOI", cls:"measured",
+   label:"Measured/mapped data · GNIS feature point + SIM 2956 unit · terrain pending",
+   title:"Modern terrain and geology",
+   body:"Back to today. The present-day reference point sits on mapped welded ash-flow tuff. Once the measured elevation model is prepared (M3), this view becomes 3D terrain with the geologic map draped over it.",
+   art:"locator2", desc:"Locator frame with the GNIS point labeled as mapped unit Tswt. Measured terrain not yet rendered.",
+   claims:[{st:"verified", text:"GNIS feature point 38.6691784 N, −122.6333914 W (NAD83), feature ID 232163.", src:["G15"], lim:"Feature point, not a surveyed summit.", conf:"High."},
+           {st:"partial", text:"The point lies within mapped unit Tswt (welded ash-flow tuff).", src:["G07"], lim:"Pending authoritative datum transform; 1:100,000 map scale.", conf:"Moderate."}]}
+];
+
+const $ = id => document.getElementById(id);
+const NS = "http://www.w3.org/2000/svg";
+let idx = 0, playing = false, timer = null;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function art(kind){
+  const hatch = `<defs><pattern id="h" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="14" height="14" fill="var(--stage)"/><line x1="0" y1="0" x2="0" y2="14" stroke="var(--hatch)" stroke-width="6"/></pattern></defs>`;
+  if(kind==="globe"){
+    let lines="";
+    for(let i=-60;i<=60;i+=30){const ry=Math.abs(170*Math.cos(i*Math.PI/180));lines+=`<ellipse cx="400" cy="${250-170*Math.sin(i*Math.PI/180)}" rx="${ry}" ry="${ry*0.18}" fill="none" stroke="var(--line)"/>`;}
+    for(let j=0;j<6;j++){lines+=`<ellipse cx="400" cy="250" rx="${170*Math.abs(Math.cos(j*Math.PI/6))}" ry="170" fill="none" stroke="var(--line)"/>`;}
+    return `<circle cx="400" cy="250" r="170" fill="var(--surface)" stroke="var(--muted)" stroke-width="1.5"/>${lines}
+      <text x="400" y="255" text-anchor="middle" fill="var(--muted)" font-size="18">Plate model not yet licensed</text>
+      <text x="400" y="280" text-anchor="middle" fill="var(--muted)" font-size="14">globe scale · no local marker</text>`;
+  }
+  if(kind==="gap"){
+    return hatch+`<rect x="60" y="60" width="680" height="380" rx="12" fill="url(#h)" stroke="var(--line)"/>
+      <rect x="220" y="215" width="360" height="70" rx="8" fill="var(--surface)" stroke="var(--line)"/>
+      <text x="400" y="246" text-anchor="middle" fill="var(--ink)" font-size="18" font-weight="600">Evidence gap</text>
+      <text x="400" y="270" text-anchor="middle" fill="var(--muted)" font-size="14">No reviewed claim supports a view here</text>`;
+  }
+  if(kind==="ashflow"){
+    return `<rect x="0" y="330" width="800" height="170" fill="var(--hatch)"/>
+      <text x="24" y="480" fill="var(--muted)" font-size="13">older ground (schematic)</text>
+      <path d="M0 330 Q200 300 400 318 T800 312 L800 350 Q600 356 400 352 T0 360 Z" fill="var(--illus)" opacity=".85"/>
+      <text x="560" y="344" fill="var(--surface)" font-size="14" font-weight="600">welded tuff layer (schematic)</text>
+      <g class="anim" style="animation:flow 6s ease-in-out infinite alternate">
+        <g class="anim" style="animation:rise 4s ease-in-out infinite">
+          <ellipse cx="260" cy="290" rx="150" ry="36" fill="var(--muted)" opacity=".5"/>
+          <ellipse cx="360" cy="270" rx="120" ry="44" fill="var(--muted)" opacity=".45"/>
+          <ellipse cx="190" cy="262" rx="90" ry="30" fill="var(--muted)" opacity=".4"/>
+        </g>
+        <text x="250" y="222" fill="var(--ink)" font-size="15">hot ash flow →</text>
+      </g>
+      <text x="24" y="40" fill="var(--muted)" font-size="13">Not to scale · no real location · no vent shown</text>`;
+  }
+  // locator: 30 km AOI around the GNIS point, plain lat/lon frame (no terrain)
+  const unit = kind==="locator2";
+  let grid="";
+  for(let k=0;k<=4;k++){const x=200+k*100, y=50+k*100;
+    grid+=`<line x1="${x}" y1="50" x2="${x}" y2="450" stroke="var(--line)"/><line x1="200" y1="${y}" x2="600" y2="${y}" stroke="var(--line)"/>`;}
+  return hatch+`<rect x="200" y="50" width="400" height="400" fill="url(#h)" stroke="var(--measured)" stroke-width="2"/>${grid}
+    <text x="200" y="40" fill="var(--muted)" font-size="13">~30 km area of interest (design extent, not a geological boundary)</text>
+    <text x="400" y="470" text-anchor="middle" fill="var(--muted)" font-size="13">Measured terrain pending (M3) — hatching marks missing data, not ground</text>
+    ${unit?`<rect x="336" y="206" width="128" height="30" rx="4" fill="var(--surface)" stroke="var(--illus)"/><text x="400" y="226" text-anchor="middle" fill="var(--ink)" font-size="14">unit Tswt (partial)</text>`:""}
+    <circle cx="400" cy="250" r="9" fill="var(--measured)" stroke="var(--surface)" stroke-width="3"/>
+    <rect x="418" y="258" width="210" height="46" rx="4" fill="var(--surface)" stroke="var(--line)"/>
+    <text x="428" y="277" fill="var(--ink)" font-size="14" font-weight="600">GNIS feature point</text>
+    <text x="428" y="295" fill="var(--muted)" font-size="13">38.6691784, −122.6333914</text>`;
+}
+
+function render(){
+  const s = SCENES[idx], c = CLS[s.cls];
+  $("age").textContent = s.age; $("scope").textContent = s.scope;
+  $("cls").textContent = c.name; $("clsSwatch").style.background = `var(${c.color})`;
+  const lab = $("classLabel"); lab.textContent = s.label; lab.style.setProperty("--c", `var(${c.color})`);
+  $("title").textContent = s.title; $("body").textContent = s.body;
+  $("viewDesc").textContent = s.desc; $("art").innerHTML = art(s.art);
+  $("cta").innerHTML = idx===0 ? `<button class="btn primary" id="start">Start journey</button>` : "";
+  if(idx===0) $("start").onclick = () => go(1);
+  $("claims").innerHTML = s.claims.map(cl => `<div class="claim"><span class="st ${cl.st}">${cl.st}</span><p>${cl.text}</p>
+    <dl><dt>Sources</dt><dd>${cl.src.length?cl.src.join(", "):"none"}</dd><dt>Limits</dt><dd>${cl.lim}</dd><dt>Confidence</dt><dd>${cl.conf}</dd></dl></div>`).join("");
+  const ids = [...new Set(s.claims.flatMap(c=>c.src))];
+  $("sources").innerHTML = ids.length ? ids.map(i => `<p class="src"><b>${i}</b> ${SRC[i].cite} ${SRC[i].url?`<a href="${SRC[i].url}" target="_blank" rel="noopener">${SRC[i].url}</a>`:""}<br><span style="color:var(--muted)">Locator: ${SRC[i].loc}</span></p>`).join("") : `<p class="src">No sources: this scene is an evidence gap.</p>`;
+  [...$("rail").querySelectorAll("button")].forEach((b,i)=> i===idx ? b.setAttribute("aria-current","step") : b.removeAttribute("aria-current"));
+  $("prev").disabled = idx===0; $("next").disabled = idx===SCENES.length-1;
+  history.replaceState(null, "", "#scene="+s.id);
+}
+function go(i){ idx = Math.max(0, Math.min(SCENES.length-1, i)); render(); }
+function setPlay(on){
+  playing = on; $("play").textContent = on ? "Pause" : "Play"; $("play").setAttribute("aria-pressed", on);
+  document.body.classList.toggle("paused", !on);
+  clearInterval(timer);
+  if(on) timer = setInterval(()=>{ if(idx>=SCENES.length-1) setPlay(false); else go(idx+1); }, reduce?6000:8000);
+}
+
+$("rail").innerHTML = SCENES.map((s,i)=>`<li><button data-i="${i}">${s.rail}<small>${s.title.split(":")[0]}</small></button></li>`).join("");
+$("rail").onclick = e => { const b = e.target.closest("button"); if(b) go(+b.dataset.i); };
+$("prev").onclick = () => go(idx-1); $("next").onclick = () => go(idx+1);
+$("play").onclick = () => setPlay(!playing);
+$("toggleEv").onclick = () => { const o = $("evidence").classList.toggle("open"); $("toggleEv").setAttribute("aria-expanded", o); };
+addEventListener("keydown", e => {
+  if(e.target.closest("input,textarea")) return;
+  if(e.key==="ArrowRight") go(idx+1); else if(e.key==="ArrowLeft") go(idx-1);
+  else if(e.key===" " && e.target===document.body){ e.preventDefault(); setPlay(!playing); }
+});
+function fromHash(){
+  const m = location.hash.match(/scene=([\w-]+)/);
+  const found = m ? SCENES.findIndex(s=>s.id===m[1]) : 0;
+  go(found<0 ? 0 : found);
+}
+addEventListener("hashchange", fromHash);
+document.body.classList.add("paused");
+fromHash();
+</script>
+</body>
+</html>
