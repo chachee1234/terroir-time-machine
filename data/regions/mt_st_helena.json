@@ -1,0 +1,10 @@
+{
+  "id": "mt_st_helena",
+  "name": "Mount St. Helena block",
+  "description": "~30 km square design extent centred on GNIS 232163 (the current viewer block); not a geological boundary",
+  "epsg": 26910,
+  "bbox_utm": [516892.63, 4265129.75, 546892.63, 4295129.75],
+  "cell_m": 30,
+  "browser_cells": 224,
+  "assets_dir": "prototype/assets"
+}

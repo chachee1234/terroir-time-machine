@@ -18,6 +18,23 @@
           "sha256": "8051c88fdcb20aecce340415b2220fbbfa6a5a24115aec44806c366ef34de12e"
         }
       ]
+    },
+    {
+      "id": "ava-napa-valley",
+      "source": "UC Davis Library & DataLab, American Viticultural Areas (AVA) Project",
+      "url": "https://raw.githubusercontent.com/UCDavisLibrary/ava/master/avas_aggregated_files/avas.geojson",
+      "rights": "CC0 1.0",
+      "source_sha256": "c90068f7154764519f0a7c6fb2788e597b7c56bf7581e8c0faa979554d984926",
+      "derived": [
+        {
+          "file": "data/ava/napa_valley_avas.geojson",
+          "sha256": "63a8ae31e42d6b14cd49de48b889f25170be0408a17067476db7abbb2547fedb"
+        },
+        {
+          "file": "prototype/assets/ava.json",
+          "sha256": "23083ad146dbc961b7420d140d4563326b5320597dc1fc531e3a9a98b57bcf02"
+        }
+      ]
     }
   ]
 }

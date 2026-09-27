@@ -9,6 +9,10 @@ endpoint in NAD83 / UTM zone 10N (EPSG:26910), then:
   prototype/assets/terrain.json           grid metadata + provenance
 
 Usage: fetch_terrain.py [--size 1000] [--out-cells 240] [--from-raw]
+       fetch_terrain.py --region data/regions/napa_valley.json [--from-raw]
+
+With --region, the extent, cell size, browser grid and output folder come from the region file
+(bbox_utm, cell_m, browser_cells, assets_dir) and the grid may be rectangular.
 """
 import argparse
 import datetime
@@ -89,29 +93,57 @@ def read_float_tiff(buf):
     return w, h, out
 
 
+def region_request(region):
+    """Pixel size of the 3DEP request and of the browser grid for a region file (longer side = browser_cells)."""
+    x0, y0, x1, y1 = region["bbox_utm"]
+    cell = float(region["cell_m"])
+    w, h = round((x1 - x0) / cell), round((y1 - y0) / cell)
+    n = int(region["browser_cells"])
+    nx, ny = (n, max(2, round(n * h / w))) if w >= h else (max(2, round(n * w / h)), n)
+    return w, h, nx, ny
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--size", type=int, default=1000, help="request width/height in pixels")
     ap.add_argument("--out-cells", type=int, default=240, help="browser heightfield width/height")
     ap.add_argument("--from-raw", action="store_true", help="reuse the saved response")
+    ap.add_argument("--region", help="region JSON (see data/regions/); overrides --size and --out-cells")
     args = ap.parse_args()
 
     cx, cy = utm_from_geographic(GNIS_LAT, GNIS_LON)
-    bbox = [cx - AOI_HALF_M, cy - AOI_HALF_M, cx + AOI_HALF_M, cy + AOI_HALF_M]
-    cell = 2 * AOI_HALF_M / args.size
+    region = json.loads(Path(args.region).read_text()) if args.region else None
+    if region:
+        bbox = list(region["bbox_utm"])
+        req_w, req_h, nx, ny = region_request(region)
+        cell = float(region["cell_m"])
+        rid = region["id"]
+        assets = ROOT / region["assets_dir"]
+        aoi = {"description": region["description"], "region": rid, "bbox_utm": bbox,
+               "center_utm": [round((bbox[0] + bbox[2]) / 2, 2), round((bbox[1] + bbox[3]) / 2, 2)]}
+    else:
+        bbox = [cx - AOI_HALF_M, cy - AOI_HALF_M, cx + AOI_HALF_M, cy + AOI_HALF_M]
+        req_w = req_h = args.size
+        nx = ny = args.out_cells
+        cell = 2 * AOI_HALF_M / args.size
+        rid = "mt_st_helena"
+        assets = ROOT / "prototype" / "assets"
+        aoi = {"description": "~30 km square design extent centered on the GNIS feature point; not a geological boundary",
+               "center_gnis": {"feature_id": GNIS_ID, "lat": GNIS_LAT, "lon": GNIS_LON, "datum": "NAD83"},
+               "center_utm": [round(cx, 2), round(cy, 2)], "bbox_utm": [round(v, 2) for v in bbox]}
     params = {
         "bbox": ",".join(f"{v:.2f}" for v in bbox), "bboxSR": EPSG, "imageSR": EPSG,
-        "size": f"{args.size},{args.size}", "format": "tiff", "pixelType": "F32",
+        "size": f"{req_w},{req_h}", "format": "tiff", "pixelType": "F32",
         "compression": "None", "interpolation": "RSP_BilinearInterpolation",
         "noData": "-9999", "f": "image",
     }
     url = SERVICE + "/exportImage?" + urllib.parse.urlencode(params)
-    raw = ROOT / "data" / "raw" / f"mt_st_helena_3dep_{cell:g}m.tif"
+    raw = ROOT / "data" / "raw" / f"{rid}_3dep_{cell:g}m.tif"
     if args.from_raw:
         buf = raw.read_bytes()
     else:
         # curl uses the OS trust store; python.org builds on macOS may lack CA certs.
-        buf = subprocess.run(["curl", "-sSf", "--max-time", "180", url], check=True, capture_output=True).stdout
+        buf = subprocess.run(["curl", "-sSf", "--max-time", "600", url], check=True, capture_output=True).stdout
         if not buf.startswith((b"II", b"MM")):
             sys.exit("service did not return a TIFF: " + buf[:300].decode("utf-8", "replace"))
         raw.parent.mkdir(parents=True, exist_ok=True)
@@ -125,15 +157,13 @@ def main():
     imax = max(range(len(z)), key=lambda i: z[i])
 
     # Block-mean downsample for the browser; record that resampling does not add accuracy.
-    n = args.out_cells
     grid = []
-    for gy in range(n):
-        y0, y1 = gy * h // n, (gy + 1) * h // n
-        for gx in range(n):
-            x0, x1 = gx * w // n, (gx + 1) * w // n
+    for gy in range(ny):
+        y0, y1 = gy * h // ny, (gy + 1) * h // ny
+        for gx in range(nx):
+            x0, x1 = gx * w // nx, (gx + 1) * w // nx
             block = [z[y * w + x] for y in range(y0, y1) for x in range(x0, x1) if z[y * w + x] > -9000]
             grid.append(round(sum(block) / len(block)) if block else -32768)
-    assets = ROOT / "prototype" / "assets"
     assets.mkdir(parents=True, exist_ok=True)
     binpath = assets / "terrain.bin"
     binpath.write_bytes(struct.pack("<" + "h" * len(grid), *grid))
@@ -150,26 +180,26 @@ def main():
                 "the underlying source dataset and survey epoch vary by location and are not recorded by this request.",
     }
     meta = {**source,
-            "aoi": {"description": "~30 km square design extent centered on the GNIS feature point; not a geological boundary",
-                    "center_gnis": {"feature_id": GNIS_ID, "lat": GNIS_LAT, "lon": GNIS_LON, "datum": "NAD83"},
-                    "center_utm": [round(cx, 2), round(cy, 2)], "bbox_utm": [round(v, 2) for v in bbox]},
+            "aoi": aoi,
             "raw": {"file": str(raw.relative_to(ROOT)), "sha256": sha, "width": w, "height": h,
                     "cell_m": cell, "nodata_cells": nodata},
             "stats_raw_m": {"min": round(zmin, 2), "max": round(zmax, 2),
                             "max_cell_utm": [round(bbox[0] + (imax % w + .5) * cell, 1),
                                              round(bbox[3] - (imax // w + .5) * cell, 1)]},
-            "browser_grid": {"file": "assets/terrain.bin", "sha256": bin_sha, "encoding": "int16 little-endian, meters, row 0 = north",
-                             "cells": n, "cell_m": 2 * AOI_HALF_M / n, "resampling": "block mean from raw grid",
+            "browser_grid": {"file": str(binpath.relative_to(ROOT / "prototype")), "sha256": bin_sha, "encoding": "int16 little-endian, meters, row 0 = north",
+                             **({"cells": nx} if nx == ny else {}), "cols": nx, "rows": ny,
+                             "cell_m": round((bbox[2] - bbox[0]) / nx, 3), "resampling": "block mean from raw grid",
                              "nodata": -32768, "vertical_exaggeration_default": 1}}
     (assets / "terrain.json").write_text(json.dumps(meta, indent=2) + "\n")
     manifest_path = ROOT / "data" / "manifest.json"
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {"datasets": []}
-    manifest["datasets"] = [d for d in manifest["datasets"] if d.get("id") != "dem-3dep-aoi"]
-    manifest["datasets"].append({"id": "dem-3dep-aoi", **source, "raw_file": meta["raw"]["file"],
-                                 "raw_sha256": sha, "derived": [{"file": "prototype/assets/terrain.bin", "sha256": bin_sha}]})
+    did = "dem-3dep-aoi" if rid == "mt_st_helena" else f"dem-3dep-{rid}"
+    manifest["datasets"] = [d for d in manifest["datasets"] if d.get("id") != did]
+    manifest["datasets"].append({"id": did, **source, "raw_file": meta["raw"]["file"],
+                                 "raw_sha256": sha, "derived": [{"file": str(binpath.relative_to(ROOT)), "sha256": bin_sha}]})
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
     print(f"raw {w}x{h} @ {cell:g} m, sha256 {sha[:16]}…, nodata {nodata}, "
-          f"elev {zmin:.1f}–{zmax:.1f} m; browser grid {n}x{n} @ {2 * AOI_HALF_M / n:g} m")
+          f"elev {zmin:.1f}–{zmax:.1f} m; browser grid {nx}x{ny} @ {(bbox[2] - bbox[0]) / nx:g} m")
 
 
 if __name__ == "__main__":
