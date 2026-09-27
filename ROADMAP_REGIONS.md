@@ -72,6 +72,23 @@ Paso Robles (calcareous soils and the Salinian granite block), Santa Maria Valle
 
 Close-ups load only when chosen, so a region's first load stays around 3 MB and each close-up adds about 0.5 MB.
 
+## Data sources the owner suggested (2026-09-27)
+
+| Source | Use in TTM | Licence / access | Verdict |
+|---|---|---|---|
+| USDA NRCS SSURGO via Soil Data Access | Section column and a "Today" soils layer | Public domain; open web service, no key | Use (AUTOPILOT D1) |
+| UC Davis AVA Project | All AVA boundaries | CC0 | Already used |
+| USGS 3DEP ImageServer (slope, aspect, hillshade) | Terrain derivatives | Public domain, but the host is blocked from the cloud sandbox | Terrain Tiles (G19) carry the same 3DEP elevation; slope, aspect and hillshade are computed in the viewer |
+| California DWR / Land IQ crop mapping | Real vineyards instead of the schematic tint | State open data; licence to be read per dataset before use | Use once the licence is confirmed (D2) |
+| USDA NASS Cropland Data Layer | Vineyard fallback | Public domain | Fallback for D2 |
+| Sentinel-2 L2A NDVI via Earth Search STAC | Vine vigour, seasonal "Today" imagery | Copernicus open licence, attribution required | Later; large rasters, one scene per close-up |
+| CARTO / OpenStreetMap basemaps | Roads and labels for orientation | ODbL (OSM), CARTO terms for their tiles | Optional; would add a third-party tile dependency |
+| Esri imagery basemaps | Satellite imagery | Esri terms restrict reuse | Not used; NAIP (public domain) instead |
+| Napa County parcels | Property lines | County terms | Out of scope: TTM is geology and terroir, not title |
+| NOAA NWS, Open-Meteo weather | Live weather | Open | Out of scope for a geologic-time viewer; possible later "climate today" panel |
+
+These are planning layers, not legal descriptions, surveys or title guarantees; the viewer says so wherever a present-day layer is shown.
+
 ## Decisions for the owner
 
 - Phase 1 order: I recommend Sonoma Valley first, as a joint Napa–Sonoma frame, because it reuses Napa's geology and terrain work. Then Northern Sonoma, then Anderson Valley.

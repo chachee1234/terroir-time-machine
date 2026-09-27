@@ -48,9 +48,9 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .legend i{display:inline-block;width:18px;height:3px;border-radius:2px;background:var(--c)}
 .foot{position:absolute;z-index:2;left:16px;right:16px;bottom:calc(10px + env(safe-area-inset-bottom,0px));font-size:11px;color:var(--muted);text-shadow:0 1px 6px rgba(0,0,0,.9);pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #labs{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
-.lab{position:absolute;transform:translate(-50%,-50%);font-size:12px;white-space:nowrap;color:#f3eee4;text-shadow:0 1px 5px rgba(0,0,0,.95),0 0 2px rgba(0,0,0,.9);pointer-events:auto;cursor:pointer;letter-spacing:.03em}
+.lab{position:absolute;transform:translate(-4px,-50%);font-size:12px;white-space:nowrap;color:#f3eee4;text-shadow:0 1px 5px rgba(0,0,0,.95),0 0 2px rgba(0,0,0,.9);pointer-events:auto;cursor:pointer;letter-spacing:.03em}
 .lab::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--c);margin-right:6px;vertical-align:0;box-shadow:0 0 0 1.5px rgba(0,0,0,.7)}
-.lab.live{font-family:var(--serif);font-size:15px;color:#fff1cf}
+.lab.live{font-family:var(--serif);font-size:15px;color:#fff1cf;transform:translate(-5px,-50%)}
 .lab.live::before{width:9px;height:9px;box-shadow:0 0 0 2px rgba(0,0,0,.7),0 0 12px 3px rgba(255,210,122,.7)}
 .lab:hover{color:#fff}
 .lab[hidden]{display:none}
@@ -172,8 +172,8 @@ vec3 light(vec3 col, vec3 N, vec3 L){ float d=max(dot(N,L),0.0); return col*(0.2
 /* ---------------- globe: shaded from the relief texture (no displacement) */
 const load=src=>new Promise((res,rej)=>new THREE.TextureLoader().load(src,res,undefined,rej));
 const sun=new THREE.Vector3(1,0,0);
-const gUni={uRel:{value:null}, uSun:{value:sun}, uTexel:{value:new THREE.Vector2(1/2048,1/1024)}};
-try{ const t=await load("assets/globe/relief.png"); t.flipY=false; t.minFilter=t.magFilter=THREE.LinearFilter; t.generateMipmaps=false; t.needsUpdate=true; t.wrapS=THREE.RepeatWrapping; gUni.uRel.value=t; }
+const gUni={uRel:{value:null}, uSun:{value:sun}, uTexel:{value:new THREE.Vector2(1/4096,1/2048)}};
+try{ const t=await load("assets/globe/relief.png"); t.flipY=false; t.minFilter=t.magFilter=THREE.LinearFilter; t.generateMipmaps=false; t.needsUpdate=true; t.wrapS=THREE.RepeatWrapping; gUni.uTexel.value.set(1/t.image.width,1/t.image.height); gUni.uRel.value=t; }
 catch(e){ document.body.insertAdjacentHTML("beforeend",'<div class="err">The globe relief could not load. Serve the prototype folder over http and reload.</div>'); return; }
 const globeMat=new THREE.ShaderMaterial({ uniforms:gUni,
   vertexShader:`varying vec3 vN; varying vec3 vW; void main(){ vN=normalize(position); vec4 w=modelMatrix*vec4(position,1.0); vW=w.xyz; gl_Position=projectionMatrix*viewMatrix*w; }`,
@@ -322,7 +322,7 @@ function placeLabels(){
     let vis=show&&facing&&pv.z<1&&Math.abs(pv.x)<1.1&&Math.abs(pv.y)<1.1;
     const x=(pv.x+1)/2*innerWidth, y=(1-pv.y)/2*innerHeight, w=q.w||(q.w=q.r.name.length*7.2+16);
     // skip a label that would overlap one already placed (the list is in plan order, so earlier phases win)
-    if(vis&&placed.some(b=>Math.abs(b.y-y)<17&&Math.abs(b.x-x)<(b.w+w)/2)) vis=false;
+    if(vis&&placed.some(b=>Math.abs(b.y-y)<17&&Math.abs(b.x+b.w/2-x-w/2)<(b.w+w)/2)) vis=false;
     q.e.hidden=!vis; if(vis){ placed.push({x,y,w}); q.e.style.left=x+"px"; q.e.style.top=y+"px"; } });
 }
 
