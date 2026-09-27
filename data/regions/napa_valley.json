@@ -7,5 +7,8 @@
   "cell_m": 30,
   "browser_cells": 512,
   "assets_dir": "prototype/assets/regions/napa_valley",
-  "boundary": "data/ava/napa_valley_avas.geojson"
+  "boundary": "data/ava/napa_valley_avas.geojson",
+  "close_ups": [
+    {"id": "mount_st_helena", "name": "Mount St. Helena", "center_utm": [531892.63, 4280129.75], "half_m": 4500}
+  ]
 }

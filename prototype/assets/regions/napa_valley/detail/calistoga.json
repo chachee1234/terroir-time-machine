@@ -1,0 +1,35 @@
+{
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 13,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "fetched": "2026-09-27",
+ "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+ "encoding": "Int16 little-endian, row 0 = north",
+ "scale": 0.1,
+ "resampling": "bilinear from the tile mosaic at each UTM cell centre",
+ "product": "sub-AVA close-up",
+ "region": "napa_valley",
+ "ava_id": "calistoga",
+ "name": "Calistoga",
+ "bbox_utm": [
+  529260.4,
+  4263507.5,
+  545273.7,
+  4279520.8
+ ],
+ "ava_bbox_utm": [
+  530760.4,
+  4266936.5,
+  543773.7,
+  4276091.9
+ ],
+ "cols": 512,
+ "rows": 512,
+ "cell_m": 31.337,
+ "range_m": [
+  66.12,
+  1219.19
+ ],
+ "sha256": "30197b1c25f1f2944ba2dcf3bdf7d9260dec920db9d3b997b658ca3506085c79"
+}

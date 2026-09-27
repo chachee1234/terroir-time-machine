@@ -89,7 +89,22 @@ body.xs-open .locator{display:none}
 .locator{position:absolute;z-index:2;right:16px;bottom:calc(126px + env(safe-area-inset-bottom,0px));width:132px;padding:6px 8px 6px;background:var(--panel);border:1px solid var(--line);border-radius:6px;pointer-events:none;font-size:10.5px;color:var(--muted);transition:opacity .4s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .locator b{display:block;color:var(--ink);font-weight:500;font-size:11px;margin-bottom:3px}
 .locator svg{display:block;width:100%;height:auto}
-.plc.ava{color:#ffe7a8;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.plc.ava{color:#ffe7a8;font-size:11px;letter-spacing:.05em;text-transform:uppercase;pointer-events:auto;cursor:pointer}
+.plc.ava:hover{color:#fff;text-decoration:underline}
+a.chip.tog{text-decoration:none}
+.places{position:absolute;z-index:3;right:16px;top:calc(52px + env(safe-area-inset-top,0px));width:min(300px,calc(100% - 32px));max-height:calc(100% - 250px);display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:6px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.places header{display:flex;justify-content:space-between;align-items:center;padding:7px 8px 4px 12px;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.places header b{color:var(--ink);font-weight:500}
+.places header button{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;min-width:32px;min-height:28px;cursor:pointer;border-radius:4px}
+.places[hidden]{display:none}
+.places .plist{overflow:auto;padding:2px 6px 6px}
+.places .plist button{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;background:none;border:0;border-radius:4px;color:var(--ink);font:inherit;font-size:13px;padding:7px 8px;min-height:32px;cursor:pointer}
+.places .plist button small{color:var(--muted);font:11px var(--mono)}
+.places .plist button:hover,.places .plist button:focus-visible{background:rgba(255,255,255,.08);outline:none}
+.places .plist button[aria-current="true"]{color:var(--magma)}
+.places .plist hr{border:0;border-top:1px solid var(--line);margin:4px 2px}
+.places .foot{padding:4px 12px 8px;font-size:11px;color:var(--muted);line-height:1.35}
+body.pl-open .compass,body.pl-open .legend{display:none}
 .plc.ava::before{display:none}
 @media (max-width:640px){
   .brand{font-size:17px}
@@ -122,6 +137,8 @@ body.xs-open .locator{display:none}
     <span class="chip" id="clsChip"><i></i><span>Reconstruction</span></span>
     <button class="chip tog" id="avaBtn" aria-pressed="true">AVAs</button>
     <button class="chip tog" id="xsBtn" aria-pressed="false" aria-controls="xsec">Section</button>
+    <button class="chip tog" id="plBtn" aria-pressed="false" aria-controls="places" hidden>Places</button>
+    <a class="chip tog" id="globeBtn" href="globe.html">Globe</a>
   </div>
 </div>
 
@@ -146,7 +163,7 @@ body.xs-open .locator{display:none}
   <div id="lgSut"><i style="--c:#ff5a3c"></i>Collision zone / margin</div>
   <div id="lgStream"><i style="--c:#6fb6e8"></i>Streams, from terrain</div>
   <div id="lgAva"><i style="--c:#ffd27a"></i>AVA boundary</div>
-  <div id="lgTopo"><i style="--c:#5a3d22;height:1.5px"></i>Contours, 50 m</div>
+  <div id="lgTopo"><i style="--c:#5a3d22;height:1.5px"></i>Contours, 50 m (10 m close up)</div>
 </div>
 <div class="scalebar" id="scalebar" hidden><span id="sbKm">5 km</span><div id="sbar"></div></div>
 <div id="plcs"></div>
@@ -155,6 +172,11 @@ body.xs-open .locator{display:none}
   <header><span><b>Cross-section</b> · SW to NE through the site</span><button id="xsX" aria-label="Close cross-section">×</button></header>
   <canvas id="xsCv"></canvas>
   <div class="foot" id="xsNote"></div>
+</aside>
+<aside class="places" id="places" hidden aria-label="Go to a place in Napa Valley">
+  <header><span><b>Go to</b> · Napa Valley</span><button id="plX" aria-label="Close places">×</button></header>
+  <div class="plist" id="plist"></div>
+  <div class="foot">Close-ups load finer terrain: USGS 3DEP (≈10 m source) via AWS Terrain Tiles, 17–51 m cells. You can also click an AVA name on the map.</div>
 </aside>
 <div class="pin" id="pin" hidden><b id="pinT">Mount St. Helena</b><span id="pinS"></span></div>
 
@@ -406,6 +428,13 @@ const REG = await (async function loadRegion(){
 const X0=REG.x0, X1=REG.x1, Z0=REG.z0, Z1=REG.z1, SX=X1-X0, SZ=Z1-Z0, NX=REG.nx, NZ=REG.nz;
 const CXm=(X0+X1)/2, CZm=(Z0+Z1)/2, LEXT=Math.max(SX,SZ), realDEM=!!REG.h;
 const REG_LABEL = REG.id==="napa_valley" ? `Napa Valley · ${Math.round(SX)} × ${Math.round(SZ)} km` : "30 km block · North Bay";
+// Finer shading grid for the whole frame (AWS Terrain Tiles, USGS 3DEP ≈10 m source), when present.
+async function loadGrid(base){
+  const [m,buf]=await Promise.all([fetch(base+".json").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
+                                   fetch(base+".bin").then(r=>{ if(!r.ok) throw 0; return r.arrayBuffer(); })]);
+  const h=new Int16Array(buf); if(h.length!==m.cols*m.rows) throw 0; return {m,h};
+}
+const HI = REG.h&&REG.id!=="mt_st_helena" ? await loadGrid("assets/regions/"+REG.id+"/dem_hi").catch(()=>null) : null;
 const inExt=(x,z,m=0)=>x>X0+m&&x<X1-m&&z>Z0+m&&z<Z1-m;
 const idxAt=(x,z)=>inExt(x,z) ? Math.round((z-Z0)/SZ*(NZ-1))*NX+Math.round((x-X0)/SX*(NX-1)) : -1;
 
@@ -413,7 +442,7 @@ const idxAt=(x,z)=>inExt(x,z) ? Math.round((z-Z0)/SZ*(NZ-1))*NX+Math.round((x-X0
 const lScene = new THREE.Scene();
 const lCam = new THREE.PerspectiveCamera(42,1,0.1,Math.max(400,LEXT*8));
 const lCtl = new THREE.OrbitControls(lCam, canvas);
-lCtl.enablePan=false; lCtl.minDistance=10; lCtl.maxDistance=LEXT*3; lCtl.maxPolarAngle=Math.PI*0.47; lCtl.enableDamping=true; lCtl.target.set(0,0.6,0);
+lCtl.enablePan=false; lCtl.minDistance=1.2; lCtl.maxDistance=LEXT*3; lCtl.maxPolarAngle=Math.PI*0.47; lCtl.enableDamping=true; lCtl.target.set(0,0.6,0);
 
 const VE = LEXT>40 ? 2.2 : 1.6, BASE=-3.2;
 // seeded value noise for terrain synthesis
@@ -494,24 +523,30 @@ const CENTER = Math.max(0,idxAt(0,0));
    downstream receiver (pits and flats drain through), then flow accumulation and distance
    from the headwaters. Streams in the diorama are drawn from this, not invented. */
 const aFlow = new Float32Array(NV), aDist = new Float32Array(NV);
-function computeDrainage(){
-  const h=H[5], rec=new Int32Array(NV).fill(-1), seen=new Uint8Array(NV), fill=new Float32Array(NV), order=new Int32Array(NV);
-  const heap=new Int32Array(NV); let hn=0, on=0;
+// priority-flood drainage on any nx×nz grid; acc0/dist0 seed inflow from outside the grid
+function drain(h,nx,nzz,cdx,cdz,acc0,dist0){
+  const n=nx*nzz, rec=new Int32Array(n).fill(-1), seen=new Uint8Array(n), fill=new Float32Array(n), order=new Int32Array(n);
+  const heap=new Int32Array(n); let hn=0, on=0;
   const less=(a,b)=>fill[a]<fill[b];
   function push(v){ let i=hn++; heap[i]=v; while(i>0){ const p=(i-1)>>1; if(!less(heap[i],heap[p])) break; [heap[i],heap[p]]=[heap[p],heap[i]]; i=p; } }
   function pop(){ const top=heap[0]; heap[0]=heap[--hn]; let i=0; for(;;){ const l=2*i+1, r=l+1; let m=i; if(l<hn&&less(heap[l],heap[m])) m=l; if(r<hn&&less(heap[r],heap[m])) m=r; if(m===i) break; [heap[i],heap[m]]=[heap[m],heap[i]]; i=m; } return top; }
-  for(let r=0;r<NZ;r++) for(let c=0;c<NX;c++) if(r===0||c===0||r===NZ-1||c===NX-1){ const v=r*NX+c; fill[v]=h[v]; seen[v]=1; push(v); }
+  for(let r=0;r<nzz;r++) for(let c=0;c<nx;c++) if(r===0||c===0||r===nzz-1||c===nx-1){ const v=r*nx+c; fill[v]=h[v]; seen[v]=1; push(v); }
   const eps=1e-6;
-  while(hn){ const v=pop(); order[on++]=v; const r=(v/NX)|0, c=v%NX;
+  while(hn){ const v=pop(); order[on++]=v; const r=(v/nx)|0, c=v%nx;
     for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){ if(!dr&&!dc) continue; const rr=r+dr, cc=c+dc;
-      if(rr<0||cc<0||rr>=NZ||cc>=NX) continue; const u=rr*NX+cc; if(seen[u]) continue;
+      if(rr<0||cc<0||rr>=nzz||cc>=nx) continue; const u=rr*nx+cc; if(seen[u]) continue;
       seen[u]=1; fill[u]=Math.max(h[u],fill[v]+eps); rec[u]=v; push(u); } }
-  const acc=new Float32Array(NV).fill(1), cdx=SX/(NX-1), cdz=SZ/(NZ-1), cdd=Math.hypot(cdx,cdz); aDist.fill(0);
+  const acc=acc0?Float32Array.from(acc0):new Float32Array(n).fill(1), dist=dist0?Float32Array.from(dist0):new Float32Array(n), cdd=Math.hypot(cdx,cdz);
   for(let k=on-1;k>=0;k--){ const v=order[k], d=rec[v]; if(d<0) continue; acc[d]+=acc[v];
-    const sc=(v%NX)!==(d%NX), sr=((v/NX)|0)!==((d/NX)|0), len=sc&&sr ? cdd : sc ? cdx : cdz;
-    aDist[d]=Math.max(aDist[d],aDist[v]+len); }
-  let mx=1; for(let i=0;i<NV;i++) mx=Math.max(mx,acc[i]);
-  const lm=Math.log(mx); for(let i=0;i<NV;i++) aFlow[i]=Math.log(acc[i])/lm;
+    const sc=(v%nx)!==(d%nx), sr=((v/nx)|0)!==((d/nx)|0), len=sc&&sr ? cdd : sc ? cdx : cdz;
+    dist[d]=Math.max(dist[d],dist[v]+len); }
+  return {rec,acc,dist};
+}
+let BASE_ACC=null, BASE_REC=null, LM=1;
+function computeDrainage(){
+  const d=drain(H[5],NX,NZ,SX/(NX-1),SZ/(NZ-1)); BASE_ACC=d.acc; BASE_REC=d.rec; aDist.set(d.dist);
+  let mx=1; for(let i=0;i<NV;i++) mx=Math.max(mx,d.acc[i]);
+  LM=Math.log(mx); for(let i=0;i<NV;i++) aFlow[i]=Math.log(d.acc[i])/LM;
   if(geo.attributes.aFlow){ geo.attributes.aFlow.needsUpdate=true; geo.attributes.aDist.needsUpdate=true; }
 }
 computeDrainage();
@@ -520,12 +555,15 @@ geo.setAttribute("aDist",new THREE.BufferAttribute(aDist,1));
 
 // Full-resolution DEM as a float texture, for per-pixel hillshade and contours on the modern stage.
 const demTex = { value:null };
-function buildDemTexture(h16,nx,nzz){
-  if(!renderer.capabilities.isWebGL2) return false;
-  const f=new Float32Array(nx*nzz); for(let i=0;i<nx*nzz;i++) f[i]=(h16[i]<-1000?0:h16[i])/1000;
+function makeDemTex(h16,nx,nzz,scale=1){
+  if(!renderer.capabilities.isWebGL2) return null;
+  const f=new Float32Array(nx*nzz); for(let i=0;i<nx*nzz;i++) f[i]=(h16[i]<-32000?0:h16[i]*scale)/1000;
   const t=new THREE.DataTexture(f,nx,nzz,THREE.RedFormat,THREE.FloatType);
   const lin=renderer.extensions.has("OES_texture_float_linear");
-  t.magFilter=t.minFilter=lin?THREE.LinearFilter:THREE.NearestFilter; t.needsUpdate=true;
+  t.magFilter=t.minFilter=lin?THREE.LinearFilter:THREE.NearestFilter; t.needsUpdate=true; return t;
+}
+function buildDemTexture(h16,nx,nzz,scale=1){
+  const t=makeDemTex(h16,nx,nzz,scale); if(!t) return false;
   demTex.value=t; lUni.uDemOn.value=1; lUni.uDemTexel.value.set(1/nx,1/nzz); lUni.uDemCell.value.set(SX/(nx-1),SZ/(nzz-1)); return true;
 }
 
@@ -535,9 +573,9 @@ const lUni = {
   uFog:{value:new THREE.Color(.6,.7,.8)}, uVolc:{value:0}, uLava:{value:0}, uAsh:{value:0}, uVines:{value:0}, uGold:{value:0}, uBase:{value:BASE},
   uThr:{value:0}, uThrAct:{value:0}, uThrOff:{value:0}, uSS:{value:0}, uSSAct:{value:0}, uErode:{value:0}, uTopo:{value:0},
   uDem:demTex, uDemOn:{value:0}, uDemTexel:{value:new THREE.Vector2(1,1)}, uDemCell:{value:new THREE.Vector2(1,1)}, uAva:{value:null}, uAvaOn:{value:0},
-  uExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uFogN:{value:LEXT*1.5}, uFogF:{value:LEXT*4.7}
+  uExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uDemExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uHole:{value:new THREE.Vector4()}, uFogN:{value:LEXT*1.5}, uFogF:{value:LEXT*4.7}
 };
-if(realDEM) buildDemTexture(REG.h,NX,NZ);
+if(HI) buildDemTexture(HI.h,HI.m.cols,HI.m.rows,HI.m.scale||1); else if(realDEM) buildDemTexture(REG.h,NX,NZ);
 const TERRAIN_VS = `
 attribute float h0,h1,h2,h3,h4,h5; attribute float aTop;
 uniform vec3 uWa,uWb; uniform float uVE,uBase;
@@ -600,14 +638,15 @@ const terrainMat = new THREE.ShaderMaterial({
   vertexShader:TERRAIN_VS.replace("attribute float aTop;","attribute float aFlow,aDist; varying float vFlow; varying float vDist;").replace("aTop>0.5","true").replace("vS=aTop;","vS=1.0; vFlow=aFlow; vDist=aDist;"),
   fragmentShader:GLSL_NOISE+FAULT_GLSL+`
   uniform vec3 uSun,uSunCol,uFog,uWb; uniform float uVE,uVolc,uLava,uAsh,uVines,uGold,uTime,uErode,uTopo;
-  uniform sampler2D uDem,uAva; uniform float uDemOn,uAvaOn; uniform vec2 uDemTexel,uDemCell; uniform vec4 uExt;
+  uniform sampler2D uDem,uAva; uniform float uDemOn,uAvaOn; uniform vec2 uDemTexel,uDemCell; uniform vec4 uExt,uDemExt,uHole;
   varying vec3 vW; varying float vH; varying float vS; varying float vR; varying float vFlow; varying float vDist;
   `+LIGHT_FOG+`
   void main(){
+    if(uHole.z>uHole.x && vW.x>uHole.x && vW.x<uHole.z && vW.z>uHole.y && vW.z<uHole.w) discard;  // a close-up covers this area
     vec3 N=normalize(cross(dFdx(vW),dFdy(vW)));
     float w5=uWb.z, hC=vH;
     if(uDemOn>0.5){
-      vec2 uv=(vW.xz-uExt.xy)/uExt.zw;
+      vec2 uv=(vW.xz-uDemExt.xy)/uDemExt.zw;
       float hd=texture2D(uDem,uv).r;
       float hx=texture2D(uDem,uv+vec2(uDemTexel.x,0.0)).r-texture2D(uDem,uv-vec2(uDemTexel.x,0.0)).r;
       float hz=texture2D(uDem,uv+vec2(0.0,uDemTexel.y)).r-texture2D(uDem,uv-vec2(0.0,uDemTexel.y)).r;
@@ -629,6 +668,8 @@ const terrainMat = new THREE.ShaderMaterial({
       float ang=fract(sin(dot(cell,vec2(4.1,7.7)))*999.0)>0.5?0.0:1.5708;
       vec2 rq=mat2(cos(ang),-sin(ang),sin(ang),cos(ang))*q;
       float rows=0.5+0.5*sin(rq.x*70.0);
+      float fr=rq.x*2500.0, fine=1.0-smoothstep(0.25,0.6,fwidth(fr)/6.2832);   // ≈2.5 m rows when close enough to see them
+      rows=mix(rows,0.5+0.5*sin(fr),fine);
       float flt=smoothstep(0.1,0.03,slope)*smoothstep(0.42,0.2,vH);
       vec3 vine=mix(vec3(0.52,0.40,0.28),vec3(0.27,0.40,0.16),rows);
       col=mix(col,vine,uVines*parcel*flt);
@@ -645,8 +686,9 @@ const terrainMat = new THREE.ShaderMaterial({
       float hm=hC*1000.0;
       float c1=hm/50.0, f1=fwidth(c1); float l1=1.0-smoothstep(0.0,f1*1.3,abs(fract(c1-0.5)-0.5));
       float c5=hm/250.0, f5=fwidth(c5); float l5=1.0-smoothstep(0.0,f5*1.8,abs(fract(c5-0.5)-0.5));
-      l1*=1.0-smoothstep(0.25,0.5,f1);
-      col=mix(col,vec3(0.25,0.16,0.08),uTopo*max(l1*0.45,l5*0.8));
+      l1*=(1.0-smoothstep(0.25,0.5,f1))*smoothstep(0.0006,0.004,f1); l5*=smoothstep(0.00012,0.0008,f5);   // no contour fill on flats (lakes)
+      float c0=hm/10.0, f0=fwidth(c0); float l0=(1.0-smoothstep(0.0,f0*1.2,abs(fract(c0-0.5)-0.5)))*(1.0-smoothstep(0.15,0.35,f0))*smoothstep(0.003,0.02,f0);
+      col=mix(col,vec3(0.25,0.16,0.08),uTopo*max(max(l0*0.28,l1*0.45),l5*0.8));
     }
     vec3 lit=shade(col,N);
     // streams: moving highlights run downstream along the drainage network
@@ -801,6 +843,16 @@ const rain = (function(){
 
 /* ---------------- AVA boundaries (UC Davis AVA Project, CC0): draped outlines, labels, valley locator */
 const AVA={on:true, data:null, labels:[], tex:null};
+// outlines drawn into a canvas covering x0..x0+sx, z0..z0+sz (scene km); close-ups get their own, with thinner lines
+function avaTexture(x0,z0,sx,sz){
+  const CW=2048, CH=Math.min(4096,Math.round(2048*sz/sx)), cv=document.createElement("canvas"); cv.width=CW; cv.height=CH; const g=cv.getContext("2d");
+  const P=([x,z])=>[(x-x0)/sx*CW,(z-z0)/sz*CH], lw=Math.max(0.55,(CW/sx)/68*clamp(sx/30,0.3,1));   // line widths were tuned at 68 px/km
+  g.lineJoin="round";
+  AVA.data.slice().reverse().forEach(a=>{ a.rings.forEach(r=>{ g.beginPath(); r.forEach((q,i)=>{ const [px,py]=P(q); i?g.lineTo(px,py):g.moveTo(px,py); }); g.closePath();
+    if(a.parent){ g.strokeStyle="rgba(20,14,4,.55)"; g.lineWidth=11*lw; g.stroke(); g.strokeStyle="#ffd27a"; g.lineWidth=5.5*lw; g.stroke(); }
+    else { g.fillStyle="rgba(255,236,190,.07)"; g.fill(); g.setLineDash([14*lw,9*lw]); g.strokeStyle="rgba(20,14,4,.5)"; g.lineWidth=6*lw; g.stroke(); g.strokeStyle="rgba(255,240,205,.92)"; g.lineWidth=2.6*lw; g.stroke(); g.setLineDash([]); } }); });
+  const t=new THREE.CanvasTexture(cv); t.flipY=false; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); return t;
+}
 $("avaBtn").onclick=()=>{ AVA.on=!AVA.on; $("avaBtn").setAttribute("aria-pressed",AVA.on); };
 (async function loadAVA(){
   try{
@@ -808,18 +860,12 @@ $("avaBtn").onclick=()=>{ AVA.on=!AVA.on; $("avaBtn").setAttribute("aria-pressed
     let c=[531.89263,4280.12975];                       // GNIS centre (UTM km) if terrain.json is missing
     try{ const m=await fetch("assets/terrain.json").then(r=>r.json()); c=m.aoi.center_utm.map(v=>v/1000); }catch(e){}
     const toS=([e,n])=>[e-c[0], -(n-c[1])];            // scene km: x east, z south
-    AVA.data=d.avas.map(a=>({name:a.name, parent:a.id==="napa_valley", rings:a.rings.map(r=>r.map(toS))}));
-    const CW=2048, CH=Math.min(4096,Math.round(2048*SZ/SX)), cv=document.createElement("canvas"); cv.width=CW; cv.height=CH; const g=cv.getContext("2d");
-    const P=([x,z])=>[(x-X0)/SX*CW,(z-Z0)/SZ*CH], lw=Math.max(0.55,(CW/SX)/68);   // line widths were tuned at 68 px/km
-    g.lineJoin="round";
-    AVA.data.slice().reverse().forEach(a=>{ a.rings.forEach(r=>{ g.beginPath(); r.forEach((q,i)=>{ const [px,py]=P(q); i?g.lineTo(px,py):g.moveTo(px,py); }); g.closePath();
-      if(a.parent){ g.strokeStyle="rgba(20,14,4,.55)"; g.lineWidth=11*lw; g.stroke(); g.strokeStyle="#ffd27a"; g.lineWidth=5.5*lw; g.stroke(); }
-      else { g.fillStyle="rgba(255,236,190,.07)"; g.fill(); g.setLineDash([14*lw,9*lw]); g.strokeStyle="rgba(20,14,4,.5)"; g.lineWidth=6*lw; g.stroke(); g.strokeStyle="rgba(255,240,205,.92)"; g.lineWidth=2.6*lw; g.stroke(); g.setLineDash([]); } }); });
-    const t=new THREE.CanvasTexture(cv); t.flipY=false; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); lUni.uAva.value=t;
+    AVA.data=d.avas.map(a=>({id:a.id, name:a.name, parent:a.id==="napa_valley", rings:a.rings.map(r=>r.map(toS))}));
+    lUni.uAva.value=avaTexture(X0,Z0,SX,SZ);
     // label each AVA at the mean of its vertices that fall inside the block
     AVA.data.forEach(a=>{ const inside=a.rings.flat().filter(([x,z])=>inExt(x,z,1)); if(inside.length<3) return;
       const x=inside.reduce((s,q)=>s+q[0],0)/inside.length, z=inside.reduce((s,q)=>s+q[1],0)/inside.length;
-      const q={x,z,el:mkLab(a.parent?"Napa Valley AVA":a.name,"plc ava")}; q.i=idxAt(x,z); if(q.i>=0) AVA.labels.push(q); else q.el.remove(); });
+      const q={x,z,el:mkLab(a.parent?"Napa Valley AVA":a.name,"plc ava")}; q.el.dataset.loc=a.parent?"":a.id; q.i=idxAt(x,z); if(q.i>=0) AVA.labels.push(q); else q.el.remove(); });
     // locator: whole valley, with the 30 km block
     const all=AVA.data.flatMap(a=>a.rings.flat()).concat([[X0,Z0],[X1,Z1]]);
     const xs=all.map(q=>q[0]), zs=all.map(q=>q[1]); const x0=Math.min(...xs), x1=Math.max(...xs), z0=Math.min(...zs), z1=Math.max(...zs);
@@ -831,6 +877,90 @@ $("avaBtn").onclick=()=>{ AVA.on=!AVA.on; $("avaBtn").setAttribute("aria-pressed
     svg+=`<circle cx="${((0-x0)*k+ox).toFixed(1)}" cy="${((0-z0)*k+oz).toFixed(1)}" r="1.8" fill="#ece6d9"/>`;
     $("locSvg").innerHTML=svg;
   }catch(e){ /* AVA layer is optional */ }
+})();
+
+/* ---------------- Close-ups: finer terrain (AWS Terrain Tiles; USGS 3DEP ≈10 m source) for one place at a time.
+   The close-up mesh plays every era like the valley: its older stages are sampled from the valley stages and
+   its modern stage is the finer grid, blended into the valley surface along its edges. Streams inside it are
+   re-traced on the finer grid, with rivers entering from the valley network. */
+const LOC={list:[], cur:null, mesh:null, cache:{}, base:"assets/regions/"+REG.id+"/"};
+const toSceneBox=b=>({x0:(b[0]-GNIS_UTM[0])/1000, x1:(b[2]-GNIS_UTM[0])/1000, z0:-(b[3]-GNIS_UTM[1])/1000, z1:-(b[1]-GNIS_UTM[1])/1000});
+function sampleGrid(arr,x,z){
+  const fx=clamp((x-X0)/SX*(NX-1),0,NX-1), fz=clamp((z-Z0)/SZ*(NZ-1),0,NZ-1);
+  const c=Math.min(NX-2,Math.floor(fx)), r=Math.min(NZ-2,Math.floor(fz)), u=fx-c, v=fz-r, i=r*NX+c;
+  return (arr[i]*(1-u)+arr[i+1]*u)*(1-v)+(arr[i+NX]*(1-u)+arr[i+NX+1]*u)*v;
+}
+function clearPatch(){
+  if(LOC.mesh){ lScene.remove(LOC.mesh); LOC.mesh.geometry.dispose(); const u=LOC.mesh.material.uniforms;
+    [u.uDem.value, u.uAva!==lUni.uAva&&u.uAva.value].forEach(t=>{ if(t) t.dispose(); }); LOC.mesh.material.dispose(); LOC.mesh=null; }
+  lUni.uHole.value.set(0,0,0,0);
+}
+function buildPatch(q,m,h16){
+  const nx=m.cols, nzz=m.rows, b=q.box, sx=b.x1-b.x0, sz=b.z1-b.z0, n=nx*nzz, sc=m.scale||1;
+  const cx=sx/(nx-1), cz=sz/(nzz-1), bc=SX/(NX-1);
+  const g=new THREE.PlaneGeometry(sx,sz,nx-1,nzz-1); g.rotateX(-Math.PI/2); g.translate((b.x0+b.x1)/2,0,(b.z0+b.z1)/2);
+  g.deleteAttribute("normal"); g.deleteAttribute("uv");
+  const pp=g.attributes.position, hh=[0,1,2,3,4,5].map(()=>new Float32Array(n)), ramp=Math.max(4,2.5*bc/cx);
+  for(let r=0;r<nzz;r++) for(let c=0;c<nx;c++){ const i=r*nx+c, x=pp.getX(i), z=pp.getZ(i), v=h16[i];
+    for(let k=0;k<5;k++) hh[k][i]=sampleGrid(H[k],x,z);
+    hh[5][i]=lerp(sampleGrid(H[5],x,z), v<-32000?0:v*sc/1000, sm(0,ramp,Math.min(c,r,nx-1-c,nzz-1-r))); }
+  hh.forEach((a,k)=>g.setAttribute("h"+k,new THREE.BufferAttribute(a,1)));
+  const kA=(bc*SZ/(NZ-1))/(cx*cz), acc0=new Float32Array(n).fill(1), dist0=new Float32Array(n);
+  const inB=(x,z)=>x>b.x0&&x<b.x1&&z>b.z0&&z<b.z1;
+  for(let v=0;v<NV;v++){ const d=BASE_REC[v]; if(d<0) continue; const dx=P.getX(d), dz=P.getZ(d);
+    if(inB(P.getX(v),P.getZ(v))||!inB(dx,dz)) continue;
+    const i=clamp(Math.round((dz-b.z0)/cz),1,nzz-2)*nx+clamp(Math.round((dx-b.x0)/cx),1,nx-2);
+    acc0[i]+=BASE_ACC[v]*kA; dist0[i]=Math.max(dist0[i],aDist[v]); }
+  const dr=drain(hh[5],nx,nzz,cx,cz,acc0,dist0), fl=new Float32Array(n);
+  for(let i=0;i<n;i++) fl[i]=Math.max(0,Math.log(dr.acc[i]/kA)/LM);
+  g.setAttribute("aFlow",new THREE.BufferAttribute(fl,1)); g.setAttribute("aDist",new THREE.BufferAttribute(dr.dist,1));
+  const tex=makeDemTex(h16,nx,nzz,sc);
+  const mat=terrainMat.clone();
+  mat.uniforms=Object.assign({},lUni,{uHole:{value:new THREE.Vector4()}, uDem:{value:tex}, uDemOn:{value:tex?1:0},
+    uDemTexel:{value:new THREE.Vector2(1/nx,1/nzz)}, uDemCell:{value:new THREE.Vector2(cx,cz)}, uDemExt:{value:new THREE.Vector4(b.x0,b.z0,sx,sz)}});
+  if(AVA.data){ mat.uniforms.uAva={value:avaTexture(b.x0,b.z0,sx,sz)}; mat.uniforms.uExt={value:new THREE.Vector4(b.x0,b.z0,sx,sz)}; }
+  mat.polygonOffset=true; mat.polygonOffsetFactor=-1; mat.polygonOffsetUnits=-4;
+  LOC.mesh=new THREE.Mesh(g,mat); lScene.add(LOC.mesh);
+  const inset=Math.min(0.6*bc, sx*0.05); lUni.uHole.value.set(b.x0+inset,b.z0+inset,b.x1-inset,b.z1-inset);
+}
+function renderPicker(){
+  const cur=LOC.cur?LOC.cur.id:"";
+  const btn=(id,name,sub)=>`<button data-loc="${id}" aria-current="${id===cur}">${name}${sub?`<small>${sub}</small>`:""}</button>`;
+  const places=LOC.list.filter(q=>q.kind==="place"), avas=LOC.list.filter(q=>q.kind!=="place");
+  $("plist").innerHTML=btn("","Whole valley",Math.round(SX)+" × "+Math.round(SZ)+" km")+places.map(q=>btn(q.id,q.name,Math.round(q.cell)+" m")).join("")
+    +"<hr>"+avas.map(q=>btn(q.id,q.name.replace(" of Napa Valley",""),Math.round(q.cell)+" m")).join("");
+}
+function openPlaces(on){
+  $("places").hidden=!on; $("plBtn").setAttribute("aria-pressed",on); document.body.classList.toggle("pl-open",on);
+  if(on&&xs.open) $("xsBtn").click();
+}
+$("plBtn").onclick=()=>openPlaces($("places").hidden);
+$("plX").onclick=()=>openPlaces(false);
+$("plist").addEventListener("click",e=>{ const b=e.target.closest("button[data-loc]"); if(b) selectLoc(b.dataset.loc); });
+$("plcs").addEventListener("click",e=>{ const el=e.target.closest(".plc.ava"); if(el) selectLoc(el.dataset.loc||""); });
+async function selectLoc(id){
+  const q=LOC.list.find(l=>l.id===id)||null;
+  LOC.cur=q; clearPatch(); renderPicker(); autoCam=true;
+  if(!q) return;
+  if(ageOf(p)>150) goTo(CH.length-1);                     // from the globe, go to today's valley
+  try{
+    const gd=LOC.cache[q.id]||(LOC.cache[q.id]=await loadGrid(LOC.base+q.file));
+    if(LOC.cur===q&&!LOC.mesh) buildPatch(q,gd.m,gd.h);
+  }catch(e){ delete LOC.cache[q.id]; }
+}
+(async function loadLocations(){
+  if(!realDEM||REG.id==="mt_st_helena") return;              // the 30 km block has no region folder
+  try{
+    const d=await fetch(LOC.base+"detail/index.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
+    LOC.list=d.locations.map(q=>{ const box=toSceneBox(q.bbox_utm), av=toSceneBox(q.ava_bbox_utm||q.bbox_utm);
+      const fx=(av.x0+av.x1)/2, fz=(av.z0+av.z1)/2;
+      return {id:q.id, name:q.name, kind:q.kind||"ava", file:q.file, cell:q.cell_m, box, fx, fz, fr:Math.max(av.x1-av.x0,av.z1-av.z0)/2, i:idxAt(fx,fz)}; })
+      .filter(q=>q.i>=0);
+    if(!LOC.list.length) return;
+    renderPicker(); $("plBtn").hidden=false;
+    const want=(new URLSearchParams(location.search)).get("loc");
+    if(want) selectLoc(want.replace(/[^a-z_]/g,""));
+  }catch(e){ /* close-ups are optional */ }
 })();
 
 /* =================================================================== state from age */
@@ -924,12 +1054,16 @@ function driveLocalCam(a,hc,dt){
   if(!reduce) orbit += dt*0.045*(playing?1:0.6);
   const t=sm(170,0,a), kL=LEXT/30;
   // volcano chapters frame the summit; the ocean era and today frame the whole region
-  const focus=sm(14,9,a)*sm(0.05,0.6,a), tx=lerp(CXm,0,focus), tz=lerp(CZm,0,focus);
+  const focus=sm(14,9,a)*sm(0.05,0.6,a);
+  let tx=lerp(CXm,0,focus), tz=lerp(CZm,0,focus), dist=lerp(lerp(48,27,t)*kL*0.95, lerp(48,27,t), focus), elev=lerp(0.78,0.36,t), ty=Math.max(0.3,hc*VE*0.45*focus), lift=hc*0.4;
+  const L=LOC.cur;
+  if(L){ // a chosen place: frame it close, whatever the era
+    let hl=0; for(let k=0;k<6;k++) hl+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][L.i];
+    tx=L.fx; tz=L.fz; dist=clamp(L.fr*2.3,3,30); elev=0.6; ty=Math.max(0,hl)*VE*0.8; lift=0; }
   if(!lInit){ lInit=true; lCam.position.set(tx+Math.sin(orbit)*30*kL,34*kL,tz+Math.cos(orbit)*30*kL); }
-  const dist=lerp(lerp(48,27,t)*kL*0.95, lerp(48,27,t), focus), elev=lerp(0.78,0.36,t);
-  tv.set(tx+Math.sin(orbit)*Math.cos(elev)*dist, Math.sin(elev)*dist + hc*0.4, tz+Math.cos(orbit)*Math.cos(elev)*dist);
+  tv.set(tx+Math.sin(orbit)*Math.cos(elev)*dist, Math.sin(elev)*dist + ty + lift, tz+Math.cos(orbit)*Math.cos(elev)*dist);
   lCam.position.lerp(tv, 1-Math.exp(-dt*2.2));
-  lCtl.target.lerp(tv.set(tx, Math.max(0.3,hc*VE*0.45*focus), tz), 1-Math.exp(-dt*2.2));
+  lCtl.target.lerp(tv.set(tx, ty, tz), 1-Math.exp(-dt*2.2));
   lCam.lookAt(lCtl.target);
 }
 
@@ -980,7 +1114,7 @@ addEventListener("resize",resize); resize();
    same stage heights and fault geometry as the 3D block, plus a column under the location point. */
 const xs={el:$("xsec"), cv:$("xsCv"), btn:$("xsBtn"), open:false, ctx:null, w:0, h:0};
 xs.ctx=xs.cv.getContext("2d");
-function xsToggle(on){ xs.open=on; xs.el.hidden=!on; xs.btn.setAttribute("aria-pressed",on); document.body.classList.toggle("xs-open",on); if(on) xsSize(); }
+function xsToggle(on){ if(on&&!$("places").hidden) openPlaces(false); xs.open=on; xs.el.hidden=!on; xs.btn.setAttribute("aria-pressed",on); document.body.classList.toggle("xs-open",on); if(on) xsSize(); }
 xs.btn.onclick=()=>xsToggle(!xs.open); $("xsX").onclick=()=>xsToggle(false);
 function xsSize(){ const r=xs.cv.getBoundingClientRect(), d=Math.min(devicePixelRatio,2); xs.w=r.width; xs.h=r.height; xs.cv.width=Math.round(r.width*d); xs.cv.height=Math.round(r.height*d); xs.ctx.setTransform(d,0,0,d,0,0); }
 addEventListener("resize",()=>{ if(xs.open) xsSize(); });
@@ -1119,7 +1253,7 @@ function frame(now){
 
   const st=apply(a,p);
   if(xs.open){ drawSection(a,w6); xsPlace(); }
-  $("scaleChip").textContent = st.local ? REG_LABEL : (a>320 ? "Planet" : "Western North America");
+  $("scaleChip").textContent = st.local ? (LOC.cur ? LOC.cur.name.replace(" of Napa Valley","")+" · close-up" : REG_LABEL) : (a>320 ? "Planet" : "Western North America");
   let cam;
   if(!st.local){
     if(autoCam) driveGlobeCam(a,p,dt); else gCtl.update();
@@ -1148,9 +1282,10 @@ function frame(now){
     $("lgFault").hidden=!lf; $("lgStream").hidden=!ls; $("lgTopo").hidden=!lt; legend.style.opacity=(lf||lh||ls||lt)?1:0;
     // 5 km scale bar measured at the summit, across the screen
     camR.setFromMatrixColumn(lCam.matrixWorld,0); camR.y=0; camR.normalize();
-    const sbK=LEXT>40?10:5; $("sbKm").textContent=sbK+" km";
-    cv0.copy(lCtl.target).project(lCam); cv1.copy(lCtl.target).addScaledVector(camR,sbK).project(lCam);
-    const px5=Math.abs(cv1.x-cv0.x)/2*innerWidth; sbar.hidden=!(px5>12&&px5<innerWidth*0.4); $("sbar").style.width=px5.toFixed(0)+"px";
+    cv0.copy(lCtl.target).project(lCam); cv1.copy(lCtl.target).addScaledVector(camR,1).project(lCam);
+    const pxKm=Math.abs(cv1.x-cv0.x)/2*innerWidth, sbK=[10,5,2,1,0.5].find(k=>k*pxKm<innerWidth*0.22)||0.5;
+    $("sbKm").textContent=sbK<1?(sbK*1000)+" m":sbK+" km";
+    const px5=sbK*pxKm; sbar.hidden=!(px5>12&&px5<innerWidth*0.4); $("sbar").style.width=px5.toFixed(0)+"px";
     // town labels fade in with the topo detail
     const to=lUni.uTopo.value;
     FLAB.forEach(q=>placeLab(q,lUni.uSS.value>0.3,lUni.uSS.value));
