@@ -196,3 +196,11 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Checks: `python3 -m unittest discover -s scripts -p 'test_*.py'` → 61 tests OK (2 skipped). Headless Chromium: eras 1800/250/150/8/0 Ma, the 30 km block, `globe.html` redirect, regions view, flights to Sonoma Valley and Mendocino, card minimize, click-to-section: no console errors. Not tested: touch devices, real-hardware frame rate.
 - Next smallest action: owner review of PR #11; the nightly routine starts on AUTOPILOT R1 (Sonoma Valley).
 
+## Open in GeoLibre (branch `geolibre-link`, stacked on `one-program`) — 2026-09-27
+- Owner asked to analyze GeoLibre (github.com/opengeos/GeoLibre, MIT) for integration, then said "proceed" on step 1 of the proposal: an "Open in GeoLibre" link per region.
+- New `scripts/geolibre_export.py` (Tier 0, stdlib) writes `prototype/assets/geolibre/<id>.geolibre.json` plus `index.json`: GeoLibre projects with inline GeoJSON for the AVA outline, the AVAs inside it, mapped faults near it (read from the viewer's FAULTS table, UCERF3 via GEM) and, for mapped regions, the viewer's 3D frame. Napa Valley (mapped, full-resolution outlines, 575 KB) and Sonoma Valley (planned, simplified outlines, 12 KB).
+- Viewer: the card shows "Open in GeoLibre ↗" at Today for the live region and on region cards that have a project. The link is `web.geolibre.app/?url=<raw.githubusercontent.com URL>` on the ref in `index.json` (`main`); `?glref=<branch>` overrides it for testing before merge.
+- Added `scripts/test_geolibre_export.py`; SOURCES.md T04; AUTOPILOT R3 now re-runs the export.
+- Commands: `python3 scripts/geolibre_export.py`; `python3 -m unittest discover -s scripts -p 'test_*.py'` → 66 tests OK (2 skipped); GeoLibre's own `parseProject` (esbuild bundle of packages/core/src/project.ts at d9d7651) accepted both files; headless Chromium: link appears at Today and on the Sonoma Valley card, not at 1800 Ma or on Petaluma Gap (no project), no console errors.
+- Not tested: opening the projects in the live GeoLibre app (web.geolibre.app is blocked from the cloud sandbox). The links use `main`, so they return 404 until this branch reaches `main`.
+- Next smallest action: owner opens the Sonoma link with `?glref=geolibre-link` and confirms it loads; then step 2 (slope, aspect and sun exposure at the clicked point).
