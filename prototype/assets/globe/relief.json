@@ -1,0 +1,12 @@
+{
+ "product": "Earth relief for the globe",
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 3,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "projection": "equirectangular, WGS84; row 0 = 90N",
+ "width": 2048,
+ "height": 1024,
+ "clamped_lat": 85.05,
+ "encoding": "8-bit gray; v>=128: h = ((v-128)/127)^2 * 8848 m; v<128: h = -((127-v)/127)^2 * 11000 m"
+}

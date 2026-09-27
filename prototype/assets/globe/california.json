@@ -1,0 +1,23 @@
+{
+ "product": "California relief for the globe",
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 8,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "crs": "WGS84 lat/lon grid",
+ "box_lonlat": [
+  -124.6,
+  32.4,
+  -114.0,
+  42.1
+ ],
+ "cell_deg": 0.02,
+ "cols": 531,
+ "rows": 486,
+ "encoding": "Int16 little-endian metres, row 0 = north",
+ "range_m": [
+  -4890.5,
+  4146.8
+ ],
+ "sha256": "9fb5bc8e88e90f7777b3e58258347e39eb4719d4318f6153b4eb7a637f0df555"
+}

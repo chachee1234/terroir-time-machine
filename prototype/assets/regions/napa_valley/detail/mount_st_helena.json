@@ -1,0 +1,35 @@
+{
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 13,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "fetched": "2026-09-27",
+ "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+ "encoding": "Int16 little-endian, row 0 = north",
+ "scale": 0.1,
+ "resampling": "bilinear from the tile mosaic at each UTM cell centre",
+ "product": "sub-AVA close-up",
+ "region": "napa_valley",
+ "ava_id": "mount_st_helena",
+ "name": "Mount St. Helena",
+ "bbox_utm": [
+  528800.0,
+  4275629.8,
+  536392.6,
+  4284629.8
+ ],
+ "ava_bbox_utm": [
+  527392.6,
+  4275629.8,
+  536392.6,
+  4284629.8
+ ],
+ "cols": 432,
+ "rows": 512,
+ "cell_m": 17.616,
+ "range_m": [
+  161.21,
+  1319.6
+ ],
+ "sha256": "7d4e5773ae09b522c3a1752784933bdd34d21a7e9fe49fbced3b22bdb0175333"
+}

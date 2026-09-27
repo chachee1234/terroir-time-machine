@@ -1,0 +1,35 @@
+{
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 13,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "fetched": "2026-09-27",
+ "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+ "encoding": "Int16 little-endian, row 0 = north",
+ "scale": 0.1,
+ "resampling": "bilinear from the tile mosaic at each UTM cell centre",
+ "product": "sub-AVA close-up",
+ "region": "napa_valley",
+ "ava_id": "chiles_valley",
+ "name": "Chiles Valley",
+ "bbox_utm": [
+  549952.3,
+  4259131.9,
+  565011.4,
+  4274191.0
+ ],
+ "ava_bbox_utm": [
+  551452.3,
+  4261408.4,
+  563511.4,
+  4271914.5
+ ],
+ "cols": 512,
+ "rows": 512,
+ "cell_m": 29.47,
+ "range_m": [
+  47.96,
+  722.16
+ ],
+ "sha256": "767206e6efa5d4395c40e8d1c04fd64a9d09930cb7a4bfbc735c45e333ddebef"
+}

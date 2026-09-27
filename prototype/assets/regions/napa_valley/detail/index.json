@@ -1,0 +1,364 @@
+{
+ "region": "napa_valley",
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "locations": [
+  {
+   "id": "mount_st_helena",
+   "name": "Mount St. Helena",
+   "kind": "place",
+   "file": "detail/mount_st_helena",
+   "bbox_utm": [
+    528800.0,
+    4275629.8,
+    536392.6,
+    4284629.8
+   ],
+   "ava_bbox_utm": [
+    527392.6,
+    4275629.8,
+    536392.6,
+    4284629.8
+   ],
+   "cols": 432,
+   "rows": 512,
+   "cell_m": 17.616
+  },
+  {
+   "id": "calistoga",
+   "name": "Calistoga",
+   "kind": "ava",
+   "file": "detail/calistoga",
+   "bbox_utm": [
+    529260.4,
+    4263507.5,
+    545273.7,
+    4279520.8
+   ],
+   "ava_bbox_utm": [
+    530760.4,
+    4266936.5,
+    543773.7,
+    4276091.9
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 31.337
+  },
+  {
+   "id": "howell_mountain",
+   "name": "Howell Mountain",
+   "kind": "ava",
+   "file": "detail/howell_mountain",
+   "bbox_utm": [
+    540130.3,
+    4262458.9,
+    555614.8,
+    4277943.5
+   ],
+   "ava_bbox_utm": [
+    541630.3,
+    4264306.0,
+    554114.8,
+    4276096.4
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 30.302
+  },
+  {
+   "id": "chiles_valley",
+   "name": "Chiles Valley",
+   "kind": "ava",
+   "file": "detail/chiles_valley",
+   "bbox_utm": [
+    549952.3,
+    4259131.9,
+    565011.4,
+    4274191.0
+   ],
+   "ava_bbox_utm": [
+    551452.3,
+    4261408.4,
+    563511.4,
+    4271914.5
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 29.47
+  },
+  {
+   "id": "diamond_mountain_district",
+   "name": "Diamond Mountain District",
+   "kind": "ava",
+   "file": "detail/diamond_mountain_district",
+   "bbox_utm": [
+    531015.6,
+    4261912.9,
+    543111.1,
+    4274008.4
+   ],
+   "ava_bbox_utm": [
+    532515.6,
+    4265689.8,
+    541611.1,
+    4270231.6
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 23.67
+  },
+  {
+   "id": "st__helena",
+   "name": "St. Helena",
+   "kind": "ava",
+   "file": "detail/st__helena",
+   "bbox_utm": [
+    540154.5,
+    4257230.0,
+    553203.4,
+    4270278.9
+   ],
+   "ava_bbox_utm": [
+    542082.4,
+    4258730.0,
+    551275.5,
+    4268778.9
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 25.536
+  },
+  {
+   "id": "spring_mountain_district",
+   "name": "Spring Mountain District",
+   "kind": "ava",
+   "file": "detail/spring_mountain_district",
+   "bbox_utm": [
+    535126.0,
+    4256266.6,
+    547415.0,
+    4268555.5
+   ],
+   "ava_bbox_utm": [
+    537142.6,
+    4257766.6,
+    545398.3,
+    4267055.5
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 24.049
+  },
+  {
+   "id": "rutherford",
+   "name": "Rutherford",
+   "kind": "ava",
+   "file": "detail/rutherford",
+   "bbox_utm": [
+    545163.1,
+    4252168.9,
+    556499.6,
+    4263505.3
+   ],
+   "ava_bbox_utm": [
+    546663.1,
+    4254244.0,
+    554999.6,
+    4261430.2
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 22.185
+  },
+  {
+   "id": "oakville",
+   "name": "Oakville",
+   "kind": "ava",
+   "file": "detail/oakville",
+   "bbox_utm": [
+    547557.9,
+    4247713.8,
+    559941.0,
+    4260096.8
+   ],
+   "ava_bbox_utm": [
+    549057.9,
+    4250212.1,
+    558441.0,
+    4257598.5
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 24.233
+  },
+  {
+   "id": "atlas_peak",
+   "name": "Atlas Peak",
+   "kind": "ava",
+   "file": "detail/atlas_peak",
+   "bbox_utm": [
+    557709.5,
+    4246400.2,
+    570921.2,
+    4259611.9
+   ],
+   "ava_bbox_utm": [
+    559682.9,
+    4247900.2,
+    568947.8,
+    4258111.9
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 25.855
+  },
+  {
+   "id": "yountville",
+   "name": "Yountville",
+   "kind": "ava",
+   "file": "detail/yountville",
+   "bbox_utm": [
+    548878.5,
+    4243674.3,
+    562303.9,
+    4257099.7
+   ],
+   "ava_bbox_utm": [
+    550378.5,
+    4245823.7,
+    560803.9,
+    4254950.2
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 26.273
+  },
+  {
+   "id": "mt__veeder",
+   "name": "Mt. Veeder",
+   "kind": "ava",
+   "file": "detail/mt__veeder",
+   "bbox_utm": [
+    540175.0,
+    4235303.0,
+    561008.4,
+    4256136.3
+   ],
+   "ava_bbox_utm": [
+    543829.9,
+    4236803.0,
+    557353.5,
+    4254636.3
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 40.77
+  },
+  {
+   "id": "stags_leap_district",
+   "name": "Stags Leap District",
+   "kind": "ava",
+   "file": "detail/stags_leap_district",
+   "bbox_utm": [
+    554528.6,
+    4246495.5,
+    563355.9,
+    4255322.9
+   ],
+   "ava_bbox_utm": [
+    556580.8,
+    4247995.5,
+    561303.8,
+    4253822.9
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 17.275
+  },
+  {
+   "id": "oak_knoll_district_of_napa_valley",
+   "name": "Oak Knoll District of Napa Valley",
+   "kind": "ava",
+   "file": "detail/oak_knoll_district_of_napa_valley",
+   "bbox_utm": [
+    553608.5,
+    4239009.7,
+    564964.7,
+    4250365.8
+   ],
+   "ava_bbox_utm": [
+    555108.5,
+    4240922.3,
+    563464.7,
+    4248453.3
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 22.223
+  },
+  {
+   "id": "coombsville",
+   "name": "Coombsville",
+   "kind": "ava",
+   "file": "detail/coombsville",
+   "bbox_utm": [
+    560064.5,
+    4234032.0,
+    572093.7,
+    4246061.2
+   ],
+   "ava_bbox_utm": [
+    562457.8,
+    4235532.0,
+    569700.4,
+    4244561.2
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 23.541
+  },
+  {
+   "id": "wild_horse_valley",
+   "name": "Wild Horse Valley",
+   "kind": "ava",
+   "file": "detail/wild_horse_valley",
+   "bbox_utm": [
+    564314.0,
+    4233243.6,
+    575819.3,
+    4244748.9
+   ],
+   "ava_bbox_utm": [
+    568514.8,
+    4234743.6,
+    571618.6,
+    4243248.9
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 22.515
+  },
+  {
+   "id": "los_carneros",
+   "name": "Los Carneros",
+   "kind": "ava",
+   "file": "detail/los_carneros",
+   "bbox_utm": [
+    538304.0,
+    4221300.0,
+    564275.2,
+    4244174.5
+   ],
+   "ava_bbox_utm": [
+    539804.0,
+    4222687.8,
+    562775.2,
+    4239689.9
+   ],
+   "cols": 512,
+   "rows": 451,
+   "cell_m": 50.824
+  }
+ ]
+}
