@@ -2,9 +2,9 @@
 
 **Terroir Time Machine — Autonomous Operations Policy**
 
-Version: 1.2  
+Version: 1.3  
 Effective: September 20, 2026  
-Last revised: September 24, 2026 (v1.2: OAuth token lifetime is 1 year, rotate yearly; v1.1: all-linked sources award raised from 20 to 30 so the maximum score is 100)  
+Last revised: September 28, 2026 (v1.3: cost layers L0–L3 and an optional local FreeLLMAPI pool, off by default, §2a; v1.2: OAuth token lifetime is 1 year, rotate yearly; v1.1: all-linked sources award raised from 20 to 30 so the maximum score is 100)  
 Authority: Developer + Claude Agent (within defined rules)
 
 ---
@@ -15,6 +15,7 @@ TTM is an autonomous open-source application for geological history exploration.
 - Which decisions are automated, which require human approval
 - Model allocation: Haiku 4.5 (extraction) + Opus 5.5 (audits only)
 - Tier 0 (deterministic Python) runs most operations
+- Cost layers L0–L3 and an optional, local-only FreeLLMAPI pool for checkable mechanical work (§2a)
 - Quota management against Claude Pro shared weekly limit
 - Escalation ladder for edge cases
 
@@ -28,6 +29,7 @@ TTM is an autonomous open-source application for geological history exploration.
 - `claude-haiku-4-5-20251001` — Text extraction, classification (Tier 1)
 - `claude-opus-5-5` — Weekly architecture audit (Tier 2)
 - No other models. No Fable. No Sonnet. No direct API calls via SDK.
+- Sole exception: the optional local FreeLLMAPI pool in §2a, called only by Claude through MCP in the developer's local sessions, never in workflows.
 
 **Authentication:**
 - All runs use `CLAUDE_CODE_OAUTH_TOKEN` (generated via `claude setup-token`)
@@ -40,6 +42,51 @@ TTM is an autonomous open-source application for geological history exploration.
 - Calendar reminder: `Rotate CLAUDE_CODE_OAUTH_TOKEN` 11 months after creation (one month before expiry)
 - Rotate immediately if a token is ever exposed (pasted in chat, logs, screenshots)
 - Test token validity in Phase 2 before adding Haiku to critical path
+
+---
+
+## 2a. COST LAYERS AND THE OPTIONAL FREELLMAPI POOL
+
+Added in v1.3 by owner instruction (2026-09-28). This section extends the budget plan in §6; it does not replace §2, §3 or §6.
+
+**Switch:** `FreeLLMAPI: OFF`
+Only the developer changes this to `ON`, after completing the setup below. While it is `OFF`, no session may call FreeLLMAPI.
+
+**Operating rule:** Use the cheapest reliable layer capable of doing the task correctly. Scientific integrity and project correctness come before avoiding model usage; the project still targets no incremental API spend wherever practical.
+
+| Layer | What | Used for | Existing names |
+|---|---|---|---|
+| **L0** | Deterministic Python, scripts, tests, schema validation, data processing | The default whenever a task can be done deterministically | §3 Tier 0 |
+| **L1** | FreeLLMAPI, a local router over third-party free model tiers | Bounded, mechanical, independently checkable inference; opportunistic, not guaranteed | New |
+| **L2** | Claude (subscription OAuth only) | Substantive implementation, scientific reasoning, architecture, synthesis, difficult debugging, governance decisions, and verifying every L1 output | Interactive and autopilot sessions; §3 Tier 1 Haiku and Tier 2 Opus workflows |
+| **L3** | The developer (and a qualified geoscientist where SCIENCE_RULES.md §7 requires one) | Consequential scientific, architectural, governance, licensing and release decisions | §8, §11 |
+
+The §3 workflow tier names (Tier 1 Haiku, Tier 2 Opus) are unchanged; both are L2.
+
+**Claude stays primary.** Claude handles architecture decisions, scientific reasoning, source evaluation, final interpretation, code changes, acceptance decisions, release readiness, and final review before anything is committed or merged (merging stays with the developer, §7). FreeLLMAPI is only a secondary pool that Claude may call through MCP. It is never configured as Claude Code's model endpoint (no `ANTHROPIC_BASE_URL` or similar redirect).
+
+**L1 may be used for:** extracting source metadata; normalizing source records; organizing citation candidates; converting supplied text or roadmap information into structured JSON; classification; duplicate detection; repetitive region metadata work; documentation cleanup; first-pass summarization; first-pass code review or second opinions; and other easily checked AUTOPILOT subtasks whose result can be independently verified.
+
+**L1 must never independently decide:** whether geological claims are valid; whether evidence is sufficient; whether a reconstruction is scientifically defensible; whether a source licence permits reuse; whether an unsupported claim can be published; or whether a PR is ready to merge.
+
+**Untrusted output:**
+- L1 output is always untrusted intermediate material, like a web page or an issue body (AGENTS.md).
+- Claude independently verifies, against the original source or with L0 checks, any L1 output that affects scientific claims, geological ages, coordinates, source provenance, licensing, SCIENCE_RULES.md, SOURCES.md, architecture, or application behavior.
+- An L1 model is never a scientific source or evidence. It is never cited in SOURCES.md or a claim record, and it does not raise a source's verification level (SCIENCE_RULES.md §4 "model memory", §7 "AI review").
+- Existing tests and validation stay authoritative. An LLM saying something "looks correct" never substitutes for a test.
+- When L1 contributed to a commit, the commit or PR says what it drafted and how Claude checked it.
+
+**Data that never goes to L1:** secrets, tokens, keys or credentials (including `.env` files and logs that may contain them); private or personal information; proprietary or confidential material; and the owner's uploads or unpublished files unless the owner has said they may be shared. Prompts pass to third-party providers whose terms may allow logging or training, so send only text you would be willing to publish.
+
+**Setup and limits (L1):**
+- Local-only: runs on the developer's own machine, listening on `127.0.0.1` (`HOST=127.0.0.1`), connected to local Claude Code with `claude mcp add --transport http freellmapi http://localhost:3001/mcp`. No public port, tunnel or hosted instance.
+- Not used by GitHub Actions workflows or the cloud autopilot routine, which cannot reach it; those keep the §2 models only.
+- Claude uses only `ask_freellmapi` and the read-only status tools. FreeLLMAPI gets no repository access: it never edits files, commits, pushes, merges, labels, or comments. Claude makes all repository changes.
+- Free tiers only: no paid provider plan, no payment method, no paid catalog subscription.
+- Capacity is opportunistic. FreeLLMAPI's advertised free-token totals are not project capacity; providers change or retire free tiers without notice. It is a cost-reduction and capacity-extension mechanism, not guaranteed zero-cost infrastructure. When it is unavailable or slow, do the work at L0 or L2 instead; never lower a check to fit.
+- Kill switches: set the switch above to `OFF`, or run `claude mcp remove freellmapi`, or turn MCP off on FreeLLMAPI's Keys page.
+
+**Human-review gates are unchanged.** Every gate in §7, §8, §11 and SCIENCE_RULES.md §7 applies as before.
 
 ---
 
@@ -401,6 +448,8 @@ Done.
 
 **Headroom:** Autonomous operations target <10% of weekly budget, leaving 20–30% as safety margin.
 
+**FreeLLMAPI (§2a):** Its free-tier usage does not count against the Claude weekly limit, but it is not guaranteed capacity and is not part of this budget. Plan every workload so it still fits the Claude budget with FreeLLMAPI unavailable. Claude's tokens for writing L1 prompts and verifying L1 output do count.
+
 **If you exceed headroom:**
 - Workflows log a warning
 - If weekly cap reached mid-week, next scheduled run is skipped
@@ -603,6 +652,7 @@ Developer receives email/discussion with:
 | Accept region requests (manual) | Developer | No |
 | Rotate OAuth token | Developer | No |
 | Change GOVERNANCE.md | Developer | No (must amend this file) |
+| Turn the FreeLLMAPI switch on, add its providers or widen its use (§2a) | Developer | No |
 | Modify scoring rule | Developer | No (amendment + tests required) |
 | Update dependencies | Developer | Yes (code review) |
 
@@ -635,6 +685,7 @@ Example:
 - Haiku: Issue classification only
 - Opus: Weekly diff audit only
 - Auth: OAuth token via `claude setup-token`
+- FreeLLMAPI: optional, local-only, untrusted, off by default (§2a)
 
 **Weekly workflow:**
 - Monday 9 AM: Generation (Tier 0)
