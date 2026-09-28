@@ -35,6 +35,143 @@
           "sha256": "23083ad146dbc961b7420d140d4563326b5320597dc1fc531e3a9a98b57bcf02"
         }
       ]
+    },
+    {
+      "id": "dem-3dep-napa_valley",
+      "source": "USGS 3D Elevation Program (3DEP) Bare Earth DEM dynamic service",
+      "service": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer",
+      "request_url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=528800.00%2C4221300.00%2C584100.00%2C4293300.00&bboxSR=26910&imageSR=26910&size=1843%2C2400&format=tiff&pixelType=F32&compression=None&interpolation=RSP_BilinearInterpolation&noData=-9999&f=image",
+      "fetched": "2026-09-27",
+      "rights": "USGS-produced data, public domain in the U.S.; credit: U.S. Geological Survey",
+      "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N)",
+      "vertical": "meters; service reports 3DEP bare-earth elevation (NAVD88 per 3DEP standard; not re-verified here)",
+      "note": "Dynamic multi-resolution mosaic resampled by the service with bilinear interpolation; the underlying source dataset and survey epoch vary by location and are not recorded by this request.",
+      "raw_file": "data/raw/napa_valley_3dep_30m.tif",
+      "raw_sha256": "ea4e33c5837fc31ccbdfaf55e7a1902ee87acb6993bfb3c69ffb6603f38da4ae",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/terrain.bin",
+          "sha256": "79a7d369115dfaad99fcccfa1590845786b1382c76a4c4a0ae1d8a1a8449e548"
+        }
+      ]
+    },
+    {
+      "id": "napa_valley-terrain-tiles-z13",
+      "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "zoom": 13,
+      "tiles": 378,
+      "tiles_sha256": "35cfd99fd510021881ce46c6d76952ee2226ed34e8a0a9c3adc45dc838093067",
+      "fetched": "2026-09-27",
+      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/dem_hi.bin",
+          "sha256": "aa43e93c5a1ef55ec73b38b731521f4f4ec994e9a4873857c0799c86b9dbe5e0"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/atlas_peak.bin",
+          "sha256": "895a916d7cf3cdb1a210328572f76311dc42e0b10872e22cdc296b0fb6a15f15"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/calistoga.bin",
+          "sha256": "30197b1c25f1f2944ba2dcf3bdf7d9260dec920db9d3b997b658ca3506085c79"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/chiles_valley.bin",
+          "sha256": "767206e6efa5d4395c40e8d1c04fd64a9d09930cb7a4bfbc735c45e333ddebef"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/coombsville.bin",
+          "sha256": "dab9b25befa705b47f207fc1043c12f0d1a17ad3f17844a807ffd3dbcb7c949e"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/diamond_mountain_district.bin",
+          "sha256": "667c179187fd2bda8768c96077be19cfe34798fc554cb09462f5092ef2491c00"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/howell_mountain.bin",
+          "sha256": "d549eac7d7154881de555ed02c3445ef5d507e1c7105ceaff55e42fe1de7e69c"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/los_carneros.bin",
+          "sha256": "39ed2adaab2f7c8c10181fe02a3541d0b1040de8c7d30a197dbc6e87eb46a984"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/mt__veeder.bin",
+          "sha256": "354f2338982b160ef7427d56c834e8f509953d66c8ea2c2900fdbcd471d23282"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/oak_knoll_district_of_napa_valley.bin",
+          "sha256": "1a05ee50be57a4ddc59674016277cdf7bd73e0ecae2efd8dc8f25e3021c9b8da"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/oakville.bin",
+          "sha256": "9ed39c3628bfb97a72b8c4bd6d8ce890f7427bfdf660ab19cbaef7afe7dfd439"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/rutherford.bin",
+          "sha256": "bee36a718fea783ede79826e9433880453c2ef901f0427affc2133e69b0d0ab1"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/spring_mountain_district.bin",
+          "sha256": "3793c85a73b2b205a64205071c39c1d33fbb98778f9e50e713a44f642666cb51"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/st__helena.bin",
+          "sha256": "1b212a9da3eae054b65c65e4da0fcc82867d6ad3ac0f9187e07e550c8e40d03e"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/stags_leap_district.bin",
+          "sha256": "d34d56dc8828b34622f8bb27bd379459b6cabe3e307bcc2c4b78743a5fd1a8b9"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/wild_horse_valley.bin",
+          "sha256": "8593b6d7923ba21aff395310d4242f824e5348c7eda40837aebc3d002a130fb0"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/yountville.bin",
+          "sha256": "bfe7c4aac8ec9de34a0a854d88ce406a092aaf8b0411554f81616828751373d4"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/mount_st_helena.bin",
+          "sha256": "7d4e5773ae09b522c3a1752784933bdd34d21a7e9fe49fbced3b22bdb0175333"
+        }
+      ]
+    },
+    {
+      "id": "globe-assets",
+      "source": "AWS Open Data Terrain Tiles (Terrarium) + UC Davis AVA Project",
+      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "ava_url": "https://raw.githubusercontent.com/UCDavisLibrary/ava/master/avas_aggregated_files/avas.geojson",
+      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md AVA outlines: CC0 1.0.",
+      "tiles_sha256": {
+        "z4": "67249c97e35a4b7c7f52d0c903409015789e45b1b4add66e81968ca169643938",
+        "z8": "6a337f2746bfcdc8bb4710e4072cf911f00b98b0486a374bbed6ea7c63c9a3fd"
+      },
+      "fetched": "2026-09-27",
+      "derived": [
+        {
+          "file": "prototype/assets/globe/ca_avas.json",
+          "sha256": "9491809d392a92a554193bef41728b9bfe1b975acc124665d0a46e31822de895"
+        },
+        {
+          "file": "prototype/assets/globe/california.bin",
+          "sha256": "9fb5bc8e88e90f7777b3e58258347e39eb4719d4318f6153b4eb7a637f0df555"
+        },
+        {
+          "file": "prototype/assets/globe/california.json",
+          "sha256": "d6ffab30c7575d4ad25eb4ea1aa8364ec852bf4d5026fc13cc22b08dd60d0e6e"
+        },
+        {
+          "file": "prototype/assets/globe/relief.json",
+          "sha256": "479c556700fbdda07713d45200341b7c31ac40e94ca6ad2969623d7999eb344d"
+        },
+        {
+          "file": "prototype/assets/globe/relief.png",
+          "sha256": "55baedd80623a1aa1ac522a853de91e07eb5d369e5cb8b8110550c347358e9e4"
+        }
+      ]
     }
   ]
 }

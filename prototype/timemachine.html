@@ -16,7 +16,7 @@
 html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px/1.5 var(--sans);overflow:hidden}
 #stage{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 40%,#16202a 0%,#07090b 70%)}
 #gl{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
-#veil{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 50%,rgba(250,248,244,.98) 0%,rgba(236,236,236,.92) 45%,rgba(200,208,214,.75) 100%)}
+#space{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 40%,#16202a 0%,#07090b 70%)}
 .ui{position:absolute;z-index:2}
 .top{top:calc(12px + env(safe-area-inset-top,0px));left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;pointer-events:none}
 .brand{font-family:var(--serif);font-size:20px;line-height:1.1;text-shadow:0 1px 12px rgba(0,0,0,.6)}
@@ -68,9 +68,10 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .legend i{display:inline-block;width:18px;height:3px;border-radius:2px;background:var(--c)}
 .scalebar{position:absolute;z-index:2;right:16px;bottom:calc(92px + env(safe-area-inset-bottom,0px));font:11px var(--mono);color:var(--ink);text-align:center;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.9)}
 .scalebar div{height:5px;border:1.5px solid var(--ink);border-top:0;margin-top:2px}
-.plc{position:absolute;z-index:2;transform:translate(-50%,-50%);pointer-events:none;font-size:11.5px;white-space:nowrap;color:#f3eee4;text-shadow:0 1px 5px rgba(0,0,0,.95),0 0 2px rgba(0,0,0,.9);letter-spacing:.03em}
+.plc{position:absolute;z-index:2;transform:translate(-5px,-50%);pointer-events:none;font-size:11.5px;white-space:nowrap;color:#f3eee4;text-shadow:0 1px 5px rgba(0,0,0,.95),0 0 2px rgba(0,0,0,.9);letter-spacing:.03em}
 .plc.plate{font-family:var(--serif);font-size:13px;color:#ffe2b8}
 .plc.plate::before,.plc.flt::before{display:none}
+.plc.plate,.plc.flt,.plc.ava{transform:translate(-50%,-50%)}   /* no dot: centre the text; with a dot, the dot sits on the point */
 .plc.flt{color:#ffb4a0;font-size:11px;font-weight:500}
 .plc::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#f3eee4;margin-right:5px;vertical-align:1px;box-shadow:0 0 0 1px rgba(0,0,0,.6)}
 .chip.tog{pointer-events:auto;cursor:pointer;color:var(--ink);font:inherit;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
@@ -85,10 +86,26 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .xsec .foot{padding:4px 12px 8px;font-size:11px;color:var(--muted);line-height:1.35}
 body.xs-open .compass{top:calc(var(--xsb,320px) + 10px)}
 body.xs-open .legend{top:calc(var(--xsb,320px) + 82px)}
+body.xs-open .locator{display:none}
 .locator{position:absolute;z-index:2;right:16px;bottom:calc(126px + env(safe-area-inset-bottom,0px));width:132px;padding:6px 8px 6px;background:var(--panel);border:1px solid var(--line);border-radius:6px;pointer-events:none;font-size:10.5px;color:var(--muted);transition:opacity .4s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .locator b{display:block;color:var(--ink);font-weight:500;font-size:11px;margin-bottom:3px}
 .locator svg{display:block;width:100%;height:auto}
-.plc.ava{color:#ffe7a8;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.plc.ava{color:#ffe7a8;font-size:11px;letter-spacing:.05em;text-transform:uppercase;pointer-events:auto;cursor:pointer}
+.plc.ava:hover{color:#fff;text-decoration:underline}
+a.chip.tog{text-decoration:none}
+.places{position:absolute;z-index:3;right:16px;top:calc(52px + env(safe-area-inset-top,0px));width:min(300px,calc(100% - 32px));max-height:calc(100% - 250px);display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:6px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.places header{display:flex;justify-content:space-between;align-items:center;padding:7px 8px 4px 12px;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.places header b{color:var(--ink);font-weight:500}
+.places header button{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;min-width:32px;min-height:28px;cursor:pointer;border-radius:4px}
+.places[hidden]{display:none}
+.places .plist{overflow:auto;padding:2px 6px 6px}
+.places .plist button{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;background:none;border:0;border-radius:4px;color:var(--ink);font:inherit;font-size:13px;padding:7px 8px;min-height:32px;cursor:pointer}
+.places .plist button small{color:var(--muted);font:11px var(--mono)}
+.places .plist button:hover,.places .plist button:focus-visible{background:rgba(255,255,255,.08);outline:none}
+.places .plist button[aria-current="true"]{color:var(--magma)}
+.places .plist hr{border:0;border-top:1px solid var(--line);margin:4px 2px}
+.places .foot{padding:4px 12px 8px;font-size:11px;color:var(--muted);line-height:1.35}
+body.pl-open .compass,body.pl-open .legend{display:none}
 .plc.ava::before{display:none}
 @media (max-width:640px){
   .brand{font-size:17px}
@@ -110,8 +127,8 @@ body.xs-open .legend{top:calc(var(--xsb,320px) + 82px)}
 </style>
 
 <div id="stage">
+  <div id="space"></div>
   <canvas id="gl" aria-label="Animated 3D view of Earth and Mount St. Helena through geological time"></canvas>
-  <div id="veil"></div>
 </div>
 
 <div class="ui top">
@@ -120,7 +137,10 @@ body.xs-open .legend{top:calc(var(--xsb,320px) + 82px)}
     <span class="chip" id="scaleChip">Planet</span>
     <span class="chip" id="clsChip"><i></i><span>Reconstruction</span></span>
     <button class="chip tog" id="avaBtn" aria-pressed="true">AVAs</button>
+    <button class="chip tog" id="sdBtn" aria-pressed="false" aria-controls="sub">Plates</button>
     <button class="chip tog" id="xsBtn" aria-pressed="false" aria-controls="xsec">Section</button>
+    <button class="chip tog" id="plBtn" aria-pressed="false" aria-controls="places" hidden>Places</button>
+    <a class="chip tog" id="globeBtn" href="globe.html">Globe</a>
   </div>
 </div>
 
@@ -145,15 +165,25 @@ body.xs-open .legend{top:calc(var(--xsb,320px) + 82px)}
   <div id="lgSut"><i style="--c:#ff5a3c"></i>Collision zone / margin</div>
   <div id="lgStream"><i style="--c:#6fb6e8"></i>Streams, from terrain</div>
   <div id="lgAva"><i style="--c:#ffd27a"></i>AVA boundary</div>
-  <div id="lgTopo"><i style="--c:#5a3d22;height:1.5px"></i>Contours, 50 m</div>
+  <div id="lgTopo"><i style="--c:#5a3d22;height:1.5px"></i>Contours, 50 m (10 m close up)</div>
 </div>
-<div class="scalebar" id="scalebar" hidden><span>5 km</span><div id="sbar"></div></div>
+<div class="scalebar" id="scalebar" hidden><span id="sbKm">5 km</span><div id="sbar"></div></div>
 <div id="plcs"></div>
 <div class="locator" id="locator" style="opacity:0" aria-hidden="true"><b>Napa Valley AVA</b><svg id="locSvg" viewBox="0 0 100 130"></svg><span>Box: area shown in 3D</span></div>
+<aside class="xsec" id="sub" hidden aria-label="Animated plate cross-section">
+  <header><span><b>Plates in motion</b> · W to E, 600 km across</span><button id="sdX" aria-label="Close plate animation">×</button></header>
+  <canvas id="sdCv"></canvas>
+  <div class="foot" id="sdNote"></div>
+</aside>
 <aside class="xsec" id="xsec" hidden aria-label="Cross-section under Mount St. Helena">
   <header><span><b>Cross-section</b> · SW to NE through the site</span><button id="xsX" aria-label="Close cross-section">×</button></header>
   <canvas id="xsCv"></canvas>
   <div class="foot" id="xsNote"></div>
+</aside>
+<aside class="places" id="places" hidden aria-label="Go to a place in Napa Valley">
+  <header><span><b>Go to</b> · Napa Valley</span><button id="plX" aria-label="Close places">×</button></header>
+  <div class="plist" id="plist"></div>
+  <div class="foot">Close-ups load finer terrain: USGS 3DEP (≈10 m source) via AWS Terrain Tiles, 17–51 m cells. You can also click an AVA name on the map.</div>
 </aside>
 <div class="pin" id="pin" hidden><b id="pinT">Mount St. Helena</b><span id="pinS"></span></div>
 
@@ -181,7 +211,7 @@ body.xs-open .legend{top:calc(var(--xsb,320px) + 82px)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
-(function(){
+(async function(){
 "use strict";
 const $ = id => document.getElementById(id);
 if(!window.THREE){ document.body.insertAdjacentHTML("beforeend",'<div class="err">The 3D engine could not load. Check your connection and reload.</div>'); return; }
@@ -231,7 +261,7 @@ const CH = [
  {age:250, key:1, tag:"250 Ma", t:"Pangaea, and the long subduction begins", cls:"recon",
   b:"Every major continent is joined. Off the west coast an ocean plate begins sinking beneath the continent. That subduction zone will run for about 200 million years and build much of California."},
  {age:150, key:1, tag:"150 Ma", t:"Zoom in: this spot is deep ocean", cls:"illus", scale:"local",
-  b:"We drop to the 30 km block that will one day hold Mount St. Helena. It is seafloor. The Farallon plate slides east into a deep trench, and mud, sand and slices of ocean crust are scraped off and piled up. That pile becomes the Franciscan Complex and Coast Range ophiolite beneath the Mayacamas. The red lines on the cut faces trace thrust faults, where slices of seafloor are shoved up and stacked on each other."},
+  b:"We drop to the ground that will one day hold Mount St. Helena and Napa Valley. It is seafloor. The Farallon plate slides east into a deep trench, and mud, sand and slices of ocean crust are scraped off and piled up. That pile becomes the Franciscan Complex and Coast Range ophiolite beneath the Mayacamas. The red lines on the cut faces trace thrust faults, where slices of seafloor are shoved up and stacked on each other."},
  {age:66, tag:"66 Ma", t:"A distant impact darkens the sky", cls:"illus",
   b:"An asteroid strikes what is now Mexico. The dust dims sunlight worldwide and ends the age of dinosaurs. Here, the scraped-up seafloor keeps accumulating under the waves."},
  {age:28, key:1, tag:"28 Ma", t:"The San Andreas system is born", cls:"illus",
@@ -245,10 +275,10 @@ const CH = [
  {age:1.0, span:[1.4,0.45], dur:9, tag:"1 Ma", t:"Uplift and erosion", cls:"illus",
   b:"Faults keep squeezing and lifting the Mayacamas while rain and streams tear the old volcano down. Watch the channels: runoff gathers into streams that cut back into the slopes, and the gravel they carry spreads over the valley floors. The hard welded tuff resists and is left standing high."},
  {age:0, key:1, span:[0.0002,0], dur:10, tag:"Today", t:"The last two centuries to today", cls:"approx",
-  b:"The peak rises about 1,320 m above Knights Valley and the head of Napa Valley. Vineyards spread across the valley floors from the mid-1800s. Volcanic soils on its flanks and river-laid gravels on the valley floors are part of the terroir of the vineyards below. Contours every 50 m; streams traced from the terrain. The gold line is the Napa Valley AVA and the pale lines are AVAs inside it, like Calistoga and Diamond Mountain District; the inset shows how much of the valley this block covers."}
+  b:"The peak rises about 1,320 m above Knights Valley and the head of Napa Valley. Vineyards spread across the valley floors from the mid-1800s. Volcanic soils on its flanks and river-laid gravels on the valley floors are part of the terroir of the vineyards below. Contours every 50 m; streams traced from the terrain. The gold line is the Napa Valley AVA and the pale lines are AVAs inside it, like Calistoga and Diamond Mountain District; the inset shows the whole AVA with the area drawn in 3D boxed."}
 ];
 CH.forEach(c=>{ c.trig = c.span ? c.span[0] : c.age; c.p = pOf(c.trig); });
-const P_SWITCH = pOf(180);
+const A_DIVE = 186, P_SWITCH = pOf(A_DIVE);   // older: globe camera; younger: one camera from orbit to the ground
 
 /* ------------------------------------------------------------------ renderer */
 const canvas = $("gl");
@@ -256,7 +286,7 @@ let renderer;
 try { renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true}); }
 catch(e){ document.body.insertAdjacentHTML("beforeend",'<div class="err">WebGL is not available in this browser, so the 3D view cannot run.</div>'); return; }
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.setClearColor(0x000000,0);
+renderer.setClearColor(0x000000,0); renderer.autoClear=false;
 
 const GLSL_NOISE = `
 float hash(vec3 p){ p = fract(p*0.3183099+0.1); p *= 17.0; return fract(p.x*p.y*p.z*(p.x+p.y+p.z)); }
@@ -296,13 +326,45 @@ function plateAt(pl,a,out){
 const gUni = {
   uC:{value:PLATES.map(()=>new THREE.Vector3())}, uR:{value:PLATES.map(p=>p.r)},
   uGreen:{value:0}, uCap:{value:1}, uIceAll:{value:0}, uDesert:{value:0}, uSun:{value:new THREE.Vector3(1,0,0)}, uTime:{value:0},
-  uWest:{value:new THREE.Vector3(1,0,0)}, uRift:{value:0}, uSubd:{value:0}, uEdges:{value:1}
+  uWest:{value:new THREE.Vector3(1,0,0)}, uRift:{value:0}, uSubd:{value:0}, uEdges:{value:1}, uFlow:{value:0},
+  // present-day relief (AWS Terrain Tiles: ≈10 km global, ≈2 km California), grey "no data" wash, near-ground fog
+  uReal:{value:0}, uRelief:{value:null}, uCa:{value:null}, uCaOn:{value:0}, uCaBox:{value:new THREE.Vector4(-124.6,32.4,-114.0,42.1)},
+  uRelK:{value:30}, uGrey:{value:0}, uFogCol:{value:new THREE.Color(.7,.78,.84)}, uFogN:{value:1e3}, uFogF:{value:2e3}
 };
+// Earth relief, 8-bit equirectangular (scripts/build_globe.py). Row 0 is 90N.
+new THREE.TextureLoader().load("assets/globe/relief.png", t=>{ t.flipY=false; t.wrapS=THREE.RepeatWrapping; t.minFilter=t.magFilter=THREE.LinearFilter; t.generateMipmaps=false; t.needsUpdate=true; gUni.uRelief.value=t; });
 const globeMat = new THREE.ShaderMaterial({
   uniforms:gUni, extensions:{derivatives:true},
   vertexShader:`varying vec3 vN; void main(){ vN=normalize(position); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
   fragmentShader:GLSL_NOISE+`
-  uniform vec3 uC[8]; uniform float uR[8]; uniform float uGreen,uCap,uIceAll,uDesert,uTime,uRift,uSubd,uEdges; uniform vec3 uSun,uWest;
+  uniform vec3 uC[8]; uniform float uR[8]; uniform float uGreen,uCap,uIceAll,uDesert,uTime,uRift,uSubd,uEdges,uFlow; uniform vec3 uSun,uWest;
+  uniform float uReal,uCaOn,uRelK,uGrey,uFogN,uFogF; uniform sampler2D uRelief,uCa; uniform vec4 uCaBox; uniform vec3 uFogCol;
+  float relH(vec2 uv){ float v=texture2D(uRelief,uv).r*255.0;
+    return v>=128.0 ? pow((v-128.0)/127.0,2.0)*8848.0 : -pow(max(127.0-v,0.0)/127.0,2.0)*11000.0; }
+  float caW(vec2 ll){ vec2 q=(ll-uCaBox.xy)/(uCaBox.zw-uCaBox.xy); vec2 e=min(q,1.0-q); return uCaOn*smoothstep(0.0,0.03,min(e.x,e.y)); }
+  float elev(vec2 ll){ // ll = lon, lat in degrees
+    float h=relH(vec2(ll.x/360.0+0.5, 0.5-ll.y/180.0));
+    float w=caW(ll);
+    if(w>0.0){ vec2 q=(ll-uCaBox.xy)/(uCaBox.zw-uCaBox.xy); h=mix(h, texture2D(uCa,vec2(q.x,1.0-q.y)).r*1000.0, w); }
+    return h; }
+  vec3 realEarth(vec3 n, out float sea){
+    float lat=degrees(asin(clamp(n.y,-1.0,1.0))), lon=degrees(atan(-n.z,n.x));
+    float d=mix(360.0/4096.0, 0.02, caW(vec2(lon,lat)));
+    float h=elev(vec2(lon,lat)), cl=max(cos(radians(lat)),0.05);
+    float gE=(elev(vec2(lon+d/cl,lat))-elev(vec2(lon-d/cl,lat)))/(2.0*radians(d)*6371000.0);
+    float gN=(elev(vec2(lon,lat+d))-elev(vec2(lon,lat-d)))/(2.0*radians(d)*6371000.0);
+    vec3 E=normalize(vec3(-n.z,0.0,-n.x)), Nn=cross(n,E);
+    vec3 N=normalize(n-uRelK*(gE*E+gN*Nn));
+    sea=step(h,0.0);
+    vec3 c;
+    if(h<=0.0) c=mix(vec3(0.03,0.10,0.24),vec3(0.10,0.34,0.46),smoothstep(-5000.0,-80.0,h));
+    else { c=mix(vec3(0.24,0.36,0.20),vec3(0.52,0.50,0.33),smoothstep(0.0,900.0,h));
+      c=mix(c,vec3(0.56,0.47,0.38),smoothstep(900.0,2600.0,h));
+      c=mix(c,vec3(0.93,0.94,0.96),smoothstep(3800.0,5200.0,h+abs(lat)*40.0-1200.0));
+      c=mix(c,vec3(0.93,0.95,0.98),smoothstep(0.86,0.9,abs(n.y))); }
+    float diff=clamp(dot(N,uSun),0.0,1.0);
+    return c*(0.1+0.95*diff);
+  }
   float fl(float d,float w){ return 1.0-smoothstep(w*0.5,w,abs(d)); }
   varying vec3 vN;
   float smax(float a,float b,float k){ float h=clamp(0.5+0.5*(a-b)/k,0.0,1.0); return mix(b,a,h)+k*h*(1.0-h); }
@@ -334,19 +396,28 @@ const globeMat = new THREE.ShaderMaterial({
     float edge=fl(d1,w1)*step(d2,-0.015);
     float sut=fl(d1-d2,max(fwidth(d1-d2)*1.6,0.005))*step(-0.02,d2);
     vec3 lc2=vec3(1.0,0.78,0.42)*(0.35+0.65*diff+0.25);
-    col=mix(col,lc2,edge*0.55*uEdges);
-    col=mix(col,vec3(1.0,0.35,0.2)*(0.5+0.5*diff+0.3),sut*0.95*uEdges);
+    col=mix(col,lc2,edge*0.55*uEdges*(1.0-uReal));
+    col=mix(col,vec3(1.0,0.35,0.2)*(0.5+0.5*diff+0.3),sut*0.95*uEdges*(1.0-uReal));
     // Laurentia's western margin: rift (dashed) then subduction (teeth)
     float wside=smoothstep(0.0,0.25,dot(normalize(n-uC[0]*dot(n,uC[0])),uWest));
     float mar=fl(dL,max(fwidth(dL)*2.2,0.006))*wside;
     float along=atan(n.y,length(n.xz))*60.0+atan(n.z,n.x)*20.0;
     col=mix(col,vec3(1.0,0.55,0.25),mar*uRift*step(0.45,fract(along)));
     float teeth=step(0.0,-dL)*step(-dL,0.03)*wside*step(fract(along*1.2),0.35);
-    col=mix(col,vec3(1.0,0.3,0.18)*(1.0+0.3*sin(uTime*3.0)),max(mar,teeth)*uSubd);
+    col=mix(col,vec3(1.0,0.3,0.18)*(1.0+0.3*sin(uTime*3.0)),max(mar,teeth)*uSubd*(1.0-uReal));
+    // ocean floor moving toward the trench: chevrons on the ocean side of the margin
+    float chev=step(0.72,fract(dL*42.0-uTime*0.55+abs(fract(along*0.12)-0.5)*1.6));
+    float zone=smoothstep(-0.26,-0.12,dL)*step(dL,-0.006)*wside*(1.0-land);
+    col=mix(col,vec3(0.75,0.93,1.0)*(0.4+0.6*diff),chev*zone*uFlow*0.5);
+    if(uReal>0.0){ float sea; vec3 rc=realEarth(n,sea);
+      rc+=vec3(1.0,0.95,0.85)*pow(max(dot(reflect(-uSun,n),V),0.0),48.0)*sea*0.5;
+      col=mix(col,rc,uReal); }
+    col=mix(col,vec3(mix(dot(col,vec3(0.3,0.59,0.11)),0.28+0.3*diff,0.6)),uGrey);
+    col=mix(col,uFogCol,smoothstep(uFogN,uFogF,distance(n,cameraPosition)));
     gl_FragColor=vec4(col,1.0);
   }`
 });
-const globe = new THREE.Mesh(new THREE.SphereGeometry(1,160,120), globeMat);
+const globe = new THREE.Mesh(new THREE.SphereGeometry(1,288,216), globeMat);
 gScene.add(globe);
 
 const cloudMat = new THREE.ShaderMaterial({
@@ -360,19 +431,20 @@ const cloudMat = new THREE.ShaderMaterial({
 gScene.add(new THREE.Mesh(new THREE.SphereGeometry(1.012,96,72), cloudMat));
 
 const atmoMat = new THREE.ShaderMaterial({
-  uniforms:{uSun:gUni.uSun}, side:THREE.BackSide, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false,
+  uniforms:{uSun:gUni.uSun, uAmt:{value:1}}, side:THREE.BackSide, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false,
   vertexShader:`varying vec3 vVN; varying vec3 vW; void main(){ vVN=normalize(normalMatrix*normal); vW=normalize(position); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
-  fragmentShader:`uniform vec3 uSun; varying vec3 vVN; varying vec3 vW;
+  fragmentShader:`uniform vec3 uSun; uniform float uAmt; varying vec3 vVN; varying vec3 vW;
   void main(){ float i=pow(clamp(0.78-dot(vVN,vec3(0.0,0.0,1.0)),0.0,1.0),3.0); float d=clamp(dot(vW,uSun)*0.7+0.4,0.0,1.0);
-    gl_FragColor=vec4(vec3(0.35,0.62,1.0)*i*1.6*d,1.0); }`
+    gl_FragColor=vec4(vec3(0.35,0.62,1.0)*i*1.6*d*uAmt,1.0); }`
 });
-gScene.add(new THREE.Mesh(new THREE.SphereGeometry(1.09,64,48), atmoMat));
+const atmo=new THREE.Mesh(new THREE.SphereGeometry(1.09,64,48), atmoMat); gScene.add(atmo);
 
 // stars
+let stars;
 (function(){ const n=2400, pos=new Float32Array(n*3);
   for(let i=0;i<n;i++){ const v=new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiplyScalar(40+Math.random()*10); pos.set([v.x,v.y,v.z],i*3); }
   const g=new THREE.BufferGeometry(); g.setAttribute("position",new THREE.BufferAttribute(pos,3));
-  gScene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0xcfd8e6,size:0.09,sizeAttenuation:true,transparent:true,opacity:.8})));
+  stars=new THREE.Points(g,new THREE.PointsMaterial({color:0xcfd8e6,size:0.09,sizeAttenuation:true,transparent:true,opacity:.8})); gScene.add(stars);
 })();
 
 // ancestral-region glow (never a pin on the modern point)
@@ -383,13 +455,45 @@ const marker = new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex(255,140,60
 marker.scale.set(.32,.32,1); gScene.add(marker);
 const markerDir = new THREE.Vector3();
 
+/* =================================================================== REGION
+   Which measured terrain frame the diorama covers. Scene units are km, x east and z south of the
+   GNIS summit point. Default is the whole Napa Valley frame; ?region=mt_st_helena gives the
+   original 30 km block. Without any terrain file the block falls back to procedural terrain. */
+const GNIS_UTM=[531892.63,4280129.75];
+const REG = await (async function loadRegion(){
+  const want=((new URLSearchParams(location.search)).get("region")||"napa_valley").replace(/[^a-z_]/g,"");
+  const tries = want==="mt_st_helena" ? ["assets/terrain"] : ["assets/regions/"+want+"/terrain","assets/terrain"];
+  for(const base of tries){
+    try{
+      const [m,buf]=await Promise.all([fetch(base+".json").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
+                                       fetch(base+".bin").then(r=>{ if(!r.ok) throw 0; return r.arrayBuffer(); })]);
+      const g=m.browser_grid, nx=g.cols||g.cells, nz=g.rows||g.cells, h=new Int16Array(buf); if(h.length!==nx*nz) continue;
+      const b=m.aoi.bbox_utm, id=m.aoi.region||"mt_st_helena";
+      return {id, h, nx, nz, x0:(b[0]-GNIS_UTM[0])/1000, x1:(b[2]-GNIS_UTM[0])/1000, z0:-(b[3]-GNIS_UTM[1])/1000, z1:-(b[1]-GNIS_UTM[1])/1000};
+    }catch(e){}
+  }
+  return {id:"procedural", h:null, nx:224, nz:224, x0:-15, x1:15, z0:-15, z1:15};
+})();
+const X0=REG.x0, X1=REG.x1, Z0=REG.z0, Z1=REG.z1, SX=X1-X0, SZ=Z1-Z0, NX=REG.nx, NZ=REG.nz;
+const CXm=(X0+X1)/2, CZm=(Z0+Z1)/2, LEXT=Math.max(SX,SZ), realDEM=!!REG.h;
+const REG_LABEL = REG.id==="napa_valley" ? `Napa Valley · ${Math.round(SX)} × ${Math.round(SZ)} km` : "30 km block · North Bay";
+// Finer shading grid for the whole frame (AWS Terrain Tiles, USGS 3DEP ≈10 m source), when present.
+async function loadGrid(base){
+  const [m,buf]=await Promise.all([fetch(base+".json").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
+                                   fetch(base+".bin").then(r=>{ if(!r.ok) throw 0; return r.arrayBuffer(); })]);
+  const h=new Int16Array(buf); if(h.length!==m.cols*m.rows) throw 0; return {m,h};
+}
+const HI = REG.h&&REG.id!=="mt_st_helena" ? await loadGrid("assets/regions/"+REG.id+"/dem_hi").catch(()=>null) : null;
+const inExt=(x,z,m=0)=>x>X0+m&&x<X1-m&&z>Z0+m&&z<Z1-m;
+const idxAt=(x,z)=>inExt(x,z) ? Math.round((z-Z0)/SZ*(NZ-1))*NX+Math.round((x-X0)/SX*(NX-1)) : -1;
+
 /* =================================================================== LOCAL DIORAMA */
 const lScene = new THREE.Scene();
-const lCam = new THREE.PerspectiveCamera(42,1,0.1,400);
+const lCam = new THREE.PerspectiveCamera(42,1,0.1,Math.max(400,LEXT*8));
 const lCtl = new THREE.OrbitControls(lCam, canvas);
-lCtl.enablePan=false; lCtl.minDistance=10; lCtl.maxDistance=90; lCtl.maxPolarAngle=Math.PI*0.47; lCtl.enableDamping=true; lCtl.target.set(0,0.6,0);
+lCtl.enablePan=false; lCtl.minDistance=1.2; lCtl.maxDistance=4*6371;   // zoom out from the block to the whole planet lCtl.maxPolarAngle=Math.PI*0.47; lCtl.enableDamping=true; lCtl.target.set(0,0.6,0);
 
-const SIZE=30, N=224, VE=1.6, BASE=-3.2;
+const VE = LEXT>40 ? 2.2 : 1.6, BASE=-3.2;
 // seeded value noise for terrain synthesis
 function mkNoise(seed){
   const perm=new Uint8Array(512), vals=new Float32Array(256); let s=seed>>>0;
@@ -407,7 +511,7 @@ function mkNoise(seed){
 }
 const nz = mkNoise(20260927);
 
-const geo = new THREE.PlaneGeometry(SIZE,SIZE,N-1,N-1); geo.rotateX(-Math.PI/2);
+const geo = new THREE.PlaneGeometry(SX,SZ,NX-1,NZ-1); geo.rotateX(-Math.PI/2); geo.translate(CXm,0,CZm);
 const P = geo.attributes.position, NV = P.count;
 const H = [0,1,2,3,4,5].map(()=>new Float32Array(NV));
 function stages(x,z){
@@ -434,34 +538,64 @@ function stages(x,z){
   const s4 = s3 - 1.0*Math.exp(-Math.pow(r/2.5,4)) + 0.12*Math.exp(-(((r-2.8)/0.55)**2)) + 0.10*Math.exp(-((r/12)**2));
   return [s0,s1,s2,s3,s4,m];
 }
+// volcano and caldera terms around the summit, added to whichever pre-volcanic surface is used
+function volcano(x,z,s2){
+  const r=Math.hypot(x,z), cone=1.55*Math.exp(-Math.pow(r/3.3,1.35));
+  const s3 = s2 + 0.18*Math.exp(-((r/11)**2)) + cone + 0.22*(nz.fbm(x*.32+9,z*.32+2)-0.4)*Math.exp(-((r/8)**2)) + 0.14*Math.exp(-((r/0.9)**2));
+  const s4 = s3 - 1.0*Math.exp(-Math.pow(r/2.5,4)) + 0.12*Math.exp(-(((r-2.8)/0.55)**2)) + 0.10*Math.exp(-((r/12)**2));
+  return [s3,s4];
+}
+// separable box blur on the NX×NZ grid (two passes ≈ gaussian)
+function blurGrid(src,rad){ let a=Float32Array.from(src), b=new Float32Array(src.length);
+  for(let pass=0;pass<2;pass++){
+    for(let r=0;r<NZ;r++){ let acc=0,cnt=0; for(let c=-rad;c<NX+rad;c++){ if(c+rad<NX){ acc+=a[r*NX+c+rad]; cnt++; } if(c-rad-1>=0){ acc-=a[r*NX+c-rad-1]; cnt--; } if(c>=0&&c<NX) b[r*NX+c]=acc/cnt; } }
+    for(let c=0;c<NX;c++){ let acc=0,cnt=0; for(let r=-rad;r<NZ+rad;r++){ if(r+rad<NZ){ acc+=b[(r+rad)*NX+c]; cnt++; } if(r-rad-1>=0){ acc-=b[(r-rad-1)*NX+c]; cnt--; } if(r>=0&&r<NZ) a[r*NX+c]=acc/cnt; } }
+  } return a; }
 for(let i=0;i<NV;i++){ const s=stages(P.getX(i),P.getZ(i)); for(let k=0;k<6;k++) H[k][i]=s[k]; }
-// scale the modern stage so the summit sits near 1.32 km
-(function(){ let mx=0; for(let i=0;i<NV;i++) mx=Math.max(mx,H[5][i]); const sc=1.33/mx; for(let i=0;i<NV;i++) H[5][i]*=sc; })();
+if(realDEM){
+  // S5 is the measured 3DEP surface; earlier stages follow its smoothed layout so every era keeps
+  // the real valleys and ridges (roadmap step 10), with the volcano added around the summit.
+  for(let i=0;i<NV;i++){ const v=REG.h[i]; H[5][i]=(v<-1000?0:v)/1000; }
+  const Hs=blurGrid(H[5],Math.max(2,Math.round(2.5/(SX/(NX-1)))));
+  for(let i=0;i<NV;i++){ const x=P.getX(i), z=P.getZ(i), f1=nz.fbm(x*.18+40,z*.18+40), rd=nz.ridged(x*.23+3,z*.23+7);
+    H[1][i]=-0.45+0.62*Hs[i]+0.25*(f1-0.45)+0.08*(rd-0.4);
+    H[2][i]=0.08+0.62*Hs[i]+0.08*(f1-0.5)+0.06*(rd-0.4);
+    const v=volcano(x,z,H[2][i]); H[3][i]=v[0]; H[4][i]=v[1]; }
+} else {
+  // procedural block: scale the modern stage so the summit sits near 1.32 km
+  let mx=0; for(let i=0;i<NV;i++) mx=Math.max(mx,H[5][i]); const sc=1.33/mx; for(let i=0;i<NV;i++) H[5][i]*=sc;
+}
 H.forEach((h,k)=>geo.setAttribute("h"+k,new THREE.BufferAttribute(h,1)));
-const CENTER = (N>>1)*N + (N>>1);
+const CENTER = Math.max(0,idxAt(0,0));
 
 /* Drainage from the modern surface: priority-flood from the block edges gives every cell a
    downstream receiver (pits and flats drain through), then flow accumulation and distance
    from the headwaters. Streams in the diorama are drawn from this, not invented. */
 const aFlow = new Float32Array(NV), aDist = new Float32Array(NV);
-function computeDrainage(){
-  const h=H[5], rec=new Int32Array(NV).fill(-1), seen=new Uint8Array(NV), fill=new Float32Array(NV), order=new Int32Array(NV);
-  const heap=new Int32Array(NV); let hn=0, on=0;
+// priority-flood drainage on any nx×nz grid; acc0/dist0 seed inflow from outside the grid
+function drain(h,nx,nzz,cdx,cdz,acc0,dist0){
+  const n=nx*nzz, rec=new Int32Array(n).fill(-1), seen=new Uint8Array(n), fill=new Float32Array(n), order=new Int32Array(n);
+  const heap=new Int32Array(n); let hn=0, on=0;
   const less=(a,b)=>fill[a]<fill[b];
   function push(v){ let i=hn++; heap[i]=v; while(i>0){ const p=(i-1)>>1; if(!less(heap[i],heap[p])) break; [heap[i],heap[p]]=[heap[p],heap[i]]; i=p; } }
   function pop(){ const top=heap[0]; heap[0]=heap[--hn]; let i=0; for(;;){ const l=2*i+1, r=l+1; let m=i; if(l<hn&&less(heap[l],heap[m])) m=l; if(r<hn&&less(heap[r],heap[m])) m=r; if(m===i) break; [heap[i],heap[m]]=[heap[m],heap[i]]; i=m; } return top; }
-  for(let r=0;r<N;r++) for(let c=0;c<N;c++) if(r===0||c===0||r===N-1||c===N-1){ const v=r*N+c; fill[v]=h[v]; seen[v]=1; push(v); }
+  for(let r=0;r<nzz;r++) for(let c=0;c<nx;c++) if(r===0||c===0||r===nzz-1||c===nx-1){ const v=r*nx+c; fill[v]=h[v]; seen[v]=1; push(v); }
   const eps=1e-6;
-  while(hn){ const v=pop(); order[on++]=v; const r=(v/N)|0, c=v%N;
+  while(hn){ const v=pop(); order[on++]=v; const r=(v/nx)|0, c=v%nx;
     for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){ if(!dr&&!dc) continue; const rr=r+dr, cc=c+dc;
-      if(rr<0||cc<0||rr>=N||cc>=N) continue; const u=rr*N+cc; if(seen[u]) continue;
+      if(rr<0||cc<0||rr>=nzz||cc>=nx) continue; const u=rr*nx+cc; if(seen[u]) continue;
       seen[u]=1; fill[u]=Math.max(h[u],fill[v]+eps); rec[u]=v; push(u); } }
-  const acc=new Float32Array(NV).fill(1), cell=SIZE/(N-1); aDist.fill(0);
+  const acc=acc0?Float32Array.from(acc0):new Float32Array(n).fill(1), dist=dist0?Float32Array.from(dist0):new Float32Array(n), cdd=Math.hypot(cdx,cdz);
   for(let k=on-1;k>=0;k--){ const v=order[k], d=rec[v]; if(d<0) continue; acc[d]+=acc[v];
-    const len=((v%N)!==(d%N) && ((v/N)|0)!==((d/N)|0)) ? cell*1.414 : cell;
-    aDist[d]=Math.max(aDist[d],aDist[v]+len); }
-  let mx=1; for(let i=0;i<NV;i++) mx=Math.max(mx,acc[i]);
-  const lm=Math.log(mx); for(let i=0;i<NV;i++) aFlow[i]=Math.log(acc[i])/lm;
+    const sc=(v%nx)!==(d%nx), sr=((v/nx)|0)!==((d/nx)|0), len=sc&&sr ? cdd : sc ? cdx : cdz;
+    dist[d]=Math.max(dist[d],dist[v]+len); }
+  return {rec,acc,dist};
+}
+let BASE_ACC=null, BASE_REC=null, LM=1;
+function computeDrainage(){
+  const d=drain(H[5],NX,NZ,SX/(NX-1),SZ/(NZ-1)); BASE_ACC=d.acc; BASE_REC=d.rec; aDist.set(d.dist);
+  let mx=1; for(let i=0;i<NV;i++) mx=Math.max(mx,d.acc[i]);
+  LM=Math.log(mx); for(let i=0;i<NV;i++) aFlow[i]=Math.log(d.acc[i])/LM;
   if(geo.attributes.aFlow){ geo.attributes.aFlow.needsUpdate=true; geo.attributes.aDist.needsUpdate=true; }
 }
 computeDrainage();
@@ -470,13 +604,22 @@ geo.setAttribute("aDist",new THREE.BufferAttribute(aDist,1));
 
 // Full-resolution DEM as a float texture, for per-pixel hillshade and contours on the modern stage.
 const demTex = { value:null };
-function buildDemTexture(h16,n){
-  if(!renderer.capabilities.isWebGL2) return false;
-  const f=new Float32Array(n*n); for(let i=0;i<n*n;i++) f[i]=h16[i]/1000;
-  const t=new THREE.DataTexture(f,n,n,THREE.RedFormat,THREE.FloatType);
+function makeDemTex(h16,nx,nzz,scale=1){
+  if(!renderer.capabilities.isWebGL2) return null;
+  const f=new Float32Array(nx*nzz); for(let i=0;i<nx*nzz;i++) f[i]=(h16[i]<-32000?0:h16[i]*scale)/1000;
+  const t=new THREE.DataTexture(f,nx,nzz,THREE.RedFormat,THREE.FloatType);
   const lin=renderer.extensions.has("OES_texture_float_linear");
-  t.magFilter=t.minFilter=lin?THREE.LinearFilter:THREE.NearestFilter; t.needsUpdate=true;
-  demTex.value=t; lUni.uDemOn.value=1; lUni.uDemTexel.value=1/n; lUni.uDemCell.value=SIZE/(n-1); return true;
+  t.magFilter=t.minFilter=lin?THREE.LinearFilter:THREE.NearestFilter; t.needsUpdate=true; return t;
+}
+// California relief (0.02°, scripts/build_globe.py) for the globe around the block
+Promise.all([fetch("assets/globe/california.json").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
+             fetch("assets/globe/california.bin").then(r=>{ if(!r.ok) throw 0; return r.arrayBuffer(); })]).then(([m,buf])=>{
+  const t=makeDemTex(new Int16Array(buf),m.cols,m.rows); if(!t) return;
+  const b=m.box_lonlat, hc=m.cell_deg/2; gUni.uCaBox.value.set(b[0]-hc,b[1]-hc,b[2]+hc,b[3]+hc); gUni.uCa.value=t; gUni.uCaOn.value=1;
+}).catch(()=>{});
+function buildDemTexture(h16,nx,nzz,scale=1){
+  const t=makeDemTex(h16,nx,nzz,scale); if(!t) return false;
+  demTex.value=t; lUni.uDemOn.value=1; lUni.uDemTexel.value.set(1/nx,1/nzz); lUni.uDemCell.value.set(SX/(nx-1),SZ/(nzz-1)); return true;
 }
 
 const lUni = {
@@ -484,8 +627,10 @@ const lUni = {
   uSun:{value:new THREE.Vector3(-0.5,0.75,-0.4).normalize()}, uSunCol:{value:new THREE.Color(1,.96,.9)},
   uFog:{value:new THREE.Color(.6,.7,.8)}, uVolc:{value:0}, uLava:{value:0}, uAsh:{value:0}, uVines:{value:0}, uGold:{value:0}, uBase:{value:BASE},
   uThr:{value:0}, uThrAct:{value:0}, uThrOff:{value:0}, uSS:{value:0}, uSSAct:{value:0}, uErode:{value:0}, uTopo:{value:0},
-  uDem:demTex, uDemOn:{value:0}, uDemTexel:{value:1}, uDemCell:{value:1}, uAva:{value:null}, uAvaOn:{value:0}
+  uDem:demTex, uDemOn:{value:0}, uDemTexel:{value:new THREE.Vector2(1,1)}, uDemCell:{value:new THREE.Vector2(1,1)}, uAva:{value:null}, uAvaOn:{value:0},
+  uExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uDemExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uHole:{value:new THREE.Vector4()}, uFogN:{value:LEXT*1.5}, uFogF:{value:LEXT*4.7}
 };
+if(HI) buildDemTexture(HI.h,HI.m.cols,HI.m.rows,HI.m.scale||1); else if(realDEM) buildDemTexture(REG.h,NX,NZ);
 const TERRAIN_VS = `
 attribute float h0,h1,h2,h3,h4,h5; attribute float aTop;
 uniform vec3 uWa,uWb; uniform float uVE,uBase;
@@ -502,27 +647,42 @@ vec3 shade(vec3 col, vec3 N){
   float hemi=0.5+0.5*N.y;
   return col*(uSunCol*d*1.05 + mix(vec3(0.16,0.14,0.13),vec3(0.36,0.42,0.5),hemi)*0.85);
 }
-vec3 fogit(vec3 col){ float f=smoothstep(45.0,140.0,distance(vW,cameraPosition)); return mix(col,uFog,f); }
+uniform float uFogN,uFogF;
+vec3 fogit(vec3 col){ float f=smoothstep(uFogN,uFogF,distance(vW,cameraPosition)); return mix(col,uFog,f); }
 `;
 // Mapped active faults: Maacama and Collayomi traces from the USGS UCERF3 fault model (via the GEM
 // Global Active Faults Database, CC BY-SA 4.0), in scene km (x east, z south of the GNIS point),
 // ordered SE→NW. Shown as vertical planes (UCERF3 dips: Maacama 63°, Collayomi 90°).
 const FAULTS=[
- {n:"Maacama Fault", r:"≈8 mm/yr", pts:[[-1.13,18.79],[-9.52,5.92],[-14.66,-1.27],[-28.25,-16.19]], lab:[-12.1,2.3]},
- {n:"Collayomi Fault", r:"≈0.5 mm/yr", pts:[[6.34,-6.33],[1.96,-9.38],[-6.19,-14.91],[-13.73,-24.45]], lab:[-2.2,-12.2]}
+ {n:"Maacama Fault", r:"≈8 mm/yr", pts:[[-1.13,18.79],[-9.52,5.92],[-14.66,-1.27],[-28.25,-16.19]]},
+ {n:"Collayomi Fault", r:"≈0.5 mm/yr", pts:[[-18.67,-30.09],[-13.73,-24.45],[-6.19,-14.91],[1.96,-9.38],[6.34,-6.33]]},
+ {n:"Rodgers Creek–Healdsburg Fault", r:"≈6 mm/yr", pts:[[17.16,55.67],[13.07,51.24],[8.1,44.26],[-0.37,33.97],[-3.36,28.88],[-6.21,22.37],[-10.98,16.28]]},
+ {n:"West Napa Fault", r:"≈1.3 mm/yr", pts:[[13.23,17.94],[22.18,32.87],[27.54,39.97],[30.92,49.99],[34.29,55.8]]},
+ {n:"Bennett Valley Fault", r:"≈1 mm/yr", pts:[[14.53,49.16],[8.62,41.77],[3.76,32.54],[-1.04,26.03],[-1.84,20.97]]},
+ {n:"Green Valley Fault", r:"≈4 mm/yr", pts:[[35.93,27.94],[41.51,48.13],[44.08,56.88],[46.09,61.87]]},
+ {n:"Hunting Creek–Berryessa Fault", r:"≈4 mm/yr", pts:[[35.93,27.94],[33.53,22.3],[34.32,12.43],[29.16,4.91],[25.18,1.11],[16.06,-9.18]]},
+ {n:"Hunting Creek–Bartlett Springs connector", r:"≈5 mm/yr", pts:[[23.41,-1.49],[21.36,-12.73],[21.55,-18.62]]},
+ {n:"Hayward Fault (north end)", r:"≈8 mm/yr", pts:[[19.6,67.78],[16.81,62.43],[14.16,52.4]]},
+ {n:"Great Valley thrust (Trout Creek)", r:"reverse, ≈1 mm/yr", k:0, pts:[[47.07,-2.42],[55.36,14.86]]},
+ {n:"Great Valley thrust (Gordon Valley)", r:"reverse, ≈1 mm/yr", k:0, pts:[[51.14,15.25],[52.81,25.08],[60.26,41.98]]},
+ {n:"Great Valley thrust (Mysterious Ridge)", r:"reverse, ≈1.3 mm/yr", k:0, pts:[[30.55,-49.87],[50.87,-2.69]]}
 ];
-const SEG=[], SEGC=[];
-FAULTS.forEach(fl=>{ let cum=0; for(let i=0;i<fl.pts.length-1;i++){ const [ax,az]=fl.pts[i],[bx,bz]=fl.pts[i+1]; SEG.push(new THREE.Vector4(ax,az,bx,bz)); SEGC.push(cum); cum+=Math.hypot(bx-ax,bz-az); } });
-lUni.uSeg={value:SEG}; lUni.uSegC={value:SEGC};
+// orient every trace south→north so the dash motion reads right-lateral; label at a vertex inside the frame
+FAULTS.forEach(fl=>{ if(fl.pts[0][1]<fl.pts[fl.pts.length-1][1]) fl.pts.reverse(); if(fl.k===undefined) fl.k=1;
+  const ins=fl.pts.map((p,i)=>i<fl.pts.length-1?[(p[0]+fl.pts[i+1][0])/2,(p[1]+fl.pts[i+1][1])/2]:null).filter(p=>p&&inExt(p[0],p[1],1.5));
+  fl.lab=ins.length?ins[ins.length>>1]:null; });
+const SEG=[], SEGC=[], SEGK=[];
+FAULTS.forEach(fl=>{ let cum=0; for(let i=0;i<fl.pts.length-1;i++){ const [ax,az]=fl.pts[i],[bx,bz]=fl.pts[i+1]; SEG.push(new THREE.Vector4(ax,az,bx,bz)); SEGC.push(cum); SEGK.push(fl.k); cum+=Math.hypot(bx-ax,bz-az); } });
+lUni.uSeg={value:SEG}; lUni.uSegC={value:SEGC}; lUni.uSegK={value:SEGK};
 // Ancient thrusts: schematic, across (c, km, + toward NE) the N40W Mayacamas trend, dipping ~30° NE.
 const FAULT_GLSL = `
-uniform float uThr,uThrAct,uThrOff,uSS,uSSAct; uniform vec4 uSeg[${SEG.length}]; uniform float uSegC[${SEG.length}];
+uniform float uThr,uThrAct,uThrOff,uSS,uSSAct; uniform vec4 uSeg[${SEG.length}]; uniform float uSegC[${SEG.length}],uSegK[${SEG.length}];
 const float TH0=-9.5, TH1=-3.5, TH2=3.0, TH3=10.5; const float COTD=1.732;
-// nearest mapped fault: x = distance (km), y = distance along trace, z = side (+1 NE, -1 SW)
-vec3 nearFault(vec2 p){ vec3 best=vec3(99.0,0.0,1.0);
+// nearest mapped fault: x = distance (km), y = distance along trace, z = side (+1 NE, -1 SW), w = 1 strike-slip / 0 reverse
+vec4 nearFault(vec2 p){ vec4 best=vec4(99.0,0.0,1.0,1.0);
   for(int i=0;i<${SEG.length};i++){ vec2 a=uSeg[i].xy, b=uSeg[i].zw, d=b-a; float L=length(d);
     float t=clamp(dot(p-a,d)/(L*L),0.0,1.0); float dist=length(p-a-d*t);
-    if(dist<best.x) best=vec3(dist,uSegC[i]+t*L,sign(d.x*(p.y-a.y)-d.y*(p.x-a.x))); }
+    if(dist<best.x) best=vec4(dist,uSegC[i]+t*L,sign(d.x*(p.y-a.y)-d.y*(p.x-a.x)),uSegK[i]); }
   return best; }
 float acrossC(vec3 w){ return 0.766*w.x-0.643*w.z; }
 float alongC(vec3 w){ return -0.643*w.x-0.766*w.z; }
@@ -533,18 +693,19 @@ const terrainMat = new THREE.ShaderMaterial({
   vertexShader:TERRAIN_VS.replace("attribute float aTop;","attribute float aFlow,aDist; varying float vFlow; varying float vDist;").replace("aTop>0.5","true").replace("vS=aTop;","vS=1.0; vFlow=aFlow; vDist=aDist;"),
   fragmentShader:GLSL_NOISE+FAULT_GLSL+`
   uniform vec3 uSun,uSunCol,uFog,uWb; uniform float uVE,uVolc,uLava,uAsh,uVines,uGold,uTime,uErode,uTopo;
-  uniform sampler2D uDem,uAva; uniform float uDemOn,uDemTexel,uDemCell,uAvaOn;
+  uniform sampler2D uDem,uAva; uniform float uDemOn,uAvaOn; uniform vec2 uDemTexel,uDemCell; uniform vec4 uExt,uDemExt,uHole;
   varying vec3 vW; varying float vH; varying float vS; varying float vR; varying float vFlow; varying float vDist;
   `+LIGHT_FOG+`
   void main(){
+    if(uHole.z>uHole.x && vW.x>uHole.x && vW.x<uHole.z && vW.z>uHole.y && vW.z<uHole.w) discard;  // a close-up covers this area
     vec3 N=normalize(cross(dFdx(vW),dFdy(vW)));
     float w5=uWb.z, hC=vH;
     if(uDemOn>0.5){
-      vec2 uv=vec2((vW.x+15.0)/30.0,(vW.z+15.0)/30.0);
+      vec2 uv=(vW.xz-uDemExt.xy)/uDemExt.zw;
       float hd=texture2D(uDem,uv).r;
-      float hx=texture2D(uDem,uv+vec2(uDemTexel,0.0)).r-texture2D(uDem,uv-vec2(uDemTexel,0.0)).r;
-      float hz=texture2D(uDem,uv+vec2(0.0,uDemTexel)).r-texture2D(uDem,uv-vec2(0.0,uDemTexel)).r;
-      vec3 Nd=normalize(vec3(-hx*uVE/(2.0*uDemCell),1.0,-hz*uVE/(2.0*uDemCell)));
+      float hx=texture2D(uDem,uv+vec2(uDemTexel.x,0.0)).r-texture2D(uDem,uv-vec2(uDemTexel.x,0.0)).r;
+      float hz=texture2D(uDem,uv+vec2(0.0,uDemTexel.y)).r-texture2D(uDem,uv-vec2(0.0,uDemTexel.y)).r;
+      vec3 Nd=normalize(vec3(-hx*uVE/(2.0*uDemCell.x),1.0,-hz*uVE/(2.0*uDemCell.y)));
       N=normalize(mix(N,Nd,w5)); hC=mix(vH,hd,w5);
     }
     float slope=1.0-N.y;
@@ -562,6 +723,8 @@ const terrainMat = new THREE.ShaderMaterial({
       float ang=fract(sin(dot(cell,vec2(4.1,7.7)))*999.0)>0.5?0.0:1.5708;
       vec2 rq=mat2(cos(ang),-sin(ang),sin(ang),cos(ang))*q;
       float rows=0.5+0.5*sin(rq.x*70.0);
+      float fr=rq.x*2500.0, fine=1.0-smoothstep(0.25,0.6,fwidth(fr)/6.2832);   // ≈2.5 m rows when close enough to see them
+      rows=mix(rows,0.5+0.5*sin(fr),fine);
       float flt=smoothstep(0.1,0.03,slope)*smoothstep(0.42,0.2,vH);
       vec3 vine=mix(vec3(0.52,0.40,0.28),vec3(0.27,0.40,0.16),rows);
       col=mix(col,vine,uVines*parcel*flt);
@@ -578,15 +741,16 @@ const terrainMat = new THREE.ShaderMaterial({
       float hm=hC*1000.0;
       float c1=hm/50.0, f1=fwidth(c1); float l1=1.0-smoothstep(0.0,f1*1.3,abs(fract(c1-0.5)-0.5));
       float c5=hm/250.0, f5=fwidth(c5); float l5=1.0-smoothstep(0.0,f5*1.8,abs(fract(c5-0.5)-0.5));
-      l1*=1.0-smoothstep(0.25,0.5,f1);
-      col=mix(col,vec3(0.25,0.16,0.08),uTopo*max(l1*0.45,l5*0.8));
+      l1*=(1.0-smoothstep(0.25,0.5,f1))*smoothstep(0.0006,0.004,f1); l5*=smoothstep(0.00012,0.0008,f5);   // no contour fill on flats (lakes)
+      float c0=hm/10.0, f0=fwidth(c0); float l0=(1.0-smoothstep(0.0,f0*1.2,abs(fract(c0-0.5)-0.5)))*(1.0-smoothstep(0.15,0.35,f0))*smoothstep(0.003,0.02,f0);
+      col=mix(col,vec3(0.25,0.16,0.08),uTopo*max(max(l0*0.28,l1*0.45),l5*0.8));
     }
     vec3 lit=shade(col,N);
     // streams: moving highlights run downstream along the drainage network
     float flowT=0.65+0.35*sin(vDist*5.0-uTime*3.2);
     vec3 wcol=mix(vec3(0.16,0.38,0.55),vec3(0.55,0.80,0.95),flowT*0.6);
     lit=mix(lit,wcol*(0.55+0.45*max(dot(vec3(0.0,1.0,0.0),uSun),0.0)),chan*smoothstep(0.02,0.3,vH+0.2)*0.9);
-    if(uAvaOn>0.0){ vec4 av=texture2D(uAva,vec2((vW.x+15.0)/30.0,(vW.z+15.0)/30.0)); lit=mix(lit,av.rgb,av.a*uAvaOn); }
+    if(uAvaOn>0.0){ vec4 av=texture2D(uAva,(vW.xz-uExt.xy)/uExt.zw); lit=mix(lit,av.rgb,av.a*uAvaOn); }
     // underwater tint
     lit=mix(lit,vec3(0.03,0.10,0.16),clamp(-vH*0.55,0.0,0.92));
     // lava glow at the vent
@@ -603,10 +767,10 @@ const terrainMat = new THREE.ShaderMaterial({
     teeth=max(teeth,step(0.0,cc-TH3)*step(cc-TH3,0.45)*step(fract(al*0.9),0.3));
     vec3 fcA=vec3(1.0,0.35,0.22), fcI=vec3(0.45,0.16,0.12);
     lit=mix(lit,mix(fcI,fcA,uThrAct)*(1.0+0.4*uThrAct*sin(uTime*3.0)),uThr*max(th,teeth*0.85*uThrAct));
-    vec3 nf=nearFault(vW.xz); float pw=fwidth(vW.x)+fwidth(vW.z);
-    float ss=fline(nf.x,pw);
-    ss=max(ss,fline(nf.x-0.3,pw)*step(0.5,fract(nf.y*0.8+nf.z*uTime*0.35*uSSAct))*0.9);
-    lit=mix(lit,mix(fcI,fcA,uSSAct),uSS*ss);
+    vec4 nf=nearFault(vW.xz); float pw=fwidth(vW.x)+fwidth(vW.z);
+    float ss=fline(nf.x,pw*0.8), doff=max(0.3,pw*5.0);
+    ss=max(ss,fline(nf.x-doff,pw*0.8)*step(0.5,fract(nf.y*0.8+nf.z*uTime*0.35*uSSAct))*0.9*nf.w);
+    lit=mix(lit,mix(fcI,fcA,uSSAct),uSS*ss*(1.0-0.35*uTopo));
     gl_FragColor=vec4(fogit(lit),1.0);
   }`
 });
@@ -614,8 +778,8 @@ const terrain = new THREE.Mesh(geo, terrainMat); lScene.add(terrain);
 
 // slab walls with strata, so the block reads like a museum cross-section
 (function(){
-  const idx=[]; for(let i=0;i<N;i++) idx.push(i);                       // north edge
-  const edges=[ idx.map(i=>i), idx.map(i=>i*N+N-1), idx.map(i=>(N-1)*N+(N-1-i)), idx.map(i=>(N-1-i)*N) ];
+  const ix=[...Array(NX).keys()], iz=[...Array(NZ).keys()];              // north, east, south, west edges
+  const edges=[ ix.map(i=>i), iz.map(r=>r*NX+NX-1), ix.map(i=>(NZ-1)*NX+(NX-1-i)), iz.map(r=>(NZ-1-r)*NX) ];
   const pos=[], tops=[], hh=[[],[],[],[],[],[]], ind=[]; let base=0;
   edges.forEach(e=>{
     e.forEach(v=>{ for(const top of [1,0]){ pos.push(P.getX(v),0,P.getZ(v)); tops.push(top); for(let k=0;k<6;k++) hh[k].push(H[k][v]); } });
@@ -656,7 +820,7 @@ const terrain = new THREE.Mesh(geo, terrainMat); lScene.add(terrain);
       vec3 fcA=vec3(1.0,0.35,0.22), fcI=vec3(0.45,0.16,0.12);
       float pulse=0.5+0.5*sin((y*COTD-cc)*1.5+uTime*2.5);
       lit=mix(lit,mix(fcI,fcA,uThrAct*(0.6+0.4*pulse)),uThr*th);
-      vec3 nf=nearFault(vW.xz); float ssl=fline(nf.x,fwidth(vW.x)+fwidth(vW.z));
+      vec4 nf=nearFault(vW.xz); float ssl=fline(nf.x,fwidth(vW.x)+fwidth(vW.z));
       lit=mix(lit,mix(fcI,fcA,uSSAct),uSS*ssl);
       gl_FragColor=vec4(fogit(lit),1.0);
     }`
@@ -666,22 +830,22 @@ const terrain = new THREE.Mesh(geo, terrainMat); lScene.add(terrain);
 
 // sea: translucent water volume clipped to the block
 const waterMat = new THREE.ShaderMaterial({
-  uniforms:{uTime:lUni.uTime, uSun:lUni.uSun, uFog:lUni.uFog, uAmt:{value:1}}, transparent:true, depthWrite:false, extensions:{derivatives:true},
+  uniforms:{uTime:lUni.uTime, uSun:lUni.uSun, uFog:lUni.uFog, uFogN:lUni.uFogN, uFogF:lUni.uFogF, uNK:{value:Math.min(1,30/LEXT)}, uAmt:{value:1}}, transparent:true, depthWrite:false, extensions:{derivatives:true},
   vertexShader:`varying vec3 vW; void main(){ vec4 w=modelMatrix*vec4(position,1.0); vW=w.xyz; gl_Position=projectionMatrix*viewMatrix*w; }`,
-  fragmentShader:GLSL_NOISE+`uniform float uTime,uAmt; uniform vec3 uSun,uFog; varying vec3 vW;
+  fragmentShader:GLSL_NOISE+`uniform float uTime,uAmt,uFogN,uFogF,uNK; uniform vec3 uSun,uFog; varying vec3 vW;
   void main(){
     vec3 V=normalize(cameraPosition-vW);
     float top=step(-0.001,vW.y);
-    vec3 N=normalize(vec3((noise(vW*1.3+vec3(uTime*0.25,0.0,0.0))-0.5)*0.18,1.0,(noise(vW*1.3+vec3(0.0,0.0,uTime*0.2))-0.5)*0.18));
+    vec3 N=normalize(vec3((noise(vW*1.3*uNK+vec3(uTime*0.25,0.0,0.0))-0.5)*0.18,1.0,(noise(vW*1.3*uNK+vec3(0.0,0.0,uTime*0.2))-0.5)*0.18));
     float fr=pow(1.0-max(dot(N,V),0.0),3.0);
     float sp=pow(max(dot(reflect(-uSun,N),V),0.0),80.0);
     vec3 c=mix(vec3(0.05,0.22,0.30),vec3(0.55,0.70,0.80),fr*top)+sp*top;
     float a=mix(0.42,0.78,top)*uAmt;
-    float f=smoothstep(45.0,140.0,distance(vW,cameraPosition));
+    float f=smoothstep(uFogN,uFogF,distance(vW,cameraPosition));
     gl_FragColor=vec4(mix(c,uFog,f),a);
   }`
 });
-const water = new THREE.Mesh(new THREE.BoxGeometry(SIZE-0.04, -BASE*VE, SIZE-0.04), waterMat);
+const water = new THREE.Mesh(new THREE.BoxGeometry(SX-0.04, -BASE*VE, SZ-0.04), waterMat); water.position.x=CXm; water.position.z=CZm;
 water.position.y = BASE*VE/2 - 0.001; lScene.add(water);
 
 // eruption column particles
@@ -714,9 +878,9 @@ const ash = (function(){
 })();
 
 // rain for the erosion chapters
-const rainN = reduce ? 700 : 3000;
+const rainN = Math.round((reduce ? 700 : 3000)*Math.min(2.5,SX*SZ/900));
 const rain = (function(){
-  const pos=new Float32Array(rainN*3); for(let i=0;i<rainN;i++){ pos[i*3]=(Math.random()-0.5)*SIZE; pos[i*3+1]=Math.random(); pos[i*3+2]=(Math.random()-0.5)*SIZE; }
+  const pos=new Float32Array(rainN*3); for(let i=0;i<rainN;i++){ pos[i*3]=X0+Math.random()*SX; pos[i*3+1]=Math.random(); pos[i*3+2]=Z0+Math.random()*SZ; }
   const g=new THREE.BufferGeometry(); g.setAttribute("position",new THREE.BufferAttribute(pos,3));
   const m=new THREE.ShaderMaterial({ uniforms:{uTime:lUni.uTime, uAmt:{value:0}, uScale:{value:400}}, transparent:true, depthWrite:false,
     vertexShader:`uniform float uTime,uScale; varying float vY;
@@ -730,27 +894,20 @@ const rain = (function(){
 })();
 
 /* ---------------- optional: real USGS 3DEP grid when this file sits in the repo's prototype/ folder */
-(async function tryRealDEM(){
-  try{
-    const [meta,buf]=await Promise.all([
-      fetch("assets/terrain.json").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
-      fetch("assets/terrain.bin").then(r=>{ if(!r.ok) throw 0; return r.arrayBuffer(); })
-    ]);
-    const n=meta.browser_grid.cells, h=new Int16Array(buf); if(h.length!==n*n) return;
-    const km=(meta.aoi.bbox_utm[2]-meta.aoi.bbox_utm[0])/1000;
-    for(let i=0;i<NV;i++){
-      const u=clamp((P.getX(i)+km/2)/km*(n-1),0,n-1), v=clamp((P.getZ(i)+km/2)/km*(n-1),0,n-1);
-      const x0=Math.floor(u),y0=Math.floor(v),x1=Math.min(n-1,x0+1),y1=Math.min(n-1,y0+1),fx=u-x0,fy=v-y0;
-      H[5][i]=lerp(lerp(h[y0*n+x0],h[y0*n+x1],fx),lerp(h[y1*n+x0],h[y1*n+x1],fx),fy)/1000;
-    }
-    geo.attributes.h5.needsUpdate=true; realDEM=true;
-    computeDrainage(); buildDemTexture(h,n);
-  }catch(e){ /* stays procedural */ }
-})();
-let realDEM=false;
+// measured terrain is loaded up front (REG) and applied when the stages are built
 
 /* ---------------- AVA boundaries (UC Davis AVA Project, CC0): draped outlines, labels, valley locator */
 const AVA={on:true, data:null, labels:[], tex:null};
+// outlines drawn into a canvas covering x0..x0+sx, z0..z0+sz (scene km); close-ups get their own, with thinner lines
+function avaTexture(x0,z0,sx,sz){
+  const CW=2048, CH=Math.min(4096,Math.round(2048*sz/sx)), cv=document.createElement("canvas"); cv.width=CW; cv.height=CH; const g=cv.getContext("2d");
+  const P=([x,z])=>[(x-x0)/sx*CW,(z-z0)/sz*CH], lw=Math.max(0.55,(CW/sx)/68*clamp(sx/30,0.3,1));   // line widths were tuned at 68 px/km
+  g.lineJoin="round";
+  AVA.data.slice().reverse().forEach(a=>{ a.rings.forEach(r=>{ g.beginPath(); r.forEach((q,i)=>{ const [px,py]=P(q); i?g.lineTo(px,py):g.moveTo(px,py); }); g.closePath();
+    if(a.parent){ g.strokeStyle="rgba(20,14,4,.55)"; g.lineWidth=11*lw; g.stroke(); g.strokeStyle="#ffd27a"; g.lineWidth=5.5*lw; g.stroke(); }
+    else { g.fillStyle="rgba(255,236,190,.07)"; g.fill(); g.setLineDash([14*lw,9*lw]); g.strokeStyle="rgba(20,14,4,.5)"; g.lineWidth=6*lw; g.stroke(); g.strokeStyle="rgba(255,240,205,.92)"; g.lineWidth=2.6*lw; g.stroke(); g.setLineDash([]); } }); });
+  const t=new THREE.CanvasTexture(cv); t.flipY=false; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); return t;
+}
 $("avaBtn").onclick=()=>{ AVA.on=!AVA.on; $("avaBtn").setAttribute("aria-pressed",AVA.on); };
 (async function loadAVA(){
   try{
@@ -758,29 +915,108 @@ $("avaBtn").onclick=()=>{ AVA.on=!AVA.on; $("avaBtn").setAttribute("aria-pressed
     let c=[531.89263,4280.12975];                       // GNIS centre (UTM km) if terrain.json is missing
     try{ const m=await fetch("assets/terrain.json").then(r=>r.json()); c=m.aoi.center_utm.map(v=>v/1000); }catch(e){}
     const toS=([e,n])=>[e-c[0], -(n-c[1])];            // scene km: x east, z south
-    AVA.data=d.avas.map(a=>({name:a.name, parent:a.id==="napa_valley", rings:a.rings.map(r=>r.map(toS))}));
-    const S=2048, cv=document.createElement("canvas"); cv.width=cv.height=S; const g=cv.getContext("2d");
-    const P=([x,z])=>[(x+15)/30*S,(z+15)/30*S];
-    g.lineJoin="round";
-    AVA.data.slice().reverse().forEach(a=>{ a.rings.forEach(r=>{ g.beginPath(); r.forEach((q,i)=>{ const [px,py]=P(q); i?g.lineTo(px,py):g.moveTo(px,py); }); g.closePath();
-      if(a.parent){ g.strokeStyle="rgba(20,14,4,.55)"; g.lineWidth=11; g.stroke(); g.strokeStyle="#ffd27a"; g.lineWidth=5.5; g.stroke(); }
-      else { g.fillStyle="rgba(255,236,190,.07)"; g.fill(); g.setLineDash([14,9]); g.strokeStyle="rgba(20,14,4,.5)"; g.lineWidth=6; g.stroke(); g.strokeStyle="rgba(255,240,205,.92)"; g.lineWidth=2.6; g.stroke(); g.setLineDash([]); } }); });
-    const t=new THREE.CanvasTexture(cv); t.flipY=false; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); lUni.uAva.value=t;
+    AVA.data=d.avas.map(a=>({id:a.id, name:a.name, parent:a.id==="napa_valley", rings:a.rings.map(r=>r.map(toS))}));
+    lUni.uAva.value=avaTexture(X0,Z0,SX,SZ);
     // label each AVA at the mean of its vertices that fall inside the block
-    AVA.data.forEach(a=>{ const inside=a.rings.flat().filter(([x,z])=>Math.abs(x)<14&&Math.abs(z)<14); if(inside.length<3) return;
+    AVA.data.forEach(a=>{ const inside=a.rings.flat().filter(([x,z])=>inExt(x,z,1)); if(inside.length<3) return;
       const x=inside.reduce((s,q)=>s+q[0],0)/inside.length, z=inside.reduce((s,q)=>s+q[1],0)/inside.length;
-      const q={x,z,el:mkLab(a.parent?"Napa Valley AVA":a.name,"plc ava")}; q.i=Math.round((z+SIZE/2)/SIZE*(N-1))*N+Math.round((x+SIZE/2)/SIZE*(N-1)); AVA.labels.push(q); });
+      const q={x,z,el:mkLab(a.parent?"Napa Valley AVA":a.name,"plc ava")}; q.el.dataset.loc=a.parent?"":a.id; q.i=idxAt(x,z); if(q.i>=0) AVA.labels.push(q); else q.el.remove(); });
     // locator: whole valley, with the 30 km block
-    const all=AVA.data.flatMap(a=>a.rings.flat()).concat([[-15,-15],[15,15]]);
+    const all=AVA.data.flatMap(a=>a.rings.flat()).concat([[X0,Z0],[X1,Z1]]);
     const xs=all.map(q=>q[0]), zs=all.map(q=>q[1]); const x0=Math.min(...xs), x1=Math.max(...xs), z0=Math.min(...zs), z1=Math.max(...zs);
     const k=Math.min(96/(x1-x0),126/(z1-z0)), ox=(100-(x1-x0)*k)/2, oz=(130-(z1-z0)*k)/2;
     const L=([x,z])=>((x-x0)*k+ox).toFixed(1)+","+((z-z0)*k+oz).toFixed(1);
     let svg=""; AVA.data.slice().reverse().forEach(a=>a.rings.forEach(r=>{ const step=Math.max(1,Math.floor(r.length/140));
       svg+=`<polygon points="${r.filter((_,i)=>i%step===0).map(L).join(" ")}" fill="${a.parent?"rgba(255,210,122,.14)":"none"}" stroke="${a.parent?"#ffd27a":"rgba(255,240,205,.45)"}" stroke-width="${a.parent?1.2:0.5}"/>`; }));
-    svg+=`<rect x="${((-15-x0)*k+ox).toFixed(1)}" y="${((-15-z0)*k+oz).toFixed(1)}" width="${(30*k).toFixed(1)}" height="${(30*k).toFixed(1)}" fill="none" stroke="#ff7a2f" stroke-width="1.4"/>`;
+    svg+=`<rect x="${((X0-x0)*k+ox).toFixed(1)}" y="${((Z0-z0)*k+oz).toFixed(1)}" width="${(SX*k).toFixed(1)}" height="${(SZ*k).toFixed(1)}" fill="none" stroke="#ff7a2f" stroke-width="1.4"/>`;
     svg+=`<circle cx="${((0-x0)*k+ox).toFixed(1)}" cy="${((0-z0)*k+oz).toFixed(1)}" r="1.8" fill="#ece6d9"/>`;
     $("locSvg").innerHTML=svg;
   }catch(e){ /* AVA layer is optional */ }
+})();
+
+/* ---------------- Close-ups: finer terrain (AWS Terrain Tiles; USGS 3DEP ≈10 m source) for one place at a time.
+   The close-up mesh plays every era like the valley: its older stages are sampled from the valley stages and
+   its modern stage is the finer grid, blended into the valley surface along its edges. Streams inside it are
+   re-traced on the finer grid, with rivers entering from the valley network. */
+const LOC={list:[], cur:null, mesh:null, cache:{}, base:"assets/regions/"+REG.id+"/"};
+const toSceneBox=b=>({x0:(b[0]-GNIS_UTM[0])/1000, x1:(b[2]-GNIS_UTM[0])/1000, z0:-(b[3]-GNIS_UTM[1])/1000, z1:-(b[1]-GNIS_UTM[1])/1000});
+function sampleGrid(arr,x,z){
+  const fx=clamp((x-X0)/SX*(NX-1),0,NX-1), fz=clamp((z-Z0)/SZ*(NZ-1),0,NZ-1);
+  const c=Math.min(NX-2,Math.floor(fx)), r=Math.min(NZ-2,Math.floor(fz)), u=fx-c, v=fz-r, i=r*NX+c;
+  return (arr[i]*(1-u)+arr[i+1]*u)*(1-v)+(arr[i+NX]*(1-u)+arr[i+NX+1]*u)*v;
+}
+function clearPatch(){
+  if(LOC.mesh){ lScene.remove(LOC.mesh); LOC.mesh.geometry.dispose(); const u=LOC.mesh.material.uniforms;
+    [u.uDem.value, u.uAva!==lUni.uAva&&u.uAva.value].forEach(t=>{ if(t) t.dispose(); }); LOC.mesh.material.dispose(); LOC.mesh=null; }
+  lUni.uHole.value.set(0,0,0,0);
+}
+function buildPatch(q,m,h16){
+  const nx=m.cols, nzz=m.rows, b=q.box, sx=b.x1-b.x0, sz=b.z1-b.z0, n=nx*nzz, sc=m.scale||1;
+  const cx=sx/(nx-1), cz=sz/(nzz-1), bc=SX/(NX-1);
+  const g=new THREE.PlaneGeometry(sx,sz,nx-1,nzz-1); g.rotateX(-Math.PI/2); g.translate((b.x0+b.x1)/2,0,(b.z0+b.z1)/2);
+  g.deleteAttribute("normal"); g.deleteAttribute("uv");
+  const pp=g.attributes.position, hh=[0,1,2,3,4,5].map(()=>new Float32Array(n)), ramp=Math.max(4,2.5*bc/cx);
+  for(let r=0;r<nzz;r++) for(let c=0;c<nx;c++){ const i=r*nx+c, x=pp.getX(i), z=pp.getZ(i), v=h16[i];
+    for(let k=0;k<5;k++) hh[k][i]=sampleGrid(H[k],x,z);
+    hh[5][i]=lerp(sampleGrid(H[5],x,z), v<-32000?0:v*sc/1000, sm(0,ramp,Math.min(c,r,nx-1-c,nzz-1-r))); }
+  hh.forEach((a,k)=>g.setAttribute("h"+k,new THREE.BufferAttribute(a,1)));
+  const kA=(bc*SZ/(NZ-1))/(cx*cz), acc0=new Float32Array(n).fill(1), dist0=new Float32Array(n);
+  const inB=(x,z)=>x>b.x0&&x<b.x1&&z>b.z0&&z<b.z1;
+  for(let v=0;v<NV;v++){ const d=BASE_REC[v]; if(d<0) continue; const dx=P.getX(d), dz=P.getZ(d);
+    if(inB(P.getX(v),P.getZ(v))||!inB(dx,dz)) continue;
+    const i=clamp(Math.round((dz-b.z0)/cz),1,nzz-2)*nx+clamp(Math.round((dx-b.x0)/cx),1,nx-2);
+    acc0[i]+=BASE_ACC[v]*kA; dist0[i]=Math.max(dist0[i],aDist[v]); }
+  const dr=drain(hh[5],nx,nzz,cx,cz,acc0,dist0), fl=new Float32Array(n);
+  for(let i=0;i<n;i++) fl[i]=Math.max(0,Math.log(dr.acc[i]/kA)/LM);
+  g.setAttribute("aFlow",new THREE.BufferAttribute(fl,1)); g.setAttribute("aDist",new THREE.BufferAttribute(dr.dist,1));
+  const tex=makeDemTex(h16,nx,nzz,sc);
+  const mat=terrainMat.clone();
+  mat.uniforms=Object.assign({},lUni,{uHole:{value:new THREE.Vector4()}, uDem:{value:tex}, uDemOn:{value:tex?1:0},
+    uDemTexel:{value:new THREE.Vector2(1/nx,1/nzz)}, uDemCell:{value:new THREE.Vector2(cx,cz)}, uDemExt:{value:new THREE.Vector4(b.x0,b.z0,sx,sz)}});
+  if(AVA.data){ mat.uniforms.uAva={value:avaTexture(b.x0,b.z0,sx,sz)}; mat.uniforms.uExt={value:new THREE.Vector4(b.x0,b.z0,sx,sz)}; }
+  mat.polygonOffset=true; mat.polygonOffsetFactor=-1; mat.polygonOffsetUnits=-4;
+  LOC.mesh=new THREE.Mesh(g,mat); lScene.add(LOC.mesh);
+  const inset=Math.min(0.6*bc, sx*0.05); lUni.uHole.value.set(b.x0+inset,b.z0+inset,b.x1-inset,b.z1-inset);
+}
+function renderPicker(){
+  const cur=LOC.cur?LOC.cur.id:"";
+  const btn=(id,name,sub)=>`<button data-loc="${id}" aria-current="${id===cur}">${name}${sub?`<small>${sub}</small>`:""}</button>`;
+  const places=LOC.list.filter(q=>q.kind==="place"), avas=LOC.list.filter(q=>q.kind!=="place");
+  $("plist").innerHTML=btn("","Whole valley",Math.round(SX)+" × "+Math.round(SZ)+" km")+places.map(q=>btn(q.id,q.name,Math.round(q.cell)+" m")).join("")
+    +"<hr>"+avas.map(q=>btn(q.id,q.name.replace(" of Napa Valley",""),Math.round(q.cell)+" m")).join("");
+}
+function openPlaces(on){
+  $("places").hidden=!on; $("plBtn").setAttribute("aria-pressed",on); document.body.classList.toggle("pl-open",on);
+  if(on&&xs.open) $("xsBtn").click();
+  if(on&&sd.open) sdToggle(false,true);
+}
+$("plBtn").onclick=()=>openPlaces($("places").hidden);
+$("plX").onclick=()=>openPlaces(false);
+$("plist").addEventListener("click",e=>{ const b=e.target.closest("button[data-loc]"); if(b) selectLoc(b.dataset.loc); });
+$("plcs").addEventListener("click",e=>{ const el=e.target.closest(".plc.ava"); if(el) selectLoc(el.dataset.loc||""); });
+async function selectLoc(id){
+  const q=LOC.list.find(l=>l.id===id)||null;
+  LOC.cur=q; clearPatch(); renderPicker(); autoCam=true;
+  if(!q) return;
+  if(ageOf(p)>150) goTo(CH.length-1);                     // from the globe, go to today's valley
+  try{
+    const gd=LOC.cache[q.id]||(LOC.cache[q.id]=await loadGrid(LOC.base+q.file));
+    if(LOC.cur===q&&!LOC.mesh) buildPatch(q,gd.m,gd.h);
+  }catch(e){ delete LOC.cache[q.id]; }
+}
+(async function loadLocations(){
+  if(!realDEM||REG.id==="mt_st_helena") return;              // the 30 km block has no region folder
+  try{
+    const d=await fetch(LOC.base+"detail/index.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
+    LOC.list=d.locations.map(q=>{ const box=toSceneBox(q.bbox_utm), av=toSceneBox(q.ava_bbox_utm||q.bbox_utm);
+      const fx=(av.x0+av.x1)/2, fz=(av.z0+av.z1)/2;
+      return {id:q.id, name:q.name, kind:q.kind||"ava", file:q.file, cell:q.cell_m, box, fx, fz, fr:Math.max(av.x1-av.x0,av.z1-av.z0)/2, i:idxAt(fx,fz)}; })
+      .filter(q=>q.i>=0);
+    if(!LOC.list.length) return;
+    renderPicker(); $("plBtn").hidden=false;
+    const want=(new URLSearchParams(location.search)).get("loc");
+    if(want) selectLoc(want.replace(/[^a-z_]/g,""));
+  }catch(e){ /* close-ups are optional */ }
 })();
 
 /* =================================================================== state from age */
@@ -815,22 +1051,38 @@ function setSky(a){
   return `linear-gradient(to bottom, #${skyTop.getHexString()} 0%, #${skyHor.getHexString()} 62%, #${skyHor.clone().multiplyScalar(.8).getHexString()} 100%)`;
 }
 
-let lastBg="", lastCh=-1;
+let lastBg="", lastCh=-1, cloudBase=1;
+/* The globe and the block share one camera below A_DIVE. Scene km (x east, y up, z south of the
+   summit) sit on a sphere of radius R_E whose centre is (0,-R_E,0); the site basis turns them into
+   globe units (radius 1). */
+const R_E=6371, SITE_DIR=ll2v(38.6694,-122.6333);         // GNIS Mount St. Helena
+const bE=new THREE.Vector3(), bU=new THREE.Vector3(), bN=new THREE.Vector3(), bS=new THREE.Vector3(), mB=new THREE.Matrix4(), qB=new THREE.Quaternion();
+function siteBasis(){ bU.copy(markerDir); bE.set(bU.z,0,-bU.x).normalize(); bN.crossVectors(bU,bE); bS.copy(bN).negate(); mB.makeBasis(bE,bU,bS); qB.setFromRotationMatrix(mB); }
+function toGlobe(P,out){ return out.copy(bE).multiplyScalar(P.x).addScaledVector(bU,P.y+R_E).addScaledVector(bS,P.z).multiplyScalar(1/R_E); }
+function fromGlobe(G,out){ const x=G.dot(bE)*R_E, y=G.dot(bU)*R_E-R_E, z=G.dot(bS)*R_E; return out.set(x,y,z); }
+const gSun=new THREE.Vector3(1,0,0), gSunL=new THREE.Vector3();
 function apply(a,p){
   const local = p >= P_SWITCH;
-  // ---- globe
-  if(!local){
+  // ---- globe (drawn in every era; below A_DIVE it surrounds the block)
+  {
     PLATES.forEach((pl,i)=>plateAt(pl,a,gUni.uC.value[i]));
     const c=gUni.uC.value[0], east=new THREE.Vector3(c.z,0,-c.x).normalize();
     gUni.uWest.value.copy(east).multiplyScalar(-1);
     gUni.uRift.value = band(a,760,540,30); gUni.uSubd.value = sm(270,240,a);
+    gUni.uFlow.value = sm(270,240,a)*sm(8,12,a);             // the Farallon plate stops arriving here about 10 Ma
     markerDir.copy(c).multiplyScalar(Math.cos(0.3)).addScaledVector(east,-Math.sin(0.3)).normalize();
+    // the stylized ancestral spot slides onto the true summit position as the real map fades in
+    markerDir.lerp(SITE_DIR, sm(30,5,a)).normalize();
     marker.position.copy(markerDir).multiplyScalar(1.03);
+    marker.visible = !local;
+    gUni.uReal.value = sm(0.5,0.005,a);                      // present-day relief only for the present
+    gUni.uGrey.value = local ? sm(A_DIVE,160,a)*(1-gUni.uReal.value) : 0;   // outside the block nothing is reconstructed
+    siteBasis();
     gUni.uGreen.value = sm(470,390,a);
     gUni.uIceAll.value = Math.max(band(a,717,660,8), band(a,650,635,5));
     gUni.uCap.value = lerp(1.02, 0.87, Math.max(band(a,335,270,12), band(a,34,-1,4), band(a,447,443,3)*0.7));
     gUni.uDesert.value = band(a,300,190,25);
-    cloudMat.uniforms.uAmt.value = 1 - gUni.uIceAll.value*0.6;
+    cloudBase = 1 - gUni.uIceAll.value*0.6;
   }
   // ---- local
   const w=localWeights(a);
@@ -852,8 +1104,6 @@ function apply(a,p){
   ash.material.uniforms.uTop.value = hc*VE;
   const bg = local ? setSky(a) : "radial-gradient(ellipse at 50% 42%, #142033 0%, #070a0f 72%)";
   if(bg!==lastBg){ $("stage").style.background=bg; lastBg=bg; }
-  // veil for the dive through the clouds
-  const vd=Math.abs(p-P_SWITCH); $("veil").style.opacity = Math.pow(clamp(1-vd/0.012,0,1),0.8).toFixed(3);
   return {local, hc};
 }
 
@@ -869,15 +1119,46 @@ function driveGlobeCam(a,p,dt){
   gCam.position.lerp(tv, 1-Math.exp(-dt*3));
   gCtl.target.set(0,0,0); gCam.lookAt(0,0,0);
 }
+const g0=new THREE.Vector3(0,0,3.4), P0=new THREE.Vector3(), T0=new THREE.Vector3(), d0=new THREE.Vector3(), d1=new THREE.Vector3(), qa=new THREE.Quaternion(), qb=new THREE.Quaternion(), yL=new THREE.Vector3();
+// the globe camera, derived each frame from the block camera
+function deriveGlobeCam(){
+  toGlobe(lCam.position,gCam.position); gCam.quaternion.copy(qB).multiply(lCam.quaternion);
+  const alt=Math.max(gCam.position.length()-1,1e-6);
+  gCam.near=alt*0.5; gCam.far = alt>0.06 ? 100 : Math.sqrt((1+alt)*(1+alt)-1)*1.1+0.01;
+  gCam.updateProjectionMatrix(); gCam.updateMatrixWorld();
+  return alt*R_E;
+}
 let orbit=0.9, lInit=false;
 function driveLocalCam(a,hc,dt){
   if(!reduce) orbit += dt*0.045*(playing?1:0.6);
-  const t=sm(170,0,a);
-  if(!lInit){ lInit=true; lCam.position.set(Math.sin(orbit)*30,34,Math.cos(orbit)*30); }
-  const dist=lerp(48,27,t), elev=lerp(0.78,0.36,t);
-  tv.set(Math.sin(orbit)*Math.cos(elev)*dist, Math.sin(elev)*dist + hc*0.4, Math.cos(orbit)*Math.cos(elev)*dist);
+  const t=sm(170,0,a), kL=LEXT/30;
+  // volcano chapters frame the summit; the ocean era and today frame the whole region
+  const focus=sm(0.05,0.6,a);   // the Mount St. Helena block from the dive until the last million years; the whole region today
+  let tx=lerp(CXm,0,focus), tz=lerp(CZm,0,focus), dist=lerp(lerp(48,27,t)*kL*0.95, lerp(48,27,t), focus), elev=lerp(0.4,0.34,t),   /* low enough to keep the horizon, and the globe around the block, in view */ ty=Math.max(0.3,hc*VE*0.45*focus), lift=hc*0.4;
+  const L=LOC.cur;
+  if(L){ // a chosen place: frame it close, whatever the era
+    let hl=0; for(let k=0;k<6;k++) hl+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][L.i];
+    tx=L.fx; tz=L.fz; dist=clamp(L.fr*2.3,3,30); elev=0.6; ty=Math.max(0,hl)*VE*0.8; lift=0; }
+  if(!lInit){ lInit=true; lCam.position.set(tx+Math.sin(orbit)*30*kL,34*kL,tz+Math.cos(orbit)*30*kL); }
+  tv.set(tx+Math.sin(orbit)*Math.cos(elev)*dist, Math.sin(elev)*dist + ty + lift, tz+Math.cos(orbit)*Math.cos(elev)*dist);
+  const z=sm(A_DIVE,150,a);
+  if(z<1){ // the dive: from where the globe camera left off down to the block, altitude on a log scale
+    // where the globe camera sits at the end of its approach (driveGlobeCam at full zoom)
+    g0.set(bU.z,0,-bU.x).normalize().multiplyScalar(0.1).add(bU).addScaledVector(up,0.05).normalize().multiplyScalar(1.42);
+    fromGlobe(g0,P0); T0.set(0,-R_E,0);
+    const wT=sm(0,0.55,z), T1=new THREE.Vector3(tx,ty,tz), tgt=T0.clone().lerp(T1,wT);
+    d0.copy(P0); const l0=d0.length(); d0.normalize();
+    d1.copy(tv).sub(T1); const l1=d1.length(); d1.normalize();
+    qa.setFromUnitVectors(d0,d1); qb.identity().slerp(qa,sm(0.2,1,z));
+    lCam.position.set(tx,ty,tz).multiplyScalar(wT).add(d0.applyQuaternion(qb).multiplyScalar(Math.exp(lerp(Math.log(l0),Math.log(l1),z))));
+    lCtl.target.copy(tgt);
+    // roll: start with the globe's north up, end with the block's up
+    yL.set(0,bU.y,bS.y).lerp(up,sm(0.2,1,z)).normalize(); lCam.up.copy(yL);
+    lCam.lookAt(tgt); lCam.up.set(0,1,0);
+    return;
+  }
   lCam.position.lerp(tv, 1-Math.exp(-dt*2.2));
-  lCtl.target.lerp(tv.set(0, Math.max(0.3,hc*VE*0.45), 0), 1-Math.exp(-dt*2.2));
+  lCtl.target.lerp(tv.set(tx, ty, tz), 1-Math.exp(-dt*2.2));
   lCam.lookAt(lCtl.target);
 }
 
@@ -928,28 +1209,30 @@ addEventListener("resize",resize); resize();
    same stage heights and fault geometry as the 3D block, plus a column under the location point. */
 const xs={el:$("xsec"), cv:$("xsCv"), btn:$("xsBtn"), open:false, ctx:null, w:0, h:0};
 xs.ctx=xs.cv.getContext("2d");
-function xsToggle(on){ xs.open=on; xs.el.hidden=!on; xs.btn.setAttribute("aria-pressed",on); document.body.classList.toggle("xs-open",on); if(on) xsSize(); }
+function xsToggle(on){ if(on&&!$("places").hidden) openPlaces(false); if(on&&sd.open) sdToggle(false,true); xs.open=on; xs.el.hidden=!on; xs.btn.setAttribute("aria-pressed",on); document.body.classList.toggle("xs-open",on||sd.open); if(on) xsSize(); }
 xs.btn.onclick=()=>xsToggle(!xs.open); $("xsX").onclick=()=>xsToggle(false);
 function xsSize(){ const r=xs.cv.getBoundingClientRect(), d=Math.min(devicePixelRatio,2); xs.w=r.width; xs.h=r.height; xs.cv.width=Math.round(r.width*d); xs.cv.height=Math.round(r.height*d); xs.ctx.setTransform(d,0,0,d,0,0); }
 addEventListener("resize",()=>{ if(xs.open) xsSize(); });
 const XS_M=140, XS_TH=[-9.5,-3.5,3.0,10.5], XS_COTD=1.732;
+// the profile runs ±14.5 km from the summit, clipped to the terrain frame
+let XS_C0=-14.5, XS_C1=14.5; while(XS_C0<0&&!inExt(0.766*XS_C0,-0.643*XS_C0,0.2)) XS_C0+=0.1; while(XS_C1>0&&!inExt(0.766*XS_C1,-0.643*XS_C1,0.2)) XS_C1-=0.1;
+const XS_SPAN=XS_C1-XS_C0;
 // where each mapped trace crosses the SW–NE profile line (x=0.766c, z=-0.643c)
 const XS_SS=[]; FAULTS.forEach(fl=>{ for(let i=0;i<fl.pts.length-1;i++){ const [ax,az]=fl.pts[i],[bx,bz]=fl.pts[i+1];
   const dx=bx-ax, dz=bz-az, ux=0.766, uz=-0.643, den=ux*dz-uz*dx; if(Math.abs(den)<1e-9) continue;
   const c=(ax*dz-az*dx)/den, t=Math.abs(dx)>Math.abs(dz)?(c*ux-ax)/dx:(c*uz-az)/dz;
-  if(t>=0&&t<=1&&Math.abs(c)<14.5) XS_SS.push({c,n:fl.n.replace(" Fault","")}); } });
+  if(t>=0&&t<=1&&c>=XS_C0&&c<=XS_C1) XS_SS.push({c,n:fl.n.replace(" Fault","")}); } });
 const xsIdx=new Int32Array(XS_M), xsC=new Float32Array(XS_M), xsHs=new Float32Array(XS_M);
-for(let i=0;i<XS_M;i++){ const c=-14.5+29*i/(XS_M-1), x=0.766*c, z=-0.643*c; xsC[i]=c;
-  xsIdx[i]=Math.round((z+SIZE/2)/SIZE*(N-1))*N+Math.round((x+SIZE/2)/SIZE*(N-1)); }
+for(let i=0;i<XS_M;i++){ const c=XS_C0+(XS_C1-XS_C0)*i/(XS_M-1); xsC[i]=c; xsIdx[i]=Math.max(0,idxAt(0.766*c,-0.643*c)); }
 const XC={water:"rgba(38,96,128,.75)", fran:"#66705f", franL:"rgba(30,34,28,.35)", chert:"rgba(150,70,55,.55)", lava:"#4b4452", tuff:"#b89678", allu:"#c7ab72", soil:"#4a3322", fa:"#ff5a3c", fi:"#8a3a2c", ink:"#ece6d9", mut:"#a39d91"};
 function drawSection(a,w){
   const g=xs.ctx, W=xs.w, Hh=xs.h; if(!W) return;
   const colW=Math.max(96,Math.round(W*0.3)), SW=W-colW-8, top=2.6, bot=-3.2;
-  const X=c=>6+(c+14.5)/29*(SW-6), Y=y=>6+(top-y)/(top-bot)*(Hh-22);
+  const X=c=>6+(c-XS_C0)/XS_SPAN*(SW-6), Y=y=>6+(top-y)/(top-bot)*(Hh-22);
   g.clearRect(0,0,W,Hh);
-  const ve=((Hh-22)/(top-bot))/((SW-6)/29), veTxt="Vertical scale exaggerated "+ve.toFixed(0)+"×.";
+  const ve=((Hh-22)/(top-bot))/((SW-6)/XS_SPAN), veTxt="Vertical scale exaggerated "+ve.toFixed(0)+"×.";
   if(a>=180){ g.fillStyle=XC.mut; g.font="12px "+getComputedStyle(document.body).fontFamily; g.textAlign="center";
-    wrapText(g,"The section fills in once the view drops to the 30 km block around the site.",W/2,Hh/2-6,220,15); g.textAlign="left";
+    wrapText(g,"The section fills in once the view drops to the land around the site.",W/2,Hh/2-6,220,15); g.textAlign="left";
     $("xsNote").textContent="Planet scale: the site does not exist yet as a place you could cut through."; return; }
   g.fillStyle="rgba(170,190,205,.10)"; g.fillRect(0,0,SW+6,Y(0));
   for(let i=0;i<XS_M;i++){ let h=0; const v=xsIdx[i]; for(let k=0;k<6;k++) h+=w[k]*H[k][v]; xsHs[i]=h; }
@@ -987,7 +1270,7 @@ function drawSection(a,w){
   g.fillStyle=XC.ink; g.beginPath(); g.moveTo(X(0),Y(hc)-2); g.lineTo(X(0)-4,Y(hc)-9); g.lineTo(X(0)+4,Y(hc)-9); g.fill();
   g.font="10.5px "+getComputedStyle(document.body).fontFamily; g.fillStyle=XC.mut; g.textBaseline="alphabetic";
   g.fillText("SW",8,Hh-5); g.textAlign="right"; g.fillText("NE",SW,Hh-5); g.textAlign="center";
-  const px5=5/29*(SW-6); g.fillText("5 km",6+SW/2,Hh-5); g.fillStyle=XC.mut; g.fillRect(6+SW/2-px5/2,Hh-17,px5,1.5);
+  const px5=5/XS_SPAN*(SW-6); g.fillText("5 km",6+SW/2,Hh-5); g.fillStyle=XC.mut; g.fillRect(6+SW/2-px5/2,Hh-17,px5,1.5);
   g.textAlign="left"; g.fillText("sea level",8,Y(0)-3);
   if(ss>0.3){ g.fillStyle=XC.fa; g.textAlign="center"; XS_SS.forEach(t=>g.fillText(t.n,X(t.c),Y(bot)-4)); g.textAlign="left"; }
   // column under the point
@@ -1007,13 +1290,116 @@ function drawSection(a,w){
     g.fillStyle=XC.ink; const tx=r[0]?r[0]+"  "+r[1]:r[1]; wrapText(g,tx,cx+24,yy+10,cw-26,11); yy+=hh; });
   $("xsNote").textContent = a<0.05
     ? "Soil horizons are schematic, typical of thin volcanic mountain soils, not a soil survey. Summit rock Tswt is mapped (USGS SIM 2956). "+veTxt
-    : "Illustration: layer shapes and the old thrusts are schematic. Maacama and Collayomi crossings are from mapped traces (USGS UCERF3). "+veTxt;
+    : "Illustration: layer shapes and the old thrusts are schematic. Fault crossings are from mapped traces (USGS UCERF3). "+veTxt;
 }
 let xsBottom=0;
-function xsPlace(){ const b=Math.round(xs.el.getBoundingClientRect().bottom); if(b!==xsBottom){ xsBottom=b; document.body.style.setProperty("--xsb",b+"px"); } }
+function xsPlace(){ const b=Math.round((xs.open?xs.el:sd.el).getBoundingClientRect().bottom); if(b!==xsBottom){ xsBottom=b; document.body.style.setProperty("--xsb",b+"px"); } }
 function wrapText(g,t,x,y,mw,lh){ const ws=t.split(" "); let line="";
   for(const wd of ws){ const tl=line?line+" "+wd:wd; if(g.measureText(tl).width>mw&&line){ g.fillText(line,x,y); line=wd; y+=lh; } else line=tl; }
   if(line) g.fillText(line,x,y); }
+
+/* =================================================================== PLATES IN MOTION
+   An animated W–E section across the margin at this latitude, 600 km wide and 230 km deep, no
+   vertical exaggeration (the ocean layer is thickened so it shows). Illustration: the geometry is
+   schematic; the sequence (subduction, a Franciscan wedge scraped off, an arc that fades after about
+   85 Ma, the ridge arriving, a slab window, then sideways sliding) follows the chapter sources. */
+const sd={el:$("sub"), cv:$("sdCv"), btn:$("sdBtn"), open:false, auto:true, ctx:null, w:0, h:0};
+sd.ctx=sd.cv.getContext("2d");
+function sdToggle(on,user){ if(user) sd.auto=false; if(on&&xs.open) xsToggle(false); if(on&&!$("places").hidden) openPlaces(false);
+  sd.open=on; sd.el.hidden=!on; sd.btn.setAttribute("aria-pressed",on); document.body.classList.toggle("xs-open",on||xs.open); if(on) sdSize(); }
+sd.btn.onclick=()=>sdToggle(!sd.open,true); $("sdX").onclick=()=>sdToggle(false,true);
+function sdSize(){ const r=sd.cv.getBoundingClientRect(), d=Math.min(devicePixelRatio,2); sd.w=r.width; sd.h=r.height; sd.cv.width=Math.round(r.width*d); sd.cv.height=Math.round(r.height*d); sd.ctx.setTransform(d,0,0,d,0,0); }
+addEventListener("resize",()=>{ if(sd.open) sdSize(); });
+const SD_XT=-70;                 // trench, km (0 = centre of the panel)
+function slabPath(dip,len){      // top of the down-going plate: flat, a bend of radius 160 km, then straight
+  const pts=[], Rb=160, th=dip*D2R; let x=-300, z=5; const ds=4;
+  for(let s=0;s<len;s+=ds){ let ang;
+    if(x<SD_XT) ang=0; else { const sb=Rb*th, into=s-(SD_XT+300); ang= into<sb ? into/Rb : th; }
+    pts.push([x,z,ang]); x+=Math.cos(ang)*ds; z+=Math.sin(ang)*ds; if(z>235) break; }
+  return pts;
+}
+function sdDraw(a,t){
+  const g=sd.ctx, W=sd.w, Hh=sd.h; if(!W) return;
+  const oy=20, k=Math.min(W/600,(Hh-16-oy)/235), ox=W/2, X=x=>ox+x*k, Y=z=>oy+z*k;
+  const font=getComputedStyle(document.body).fontFamily;
+  g.clearRect(0,0,W,Hh);
+  if(a>262){ g.fillStyle=XC.mut; g.font="12px "+font; g.textAlign="center";
+    wrapText(g,"No subduction here yet. Until about 250 million years ago this was a quiet continental edge facing open ocean.",W/2,Hh/2-14,W-60,16); g.textAlign="left";
+    $("sdNote").textContent="The animation starts when the ocean plate begins sinking beneath the margin, about 250 Ma."; return; }
+  const sub=a>10, win=sm(10,7,a);                              // subduction here ends as the triple junction passes (about 10 Ma)
+  const dip=a>90?32:a>45?lerp(18,32,sm(70,90,a)):lerp(30,18,sm(55,45,a));
+  const wedge=lerp(25,95,sm(240,30,a)), arc=sm(250,235,a)*sm(78,90,a);
+  const v=sub?26:0, slab=slabPath(dip,900);
+  const zAt=x=>{ for(let i=1;i<slab.length;i++) if(slab[i][0]>=x){ const p0=slab[i-1],p1=slab[i],f=(x-p0[0])/(p1[0]-p0[0]||1); return lerp(p0[1],p1[1],f); } return 999; };
+  // mantle
+  const mg=g.createLinearGradient(0,Y(0),0,Y(235)); mg.addColorStop(0,"#5b3a2a"); mg.addColorStop(1,"#8a4a26"); g.fillStyle=mg; g.fillRect(X(-300),Y(0),600*k,235*k);
+  // ocean water (thickened)
+  g.fillStyle="rgba(38,96,128,.9)"; g.fillRect(X(-300),Y(0),(SD_XT+300+wedge*0.25)*k,Math.max(6,5*k));
+  // continental lithosphere, then crust, clipped above the slab
+  const LITH=100, CRUST=35, x0=SD_XT+wedge*0.55;
+  const cont=(depth,col)=>{ g.beginPath(); g.moveTo(X(x0),Y(0)); g.lineTo(X(300),Y(0)); g.lineTo(X(300),Y(Math.min(depth,sub||win<0.5?zAt(300):depth)));
+    for(let x=300;x>=x0;x-=6) g.lineTo(X(x),Y(Math.min(depth, win>0.5?depth:zAt(x)))); g.closePath(); g.fillStyle=col; g.fill(); };
+  cont(LITH,"#6d5a48"); cont(CRUST,"#9a8466");
+  // down-going plate (fades and drops away in the slab window)
+  const drop=(1-sm(10,0,a))*0+win*lerp(0,70,sm(8,0,a)), op=1-win*0.75;
+  const TH=45;
+  g.save(); g.globalAlpha=op;
+  g.beginPath(); slab.forEach(([x,z],i)=>{ const zz=z+(x>SD_XT+20?drop:0); i?g.lineTo(X(x),Y(zz)):g.moveTo(X(x),Y(zz)); });
+  for(let i=slab.length-1;i>=0;i--){ const [x,z,an]=slab[i], zz=z+(x>SD_XT+20?drop:0); g.lineTo(X(x-Math.sin(an)*TH),Y(zz+Math.cos(an)*TH)); }
+  g.closePath(); g.fillStyle=win>0.5?"#3c4750":"#46525c"; g.fill();
+  // magnetic stripes riding the plate, the motion cue
+  if(sub||win<1){ const L=slab.length*4, sp=40;
+    for(let s=((t*v)%sp); s<L; s+=sp){ const i=Math.min(slab.length-1,Math.floor(s/4)), [x,z,an]=slab[i], zz=z+(x>SD_XT+20?drop:0);
+      g.beginPath(); g.moveTo(X(x),Y(zz)); g.lineTo(X(x-Math.sin(an)*TH),Y(zz+Math.cos(an)*TH)); g.strokeStyle=(Math.floor(s/sp+(t*v)/sp)%2)?"rgba(160,190,210,.45)":"rgba(40,50,60,.5)"; g.lineWidth=Math.max(1.5,sp*k*0.35); g.stroke(); } }
+  g.restore();
+  // Pacific plate in the west once the ridge has passed: moving north-west, out of the page
+  if(a<22){ const rx = a>10 ? lerp(-300,SD_XT,sm(22,10,a)) : SD_XT;
+    g.fillStyle="rgba(70,95,120,.95)"; g.fillRect(X(-300),Y(5),(rx+300)*k,TH*k);
+    g.strokeStyle="rgba(255,210,150,.9)"; g.lineWidth=1.2; const pulse=0.6+0.4*Math.sin(t*3);
+    for(let x=-270;x<rx-15;x+=45){ g.beginPath(); g.arc(X(x),Y(26),5,0,7); g.stroke(); g.fillStyle=`rgba(255,210,150,${pulse})`; g.beginPath(); g.arc(X(x),Y(26),1.8,0,7); g.fill(); }
+    if(a>10){ g.fillStyle="#ffb27a"; g.fillRect(X(rx)-1.5,Y(0),3,Y(40)-Y(0)); g.font="10px "+font;
+      if(rx<SD_XT-110){ g.textAlign="center"; g.fillText("ridge ▾",X(rx),Y(0)-6); g.textAlign="left"; } }
+    g.fillStyle="#e8d9c4"; g.font="10.5px "+font; g.fillText("Pacific plate ⊙ moving NW, out of the page",X(-292),Y(64)); }
+  // hot mantle rising through the gap
+  if(win>0.02){ g.save(); g.globalAlpha=win; g.strokeStyle="#ffb070"; g.lineWidth=1.6;
+    for(let j=0;j<4;j++){ const x=SD_XT+10+j*22, ph=(t*18+j*23)%90; g.beginPath(); g.moveTo(X(x),Y(200-ph)); g.lineTo(X(x),Y(170-ph)); g.stroke();
+      g.beginPath(); g.moveTo(X(x)-3,Y(174-ph)); g.lineTo(X(x),Y(168-ph)); g.lineTo(X(x)+3,Y(174-ph)); g.stroke(); } g.restore(); }
+  // Franciscan accretionary wedge, scraped off the ocean plate
+  g.beginPath(); g.moveTo(X(SD_XT-4),Y(5)); g.lineTo(X(SD_XT+wedge),Y(0.5)); g.lineTo(X(SD_XT+wedge),Y(zAt(SD_XT+wedge))); for(let x=SD_XT+wedge;x>=SD_XT-4;x-=4) g.lineTo(X(x),Y(zAt(x))); g.closePath();
+  g.fillStyle=XC.fran; g.fill(); g.strokeStyle="rgba(30,34,28,.55)"; g.lineWidth=1;
+  for(let i=1;i<5;i++){ const xs0=SD_XT+wedge*i/5 + (sub?((t*2)%(wedge/5)):0)-wedge/5*0.5; if(xs0<SD_XT||xs0>SD_XT+wedge) continue;
+    g.beginPath(); g.moveTo(X(xs0),Y(1)); g.lineTo(X(xs0-12),Y(zAt(xs0-12))); g.stroke(); }
+  // the site: rocks now under Mount St. Helena, inside the wedge
+  const sx=SD_XT+wedge*0.62; g.fillStyle="#ff7a2f"; g.beginPath(); g.moveTo(X(sx),Y(3)); g.lineTo(X(sx)+4,Y(3)-5); g.lineTo(X(sx)-4,Y(3)-5); g.fill();
+  // arc magma: melt rises where the slab reaches about 100 km
+  if(arc>0.02){ let xa=SD_XT; for(const q of slab){ if(q[1]>=100){ xa=q[0]; break; } }
+    g.save(); g.globalAlpha=arc; g.fillStyle="#ff7a2f";
+    for(let j=0;j<5;j++){ const ph=((t*14+j*21)%95)/95, zz=lerp(100,4,ph), xx=xa+Math.sin(j*2.1+ph*5)*6; g.beginPath(); g.arc(X(xx),Y(zz),2.2*(1-ph*0.4),0,7); g.fill(); }
+    g.beginPath(); g.moveTo(X(xa-14),Y(0.5)); g.lineTo(X(xa),Y(0)-8); g.lineTo(X(xa+14),Y(0.5)); g.fill();
+    g.fillStyle="#ffd1a8"; g.font="10px "+font; g.textAlign="right"; g.fillText("arc magma (Sierra Nevada)",X(xa)-8,Y(26)); g.textAlign="left"; g.restore(); }
+  // mantle corner flow, dragged down with the slab
+  if(sub){ g.save(); g.strokeStyle="rgba(255,220,180,.5)"; g.lineWidth=1.2; g.setLineDash([6,6]); g.lineDashOffset=-t*20;
+    // in the mantle wedge between the continent's base and the slab: west along the base, then down with the slab
+    const cx=255, cz=Math.min(zAt(cx)-28,150);
+    for(const r of [14,26]){ g.beginPath(); g.ellipse(X(cx),Y(cz),r*1.5*k,r*0.8*k,-dip*D2R,-Math.PI/2,Math.PI/2,true); g.stroke(); }
+    g.restore(); }
+  // Sonoma Volcanics above the gap, about 8 to 3 Ma
+  const sv=band(a,8.2,2.6,0.4); if(sv>0.02){ g.save(); g.globalAlpha=sv; g.fillStyle="#ff5a3c";
+    for(let j=0;j<4;j++){ const ph=((t*16+j*25)%80)/80; g.beginPath(); g.arc(X(sx+Math.sin(j*1.7)*5),Y(lerp(80,4,ph)),2.1,0,7); g.fill(); }
+    g.beginPath(); g.moveTo(X(sx-12),Y(0.5)); g.lineTo(X(sx),Y(0)-9); g.lineTo(X(sx+12),Y(0.5)); g.fill(); g.restore(); }
+  // labels and scale
+  g.font="10.5px "+font; g.fillStyle="#e8d9c4"; g.textAlign="left";
+  if(a>=10){ const fx=a<22?lerp(-300,SD_XT,sm(22,10,a))+6:-292; if(fx<SD_XT-40) g.fillText(a>22?"Farallon plate →":"Farallon →",X(fx),Y(24)); }
+  g.fillText("North American plate",X(110),Y(60));
+  g.fillStyle="#cfd6cf"; g.textAlign="right"; g.fillText(win>0.5?"San Andreas system (sliding) ▾":"trench ▾",X(SD_XT)+4,Y(0)-6); g.textAlign="left";
+  g.fillStyle="#ffb27a"; g.fillText("◆ rocks now under Mt. St. Helena",X(sx)-6,Y(0)-6);
+  g.fillStyle=XC.mut; g.fillText("mantle",X(200),Y(200));
+  const s100=100*k; g.fillRect(W-12-s100,Hh-9,s100,1.5); g.textAlign="right"; g.fillText("100 km",W-12,Hh-12); g.textAlign="left";
+  $("sdNote").textContent = (win>0.5
+      ? "Illustration. The ridge has passed: the old plate's last piece is sinking away and hot mantle rises through the gap, feeding the Sonoma Volcanics (about 8 to 3 Ma). The plates now slide sideways."
+      : "Illustration. The ocean plate moves east at roughly 5 to 15 cm a year (shown about ten trillion times faster), bends into the trench and sinks. Sediment and slices of seafloor scraped off at the trench build the Franciscan rocks."+(arc>0.3?" Where the slab reaches about 100 km, melt rises to feed the arc.":a<24&&a>10?" The Pacific–Farallon ridge is approaching from the west; when it reaches the trench, subduction here stops.":a<90&&a>10?" The arc shut off about 85 Ma as the slab flattened.":""))
+    + " No vertical exaggeration; ocean thickened.";
+}
 
 const pin=$("pin"), pv=new THREE.Vector3();
 const rose=$("rose"), legend=$("legend"), sbar=$("scalebar");
@@ -1024,19 +1410,22 @@ function screenAngle(p0,dir,cam){ // screen-space heading (deg, clockwise from u
 function setCompass(deg){ rose.setAttribute("transform",`rotate(${deg.toFixed(1)})`);
   ["cN","cE","cS","cW"].forEach(id=>{ const t=$(id); t.setAttribute("transform",`rotate(${(-deg).toFixed(1)} ${t.getAttribute("x")} ${t.getAttribute("y")})`); }); }
 // Towns, positioned from their coordinates relative to the GNIS summit point (approximate).
-const PLACES=[{t:"Calistoga",x:4.72,z:10.01},{t:"Middletown",x:1.56,z:-9.24},{t:"Knights Valley",x:-4.91,z:3.26}];
+const PLACES=[{t:"Calistoga",x:4.72,z:10.01},{t:"Middletown",x:1.56,z:-9.24},{t:"Knights Valley",x:-4.91,z:3.26},
+ {t:"St. Helena",x:14.29,z:18.13},{t:"Rutherford",x:18.52,z:23.22},{t:"Oakville",x:20.38,z:25.67},{t:"Yountville",x:23.92,z:29.56},
+ {t:"Napa",x:30.46,z:41.07},{t:"American Canyon",x:32.85,z:54.65},{t:"Angwin",x:16.04,z:10.28},{t:"Pope Valley",x:17.95,z:5.86}].filter(q=>inExt(q.x,q.z,0.5));
 PLACES.forEach(q=>{ q.el=document.createElement("div"); q.el.className="plc"; q.el.textContent=q.t; q.el.hidden=true; $("plcs").appendChild(q.el);
-  const col=Math.round((q.x+SIZE/2)/SIZE*(N-1)), row=Math.round((q.z+SIZE/2)/SIZE*(N-1)); q.i=row*N+col; });
+  q.i=idxAt(q.x,q.z); });
 const pl3=new THREE.Vector3(), camR=new THREE.Vector3();
 const mkLab=(t,cls)=>{ const e=document.createElement("div"); e.className=cls; e.textContent=t; e.hidden=true; $("plcs").appendChild(e); return e; };
 const GLAB=PLATES.map(pl=>({el:mkLab(pl.lb,"plc plate")}));
-const FLAB=FAULTS.map(fl=>{ const q={x:fl.lab[0], z:fl.lab[1], el:mkLab(fl.n+" · "+fl.r,"plc flt")}; q.i=Math.round((q.z+SIZE/2)/SIZE*(N-1))*N+Math.round((q.x+SIZE/2)/SIZE*(N-1)); return q; });
+const FLAB=FAULTS.filter(fl=>fl.lab).map(fl=>{ const q={x:fl.lab[0], z:fl.lab[1], el:mkLab(fl.n+" · "+fl.r,"plc flt")}; q.i=idxAt(q.x,q.z); return q; });
 // plate names at the block's SW and NE edges (along the across-trend line)
-const PLAB=[{x:-13.2, z:13.2, t:a=>a>8?"Farallon plate, sinking east →":"← Pacific plate lies ≈55 km west, across the San Andreas"},
-            {x:12.5, z:-12.5, t:a=>"North American plate"}].map(q=>{ q.el=mkLab("","plc plate"); q.i=Math.round((q.z+SIZE/2)/SIZE*(N-1))*N+Math.round((q.x+SIZE/2)/SIZE*(N-1)); return q; });
+const PLAB=[{x:X0+Math.min(3,SX*0.06), z:Z1-Math.min(3,SZ*0.06), t:a=>a>8?"Farallon plate, sinking east →":"← Pacific plate: ≈55 km west of the summit, across the San Andreas"},
+            {x:X1-Math.min(3,SX*0.06), z:Z0+Math.min(3,SZ*0.06), t:a=>"North American plate"}].map(q=>{ q.el=mkLab("","plc plate"); q.i=idxAt(q.x,q.z); return q; });
 function placeLab(q,show,op){ let hh=0; for(let k=0;k<6;k++) hh+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][q.i];
   pl3.set(q.x,Math.max(hh,0)*VE+0.25,q.z).project(lCam); const vis=show&&pl3.z<1; q.el.hidden=!vis;
   if(vis){ q.el.style.opacity=op.toFixed(2); q.el.style.left=((pl3.x+1)/2*innerWidth)+"px"; q.el.style.top=((1-pl3.y)/2*innerHeight)+"px"; } }
+if((new URLSearchParams(location.search)).has("debug")) window.TTM={lCam,lCtl,gCam,gUni,lUni,get st(){ return {p,autoCam}; }};
 let last=performance.now(), T=0;
 function frame(now){
   const dt=Math.min(0.05,(now-last)/1000); last=now; T+=dt;
@@ -1063,12 +1452,19 @@ function frame(now){
 
   const st=apply(a,p);
   if(xs.open){ drawSection(a,w6); xsPlace(); }
-  $("scaleChip").textContent = st.local ? "30 km block · North Bay" : (a>320 ? "Planet" : "Western North America");
+  if(sd.auto && !sd.open && a<=252 && a>0.3 && !xs.open && $("places").hidden && innerWidth>640) sdToggle(true);   // opens itself once, when subduction begins
+  if(sd.open){ sdDraw(a,T); xsPlace(); }
+  $("scaleChip").textContent = st.local&&lCam.position.distanceTo(lCtl.target)>LEXT*5 ? (a<0.5 ? "Planet · present-day relief" : "Planet · grey = not reconstructed") : st.local ? (LOC.cur ? LOC.cur.name.replace(" of Napa Valley","")+" · close-up" : REG_LABEL) : (a>320 ? "Planet" : "Western North America");
   let cam;
+  let far=false;
   if(!st.local){
     if(autoCam) driveGlobeCam(a,p,dt); else gCtl.update();
     lCtl.enabled=false; gCtl.enabled=true; cam=gCam;
-    renderer.render(gScene,gCam);
+    if(gCam.near!==0.01){ gCam.near=0.01; gCam.far=100; gCam.updateProjectionMatrix(); }
+    gUni.uSun.value.copy(gSun);
+    gUni.uFogN.value=1e3; gUni.uFogF.value=2e3; gUni.uRelK.value=30; cloudMat.uniforms.uAmt.value=cloudBase; atmoMat.uniforms.uAmt.value=1; atmo.visible=true; stars.visible=true;
+    $("space").style.opacity=0;
+    renderer.clear(); renderer.render(gScene,gCam);
     pv.copy(marker.position).project(gCam);
     const facing = marker.position.dot(tv.copy(gCam.position).normalize())>0.2;
     pin.hidden=!facing;
@@ -1077,7 +1473,20 @@ function frame(now){
   } else {
     if(autoCam) driveLocalCam(a,st.hc,dt); else lCtl.update();
     gCtl.enabled=false; lCtl.enabled=true; cam=lCam;
-    renderer.render(lScene,lCam);
+    const dist=lCam.position.distanceTo(lCtl.target);
+    lCtl.zoomSpeed = dist>LEXT*2 ? 3 : 1;
+    lCam.near=Math.max(0.1,dist*0.004); lCam.far=Math.max(400,LEXT*8,dist*1.6); lCam.updateProjectionMatrix();
+    lUni.uFogN.value=Math.max(LEXT*1.5,dist*2); lUni.uFogF.value=Math.max(LEXT*4.7,dist*6);
+    const altKm=deriveGlobeCam(); far = dist>LEXT*5;
+    // globe around the block: same sun, same haze; clouds, air glow and stars only from high up
+    gSunL.copy(bE).multiplyScalar(lUni.uSun.value.x).addScaledVector(bU,lUni.uSun.value.y).addScaledVector(bS,lUni.uSun.value.z);
+    gUni.uSun.value.copy(gSun).lerp(gSunL,sm(A_DIVE,165,a)).normalize();
+    gUni.uRelK.value=lerp(6,30,sm(100,3000,altKm));        // gentler relief shading near the ground
+    gUni.uFogCol.value.copy(lUni.uFog.value); gUni.uFogN.value=lUni.uFogN.value/R_E; gUni.uFogF.value=lUni.uFogF.value/R_E;
+    cloudMat.uniforms.uAmt.value=cloudBase*sm(80,220,altKm);
+    atmoMat.uniforms.uAmt.value=sm(600,1600,altKm); atmo.visible=altKm>600; stars.visible=altKm>380;
+    $("space").style.opacity=sm(150,900,altKm).toFixed(3);
+    renderer.clear(); renderer.render(gScene,gCam); renderer.clearDepth(); renderer.render(lScene,lCam);
     pv.set(0,st.hc*VE+0.35,0).project(lCam);
     pin.hidden = pv.z>1;
     const today=a<0.06;
@@ -1092,19 +1501,21 @@ function frame(now){
     $("lgFault").hidden=!lf; $("lgStream").hidden=!ls; $("lgTopo").hidden=!lt; legend.style.opacity=(lf||lh||ls||lt)?1:0;
     // 5 km scale bar measured at the summit, across the screen
     camR.setFromMatrixColumn(lCam.matrixWorld,0); camR.y=0; camR.normalize();
-    cv0.set(0,st.hc*VE,0).project(lCam); cv1.set(0,st.hc*VE,0).addScaledVector(camR,5).project(lCam);
-    const px5=Math.abs(cv1.x-cv0.x)/2*innerWidth; sbar.hidden=!(px5>12&&px5<innerWidth*0.4); $("sbar").style.width=px5.toFixed(0)+"px";
+    cv0.copy(lCtl.target).project(lCam); cv1.copy(lCtl.target).addScaledVector(camR,1).project(lCam);
+    const pxKm=Math.abs(cv1.x-cv0.x)/2*innerWidth, sbK=[10,5,2,1,0.5].find(k=>k*pxKm<innerWidth*0.22)||0.5;
+    $("sbKm").textContent=sbK<1?(sbK*1000)+" m":sbK+" km";
+    const px5=sbK*pxKm; sbar.hidden=far||!(px5>12&&px5<innerWidth*0.4); $("sbar").style.width=px5.toFixed(0)+"px";
     // town labels fade in with the topo detail
     const to=lUni.uTopo.value;
-    FLAB.forEach(q=>placeLab(q,lUni.uSS.value>0.3,lUni.uSS.value));
-    const pOn=a<170; PLAB.forEach(q=>{ const t=q.t(a); if(q.el.textContent!==t) q.el.textContent=t; placeLab(q,pOn,Math.min(1,sm(170,150,a)*1.0)); });
+    FLAB.forEach(q=>placeLab(q,!far&&lUni.uSS.value>0.3,lUni.uSS.value));
+    const pOn=a<170; PLAB.forEach(q=>{ const t=q.t(a); if(q.el.textContent!==t) q.el.textContent=t; placeLab(q,pOn&&!far,Math.min(1,sm(170,150,a)*1.0)); });
     GLAB.forEach(q=>q.el.hidden=true);
     const avaOp=AVA.on&&AVA.data ? lUni.uTopo.value : 0; lUni.uAvaOn.value=avaOp;
-    AVA.labels.forEach(q=>placeLab(q,avaOp>0.3,avaOp));
-    $("locator").style.opacity=(AVA.data&&lUni.uTopo.value>0.3)?Math.min(1,lUni.uTopo.value):0;
+    AVA.labels.forEach(q=>placeLab(q,!far&&avaOp>0.3,avaOp));
+    $("locator").style.opacity=(!far&&AVA.data&&lUni.uTopo.value>0.3)?Math.min(1,lUni.uTopo.value):0;
     $("lgAva").hidden=!(avaOp>0.05);
     PLACES.forEach(q=>{ let hh=0; for(let k=0;k<6;k++) hh+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][q.i];
-      pl3.set(q.x,hh*VE+0.1,q.z).project(lCam); const vis=to>0.05&&pl3.z<1;
+      pl3.set(q.x,hh*VE+0.1,q.z).project(lCam); const vis=!far&&to>0.05&&pl3.z<1;
       q.el.hidden=!vis; if(vis){ q.el.style.opacity=to.toFixed(2); q.el.style.left=((pl3.x+1)/2*innerWidth)+"px"; q.el.style.top=((1-pl3.y)/2*innerHeight)+"px"; } });
   }
   if(!st.local){

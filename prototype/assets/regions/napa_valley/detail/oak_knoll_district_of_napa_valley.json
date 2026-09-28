@@ -1,0 +1,35 @@
+{
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 13,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "fetched": "2026-09-27",
+ "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+ "encoding": "Int16 little-endian, row 0 = north",
+ "scale": 0.1,
+ "resampling": "bilinear from the tile mosaic at each UTM cell centre",
+ "product": "sub-AVA close-up",
+ "region": "napa_valley",
+ "ava_id": "oak_knoll_district_of_napa_valley",
+ "name": "Oak Knoll District of Napa Valley",
+ "bbox_utm": [
+  553608.5,
+  4239009.7,
+  564964.7,
+  4250365.8
+ ],
+ "ava_bbox_utm": [
+  555108.5,
+  4240922.3,
+  563464.7,
+  4248453.3
+ ],
+ "cols": 512,
+ "rows": 512,
+ "cell_m": 22.223,
+ "range_m": [
+  -0.18,
+  560.41
+ ],
+ "sha256": "1a05ee50be57a4ddc59674016277cdf7bd73e0ecae2efd8dc8f25e3021c9b8da"
+}
