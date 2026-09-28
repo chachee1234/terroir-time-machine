@@ -9,7 +9,7 @@ Change `ON` to `OFF` (a one-line commit on `main`, or on the Start-from branch) 
 **Working branch:** `autopilot` (one PR, never merged by the routine)
 
 ## Rules for each run
-1. Read AGENTS.md, STATUS.md, this file, and only the sections of ROADMAP_REGIONS.md, SCIENCE_RULES.md and SOURCES.md the step needs. AGENTS.md and GOVERNANCE.md win over this file. This cloud routine cannot reach the local FreeLLMAPI pool (GOVERNANCE.md §2a) and does not use it; when a step is run locally with that pool switched on, only the §2a checkable subtasks may go to it.
+1. Read AGENTS.md, STATUS.md, this file, and only the sections of ROADMAP_REGIONS.md, SCIENCE_RULES.md and SOURCES.md the step needs. AGENTS.md and GOVERNANCE.md win over this file. This cloud routine does not use the FreeLLMAPI pool (GOVERNANCE.md §2a); that pool runs locally or inside the Workflow F and G jobs, and only the §2a checkable subtasks may go to it. Once Workflow F is built and two weekly PRs have merged, this routine is proposed for retirement (GOVERNANCE.md §6), with owner approval.
 2. If the switch is OFF, or the `autopilot` PR already holds 5 unreviewed steps (checked items below marked `[x]` with no owner "reviewed" note since the last merge), stop and write nothing.
 3. Do the first unchecked step only. One bounded step per run; two repair attempts at most, then mark the step `[!] blocked: <reason>` and stop.
 4. Data: only open-licensed sources already listed in SOURCES.md or in "Allowed sources" below, fetched with the repo's Tier 0 scripts. At most 600 terrain tiles or 150 MB per run. Raw downloads stay in git-ignored `data/raw/`. Record every new dataset in SOURCES.md (licence, URL, date) and `data/manifest.json`.

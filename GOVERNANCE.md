@@ -2,9 +2,9 @@
 
 **Terroir Time Machine — Autonomous Operations Policy**
 
-Version: 1.3  
+Version: 1.4  
 Effective: September 20, 2026  
-Last revised: September 28, 2026 (v1.3: cost layers L0–L3 and an optional local FreeLLMAPI pool, off by default, §2a; v1.2: OAuth token lifetime is 1 year, rotate yearly; v1.1: all-linked sources award raised from 20 to 30 so the maximum score is 100)  
+Last revised: September 28, 2026 (v1.4: FreeLLMAPI also inside GitHub Actions jobs, Workflow F weekly location, Workflow G weekly questions, 95% automation target; v1.3: cost layers L0–L3 and an optional local FreeLLMAPI pool, off by default, §2a; v1.2: OAuth token lifetime is 1 year, rotate yearly; v1.1: all-linked sources award raised from 20 to 30 so the maximum score is 100)  
 Authority: Developer + Claude Agent (within defined rules)
 
 ---
@@ -47,25 +47,29 @@ TTM is an autonomous open-source application for geological history exploration.
 
 ## 2a. COST LAYERS AND THE OPTIONAL FREELLMAPI POOL
 
-Added in v1.3 by owner instruction (2026-09-28). This section extends the budget plan in §6; it does not replace §2, §3 or §6.
+Added in v1.3 by owner instruction (2026-09-28); widened in v1.4 by owner instruction (2026-09-28: "maximize freellmapi to do all the necessary compute, github repository, based off of Opus 5.5 code and plan with 95% automation as the goal. weekly updates with location added with full detail. Weekly questions for large questions."). This section extends the budget plan in §6; it does not replace §2, §3 or §6.
 
 **Switch:** `FreeLLMAPI: OFF`
 Only the developer changes this to `ON`, after completing the setup below. While it is `OFF`, no session may call FreeLLMAPI.
 
 **Operating rule:** Use the cheapest reliable layer capable of doing the task correctly. Scientific integrity and project correctness come before avoiding model usage; the project still targets no incremental API spend wherever practical.
 
+**Goal (v1.4): 95% automation.** Each week one fully detailed location is added with no routine human work except two actions: review and merge the weekly PR (Workflow F), and answer the weekly questions issue (Workflow G). Everything else is L0 or L1, with L2 verifying once a week. The remaining 5% is the human gates below, which do not change: merging, licence interpretation, source trust, and the scientific release gate (SCIENCE_RULES.md §7).
+
+**Where the compute goes.** Most of the work of adding a location is deterministic (terrain, AVA outlines, satellite imagery, faults, towns, validation, tests, headless checks) and runs as L0 on GitHub's runners. FreeLLMAPI takes all model work that can be checked afterwards. Claude's weekly share is one bounded verification run plus any new engine code the queue needs.
+
 | Layer | What | Used for | Existing names |
 |---|---|---|---|
 | **L0** | Deterministic Python, scripts, tests, schema validation, data processing | The default whenever a task can be done deterministically | §3 Tier 0 |
-| **L1** | FreeLLMAPI, a local router over third-party free model tiers | Bounded, mechanical, independently checkable inference; opportunistic, not guaranteed | New |
-| **L2** | Claude (subscription OAuth only) | Substantive implementation, scientific reasoning, architecture, synthesis, difficult debugging, governance decisions, and verifying every L1 output | Interactive and autopilot sessions; §3 Tier 1 Haiku and Tier 2 Opus workflows |
+| **L1** | FreeLLMAPI, a router over third-party free model tiers, run locally or inside a GitHub Actions job | The default for model work: every drafting, extraction, summarizing, classifying and first-pass review task in §5 Workflows F and G, all checked afterwards; opportunistic, not guaranteed | New |
+| **L2** | Claude (subscription OAuth only) | The code and plan the automation runs on (written by Opus 5.5), new engine code, scientific reasoning, architecture, difficult debugging, governance decisions, and one weekly verification of every L1 output that matters (Workflow F step 4) | Interactive and autopilot sessions; §3 Tier 1 Haiku and Tier 2 Opus workflows |
 | **L3** | The developer (and a qualified geoscientist where SCIENCE_RULES.md §7 requires one) | Consequential scientific, architectural, governance, licensing and release decisions | §8, §11 |
 
 The §3 workflow tier names (Tier 1 Haiku, Tier 2 Opus) are unchanged; both are L2.
 
-**Claude stays primary.** Claude handles architecture decisions, scientific reasoning, source evaluation, final interpretation, code changes, acceptance decisions, release readiness, and final review before anything is committed or merged (merging stays with the developer, §7). FreeLLMAPI is only a secondary pool that Claude may call through MCP. It is never configured as Claude Code's model endpoint (no `ANTHROPIC_BASE_URL` or similar redirect).
+**Claude stays primary.** Claude handles architecture decisions, scientific reasoning, source evaluation, final interpretation, code changes, acceptance decisions, release readiness, and final review before anything is committed or merged (merging stays with the developer, §7). FreeLLMAPI is called by Claude through MCP, or by the Workflow F and G scripts through its OpenAI-compatible API inside the job. It is never configured as Claude Code's model endpoint (no `ANTHROPIC_BASE_URL` or similar redirect).
 
-**L1 may be used for:** extracting source metadata; normalizing source records; organizing citation candidates; converting supplied text or roadmap information into structured JSON; classification; duplicate detection; repetitive region metadata work; documentation cleanup; first-pass summarization; first-pass code review or second opinions; and other easily checked AUTOPILOT subtasks whose result can be independently verified.
+**L1 may be used for:** drafting the weekly location's card text, place descriptions and PR description from the verified facts file only (Workflow F step 3); drafting the weekly questions (Workflow G); extracting source metadata; normalizing source records; organizing citation candidates; converting supplied text or roadmap information into structured JSON; classification; duplicate detection; repetitive region metadata work; documentation cleanup; first-pass summarization; first-pass code review or second opinions; and other easily checked AUTOPILOT subtasks whose result can be independently verified.
 
 **L1 must never independently decide:** whether geological claims are valid; whether evidence is sufficient; whether a reconstruction is scientifically defensible; whether a source licence permits reuse; whether an unsupported claim can be published; or whether a PR is ready to merge.
 
@@ -76,15 +80,17 @@ The §3 workflow tier names (Tier 1 Haiku, Tier 2 Opus) are unchanged; both are 
 - Existing tests and validation stay authoritative. An LLM saying something "looks correct" never substitutes for a test.
 - When L1 contributed to a commit, the commit or PR says what it drafted and how Claude checked it.
 
-**Data that never goes to L1:** secrets, tokens, keys or credentials (including `.env` files and logs that may contain them); private or personal information; proprietary or confidential material; and the owner's uploads or unpublished files unless the owner has said they may be shared. Prompts pass to third-party providers whose terms may allow logging or training, so send only text you would be willing to publish.
+**Data that never goes to L1:** secrets, tokens, keys or credentials (including `.env` files and logs that may contain them); private or personal information; proprietary or confidential material; and the owner's uploads or unpublished files unless the owner has said they may be shared. Prompts pass to third-party providers whose terms may allow logging or training. By the owner's v1.4 instruction, repository code, data and documents (an open-source project meant for publication) may be sent; providers whose terms say they train on prompts (for example Kilo's anonymous routes) stay disabled.
 
 **Setup and limits (L1):**
-- Local-only: runs on the developer's own machine, listening on `127.0.0.1` (`HOST=127.0.0.1`), connected to local Claude Code with `claude mcp add --transport http freellmapi http://localhost:3001/mcp`. No public port, tunnel or hosted instance.
-- Not used by GitHub Actions workflows or the cloud autopilot routine, which cannot reach it; those keep the §2 models only.
-- Claude uses only `ask_freellmapi` and the read-only status tools. FreeLLMAPI gets no repository access: it never edits files, commits, pushes, merges, labels, or comments. Claude makes all repository changes.
+- Two places only, never always-on:
+  - **Local:** the developer's machine, listening on `127.0.0.1` (`HOST=127.0.0.1`), connected to local Claude Code with `claude mcp add --transport http freellmapi http://localhost:3001/mcp`.
+  - **Inside a GitHub Actions job (v1.4):** started at the beginning of a Workflow F or G job from a pinned release (image digest or commit), bound to `127.0.0.1` inside the runner, stopped when the job ends. Free-tier provider keys and the unified key live only in GitHub Actions secrets (`FREELLMAPI_*`), never in the repository, logs or prompts. No public port, tunnel or hosted instance.
+- The cloud autopilot routine cannot reach either instance and keeps the §2 models only.
+- Claude uses only `ask_freellmapi` and the read-only status tools. FreeLLMAPI itself gets no repository access: it never edits files, commits, pushes, merges, labels, or comments. Its drafts are files inside the job; the workflow's L0 steps write them to the weekly branch only after the checks in Workflow F pass, and a human merges.
 - Free tiers only: no paid provider plan, no payment method, no paid catalog subscription.
 - Capacity is opportunistic. FreeLLMAPI's advertised free-token totals are not project capacity; providers change or retire free tiers without notice. It is a cost-reduction and capacity-extension mechanism, not guaranteed zero-cost infrastructure. When it is unavailable or slow, do the work at L0 or L2 instead; never lower a check to fit.
-- Kill switches: set the switch above to `OFF`, or run `claude mcp remove freellmapi`, or turn MCP off on FreeLLMAPI's Keys page.
+- Kill switches: set the switch above to `OFF`, or the repository variable `FREELLMAPI_ENABLED` to anything but `true` (Workflows F and G then run L0 only and leave the text steps as labelled gaps), or `AGENT_ENABLED=false` for all automation, or run `claude mcp remove freellmapi` locally.
 
 **Human-review gates are unchanged.** Every gate in §7, §8, §11 and SCIENCE_RULES.md §7 applies as before.
 
@@ -426,6 +432,58 @@ Tier 0: Send via GitHub (create discussion) or email API
 Done.
 ```
 
+
+### **Workflow F: Weekly Location (v1.4, not yet built)**
+
+```
+Weekly, Thursday 10:00 UTC (a scheduled GitHub Actions workflow; AGENT_ENABLED gate first)
+  ↓
+Step 1, L0: pick the next region
+  python3 scripts/region_order.py → first entry of order.json (AUTOPILOT.md region order)
+  Skip the week (and say so in Workflow G) if last week's PR is still open and unmerged
+  ↓
+Step 2, L0: build it in full detail with the existing scripts
+  region file → fetch_tiles.py --frame-grid (terrain) → ava_extract.py --region (outlines, close-ups)
+  → make_imagery_texture.py --closeups (Sentinel-2, 40 m frame, 10 m close-ups) → faults and towns
+  from sources already in SOURCES.md → geolibre_export.py → region_order.py --mapped
+  → unit tests, validate.py, headless Chromium smoke (scripts/smoke_viewer.js)
+  Any failure: stop, write it into Workflow G as a question, open no PR
+  Writes facts.json: only values the scripts produced (names, bboxes, elevations, dates, sources)
+  ↓
+Step 3, L1 (FreeLLMAPI in the job, if FREELLMAPI_ENABLED): draft the region's card text, place
+  descriptions and the PR description from facts.json only. Drafts go to data/drafts/<region>/,
+  marked untrusted. Unavailable or failed: the text stays a labelled gap; the week continues.
+  ↓
+Step 4, L2 (Claude Opus 5.5 via claude-code-action, OAuth, max 5 turns): verify every draft line
+  that states a fact against facts.json and SOURCES.md; strike or fix anything unsupported;
+  keep scientific claims to what listed sources support (SCIENCE_RULES.md). One run per week.
+  ↓
+Step 5, L0: rerun the checks, commit to branch weekly/<date>-<region>, open one PR with the
+  screenshots and what L1 drafted versus what Claude changed. Never merges (§7).
+```
+
+**Commit scope:** Workflow F commits only to its own `weekly/*` branch. Merging to `main` stays with the developer.
+
+**Actions minutes:** the repository is private, and private repositories get a limited number of free Actions minutes a month on GitHub Free (2,000 when last checked; verify at setup). A week's run is expected to take well under an hour. If the monthly allowance runs out, the run is skipped, not paid for.
+
+### **Workflow G: Weekly Questions (v1.4, not yet built)**
+
+```
+Weekly, after Workflow F (same job or chained)
+  ↓
+Tier 0: collect the week's open decisions: blocked steps, layers marked needs_review or
+  pending_verification, licences to confirm, science gaps, and anything an audit flagged
+  ↓
+L1 drafts each as one question with 2–4 short options and a recommendation; Claude (step 4 of F)
+  checks the questions are accurate
+  ↓
+Tier 0: open one issue "Weekly questions — YYYY-MM-DD", labelled weekly-questions
+  (none open that week → no issue)
+  ↓
+The developer answers in comments. Next week's Workflow F reads the answers before it starts;
+an unanswered question blocks only the work that depends on it.
+```
+
 ---
 
 ## 6. QUOTA MANAGEMENT
@@ -449,6 +507,8 @@ Done.
 **Headroom:** Autonomous operations target <10% of weekly budget, leaving 20–30% as safety margin.
 
 **FreeLLMAPI (§2a):** Its free-tier usage does not count against the Claude weekly limit, but it is not guaranteed capacity and is not part of this budget. Plan every workload so it still fits the Claude budget with FreeLLMAPI unavailable. Claude's tokens for writing L1 prompts and verifying L1 output do count.
+
+**Workflows F and G (v1.4):** one bounded Claude verification run a week (max 5 turns) replaces most of the model work the nightly autopilot routine does today. Once Workflow F has produced two merged weekly PRs, the nightly routine is proposed for retirement or for a weekly schedule, with the developer's approval.
 
 **If you exceed headroom:**
 - Workflows log a warning
@@ -653,6 +713,7 @@ Developer receives email/discussion with:
 | Rotate OAuth token | Developer | No |
 | Change GOVERNANCE.md | Developer | No (must amend this file) |
 | Turn the FreeLLMAPI switch on, add its providers or widen its use (§2a) | Developer | No |
+| Answer weekly questions (Workflow G), merge weekly PRs (Workflow F) | Developer | No |
 | Modify scoring rule | Developer | No (amendment + tests required) |
 | Update dependencies | Developer | Yes (code review) |
 
@@ -685,7 +746,8 @@ Example:
 - Haiku: Issue classification only
 - Opus: Weekly diff audit only
 - Auth: OAuth token via `claude setup-token`
-- FreeLLMAPI: optional, local-only, untrusted, off by default (§2a)
+- FreeLLMAPI: optional, local or inside an Actions job, untrusted, off by default (§2a)
+- Weekly: one new location (Workflow F PR) and one questions issue (Workflow G); target 95% automation
 
 **Weekly workflow:**
 - Monday 9 AM: Generation (Tier 0)
