@@ -4,5 +4,143 @@
   "sources": [],
   "claims": [],
   "assets": [],
-  "scenes": []
+  "scenes": [],
+  "chapters": [
+    {
+      "id": "ch_1_8ga",
+      "age_ma": 1800,
+      "tag": "1.8 Ga",
+      "title": "Columbia: the old heart of North America",
+      "body": "Mount St. Helena is nearly two billion years in the future. The ancient core of North America, called Laurentia, is being stitched together inside an early supercontinent. The glow marks Laurentia, the continent this story will eventually be written on.",
+      "visual_class": "reconstruction-stylized",
+      "key": true
+    },
+    {
+      "id": "ch_1_1ga",
+      "age_ma": 1100,
+      "tag": "1.1 Ga",
+      "title": "Rodinia assembles",
+      "body": "Continents collide into a new supercontinent, Rodinia. Land is bare rock and dust. There are no plants, and life is still microscopic and lives in the sea.",
+      "visual_class": "reconstruction-stylized",
+      "key": false
+    },
+    {
+      "id": "ch_700ma",
+      "age_ma": 700,
+      "tag": "700 Ma",
+      "title": "Snowball Earth, and a coastline is born",
+      "body": "Ice may have reached the equator. Meanwhile Rodinia tears apart, and the tear becomes the western edge of Laurentia. California will eventually be built against this edge, piece by piece, from material the ocean delivers.",
+      "visual_class": "reconstruction-stylized",
+      "key": true
+    },
+    {
+      "id": "ch_430ma",
+      "age_ma": 430,
+      "tag": "430 Ma",
+      "title": "Life reaches land",
+      "body": "The first plants spread across the continents and turn them green. Off western North America, the coast is a quiet edge facing open ocean.",
+      "visual_class": "reconstruction-stylized",
+      "key": false
+    },
+    {
+      "id": "ch_250ma",
+      "age_ma": 250,
+      "tag": "250 Ma",
+      "title": "Pangaea, and the long subduction begins",
+      "body": "Every major continent is joined. Off the west coast an ocean plate begins sinking beneath the continent. That subduction zone will run for about 200 million years and build much of California.",
+      "visual_class": "reconstruction-stylized",
+      "key": true
+    },
+    {
+      "id": "ch_150ma",
+      "age_ma": 150,
+      "tag": "150 Ma",
+      "title": "Zoom in: this spot is deep ocean",
+      "body": "We drop to the ground that will one day hold Mount St. Helena and Napa Valley. It is seafloor. The Farallon plate slides east into a deep trench, and mud, sand and slices of ocean crust are scraped off and piled up. That pile becomes the Franciscan Complex and Coast Range ophiolite beneath the Mayacamas. The red lines on the cut faces trace thrust faults, where slices of seafloor are shoved up and stacked on each other.",
+      "visual_class": "illustration",
+      "key": true,
+      "scale": "local"
+    },
+    {
+      "id": "ch_66ma",
+      "age_ma": 66,
+      "tag": "66 Ma",
+      "title": "A distant impact darkens the sky",
+      "body": "An asteroid strikes what is now Mexico. The dust dims sunlight worldwide and ends the age of dinosaurs. Here, the scraped-up seafloor keeps accumulating under the waves.",
+      "visual_class": "illustration",
+      "key": false
+    },
+    {
+      "id": "ch_28ma",
+      "age_ma": 28,
+      "tag": "28 Ma",
+      "title": "The San Andreas system is born",
+      "body": "The spreading ridge between the Pacific and Farallon plates reaches the trench. Subduction shuts off piece by piece and a sliding boundary, the San Andreas system, takes over. The pile of old seafloor starts rising out of the sea.",
+      "visual_class": "illustration",
+      "key": true
+    },
+    {
+      "id": "ch_8ma",
+      "age_ma": 8,
+      "tag": "8 Ma",
+      "title": "The Sonoma Volcanics begin",
+      "body": "A gap opens in the sinking plate and hot mantle rises through it. Volcanoes erupt across what is now Sonoma and Napa for about five million years, generally younger toward the north. Subduction here has ended and the old thrusts go quiet. The bright lines are today's mapped Maacama and Collayomi faults, part of the Pacific–North American plate boundary zone; the dashes show their right-lateral slip.",
+      "visual_class": "illustration",
+      "key": true
+    },
+    {
+      "id": "ch_3_0ma",
+      "age_ma": 3,
+      "span_ma": [
+        3.45,
+        2.95
+      ],
+      "tag": "≈3.0 Ma",
+      "title": "The Mount St. Helena volcano",
+      "body": "Thick rhyolite lava builds the summit area, dated to about 3 million years ago. The volcanic center swells into the highest point for miles. Its true height and shape at this moment are unknown; this peak is an artist's version.",
+      "visual_class": "illustration",
+      "key": false
+    },
+    {
+      "id": "ch_2_85ma",
+      "age_ma": 2.85,
+      "span_ma": [
+        2.93,
+        2.83
+      ],
+      "tag": "≈2.85 Ma",
+      "title": "Caldera eruption",
+      "body": "An enormous explosive eruption empties the magma chamber. Hot ash flows race across the land and weld into rock, and the volcano's top collapses into a caldera. The welded tuff at today's summit comes from eruptions like this one.",
+      "visual_class": "illustration",
+      "key": true
+    },
+    {
+      "id": "ch_1ma",
+      "age_ma": 1,
+      "span_ma": [
+        1.4,
+        0.45
+      ],
+      "tag": "1 Ma",
+      "title": "Uplift and erosion",
+      "body": "Faults keep squeezing and lifting the Mayacamas while rain and streams tear the old volcano down. Watch the channels: runoff gathers into streams that cut back into the slopes, and the gravel they carry spreads over the valley floors. The hard welded tuff resists and is left standing high.",
+      "visual_class": "illustration",
+      "key": false,
+      "dwell_s": 9
+    },
+    {
+      "id": "today",
+      "age_ma": 0,
+      "span_ma": [
+        0.0002,
+        0
+      ],
+      "tag": "Today",
+      "title": "The last two centuries to today",
+      "body": "The peak rises about 1,320 m above Knights Valley and the head of Napa Valley. Vineyards spread across the valley floors from the mid-1800s. Volcanic soils on its flanks and river-laid gravels on the valley floors are part of the terroir of the vineyards below. Contours every 50 m; streams traced from the terrain. The gold line is the Napa Valley AVA and the pale lines are AVAs inside it, like Calistoga and Diamond Mountain District; the inset shows the whole AVA with the area drawn in 3D boxed.",
+      "visual_class": "measured-approx",
+      "key": true,
+      "dwell_s": 10
+    }
+  ]
 }

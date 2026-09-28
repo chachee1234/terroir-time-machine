@@ -231,3 +231,10 @@ This bounded pass addressed only the next unblocked M1 source-rights item. No mo
 - **What it shows:** an animated W–E section: Farallon plate subducting beneath North America from about 250 Ma, the Franciscan accretionary wedge, a Sierra Nevada arc that fades after about 85 Ma as the slab shallows, the Pacific–Farallon ridge arriving, a slab window under the Sonoma Volcanics (about 8–3 Ma), then transform motion.
 - **Status:** illustration. The sequence follows the chapter texts already in the viewer; the convergence rate "roughly 5 to 15 cm a year" and the ≈85 Ma arc shut-off are standard textbook values that still need a specific citation (e.g. a plate-reconstruction paper) before the panel's class can change. Dip angles, plate thicknesses and the wedge shape are schematic.
 
+
+### G21 — SIM 2956 geology drape (derived asset, 2026-09-28)
+- **Input:** `eswn-geol.e00` from the SIM 2956 digital database package (G07), supplied by the owner on 2026-09-28; SHA-256 `ccab4021858cef659d7a3d3c1b26d02ed127811171477fbead074d557c881df3`, identical to the M1-05 record. Kept in git-ignored `data/raw/`.
+- **Derived:** `prototype/assets/geology.png` + `geology_legend.json` (30 km block grid, 224 × 224) and `prototype/assets/regions/napa_valley/geology.png` + legend (Napa Valley frame, 393 × 512), by `scripts/make_geology_texture.py` (stdlib). One colour per PTYPE; cells outside the mapped area are transparent.
+- **Check:** the script's own reader places the GNIS summit in polygon 584, label ID 636, PTYPE Tswt, reproducing M1-05 (`scripts/test_geology_texture.py`).
+- **Limits:** 1:100,000 map sampled at cell centres (≈134–141 m cells). NAD27 → NAD83 by the three-parameter CONUS mean (dE ≈ 93.7 m, dN ≈ −193.8 m at the summit), not NADCON; the M1-05 high-accuracy transform check stays pending. Unit codes only; unit descriptions are in the SIM 2956 pamphlet and are not copied into the legend.
+- **Rights:** USGS-produced, public domain in the U.S.; credit U.S. Geological Survey (G07).

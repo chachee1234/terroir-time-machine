@@ -42,6 +42,14 @@
         "$ref": "#/$defs/scene"
       },
       "minItems": 0
+    },
+    "chapters": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/chapter"
+      },
+      "minItems": 0,
+      "description": "Viewer chapters (prototype/timemachine.html), oldest to youngest. Presentation content; evidence lives in sources, claims and scenes."
     }
   },
   "required": [
@@ -838,6 +846,76 @@
             }
           }
         }
+      ]
+    },
+    "chapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "age_ma": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 4600,
+          "description": "Age the chapter is labelled with, in millions of years before present."
+        },
+        "span_ma": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 4600
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "[older, younger] Ma: the window the viewer dwells over; must contain age_ma."
+        },
+        "tag": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1
+        },
+        "visual_class": {
+          "enum": [
+            "reconstruction-stylized",
+            "illustration",
+            "measured-approx"
+          ]
+        },
+        "key": {
+          "type": "boolean",
+          "description": "Major tick on the timeline."
+        },
+        "scale": {
+          "enum": [
+            "local"
+          ],
+          "description": "Optional: the chapter where the camera drops to the local block."
+        },
+        "dwell_s": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Optional: seconds the player dwells on this chapter."
+        }
+      },
+      "required": [
+        "id",
+        "age_ma",
+        "tag",
+        "title",
+        "body",
+        "visual_class",
+        "key"
       ]
     }
   }

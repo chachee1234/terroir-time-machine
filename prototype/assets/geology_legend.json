@@ -1,0 +1,287 @@
+{
+ "label": "USGS SIM 2956, 1:100,000",
+ "source": "Graymer, R.W., et al., 2007, Geologic Map and Map Database of Eastern Sonoma and Western Napa Counties, California: USGS Scientific Investigations Map 2956, DOI 10.3133/sim2956",
+ "rights": "USGS-produced, public domain in the U.S.; credit U.S. Geological Survey (SOURCES.md G07)",
+ "input": {
+  "file": "eswn-geol.e00",
+  "sha256": "ccab4021858cef659d7a3d3c1b26d02ed127811171477fbead074d557c881df3",
+  "arcs": 10323,
+  "polygons": 4003
+ },
+ "grid": {
+  "terrain": "prototype/assets/terrain.json",
+  "cols": 224,
+  "rows": 224,
+  "cell_m": [
+   133.929,
+   133.929
+  ],
+  "bbox_utm": [
+   516892.63,
+   4265129.75,
+   546892.63,
+   4295129.75
+  ],
+  "crs": "NAD83 / UTM 10N, row 0 = north, cell centres sampled"
+ },
+ "datum_note": "Map is NAD27 / UTM 10 (Clarke 1866). Grid shifted by a constant dE 93.7 m, dN -193.8 m (three-parameter CONUS mean, NIMA TR8350.2), not NADCON.",
+ "limits": "Published at 1:100,000. Each cell shows the unit at its centre, so units narrower than a cell and exact contact positions are not resolved. Transparent cells are outside the mapped area.",
+ "units": [
+  {
+   "ptype": "Tst",
+   "color": "#8ad864",
+   "cells": 4599
+  },
+  {
+   "ptype": "Tsr",
+   "color": "#cab872",
+   "cells": 3325
+  },
+  {
+   "ptype": "KJfs",
+   "color": "#ab2b70",
+   "cells": 3214
+  },
+  {
+   "ptype": "sp",
+   "color": "#33cc34",
+   "cells": 2532
+  },
+  {
+   "ptype": "fsr",
+   "color": "#854691",
+   "cells": 2358
+  },
+  {
+   "ptype": "Tsa",
+   "color": "#80ab2b",
+   "cells": 1955
+  },
+  {
+   "ptype": "Tsag",
+   "color": "#5374ac",
+   "cells": 1286
+  },
+  {
+   "ptype": "QThg",
+   "color": "#46b98e",
+   "cells": 1204
+  },
+  {
+   "ptype": "Tslt",
+   "color": "#8046b9",
+   "cells": 1030
+  },
+  {
+   "ptype": "Qls",
+   "color": "#64d895",
+   "cells": 874
+  },
+  {
+   "ptype": "Tsft",
+   "color": "#469156",
+   "cells": 796
+  },
+  {
+   "ptype": "Qha",
+   "color": "#2bab36",
+   "cells": 710
+  },
+  {
+   "ptype": "KJgvl",
+   "color": "#69ac53",
+   "cells": 675
+  },
+  {
+   "ptype": "Tswt",
+   "color": "#2b30ab",
+   "cells": 669
+  },
+  {
+   "ptype": "Qhf",
+   "color": "#b9469c",
+   "cells": 596
+  },
+  {
+   "ptype": "Qa",
+   "color": "#337fcc",
+   "cells": 540
+  },
+  {
+   "ptype": "KJfgs",
+   "color": "#64c5d8",
+   "cells": 526
+  },
+  {
+   "ptype": "QTob",
+   "color": "#c372ca",
+   "cells": 476
+  },
+  {
+   "ptype": "Kfm",
+   "color": "#7f7cc0",
+   "cells": 422
+  },
+  {
+   "ptype": "Qf",
+   "color": "#d8647c",
+   "cells": 379
+  },
+  {
+   "ptype": "gs",
+   "color": "#aab946",
+   "cells": 321
+  },
+  {
+   "ptype": "Tss",
+   "color": "#cc3392",
+   "cells": 295
+  },
+  {
+   "ptype": "Qpa",
+   "color": "#914665",
+   "cells": 284
+  },
+  {
+   "ptype": "Qht",
+   "color": "#3b4b9b",
+   "cells": 257
+  },
+  {
+   "ptype": "Qlsr",
+   "color": "#862bab",
+   "cells": 200
+  },
+  {
+   "ptype": "Qpf",
+   "color": "#54b946",
+   "cells": 184
+  },
+  {
+   "ptype": "sc",
+   "color": "#9b3b56",
+   "cells": 166
+  },
+  {
+   "ptype": "Qhc",
+   "color": "#46918e",
+   "cells": 152
+  },
+  {
+   "ptype": "Jgvm?",
+   "color": "#b94646",
+   "cells": 147
+  },
+  {
+   "ptype": "Jmi",
+   "color": "#733b9b",
+   "cells": 117
+  },
+  {
+   "ptype": "water",
+   "color": "#ab772b",
+   "cells": 112
+  },
+  {
+   "ptype": "Tsai",
+   "color": "#c07c82",
+   "cells": 85
+  },
+  {
+   "ptype": "Qhb",
+   "color": "#c0aa7c",
+   "cells": 82
+  },
+  {
+   "ptype": "Jk",
+   "color": "#72ca8c",
+   "cells": 76
+  },
+  {
+   "ptype": "Qoa",
+   "color": "#acac53",
+   "cells": 63
+  },
+  {
+   "ptype": "Qhff",
+   "color": "#9aca72",
+   "cells": 45
+  },
+  {
+   "ptype": "Tr",
+   "color": "#d864d3",
+   "cells": 44
+  },
+  {
+   "ptype": "Qr",
+   "color": "#9b673b",
+   "cells": 30
+  },
+  {
+   "ptype": "spm",
+   "color": "#8764d8",
+   "cells": 30
+  },
+  {
+   "ptype": "Qoa?",
+   "color": "#7cacc0",
+   "cells": 28
+  },
+  {
+   "ptype": "m",
+   "color": "#72a5ca",
+   "cells": 19
+  },
+  {
+   "ptype": "ch",
+   "color": "#7cc0a1",
+   "cells": 15
+  },
+  {
+   "ptype": "KJfc",
+   "color": "#ccb933",
+   "cells": 15
+  },
+  {
+   "ptype": "Tsri",
+   "color": "#3b939b",
+   "cells": 14
+  },
+  {
+   "ptype": "Kfss",
+   "color": "#915f46",
+   "cells": 13
+  },
+  {
+   "ptype": "Qhay",
+   "color": "#7553ac",
+   "cells": 6
+  },
+  {
+   "ptype": "af",
+   "color": "#ac6a53",
+   "cells": 5
+  },
+  {
+   "ptype": "Qt",
+   "color": "#33cca6",
+   "cells": 2
+  },
+  {
+   "ptype": "Qpt",
+   "color": "#8172ca",
+   "cells": 2
+  },
+  {
+   "ptype": "QTt",
+   "color": "#879b3b",
+   "cells": 1
+  },
+  {
+   "ptype": "Qhty",
+   "color": "#cc4733",
+   "cells": 1
+  }
+ ],
+ "unmapped_cells": 19199
+}
