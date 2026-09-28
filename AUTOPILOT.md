@@ -22,6 +22,9 @@ Change `ON` to `OFF` (a one-line commit on `main`, or on the Start-from branch) 
 - AWS Open Data Terrain Tiles (G19), UC Davis AVA Project (CC0), USGS UCERF3 via GEM (CC BY-SA 4.0), USGS/CGS geologic maps (public domain), USDA NRCS SSURGO via Soil Data Access (public domain), California DWR/Land IQ crop mapping (check the dataset's stated licence first), Sentinel-2 L2A via Earth Search STAC (Copernicus open licence, attribution required), USDA NAIP (public domain).
 - Not allowed without an owner instruction: Esri imagery, commercial basemaps, county parcel data, any source needing an account or a key.
 
+## GeoLibre intake (owner decision, 2026-09-28)
+The owner maps sources in GeoLibre and saves them as `data/geolibre/<region_id>.geolibre` (steps in `data/geolibre/README.md`). At the start of each run, if a project file there is newer than its `data/intake/<region_id>/` output, the run's one step is: `python3 scripts/geolibre_ingest.py data/geolibre/<region_id>.geolibre`, record each accepted layer's licence in SOURCES.md (or leave it `pending_verification` with the reason), and list any `needs_review` or `rejected` layers in the PR for the owner. Never edit the owner's sources file, and never accept a layer on the owner's behalf.
+
 ## Region order (owner rule, 2026-09-27)
 Sonoma first, then branch out to the next AVA that touches a mapped one; when nothing touches, move to the closest AVA. `python3 scripts/region_order.py` computes the list into `prototype/assets/regions/order.json` from the UC Davis AVA outlines. A frame-sized parent AVA is mapped before its members (Northern Sonoma before Russian River Valley and Alexander Valley), and AVAs nested in a mapped frame become its close-ups. Re-run the script whenever a region is finished (pass all finished ids with `--mapped`) and take the first entry.
 

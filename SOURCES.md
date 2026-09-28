@@ -19,7 +19,7 @@ G01 and G02 have different study scopes; their numbers must not be combined into
 |---|---|---|
 | T01 | [Three.js license](https://github.com/mrdoob/three.js/blob/dev/LICENSE) | MIT license inspected; pin package version and retain license at M2 |
 | T02 | [GPlates official site](https://www.gplates.org/) | Describes offline reconstruction tools and GPLv2 license; verify selected distribution at M2 |
-| T04 | [GeoLibre](https://github.com/opengeos/GeoLibre) (commit d9d7651, 2026-09-27) | MIT license (repository LICENSE). Free browser GIS at web.geolibre.app. We only write its project format (`docs/project-format.md`, version 0.1.0) with `scripts/geolibre_export.py` and link to the hosted app; no GeoLibre code is bundled. Output validated with GeoLibre's own `parseProject` (packages/core/src/project.ts) at that commit. |
+| T04 | [GeoLibre](https://github.com/opengeos/GeoLibre) (commit d9d7651, 2026-09-27) | MIT license (repository LICENSE). Free browser GIS at web.geolibre.app. Used as the source-finding and mapping tool (owner decision 2026-09-28): `scripts/geolibre_export.py` writes starter projects, and `scripts/geolibre_ingest.py` reads projects saved in `data/geolibre/`. GeoLibre is never the cited source; each imported layer is registered under its own agency URL. No GeoLibre code is bundled. Output validated with GeoLibre's own `parseProject` (packages/core/src/project.ts) at that commit. |
 | T03 | [GitHub Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) | Public repositories supported on GitHub Free; published site ≤1 GB and soft bandwidth limit 100 GB/month at this check. Educational MVP use must comply with current terms; recheck at release. |
 
 ## Required source record structure
