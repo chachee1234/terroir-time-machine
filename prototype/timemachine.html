@@ -183,7 +183,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
 <div class="legend" id="legend" style="opacity:0">
   <div id="lgFault"><i style="--c:#ff5a3c"></i>Fault, mapped trace (UCERF3)</div>
   <div id="lgThr"><i style="--c:#8a3a2c"></i>Old thrust, schematic</div>
-  <div id="lgEdge"><i style="--c:#ffc76b"></i>Continent edge, stylized</div>
+  <div id="lgEdge"><i style="--c:#ffc76b"></i>Continent edge, stylized (hand-drawn, not a plate model)</div>
   <div id="lgSut"><i style="--c:#ff5a3c"></i>Collision zone / margin</div>
   <div id="lgStream"><i style="--c:#6fb6e8"></i>Streams, from terrain</div>
   <div id="lgAva"><i style="--c:#ffd27a"></i>AVA boundary</div>
@@ -331,10 +331,19 @@ const PLATES = PLATES_BUILTIN.plates.map(toPlate);
 const D2R = Math.PI/180;
 function ll2v(lat,lon,out){ lat*=D2R; lon*=D2R; return (out||new THREE.Vector3()).set(Math.cos(lat)*Math.cos(lon), Math.sin(lat), -Math.cos(lat)*Math.sin(lon)); }
 function plateAt(pl,a,out){
+  // Smooth path through the stylized keyframes: a Hermite spline whose speed carries through each keyframe
+  // (tangents from the neighbouring keyframes, scaled by their age gaps), so continents no longer stop at every key.
   const k=pl.k; let i=0; while(i<k.length-2 && a<k[i+1][0]) i++;
-  const A=k[i], B=k[i+1]; const t=sm(0,1,clamp((A[0]-a)/(A[0]-B[0]),0,1));
-  let dl=((B[2]-A[2]+540)%360)-180;
-  return ll2v(lerp(A[1],B[1],t), A[2]+dl*t, out);
+  const A=k[i], B=k[i+1], P=k[Math.max(0,i-1)], N=k[Math.min(k.length-1,i+2)];
+  const t=clamp((A[0]-a)/(A[0]-B[0]),0,1), h=A[0]-B[0];
+  const un=(lon,ref)=>ref+(((lon-ref+540)%360)-180);          // unwrap longitudes next to A
+  const bl=un(B[2],A[2]), pl0=un(P[2],A[2]), nl=un(N[2],bl);
+  const tan=(q0,q1,t0,t1)=> t0===t1 ? 0 : (q1-q0)/(t0-t1)*h;   // per unit t
+  const m1la=tan(P[1],B[1],P[0],B[0]), m2la=tan(A[1],N[1],A[0],N[0]);
+  const m1lo=tan(pl0,bl,P[0],B[0]), m2lo=tan(A[2],nl,A[0],N[0]);
+  const t2=t*t, t3=t2*t, h00=2*t3-3*t2+1, h10=t3-2*t2+t, h01=-2*t3+3*t2, h11=t3-t2;
+  const lat=clamp(h00*A[1]+h10*m1la+h01*B[1]+h11*m2la,-89,89), lon=h00*A[2]+h10*m1lo+h01*bl+h11*m2lo;
+  return ll2v(lat, lon, out);
 }
 
 const gUni = {
@@ -1407,7 +1416,7 @@ fetch("../SCENES.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(m=>
 fetch("../data/plates/stylized.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{
   const L=d.plates||[];
   if(d.class!=="reconstruction-stylized" || L.length!==PLATES.length || L.some(q=>!(q.keyframes||[]).length)) throw "unusable plates";
-  L.forEach((q,i)=>{ Object.assign(PLATES[i],toPlate(q)); gUni.uR.value[i]=q.radius; GLAB[i].el.textContent=q.label; });
+  L.forEach((q,i)=>{ Object.assign(PLATES[i],toPlate(q)); gUni.uR.value[i]=q.radius; GLAB[i].el.textContent=q.label+" · stylized"; });
   DATA.plates="data/plates/stylized.json";
 }).catch(()=>{});
 $("ticks").addEventListener("click",e=>{ const b=e.target.closest(".tick"); if(b) goTo(+b.dataset.i); });
@@ -1708,7 +1717,7 @@ PLACES.forEach(q=>{ q.el=document.createElement("div"); q.el.className="plc"; q.
   q.i=idxAt(q.x,q.z); });
 const pl3=new THREE.Vector3(), camR=new THREE.Vector3();
 const mkLab=(t,cls)=>{ const e=document.createElement("div"); e.className=cls; e.textContent=t; e.hidden=true; $("plcs").appendChild(e); return e; };
-const GLAB=PLATES.map(pl=>({el:mkLab(pl.lb,"plc plate")}));
+const GLAB=PLATES.map(pl=>({el:mkLab(pl.lb+" · stylized","plc plate")}));
 const FLAB=FAULTS.filter(fl=>fl.lab).map(fl=>{ const q={x:fl.lab[0], z:fl.lab[1], el:mkLab(fl.n+" · "+fl.r,"plc flt")}; q.i=idxAt(q.x,q.z); return q; });
 // plate names at the block's SW and NE edges (along the across-trend line)
 const PLAB=[{x:X0+Math.min(3,SX*0.06), z:Z1-Math.min(3,SZ*0.06), t:a=>a>8?"Farallon plate, sinking east →":"← Pacific plate: ≈55 km west of the summit, across the San Andreas"},
