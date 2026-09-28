@@ -38,6 +38,7 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .cact{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .cact[hidden]{display:none}
 .cact button{font:500 13px var(--sans);color:var(--ink);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:5px;min-height:34px;padding:0 12px;cursor:pointer}
+.cact a{font:500 13px var(--sans);color:var(--ink);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:5px;min-height:34px;padding:0 12px;display:inline-flex;align-items:center;text-decoration:none}
 .cact button.pri{background:var(--magma);border-color:var(--magma);color:var(--magma-ink);font-weight:600}
 .xdot{position:absolute;z-index:2;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#ffd27a;box-shadow:0 0 0 2px rgba(0,0,0,.7),0 0 10px 2px rgba(255,210,122,.6);pointer-events:none}
 .xdot[hidden]{display:none}
@@ -1078,6 +1079,19 @@ function rgCentroid(rings){ let big=rings[0]; rings.forEach(r=>{ if(r.length>big
       if(q) rgSelect(q); else rgOverview(); }
   }catch(e){ /* the regions layer is optional */ }
 })();
+/* "Open in GeoLibre": the region's present-day evidence layers (AVA outlines, mapped faults, the 3D frame) as a
+   GeoLibre project (scripts/geolibre_export.py), opened in the free browser GIS at web.geolibre.app. */
+const GL={ids:new Set(), url:null};
+fetch("assets/geolibre/index.json").then(r=>r.ok?r.json():null).then(d=>{ if(!d) return;
+  const ref=((new URLSearchParams(location.search)).get("glref")||d.ref||"main").replace(/[^\w.\/-]/g,"");
+  GL.ids=new Set(d.regions||[]); GL.url=id=>d.open.replace("{repo}",d.repo).replace("{ref}",ref).replace("{id}",id);
+  if(lastCh===CH.length-1&&!RGN.sel) glActions(null);
+}).catch(()=>{});
+function glLink(id){ if(!GL.url||!GL.ids.has(id)) return null;
+  const a=document.createElement("a"); a.href=GL.url(id); a.target="_blank"; a.rel="noopener"; a.textContent="Open in GeoLibre ↗";
+  a.title="Present-day AVA outlines and mapped faults in GeoLibre, a free browser GIS (opens a new tab)"; return a; }
+function glActions(extra){ const ca=$("cAct"); ca.innerHTML=""; (extra||[]).forEach(e=>ca.appendChild(e));
+  const a=glLink(RGN.sel?RGN.sel.id:RGN.live); if(a) ca.appendChild(a); ca.hidden=!ca.children.length; }
 function rgFly(lat,lon,dist,onEnd){ autoCam=false; RGN.fly={lat,lon,dist,t:0,dur:reduce?0.01:2.6,onEnd}; }
 function rgOverview(){ RGN.sel=null; if(ageOf(p)>0.5) { goTo(CH.length-1); } lastCh=-1; rgFly(38.3,-121.9,650); }   // the North Coast, where the plan starts
 function rgHome(){ RGN.sel=null; lastCh=-1; $("cAct").hidden=true; rgFly(null,null,0,()=>{ autoCam=true; }); }
@@ -1090,8 +1104,7 @@ function rgSelect(q){
     $("cTitle").textContent=q.name;
     $("cBody").textContent=`Not mapped in detail yet (${q.rule||"in the plan"}). When the autopilot reaches it, it becomes a 3D block like Napa Valley's`+(q.cu.length?`, with close-ups of ${q.cu.length} AVA${q.cu.length>1?"s":""} inside it.`:".")+" The outline is from the UC Davis AVA Project; the relief around it is present-day terrain.";
     $("cCls").innerHTML=`<b style="--c:var(--approx)">■</b> Planning layer · not a legal boundary`;
-    const ca=$("cAct"); ca.innerHTML=""; ca.hidden=false;
-    [["Back to Napa Valley",true,rgHome],["All regions",false,rgOverview]].forEach(([t,pri,f])=>{ const b=document.createElement("button"); b.textContent=t; if(pri) b.className="pri"; b.onclick=f; ca.appendChild(b); });
+    glActions([["Back to Napa Valley",true,rgHome],["All regions",false,rgOverview]].map(([t,pri,f])=>{ const b=document.createElement("button"); b.textContent=t; if(pri) b.className="pri"; b.onclick=f; return b; }));
   }, reduce?0:300);
 }
 
@@ -1254,6 +1267,7 @@ function showCard(i){
     $("cEye").textContent=c.tag; $("cTitle").textContent=c.t; $("cBody").textContent=c.b;
     const k=CLS[c.cls]; $("cCls").innerHTML=`<b style="--c:${k.c}">■</b> ${k.name}`;
     const chip=$("clsChip"); chip.style.setProperty("--c",k.c); chip.lastElementChild.textContent=k.name.split(" · ")[0];
+    if(i===CH.length-1) glActions(null);             // Today: the live region opens in GeoLibre
     card.classList.remove("swap");
   }, reduce?0:220);
   document.querySelectorAll(".tick").forEach((t,j)=>t.classList.toggle("on",j===i));

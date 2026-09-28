@@ -1,0 +1,9 @@
+{
+ "repo": "chachee1234/terroir-time-machine",
+ "ref": "main",
+ "regions": [
+  "napa_valley",
+  "sonoma_valley"
+ ],
+ "open": "https://web.geolibre.app/?url=https://raw.githubusercontent.com/{repo}/{ref}/prototype/assets/geolibre/{id}.geolibre.json"
+}

@@ -5,7 +5,7 @@ Owner instruction (2026-09-27): "compose prompt to autonomously keep expanding t
 **Switch:** `Autopilot: ON`
 Change `ON` to `OFF` (a one-line commit on `main`, or on the Start-from branch) and every run stops before doing anything. The routine can also be paused or deleted at claude.ai → Code → Routines.
 
-**Start from:** `napa-valley-scene` (switch to `main` once PR #9 is merged)
+**Start from:** `main` (PR #9 and #12 merged 2026-09-28)
 **Working branch:** `autopilot` (one PR, never merged by the routine)
 
 ## Rules for each run
@@ -22,6 +22,9 @@ Change `ON` to `OFF` (a one-line commit on `main`, or on the Start-from branch) 
 - AWS Open Data Terrain Tiles (G19), UC Davis AVA Project (CC0), USGS UCERF3 via GEM (CC BY-SA 4.0), USGS/CGS geologic maps (public domain), USDA NRCS SSURGO via Soil Data Access (public domain), California DWR/Land IQ crop mapping (check the dataset's stated licence first), Sentinel-2 L2A via Earth Search STAC (Copernicus open licence, attribution required), USDA NAIP (public domain).
 - Not allowed without an owner instruction: Esri imagery, commercial basemaps, county parcel data, any source needing an account or a key.
 
+## GeoLibre intake (owner decision, 2026-09-28)
+The owner maps sources in GeoLibre and saves them as `data/geolibre/<region_id>.geolibre` (steps in `data/geolibre/README.md`). At the start of each run, if a project file there is newer than its `data/intake/<region_id>/` output, the run's one step is: `python3 scripts/geolibre_ingest.py data/geolibre/<region_id>.geolibre`, record each accepted layer's licence in SOURCES.md (or leave it `pending_verification` with the reason), and list any `needs_review` or `rejected` layers in the PR for the owner. Never edit the owner's sources file, and never accept a layer on the owner's behalf.
+
 ## Region order (owner rule, 2026-09-27)
 Sonoma first, then branch out to the next AVA that touches a mapped one; when nothing touches, move to the closest AVA. `python3 scripts/region_order.py` computes the list into `prototype/assets/regions/order.json` from the UC Davis AVA outlines. A frame-sized parent AVA is mapped before its members (Northern Sonoma before Russian River Valley and Alexander Valley), and AVAs nested in a mapped frame become its close-ups. Re-run the script whenever a region is finished (pass all finished ids with `--mapped`) and take the first entry.
 
@@ -29,8 +32,8 @@ Sonoma first, then branch out to the next AVA that touches a mapped one; when no
 Region work comes first. Each region takes three steps; any engine change a step needs is done inside that step, keeping Napa and the 30 km block unchanged.
 - [ ] R1. Sonoma Valley: region file (frame = AVA bounding box plus 2 km, anchor, close-ups for its nested AVAs), `fetch_tiles.py` terrain and close-ups, AVA outlines. This needs the anchor and UTM zone to come from the region file (ROADMAP_REGIONS.md items 1 and 4).
 - [ ] R2. Sonoma Valley: mapped faults (Rodgers Creek, Bennett Valley; UCERF3 via GEM) as `faults.json`, towns as `places.json`, and generic chapters in `scenes.json` (ROADMAP_REGIONS.md items 2 and 3).
-- [ ] R3. Sonoma Valley: switch its marker to live on the globe, add it to the Places list, headless check of every chapter and close-up.
-- [ ] R4+. Next region from `prototype/assets/regions/order.json` (currently Petaluma Gap, then Northern Sonoma with Russian River Valley and Alexander Valley as close-ups), three steps each as above.
+- [ ] R3. Sonoma Valley: switch its marker to live on the globe, add it to the Places list, headless check of every chapter and close-up. Re-run `python3 scripts/geolibre_export.py --regions napa_valley,sonoma_valley` so its "Open in GeoLibre" project uses the new region file and full-resolution outlines.
+- [ ] R4+. Next region from `prototype/assets/regions/order.json` (currently Petaluma Gap, then Northern Sonoma with Russian River Valley and Alexander Valley as close-ups), three steps each as above; R3's GeoLibre re-run adds the region's id to `--regions`.
 Present-day detail, done between regions when a region step is blocked:
 - [ ] D1. Soils: SSURGO map units for the section column and a "Today" soils drape (Soil Data Access query script, cached).
 - [ ] D2. Vineyards: replace the schematic vine tint with mapped vineyards (DWR/Land IQ, if its licence allows; else NASS CDL, public domain).
