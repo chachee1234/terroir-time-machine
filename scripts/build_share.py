@@ -148,11 +148,9 @@ def build(root=ROOT, out=OUT, built=None):
         blocks.append(f'<script type="text/x-ttm" data-path="{rel}" data-enc="{enc}" data-mime="{MIME[p.suffix]}">'
                       + base64.b64encode(data).decode("ascii") + "</script>")
         listing.append((rel, p.stat().st_size, len(data)))
-    head = "<!doctype html>\n" if not html.lstrip().lower().startswith("<!doctype") else ""
-    viewport = '<meta name="viewport" content="width=device-width, initial-scale=1">\n' if 'name="viewport"' not in html else ""
+    # The page is kept exactly as served (no doctype or viewport added) so it renders as the live viewer does.
     first_script = html.index("<script")
-    page = (head + html[:first_script].replace('<meta charset="utf-8">', '<meta charset="utf-8">\n' + viewport.rstrip("\n"), 1)
-            + "\n".join(blocks) + "\n" + SHIM + "\n" + html[first_script:])
+    page = html[:first_script] + "\n".join(blocks) + "\n" + SHIM + "\n" + html[first_script:]
     page = page.replace(THREE_TAG, THREE_TAG + "\n" + TEXTURE_PATCH, 1)
     page = page.replace("<title>Terroir Time Machine</title>", "<title>Terroir Time Machine (review copy)</title>", 1)
     page = page.rstrip() + "\n" + feedback
