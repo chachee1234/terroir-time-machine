@@ -218,6 +218,42 @@
           "sha256": "e781b478f2d1f5c9cf656c288970e07df029b33d0a0ce8fe557bfbbb5fa8703f"
         }
       ]
+    },
+    {
+      "id": "napa_valley-sentinel2-imagery",
+      "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+      "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs",
+      "scenes": [
+        "S2A_10SEH_20260714_0_L2A"
+      ],
+      "date": "2026-07-14",
+      "fetched": "2026-09-28",
+      "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+      "credit": "Contains modified Copernicus Sentinel data 2026, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/imagery.jpg",
+          "sha256": "6ef43e445ee227ade46c7b8821769ed19602223ba0e849406a5ffc647a2a1dd9"
+        }
+      ]
+    },
+    {
+      "id": "mt_st_helena-sentinel2-imagery",
+      "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+      "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs",
+      "scenes": [
+        "S2A_10SEH_20260714_0_L2A"
+      ],
+      "date": "2026-07-14",
+      "fetched": "2026-09-28",
+      "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+      "credit": "Contains modified Copernicus Sentinel data 2026, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+      "derived": [
+        {
+          "file": "prototype/assets/imagery.jpg",
+          "sha256": "bfde8ff53b1452c53a3790c73284a29fcdb51583a9fdd9b0c5cbda0861852de1"
+        }
+      ]
     }
   ]
 }

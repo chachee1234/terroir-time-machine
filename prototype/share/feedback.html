@@ -1,0 +1,105 @@
+<!-- Feedback panel for the shareable build (scripts/build_share.py injects this; the live viewer does not load it). -->
+<style>
+#fbBtn.float{position:fixed;right:14px;top:60px;z-index:6}
+#fb{position:fixed;right:14px;top:60px;z-index:7;max-height:calc(100vh - 150px);overflow:auto;width:min(360px,calc(100vw - 32px));background:var(--panel-solid,#12171a);border:1px solid var(--line,rgba(232,226,214,.14));border-radius:8px;padding:14px 14px 12px;box-shadow:0 12px 40px rgba(0,0,0,.5);font:14px/1.45 var(--sans,system-ui,sans-serif);color:var(--ink,#ece6d9)}
+#fb[hidden]{display:none}
+#fb header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+#fb header b{font-family:var(--serif,Georgia,serif);font-weight:400;font-size:17px}
+#fb label{display:block;font-size:12px;color:var(--muted,#a39d91);margin:8px 0 3px}
+#fb input,#fb textarea,#fb select{width:100%;box-sizing:border-box;background:#0b0e10;color:inherit;border:1px solid var(--line,rgba(232,226,214,.14));border-radius:4px;padding:7px 8px;font:inherit}
+#fb textarea{min-height:110px;resize:vertical}
+#fb .ctx{font:11px/1.4 var(--mono,monospace);color:var(--muted,#a39d91);margin-top:8px;word-break:break-word}
+#fb .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+#fb .row button{flex:1;min-width:96px;cursor:pointer;background:transparent;color:inherit;border:1px solid var(--line,rgba(232,226,214,.3));border-radius:4px;padding:7px 8px;font:inherit}
+#fb .row button.pri{background:var(--magma,#ff7a2f);color:var(--magma-ink,#1a0d05);border-color:var(--magma,#ff7a2f);font-weight:600}
+#fb .list{margin-top:8px;font-size:12px;color:var(--muted,#a39d91)}
+#fb .list li{margin:2px 0}
+#fb .ok{font-size:12px;color:var(--approx,#7fd1a8);min-height:1em;margin-top:6px}
+#fbX{background:none;border:0;color:inherit;font-size:20px;cursor:pointer;line-height:1}
+#fb .build{font:11px/1.4 var(--mono,monospace);color:var(--muted,#a39d91);margin-top:8px}
+</style>
+<button class="chip tog" id="fbBtn" aria-controls="fb" aria-expanded="false">Feedback</button>
+<aside id="fb" hidden aria-label="Leave feedback">
+  <header><b>Leave feedback</b><button id="fbX" aria-label="Close feedback">×</button></header>
+  <div style="font-size:12px;color:var(--muted,#a39d91)">Notes stay on this device until you save or copy them. Each note records what was on screen when you wrote it.</div>
+  <label for="fbName">Your name (optional)</label>
+  <input id="fbName" autocomplete="name">
+  <label for="fbKind">About</label>
+  <select id="fbKind"><option>General</option><option>Science or accuracy</option><option>Something looks wrong</option><option>Hard to use</option><option>Idea</option></select>
+  <label for="fbText">Note</label>
+  <textarea id="fbText" placeholder="What did you notice?"></textarea>
+  <div class="ctx" id="fbCtx"></div>
+  <div class="row"><button class="pri" id="fbAdd">Add note</button></div>
+  <ol class="list" id="fbList"></ol>
+  <div class="row"><button id="fbSave">Save notes file</button><button id="fbCopy">Copy notes</button></div>
+  <div class="ok" id="fbOk" role="status"></div>
+  <div class="build">Review copy · built __BUILT__ from commit __COMMIT__</div>
+</aside>
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const KEY = "ttm-feedback-__COMMIT__";
+  const chips = document.querySelector(".ui.top .chips");
+  if (chips) chips.appendChild($("fbBtn")); else $("fbBtn").classList.add("float");
+  let notes = [];
+  try { notes = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) { notes = []; }
+  try { $("fbName").value = localStorage.getItem("ttm-feedback-name") || ""; } catch (e) {}
+  const txt = id => ($(id) && $(id).textContent || "").replace(/\s+/g, " ").trim();
+  function context(){
+    const on = [...document.querySelectorAll(".chip.tog[aria-pressed='true']:not(#fbBtn)")].map(b => b.textContent.trim()).filter(Boolean);
+    const q = new URLSearchParams(location.search);
+    return {
+      age: txt("age"), era: txt("era"), card: txt("cTitle"), scale: txt("scaleChip"),
+      layers: on.join(", ") || "none", region: q.get("region") || "napa_valley", place: q.get("loc") || "",
+      screen: innerWidth + "x" + innerHeight
+    };
+  }
+  function ctxLine(c){ return [c.age + " · " + c.era, c.card && ("card: " + c.card), "view: " + c.scale, "layers: " + c.layers, c.place && ("place: " + c.place)].filter(Boolean).join(" | "); }
+  function persist(){ try { localStorage.setItem(KEY, JSON.stringify(notes)); } catch (e) {} }
+  function render(){
+    $("fbList").innerHTML = "";
+    notes.forEach((n, i) => {
+      const li = document.createElement("li");
+      li.textContent = "[" + n.kind + "] " + n.text.slice(0, 80) + (n.text.length > 80 ? "…" : "") + "  ";
+      const del = document.createElement("button");
+      del.textContent = "remove"; del.style.cssText = "background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font-size:11px";
+      del.onclick = () => { notes.splice(i, 1); persist(); render(); };
+      li.appendChild(del); $("fbList").appendChild(li);
+    });
+  }
+  function report(){
+    const who = $("fbName").value.trim() || "(no name)";
+    const head = ["Terroir Time Machine feedback", "From: " + who, "Build: __COMMIT__ (__BUILT__)", "Browser: " + navigator.userAgent, ""];
+    const body = notes.map((n, i) => (i + 1) + ". [" + n.kind + "] " + n.text + "\n   On screen: " + ctxLine(n.ctx) + "\n   Written: " + n.at);
+    return head.concat(body.length ? body : ["(no notes yet)"]).join("\n") + "\n";
+  }
+  function flash(m){ $("fbOk").textContent = m; setTimeout(() => { if ($("fbOk").textContent === m) $("fbOk").textContent = ""; }, 4000); }
+  function toggle(open){
+    $("fb").hidden = !open; $("fbBtn").setAttribute("aria-expanded", open); $("fbBtn").setAttribute("aria-pressed", open);
+    if (open) { $("fbCtx").textContent = "On screen: " + ctxLine(context()); $("fbText").focus(); }
+  }
+  $("fbBtn").onclick = () => toggle($("fb").hidden);
+  $("fbX").onclick = () => toggle(false);
+  $("fbName").onchange = () => { try { localStorage.setItem("ttm-feedback-name", $("fbName").value); } catch (e) {} };
+  $("fbAdd").onclick = () => {
+    const t = $("fbText").value.trim();
+    if (!t) { flash("Write a note first."); return; }
+    notes.push({ kind: $("fbKind").value, text: t, ctx: context(), at: new Date().toISOString().slice(0, 16).replace("T", " ") });
+    persist(); render(); $("fbText").value = ""; flash("Added. Save or copy the notes when you are done.");
+  };
+  $("fbSave").onclick = () => {
+    const who = ($("fbName").value.trim() || "reviewer").replace(/[^\w-]+/g, "-").toLowerCase();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([report()], { type: "text/plain" }));
+    a.download = "ttm-feedback-" + who + ".txt"; document.body.appendChild(a); a.click(); a.remove();
+    flash("Saved. Send that file back to whoever shared this page.");
+  };
+  $("fbCopy").onclick = async () => {
+    try { await navigator.clipboard.writeText(report()); flash("Copied. Paste it into an email or message."); }
+    catch (e) { flash("Copy is blocked here; use Save notes file."); }
+  };
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("fb").hidden) toggle(false); });
+  render();
+})();
+</script>
