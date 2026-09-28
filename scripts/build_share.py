@@ -5,6 +5,7 @@ serves the repo. This bundles those files into the page itself, so the result op
 from a download, email attachment or shared drive, and adds a feedback panel (prototype/share/).
 
     python3 scripts/build_share.py                      # writes dist/terroir-time-machine.html
+    python3 scripts/build_share.py --lite --out dist/terroir-time-machine-lite.html   # without 10 m close-up images
 
 Data files are embedded as base64 text blocks and served to the page by a small fetch() shim.
 Int16 grids (.bin) are delta-coded and byte-split before gzip (about a third smaller); JSON is
@@ -116,9 +117,11 @@ def pack(path):
     return "gz", gzip.compress(raw, 9, mtime=0)
 
 
-def collect(root=ROOT):
+def collect(root=ROOT, lite=False):
+    """Every data file the viewer can fetch. lite leaves out the 10 m close-up images (about 20 MB)."""
     files = [p for p in sorted((root / "prototype" / "assets").rglob("*"))
-             if p.is_file() and p.suffix in MIME and not p.name.endswith(SKIP_SUFFIXES)]
+             if p.is_file() and p.suffix in MIME and not p.name.endswith(SKIP_SUFFIXES)
+             and not (lite and p.name.endswith(".imagery.jpg"))]
     files += [root / e for e in EXTRA if (root / e).exists()]
     return files
 
@@ -133,7 +136,7 @@ def commit_id(root=ROOT):
         return "unknown"
 
 
-def build(root=ROOT, out=OUT, built=None):
+def build(root=ROOT, out=OUT, built=None, lite=False):
     html = (root / "prototype" / "timemachine.html").read_text(encoding="utf-8")
     if html.count(THREE_TAG) != 1:
         raise SystemExit("build_share: OrbitControls script tag not found once in timemachine.html")
@@ -142,7 +145,7 @@ def build(root=ROOT, out=OUT, built=None):
     feedback = (root / "prototype" / "share" / "feedback.html").read_text(encoding="utf-8")
     feedback = feedback.replace("__COMMIT__", commit).replace("__BUILT__", built)
     blocks, listing = [], []
-    for p in collect(root):
+    for p in collect(root, lite):
         enc, data = pack(p)
         rel = p.relative_to(root).as_posix()
         blocks.append(f'<script type="text/x-ttm" data-path="{rel}" data-enc="{enc}" data-mime="{MIME[p.suffix]}">'
@@ -162,8 +165,9 @@ def build(root=ROOT, out=OUT, built=None):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--out", type=Path, default=OUT)
+    ap.add_argument("--lite", action="store_true", help="leave out the 10 m close-up images, for email-sized files")
     a = ap.parse_args(argv)
-    out, listing, commit = build(out=a.out)
+    out, listing, commit = build(out=a.out, lite=a.lite)
     raw = sum(r for _, r, _ in listing)
     size = out.stat().st_size
     print(f"{out.relative_to(ROOT) if out.is_relative_to(ROOT) else out}: {size / 1e6:.1f} MB, "
