@@ -262,3 +262,10 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Commands: `python3 scripts/make_imagery_texture.py --region data/regions/napa_valley.json --closeups-only`; `python3 -m unittest discover -s scripts -p 'test_*.py'`; `python3 scripts/validate.py`.
 - Owner decision (2026-09-28, decision card): keep the stylized continents, no published plate model. Done: continents now follow a smooth Hermite path through the same keyframes (no stop at each keyframe; checked it passes through every keyframe with no jumps), plate labels end "· stylized", legend reads "Continent edge, stylized (hand-drawn, not a plate model)". Also removed a built `dist/` file that had been committed by mistake on this branch (the branch was rebuilt without it).
 - Next smallest action: owner review; optional year-by-year Sentinel-2 imagery 2016–2026 for the recent-years view.
+
+## Globe stays wide until 28 Ma; slower dive (branch `viewer-edits`) — 2026-09-28
+- Owner: "the animation zoom at 150 ma is way too close up ... stay zoomed out on the globe and animate the geologic plate movement that takes place until 28 ma, have the zoom be slower and smoother."
+- prototype/timemachine.html: the dive from globe to ground moved from 186–150 Ma to 27–10 Ma (`A_DIVE`, `A_LAND`), eased with smootherstep, altitude falling on a log scale. Until then the globe camera rests with the whole planet in view (`G_END`), follows more slowly, and faces the subduction pit from the same distance; the pit closes 34–29 Ma as subduction here ends. Globe light now comes from over the viewer's shoulder so the visible side is lit. During the dive the planet stays stylized until about 900 km up, then turns grey (not reconstructed).
+- SCENES.json: 150 Ma card is now "This spot is deep ocean" (globe view, same facts; the block-only thrust sentence removed); 28 Ma card says the view drops to the ground from there. Synced with scripts/sync_viewer_data.py.
+- Checked: unit tests and validate pass; Playwright screenshots (swiftshader) at 250, 150, 66, 30, 24, 21, 19, 16, 12, 8 Ma and today, no page errors.
+- Next smallest action: owner looks at the new share copy and PR #19.
