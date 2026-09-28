@@ -1,0 +1,54 @@
+{
+  "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+  "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+  "zoom": 13,
+  "fetched": "2026-09-28",
+  "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+  "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+  "vertical": "metres; 3DEP 1/3 arc-second in the United States, ETOPO1 offshore, as mosaicked by Terrain Tiles",
+  "note": "Replaces the 3DEP ImageServer request (blocked from the cloud sandbox). Samples are bilinear from the z13 tile mosaic (~15 m pixels) at each raw cell centre.",
+  "aoi": {
+    "description": "Petaluma Gap AVA bounding box (UC Davis AVA Project, CC0) padded by 2 km; ~61 x 34 km. Frame for the viewer, not a geological boundary.",
+    "region": "petaluma_gap",
+    "name": "Petaluma Gap",
+    "parents": [
+      "petaluma_gap"
+    ],
+    "bbox_utm": [
+      491100.0,
+      4215600.0,
+      551700.0,
+      4249200.0
+    ],
+    "center_utm": [
+      521400.0,
+      4232400.0
+    ]
+  },
+  "raw": {
+    "width": 2020,
+    "height": 1120,
+    "cell_m": 30.0,
+    "nodata_cells": 0,
+    "note": "sampled on the fly from cached tiles in data/raw/tiles/, not stored"
+  },
+  "stats_raw_m": {
+    "min": -80.69,
+    "max": 816.93,
+    "max_cell_utm": [
+      548205.0,
+      4248045.0
+    ]
+  },
+  "browser_grid": {
+    "file": "assets/regions/petaluma_gap/terrain.bin",
+    "sha256": "297db6aa49bc5f626bed07fe0ed8c3f7d744d92ffa2752450b0a2dc4ee668791",
+    "encoding": "int16 little-endian, meters, row 0 = north",
+    "cols": 436,
+    "rows": 242,
+    "cell_m": 138.991,
+    "resampling": "block mean from raw samples",
+    "nodata": -32768,
+    "vertical_exaggeration_default": 1
+  }
+}

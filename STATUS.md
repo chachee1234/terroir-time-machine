@@ -252,3 +252,13 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Headless Chromium from file:// (CDN three.js served locally because the sandbox blocks the CDN): default region at Today with Geology and Satellite, a close-up, `?region=mt_st_helena`, `?view=regions`: no console errors, no failed requests; the feedback panel saved a notes file. Not tested: Safari, Firefox, phones, real email clients.
 - Commands: `python3 scripts/build_share.py`; `python3 -m unittest discover -s scripts -p 'test_*.py'`.
 - Next smallest action: owner review; rebuild the file after each merge with `python3 scripts/build_share.py`.
+
+## Autopilot R4.1: Petaluma Gap region data (branch `autopilot`) — 2026-09-28
+- Daily routine run; `Autopilot: ON`; `autopilot` branch created from main (did not exist).
+- Added `data/regions/petaluma_gap.json`: Petaluma Gap AVA box plus 2 km (≈61 × 34 km), `utm_zone` 10, `anchor` = computed box centre (labelled as such).
+- `scripts/ava_extract.py` now writes a non-Napa region's viewer outlines to the region file's `ava_viewer` path and keys the manifest entry by region id; Napa's `prototype/assets/ava.json` is byte-identical. New test in `scripts/test_ava.py`.
+- Built terrain (436 × 242 mesh, 1024 × 568 shading, Sonoma Mountain close-up; 228 z13 tiles) and a 40 m Sentinel-2 texture (27 July 2026). SOURCES G24; manifest updated by the scripts.
+- Repairs: one. The first terrain fetch hit a transient empty reply (curl exit 52) on one tile; retried with the tile cache reused from the main worktree and it completed.
+- Commands: `curl -sSf -o data/raw/ava/avas.geojson <UC Davis avas.geojson>`; `python3 scripts/ava_extract.py --region data/regions/petaluma_gap.json --from-file data/raw/ava/avas.geojson`; `python3 scripts/fetch_tiles.py --region data/regions/petaluma_gap.json --frame-grid`; `python3 scripts/make_imagery_texture.py --region data/regions/petaluma_gap.json`; `python3 -m unittest discover -s scripts -p 'test_*.py'` (OK, 1 skipped); `python3 scripts/validate.py` (PASS).
+- Headless check: not run, because no page changed; the viewer does not load this region until step 3.
+- Next smallest action: R4.2, faults, towns and generic chapters for Petaluma Gap as region data.
