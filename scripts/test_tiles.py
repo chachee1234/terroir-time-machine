@@ -51,6 +51,22 @@ class TestTiles(unittest.TestCase):
         self.assertEqual(encode(-11000), 0)
         self.assertTrue(encode(-1) <= 127)
 
+    def test_frame_grid_block_means_match_the_region_request(self):
+        import fetch_tiles as ft
+        from fetch_terrain import region_request
+
+        class Tilt:                                   # elevation = metres east of the frame's west edge / 100
+            def sample(self, lat, lon):
+                return (ft.utm_from_geographic(lat, lon)[0] - 540000) / 100
+        region = {"bbox_utm": [540000, 4250000, 543000, 4251500], "cell_m": 30, "browser_cells": 20}
+        w, h, nx, ny = region_request(region)
+        self.assertEqual((w, h, nx, ny), (100, 50, 20, 10))
+        grid, lo, hi, at = ft.block_mean_grid(Tilt(), region["bbox_utm"], w, h, nx, ny)
+        self.assertEqual(len(grid), nx * ny)
+        self.assertAlmostEqual(grid[0], 0.75, delta=1)                   # first block: mean of 15..135 m east
+        self.assertAlmostEqual(grid[nx - 1], 29, delta=1)                  # last block: ~2925 m east
+        self.assertLess(abs(at[0] - 542985), 1)                            # highest sample in the east column
+
 
 if __name__ == "__main__":
     unittest.main()

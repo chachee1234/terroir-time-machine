@@ -1,13 +1,15 @@
 {
   "id": "napa_valley",
-  "name": "Napa Valley AVA",
-  "description": "Bounding box of the Napa Valley AVA (UC Davis AVA Project, data/ava/) padded by 2 km; ~55 x 72 km. Frame for the expanded viewer, not a geological boundary.",
+  "name": "Napa and Sonoma valleys",
+  "description": "Joint Napa-Sonoma frame: the Napa Valley AVA bounding box (UC Davis AVA Project) padded by 2 km, widened west to the Santa Rosa Plain (Fountaingrove, Chalk Hill, Bennett Valley, Sonoma Mountain) and south to cover the Sonoma Valley AVA; ~76 x 77 km. Frame for the viewer, not a geological boundary. The id stays napa_valley so existing links keep working.",
   "epsg": 26910,
-  "bbox_utm": [528800.0, 4221300.0, 584100.0, 4293300.0],
+  "bbox_utm": [507900.0, 4216800.0, 584100.0, 4293300.0],
   "cell_m": 30,
-  "browser_cells": 512,
+  "browser_cells": 548,
   "assets_dir": "prototype/assets/regions/napa_valley",
   "boundary": "data/ava/napa_valley_avas.geojson",
+  "parents": ["napa_valley", "sonoma_valley"],
+  "ava_rule": "the parent AVAs plus every current AVA whose bounding box lies inside the frame",
   "close_ups": [
     {"id": "mount_st_helena", "name": "Mount St. Helena", "center_utm": [531892.63, 4280129.75], "half_m": 4500}
   ]

@@ -13,7 +13,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def feat(ava_id, within, valid_end=None):
-    return {"properties": {"ava_id": ava_id, "name": ava_id, "within": within, "valid_end": valid_end,
+    return {"properties": {"ava_id": ava_id, "name": ava_id.replace("_", " ").title(), "within": within, "valid_end": valid_end,
                            "created": "2000-01-01", "cfr_index": "9.0"}, "geometry": {"type": "Polygon", "coordinates": []}}
 
 
@@ -47,19 +47,34 @@ class RegionTests(unittest.TestCase):
     def test_current_block_is_square_224(self):
         self.assertEqual(region_request(self.load("mt_st_helena.json")), (1000, 1000, 224, 224))
 
-    def test_napa_frame_rectangular_and_covers_ava(self):
+    def test_napa_sonoma_frame_covers_every_ava_it_lists(self):
         r = self.load("napa_valley.json")
         w, h, nx, ny = region_request(r)
-        self.assertEqual((w, h), (1843, 2400))
-        self.assertEqual(ny, 512)
-        self.assertEqual(nx, round(512 * 1843 / 2400))
+        self.assertEqual((w, h), (2540, 2550))
+        self.assertEqual(ny, 548)
+        self.assertEqual(nx, round(548 * 2540 / 2550))
         with open(os.path.join(ROOT, "prototype", "assets", "ava.json")) as f:
-            napa = json.load(f)["avas"][0]
-        self.assertEqual(napa["id"], "napa_valley")
+            avas = json.load(f)["avas"]
+        self.assertEqual([a["id"] for a in avas if a.get("parent")], ["napa_valley", "sonoma_valley"])
+        self.assertEqual(r["parents"], ["napa_valley", "sonoma_valley"])
         x0, y0, x1, y1 = r["bbox_utm"]
-        for ring in napa["rings"]:
-            for x, y in ring:
-                self.assertTrue(x0 <= x * 1000 <= x1 and y0 <= y * 1000 <= y1)
+        for a in avas:
+            for ring in a["rings"]:
+                for x, y in ring:
+                    self.assertTrue(x0 <= x * 1000 <= x1 and y0 <= y * 1000 <= y1, a["id"])
+
+    def test_frame_rule_adds_avas_wholly_inside_and_drops_partial_ones(self):
+        def sq(ava_id, within, lon0, lat0, d=0.05):
+            f = feat(ava_id, within)
+            f["geometry"]["coordinates"] = [[[lon0, lat0], [lon0 + d, lat0], [lon0 + d, lat0 + d], [lon0, lat0 + d], [lon0, lat0]]]
+            return f
+        frame = [507900.0, 4216800.0, 584100.0, 4293300.0]
+        got = select([sq("napa_valley", "North Coast", -122.5, 38.3), sq("sonoma_valley", "North Coast", -122.55, 38.3),
+                      sq("bennett_valley", "Sonoma Valley", -122.63, 38.38), sq("fountaingrove_district", "North Coast", -122.7, 38.5),
+                      sq("russian_river_valley", "Northern Sonoma", -123.0, 38.4, 0.3)],
+                     ("napa_valley", "sonoma_valley"), frame)
+        self.assertEqual([f["properties"]["ava_id"] for f in got],
+                         ["napa_valley", "sonoma_valley", "bennett_valley", "fountaingrove_district"])
 
 
 if __name__ == "__main__":

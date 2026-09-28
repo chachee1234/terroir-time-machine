@@ -20,23 +20,6 @@
       ]
     },
     {
-      "id": "ava-napa-valley",
-      "source": "UC Davis Library & DataLab, American Viticultural Areas (AVA) Project",
-      "url": "https://raw.githubusercontent.com/UCDavisLibrary/ava/master/avas_aggregated_files/avas.geojson",
-      "rights": "CC0 1.0",
-      "source_sha256": "c90068f7154764519f0a7c6fb2788e597b7c56bf7581e8c0faa979554d984926",
-      "derived": [
-        {
-          "file": "data/ava/napa_valley_avas.geojson",
-          "sha256": "63a8ae31e42d6b14cd49de48b889f25170be0408a17067476db7abbb2547fedb"
-        },
-        {
-          "file": "prototype/assets/ava.json",
-          "sha256": "23083ad146dbc961b7420d140d4563326b5320597dc1fc531e3a9a98b57bcf02"
-        }
-      ]
-    },
-    {
       "id": "dem-3dep-napa_valley",
       "source": "USGS 3D Elevation Program (3DEP) Bare Earth DEM dynamic service",
       "service": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer",
@@ -53,91 +36,9 @@
           "file": "prototype/assets/regions/napa_valley/terrain.bin",
           "sha256": "79a7d369115dfaad99fcccfa1590845786b1382c76a4c4a0ae1d8a1a8449e548"
         }
-      ]
-    },
-    {
-      "id": "napa_valley-terrain-tiles-z13",
-      "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
-      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
-      "zoom": 13,
-      "tiles": 378,
-      "tiles_sha256": "35cfd99fd510021881ce46c6d76952ee2226ed34e8a0a9c3adc45dc838093067",
-      "fetched": "2026-09-27",
-      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
-      "derived": [
-        {
-          "file": "prototype/assets/regions/napa_valley/dem_hi.bin",
-          "sha256": "aa43e93c5a1ef55ec73b38b731521f4f4ec994e9a4873857c0799c86b9dbe5e0"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/atlas_peak.bin",
-          "sha256": "895a916d7cf3cdb1a210328572f76311dc42e0b10872e22cdc296b0fb6a15f15"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/calistoga.bin",
-          "sha256": "30197b1c25f1f2944ba2dcf3bdf7d9260dec920db9d3b997b658ca3506085c79"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/chiles_valley.bin",
-          "sha256": "767206e6efa5d4395c40e8d1c04fd64a9d09930cb7a4bfbc735c45e333ddebef"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/coombsville.bin",
-          "sha256": "dab9b25befa705b47f207fc1043c12f0d1a17ad3f17844a807ffd3dbcb7c949e"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/diamond_mountain_district.bin",
-          "sha256": "667c179187fd2bda8768c96077be19cfe34798fc554cb09462f5092ef2491c00"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/howell_mountain.bin",
-          "sha256": "d549eac7d7154881de555ed02c3445ef5d507e1c7105ceaff55e42fe1de7e69c"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/los_carneros.bin",
-          "sha256": "39ed2adaab2f7c8c10181fe02a3541d0b1040de8c7d30a197dbc6e87eb46a984"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/mt__veeder.bin",
-          "sha256": "354f2338982b160ef7427d56c834e8f509953d66c8ea2c2900fdbcd471d23282"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/oak_knoll_district_of_napa_valley.bin",
-          "sha256": "1a05ee50be57a4ddc59674016277cdf7bd73e0ecae2efd8dc8f25e3021c9b8da"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/oakville.bin",
-          "sha256": "9ed39c3628bfb97a72b8c4bd6d8ce890f7427bfdf660ab19cbaef7afe7dfd439"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/rutherford.bin",
-          "sha256": "bee36a718fea783ede79826e9433880453c2ef901f0427affc2133e69b0d0ab1"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/spring_mountain_district.bin",
-          "sha256": "3793c85a73b2b205a64205071c39c1d33fbb98778f9e50e713a44f642666cb51"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/st__helena.bin",
-          "sha256": "1b212a9da3eae054b65c65e4da0fcc82867d6ad3ac0f9187e07e550c8e40d03e"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/stags_leap_district.bin",
-          "sha256": "d34d56dc8828b34622f8bb27bd379459b6cabe3e307bcc2c4b78743a5fd1a8b9"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/wild_horse_valley.bin",
-          "sha256": "8593b6d7923ba21aff395310d4242f824e5348c7eda40837aebc3d002a130fb0"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/yountville.bin",
-          "sha256": "bfe7c4aac8ec9de34a0a854d88ce406a092aaf8b0411554f81616828751373d4"
-        },
-        {
-          "file": "prototype/assets/regions/napa_valley/detail/mount_st_helena.bin",
-          "sha256": "7d4e5773ae09b522c3a1752784933bdd34d21a7e9fe49fbced3b22bdb0175333"
-        }
-      ]
+      ],
+      "status": "superseded",
+      "superseded_note": "2026-09-28: the Napa frame was widened into the joint Napa-Sonoma frame; terrain.bin is now built by scripts/fetch_tiles.py --frame-grid (entry napa_valley-terrain-tiles-z13). Over the old frame the two grids differ by mean -0.5 m, RMS 7.9 m."
     },
     {
       "id": "globe-assets",
@@ -170,6 +71,151 @@
         {
           "file": "prototype/assets/globe/relief.png",
           "sha256": "55baedd80623a1aa1ac522a853de91e07eb5d369e5cb8b8110550c347358e9e4"
+        }
+      ]
+    },
+    {
+      "id": "napa_valley-terrain-tiles-z13",
+      "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "zoom": 13,
+      "tiles": 552,
+      "tiles_sha256": "c3f2fddf3ae535d366634f96da346b3bc7e9b3713ebf99c634544377c018bfb5",
+      "fetched": "2026-09-28",
+      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/terrain.bin",
+          "sha256": "dfc0d9843fa197511b09224648015cd2e38e5bbf99a6cf50834947bb515db6b0"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/dem_hi.bin",
+          "sha256": "df8f663c617c1a6b61483c9e0010341d2a65c520699d6d3dc05a1c67d54f5bee"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/atlas_peak.bin",
+          "sha256": "895a916d7cf3cdb1a210328572f76311dc42e0b10872e22cdc296b0fb6a15f15"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/bennett_valley.bin",
+          "sha256": "cfb7dbd15b52f75f2ad58317b350d95fa04eb96976cdf93f80b3fa96e7d02f91"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/calistoga.bin",
+          "sha256": "30197b1c25f1f2944ba2dcf3bdf7d9260dec920db9d3b997b658ca3506085c79"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/chalk_hill.bin",
+          "sha256": "30b796df22f6032eef52eb5df340456d31d2980b22fe19b0833dc8b86dc8bb2d"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/chiles_valley.bin",
+          "sha256": "767206e6efa5d4395c40e8d1c04fd64a9d09930cb7a4bfbc735c45e333ddebef"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/coombsville.bin",
+          "sha256": "dab9b25befa705b47f207fc1043c12f0d1a17ad3f17844a807ffd3dbcb7c949e"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/crystal_springs_of_napa_valley.bin",
+          "sha256": "320bf9dc4988e3d04cbb1a88bb1362c32c5c63c676cad8e879ce8cb843682efc"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/diamond_mountain_district.bin",
+          "sha256": "667c179187fd2bda8768c96077be19cfe34798fc554cb09462f5092ef2491c00"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/fountaingrove_district.bin",
+          "sha256": "fb918a94e83f7ca794767ef7f8aa49a84145e287677156a0ec1108f5ff9a6abc"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/guenoc_valley.bin",
+          "sha256": "b9220dd6d98553f78cb2dde492333e31acfac32e9da345b9444a5e31e6ec63ab"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/howell_mountain.bin",
+          "sha256": "d549eac7d7154881de555ed02c3445ef5d507e1c7105ceaff55e42fe1de7e69c"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/knights_valley.bin",
+          "sha256": "e0d3dc2092d507c5518d6ac9db975e44fd17ab8cb76a0ad86c912dc4af5a3ce3"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/los_carneros.bin",
+          "sha256": "fec1723d5bd185a78c58a95c6ef0ffc70ce102faa840aa22c5d140a979b0a733"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/moon_mountain_district_sonoma_county.bin",
+          "sha256": "095bc3e528291f47720947ec1b1b9d9a5cbee306217174a042bf99ce21d93e5e"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/mt__veeder.bin",
+          "sha256": "354f2338982b160ef7427d56c834e8f509953d66c8ea2c2900fdbcd471d23282"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/oak_knoll_district_of_napa_valley.bin",
+          "sha256": "1a05ee50be57a4ddc59674016277cdf7bd73e0ecae2efd8dc8f25e3021c9b8da"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/oakville.bin",
+          "sha256": "9ed39c3628bfb97a72b8c4bd6d8ce890f7427bfdf660ab19cbaef7afe7dfd439"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/rutherford.bin",
+          "sha256": "bee36a718fea783ede79826e9433880453c2ef901f0427affc2133e69b0d0ab1"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/solano_county_green_valley.bin",
+          "sha256": "95d63d39791512f9e83fa1300b652b940b295a5d35b71306de868e170483a52b"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/sonoma_mountain.bin",
+          "sha256": "c9c0807a11a2f8862c8b1a2ccce14c59fbf095d496be949a17a3bd4c6b005131"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/spring_mountain_district.bin",
+          "sha256": "3793c85a73b2b205a64205071c39c1d33fbb98778f9e50e713a44f642666cb51"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/st__helena.bin",
+          "sha256": "1b212a9da3eae054b65c65e4da0fcc82867d6ad3ac0f9187e07e550c8e40d03e"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/stags_leap_district.bin",
+          "sha256": "d34d56dc8828b34622f8bb27bd379459b6cabe3e307bcc2c4b78743a5fd1a8b9"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/suisun_valley.bin",
+          "sha256": "e026f4ed4a71fbfba7cfa0b39bebbabd38b3a1f0ab7c4eff74d1c084cbcf5272"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/wild_horse_valley.bin",
+          "sha256": "8593b6d7923ba21aff395310d4242f824e5348c7eda40837aebc3d002a130fb0"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/yountville.bin",
+          "sha256": "bfe7c4aac8ec9de34a0a854d88ce406a092aaf8b0411554f81616828751373d4"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/mount_st_helena.bin",
+          "sha256": "18e82e206db25ea343e278e72396298fbb4702b752bb1c478c1b723ad54600fd"
+        }
+      ]
+    },
+    {
+      "id": "ava-napa-valley",
+      "source": "UC Davis Library & DataLab, American Viticultural Areas (AVA) Project",
+      "url": "https://raw.githubusercontent.com/UCDavisLibrary/ava/master/avas_aggregated_files/avas.geojson",
+      "rights": "CC0 1.0",
+      "source_sha256": "c90068f7154764519f0a7c6fb2788e597b7c56bf7581e8c0faa979554d984926",
+      "derived": [
+        {
+          "file": "data/ava/napa_valley_avas.geojson",
+          "sha256": "f4c5b1918928bbe92eb25174c39ddb84230220e17b7f14a443721411b4b8866c"
+        },
+        {
+          "file": "prototype/assets/ava.json",
+          "sha256": "e781b478f2d1f5c9cf656c288970e07df029b33d0a0ce8fe557bfbbb5fa8703f"
         }
       ]
     }

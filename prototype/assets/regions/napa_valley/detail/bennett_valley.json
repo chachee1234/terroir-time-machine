@@ -10,26 +10,26 @@
  "resampling": "bilinear from the tile mosaic at each UTM cell centre",
  "product": "sub-AVA close-up",
  "region": "napa_valley",
- "ava_id": "wild_horse_valley",
- "name": "Wild Horse Valley",
+ "ava_id": "bennett_valley",
+ "name": "Bennett Valley",
  "bbox_utm": [
-  564314.0,
-  4233243.6,
-  575819.3,
-  4244748.9
+  526559.3,
+  4243836.9,
+  537986.7,
+  4255264.4
  ],
  "ava_bbox_utm": [
-  568514.8,
-  4234743.6,
-  571618.6,
-  4243248.9
+  528402.1,
+  4245336.9,
+  536143.9,
+  4253764.4
  ],
  "cols": 512,
  "rows": 512,
- "cell_m": 22.515,
+ "cell_m": 22.363,
  "range_m": [
-  10.64,
-  681.78
+  31.23,
+  749.13
  ],
- "sha256": "8593b6d7923ba21aff395310d4242f824e5348c7eda40837aebc3d002a130fb0"
+ "sha256": "cfb7dbd15b52f75f2ad58317b350d95fa04eb96976cdf93f80b3fa96e7d02f91"
 }

@@ -10,26 +10,26 @@
  "resampling": "bilinear from the tile mosaic at each UTM cell centre",
  "product": "sub-AVA close-up",
  "region": "napa_valley",
- "ava_id": "wild_horse_valley",
- "name": "Wild Horse Valley",
+ "ava_id": "chalk_hill",
+ "name": "Chalk Hill",
  "bbox_utm": [
-  564314.0,
-  4233243.6,
-  575819.3,
-  4244748.9
+  511930.9,
+  4259152.9,
+  529921.4,
+  4277143.4
  ],
  "ava_bbox_utm": [
-  568514.8,
-  4234743.6,
-  571618.6,
-  4243248.9
+  513430.9,
+  4262209.4,
+  528421.4,
+  4274086.8
  ],
  "cols": 512,
  "rows": 512,
- "cell_m": 22.515,
+ "cell_m": 35.206,
  "range_m": [
-  10.64,
-  681.78
+  12.08,
+  488.76
  ],
- "sha256": "8593b6d7923ba21aff395310d4242f824e5348c7eda40837aebc3d002a130fb0"
+ "sha256": "30b796df22f6032eef52eb5df340456d31d2980b22fe19b0833dc8b86dc8bb2d"
 }

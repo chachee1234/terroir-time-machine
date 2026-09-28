@@ -10,26 +10,26 @@
  "resampling": "bilinear from the tile mosaic at each UTM cell centre",
  "product": "sub-AVA close-up",
  "region": "napa_valley",
- "ava_id": "wild_horse_valley",
- "name": "Wild Horse Valley",
+ "ava_id": "moon_mountain_district_sonoma_county",
+ "name": "Moon Mountain District Sonoma County",
  "bbox_utm": [
-  564314.0,
-  4233243.6,
-  575819.3,
-  4244748.9
+  537173.4,
+  4236270.6,
+  555705.3,
+  4254802.5
  ],
  "ava_bbox_utm": [
-  568514.8,
-  4234743.6,
-  571618.6,
-  4243248.9
+  539950.7,
+  4237770.6,
+  552928.0,
+  4253302.5
  ],
  "cols": 512,
  "rows": 512,
- "cell_m": 22.515,
+ "cell_m": 36.266,
  "range_m": [
-  10.64,
-  681.78
+  8.69,
+  816.51
  ],
- "sha256": "8593b6d7923ba21aff395310d4242f824e5348c7eda40837aebc3d002a130fb0"
+ "sha256": "095bc3e528291f47720947ec1b1b9d9a5cbee306217174a042bf99ce21d93e5e"
 }

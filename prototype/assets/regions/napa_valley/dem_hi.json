@@ -3,7 +3,7 @@
  "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
  "zoom": 13,
  "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
- "fetched": "2026-09-27",
+ "fetched": "2026-09-28",
  "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
  "encoding": "Int16 little-endian, row 0 = north",
  "scale": 0.1,
@@ -11,17 +11,17 @@
  "product": "region shading grid",
  "region": "napa_valley",
  "bbox_utm": [
-  528800.0,
-  4221300.0,
+  507900.0,
+  4216800.0,
   584100.0,
   4293300.0
  ],
- "cols": 787,
+ "cols": 1020,
  "rows": 1024,
- "cell_m": 70.356,
+ "cell_m": 74.779,
  "range_m": [
-  -17.96,
-  1319.48
+  -15.47,
+  1319.01
  ],
- "sha256": "aa43e93c5a1ef55ec73b38b731521f4f4ec994e9a4873857c0799c86b9dbe5e0"
+ "sha256": "df8f663c617c1a6b61483c9e0010341d2a65c520699d6d3dc05a1c67d54f5bee"
 }

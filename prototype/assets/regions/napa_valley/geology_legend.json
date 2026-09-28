@@ -10,15 +10,15 @@
  },
  "grid": {
   "terrain": "prototype/assets/regions/napa_valley/terrain.json",
-  "cols": 393,
-  "rows": 512,
+  "cols": 546,
+  "rows": 548,
   "cell_m": [
-   140.712,
-   140.625
+   139.56,
+   139.599
   ],
   "bbox_utm": [
-   528800.0,
-   4221300.0,
+   507900.0,
+   4216800.0,
    584100.0,
    4293300.0
   ],
@@ -29,203 +29,213 @@
  "units": [
   {
    "ptype": "Tsa",
-   "color": "#3b9b5c",
-   "cells": 16099
+   "color": "#8ac07c",
+   "cells": 18850
   },
   {
    "ptype": "KJgvl",
    "color": "#337fcc",
-   "cells": 10121
+   "cells": 10295
   },
   {
    "ptype": "Tst",
-   "color": "#53ac5f",
-   "cells": 8664
+   "color": "#629b3b",
+   "cells": 9278
   },
   {
    "ptype": "sp",
-   "color": "#cc8133",
-   "cells": 6277
-  },
-  {
-   "ptype": "Tsr",
-   "color": "#4c4691",
-   "cells": 5640
-  },
-  {
-   "ptype": "Qf",
-   "color": "#7cacc0",
-   "cells": 3993
-  },
-  {
-   "ptype": "Qoa",
-   "color": "#cc3392",
-   "cells": 3714
+   "color": "#914648",
+   "cells": 7096
   },
   {
    "ptype": "KJfs",
    "color": "#c372ca",
-   "cells": 3712
+   "cells": 5894
+  },
+  {
+   "ptype": "Tsr",
+   "color": "#6498d8",
+   "cells": 5861
+  },
+  {
+   "ptype": "Qoa",
+   "color": "#ac6a53",
+   "cells": 4548
+  },
+  {
+   "ptype": "Qf",
+   "color": "#54b946",
+   "cells": 4413
   },
   {
    "ptype": "Qhf",
-   "color": "#d864d3",
-   "cells": 3169
+   "color": "#5374ac",
+   "cells": 4216
+  },
+  {
+   "ptype": "Qha",
+   "color": "#8172ca",
+   "cells": 3496
+  },
+  {
+   "ptype": "QThg",
+   "color": "#862bab",
+   "cells": 3042
   },
   {
    "ptype": "spm",
-   "color": "#ab2b9f",
-   "cells": 2953
+   "color": "#a372ca",
+   "cells": 3004
+  },
+  {
+   "ptype": "fsr",
+   "color": "#64d8c1",
+   "cells": 2942
   },
   {
    "ptype": "Kfm",
    "color": "#d8647c",
-   "cells": 2878
+   "cells": 2929
   },
   {
    "ptype": "Qls",
-   "color": "#469156",
-   "cells": 2325
-  },
-  {
-   "ptype": "water",
-   "color": "#8aac53",
-   "cells": 1932
+   "color": "#3b939b",
+   "cells": 2709
   },
   {
    "ptype": "Qa",
-   "color": "#acac53",
-   "cells": 1866
+   "color": "#914665",
+   "cells": 2110
+  },
+  {
+   "ptype": "water",
+   "color": "#9b8c3b",
+   "cells": 2029
+  },
+  {
+   "ptype": "Tp",
+   "color": "#9433cc",
+   "cells": 1957
   },
   {
    "ptype": "QTob",
-   "color": "#862bab",
-   "cells": 1861
+   "color": "#acac53",
+   "cells": 1882
   },
   {
-   "ptype": "Qha",
-   "color": "#914665",
-   "cells": 1746
+   "ptype": "Qhff",
+   "color": "#c07c82",
+   "cells": 1639
   },
   {
    "ptype": "Jgvm",
    "color": "#72ca8c",
-   "cells": 1549
-  },
-  {
-   "ptype": "Tp",
-   "color": "#6e9146",
-   "cells": 1501
+   "cells": 1561
   },
   {
    "ptype": "Tss",
-   "color": "#6498d8",
-   "cells": 1405
+   "color": "#46b8b9",
+   "cells": 1543
+  },
+  {
+   "ptype": "Tc",
+   "color": "#ab772b",
+   "cells": 1433
   },
   {
    "ptype": "Jgvm?",
    "color": "#733b9b",
-   "cells": 1358
+   "cells": 1369
   },
   {
    "ptype": "Kgvu",
-   "color": "#46918e",
-   "cells": 1302
-  },
-  {
-   "ptype": "Tsag",
-   "color": "#9433cc",
-   "cells": 1301
+   "color": "#b9469c",
+   "cells": 1318
   },
   {
    "ptype": "Tslt",
-   "color": "#8ac07c",
-   "cells": 1289
+   "color": "#a4cc33",
+   "cells": 1310
+  },
+  {
+   "ptype": "Tsag",
+   "color": "#4c4691",
+   "cells": 1309
   },
   {
    "ptype": "Qhay",
-   "color": "#54b946",
-   "cells": 1242
+   "color": "#9b673b",
+   "cells": 1294
   },
   {
-   "ptype": "QThg",
-   "color": "#64d895",
-   "cells": 1234
+   "ptype": "Twg",
+   "color": "#9753ac",
+   "cells": 1193
   },
   {
    "ptype": "Tsft",
-   "color": "#ac537f",
-   "cells": 1175
+   "color": "#983b9b",
+   "cells": 1191
+  },
+  {
+   "ptype": "Qhb",
+   "color": "#33cca6",
+   "cells": 1170
+  },
+  {
+   "ptype": "Qpf",
+   "color": "#aab946",
+   "cells": 1099
   },
   {
    "ptype": "Qpa",
-   "color": "#2b30ab",
-   "cells": 953
+   "color": "#854691",
+   "cells": 996
+  },
+  {
+   "ptype": "Qht",
+   "color": "#8046b9",
+   "cells": 943
   },
   {
    "ptype": "Jk",
    "color": "#ccb933",
-   "cells": 923
-  },
-  {
-   "ptype": "fsr",
-   "color": "#467791",
-   "cells": 886
-  },
-  {
-   "ptype": "Qpf",
-   "color": "#ac6a53",
-   "cells": 883
+   "cells": 932
   },
   {
    "ptype": "Qt",
-   "color": "#854691",
-   "cells": 858
+   "color": "#9b3b56",
+   "cells": 878
   },
   {
    "ptype": "QTge",
-   "color": "#cc4733",
-   "cells": 749
-  },
-  {
-   "ptype": "Qht",
-   "color": "#5374ac",
-   "cells": 641
-  },
-  {
-   "ptype": "Tc",
-   "color": "#9b3b56",
-   "cells": 635
-  },
-  {
-   "ptype": "Tswt",
-   "color": "#46b8b9",
-   "cells": 625
-  },
-  {
-   "ptype": "Qlsa",
-   "color": "#8046b9",
-   "cells": 569
+   "color": "#64d895",
+   "cells": 740
   },
   {
    "ptype": "Qhc",
-   "color": "#33cca6",
-   "cells": 568
-  },
-  {
-   "ptype": "Qhff",
    "color": "#80ab2b",
-   "cells": 464
+   "cells": 667
   },
   {
    "ptype": "KJfgs",
    "color": "#915f46",
-   "cells": 386
+   "cells": 658
+  },
+  {
+   "ptype": "Tswt",
+   "color": "#2bab67",
+   "cells": 643
+  },
+  {
+   "ptype": "Qlsa",
+   "color": "#cc3392",
+   "cells": 579
   },
   {
    "ptype": "Tsrs",
-   "color": "#a4cc33",
-   "cells": 373
+   "color": "#917b46",
+   "cells": 378
   },
   {
    "ptype": "KJgv",
@@ -233,240 +243,255 @@
    "cells": 323
   },
   {
+   "ptype": "gs",
+   "color": "#ab2b9f",
+   "cells": 307
+  },
+  {
    "ptype": "Td",
-   "color": "#8764d8",
-   "cells": 290
+   "color": "#c07cb4",
+   "cells": 285
   },
   {
    "ptype": "Jv",
    "color": "#ab2b70",
-   "cells": 217
+   "cells": 231
+  },
+  {
+   "ptype": "Qlsr",
+   "color": "#2b30ab",
+   "cells": 221
   },
   {
    "ptype": "Kfmc",
    "color": "#7553ac",
-   "cells": 212
-  },
-  {
-   "ptype": "Qlsr",
-   "color": "#3b939b",
-   "cells": 198
-  },
-  {
-   "ptype": "Qhbm",
-   "color": "#9b673b",
-   "cells": 158
+   "cells": 217
   },
   {
    "ptype": "sc",
-   "color": "#503b9b",
-   "cells": 149
-  },
-  {
-   "ptype": "Qlso",
-   "color": "#cab872",
-   "cells": 149
+   "color": "#7c92c0",
+   "cells": 203
   },
   {
    "ptype": "Tsai",
-   "color": "#d8cf64",
-   "cells": 147
+   "color": "#b97246",
+   "cells": 162
   },
   {
-   "ptype": "Tp?",
-   "color": "#4662b9",
-   "cells": 132
+   "ptype": "Qhbm",
+   "color": "#d864d3",
+   "cells": 161
+  },
+  {
+   "ptype": "Qlso",
+   "color": "#8ad864",
+   "cells": 151
   },
   {
    "ptype": "Qoa?",
-   "color": "#8ad864",
-   "cells": 131
+   "color": "#7cc0a1",
+   "cells": 137
+  },
+  {
+   "ptype": "Tp?",
+   "color": "#d8cf64",
+   "cells": 137
   },
   {
    "ptype": "Tsrp",
-   "color": "#983b9b",
-   "cells": 122
-  },
-  {
-   "ptype": "Qhb",
-   "color": "#8172ca",
-   "cells": 115
-  },
-  {
-   "ptype": "Twg",
-   "color": "#ca72af",
-   "cells": 104
-  },
-  {
-   "ptype": "Tn",
-   "color": "#c07cb4",
-   "cells": 90
-  },
-  {
-   "ptype": "QTc",
-   "color": "#9aca72",
-   "cells": 83
+   "color": "#997cc0",
+   "cells": 121
   },
   {
    "ptype": "Jmi",
    "color": "#64c5d8",
-   "cells": 79
+   "cells": 104
+  },
+  {
+   "ptype": "Tsrb",
+   "color": "#ab2b3f",
+   "cells": 94
+  },
+  {
+   "ptype": "Tn",
+   "color": "#3b9b5c",
+   "cells": 86
+  },
+  {
+   "ptype": "QTc",
+   "color": "#3b4b9b",
+   "cells": 80
   },
   {
    "ptype": "Kfmg",
    "color": "#c0aa7c",
-   "cells": 78
+   "cells": 74
+  },
+  {
+   "ptype": "Qhl",
+   "color": "#469156",
+   "cells": 72
   },
   {
    "ptype": "Tssd",
-   "color": "#ab2b3f",
-   "cells": 68
+   "color": "#ca72af",
+   "cells": 71
+  },
+  {
+   "ptype": "Tsv",
+   "color": "#d87864",
+   "cells": 60
   },
   {
    "ptype": "Tms",
-   "color": "#53aca2",
+   "color": "#ca7772",
    "cells": 51
   },
   {
+   "ptype": "Tdr",
+   "color": "#6e9146",
+   "cells": 49
+  },
+  {
    "ptype": "Kv",
-   "color": "#b9469c",
-   "cells": 47
+   "color": "#9aca72",
+   "cells": 48
+  },
+  {
+   "ptype": "Tr",
+   "color": "#2b90ab",
+   "cells": 40
   },
   {
    "ptype": "afbm",
-   "color": "#3345cc",
-   "cells": 41
-  },
-  {
-   "ptype": "af",
-   "color": "#629b3b",
+   "color": "#467791",
    "cells": 37
   },
   {
    "ptype": "Qhty",
-   "color": "#c07c82",
-   "cells": 36
+   "color": "#cab872",
+   "cells": 34
   },
   {
    "ptype": "Tsri",
-   "color": "#72caad",
-   "cells": 33
+   "color": "#53ac5f",
+   "cells": 32
+  },
+  {
+   "ptype": "af",
+   "color": "#bcc07c",
+   "cells": 31
+  },
+  {
+   "ptype": "Tci",
+   "color": "#53aca2",
+   "cells": 30
   },
   {
    "ptype": "KJfgs?",
    "color": "#46b98e",
-   "cells": 33
+   "cells": 29
   },
   {
-   "ptype": "alf",
-   "color": "#d87864",
+   "ptype": "Tsb",
+   "color": "#72caad",
    "cells": 29
   },
   {
    "ptype": "Qpt",
-   "color": "#7cc0a1",
+   "color": "#72a5ca",
    "cells": 28
-  },
-  {
-   "ptype": "Tci",
-   "color": "#33cc34",
-   "cells": 28
-  },
-  {
-   "ptype": "Tsrb",
-   "color": "#b97246",
-   "cells": 27
-  },
-  {
-   "ptype": "Tsb",
-   "color": "#2b90ab",
-   "cells": 26
-  },
-  {
-   "ptype": "Tsv",
-   "color": "#917b46",
-   "cells": 22
   },
   {
    "ptype": "Tbm?",
-   "color": "#72a5ca",
-   "cells": 21
+   "color": "#8764d8",
+   "cells": 23
+  },
+  {
+   "ptype": "alf",
+   "color": "#b94670",
+   "cells": 22
   },
   {
    "ptype": "Kfm?",
    "color": "#2bab36",
+   "cells": 17
+  },
+  {
+   "ptype": "ch",
+   "color": "#79ca72",
    "cells": 16
   },
   {
    "ptype": "KJfgc",
    "color": "#7f7cc0",
-   "cells": 15
+   "cells": 16
   },
   {
-   "ptype": "gs",
-   "color": "#b94670",
-   "cells": 13
+   "ptype": "m",
+   "color": "#8aac53",
+   "cells": 14
   },
   {
    "ptype": "Tkt",
-   "color": "#ab772b",
-   "cells": 12
+   "color": "#4662b9",
+   "cells": 14
   },
   {
-   "ptype": "Tbm",
-   "color": "#aab946",
-   "cells": 10
-  },
-  {
-   "ptype": "fgc",
-   "color": "#9753ac",
-   "cells": 8
-  },
-  {
-   "ptype": "Tstx",
-   "color": "#997cc0",
-   "cells": 8
-  },
-  {
-   "ptype": "ch",
-   "color": "#2bab67",
-   "cells": 7
-  },
-  {
-   "ptype": "Ts",
-   "color": "#ca7772",
-   "cells": 6
+   "ptype": "Kfss",
+   "color": "#46918e",
+   "cells": 13
   },
   {
    "ptype": "KJfc",
    "color": "#69ac53",
+   "cells": 13
+  },
+  {
+   "ptype": "Tbm",
+   "color": "#33cc34",
+   "cells": 10
+  },
+  {
+   "ptype": "fgc",
+   "color": "#503b9b",
+   "cells": 9
+  },
+  {
+   "ptype": "Tstx",
+   "color": "#3345cc",
+   "cells": 7
+  },
+  {
+   "ptype": "Ts",
+   "color": "#ac537f",
+   "cells": 4
+  },
+  {
+   "ptype": "QTc?",
+   "color": "#cc4733",
    "cells": 4
   },
   {
    "ptype": "fs",
-   "color": "#bcc07c",
-   "cells": 3
-  },
-  {
-   "ptype": "QTc?",
-   "color": "#3b4b9b",
+   "color": "#cc8133",
    "cells": 2
   },
   {
-   "ptype": "m",
-   "color": "#79ca72",
+   "ptype": "sp?",
+   "color": "#46b964",
+   "cells": 2
+  },
+  {
+   "ptype": "QTt",
+   "color": "#7cacc0",
    "cells": 1
   },
   {
    "ptype": "Jgb",
    "color": "#b94646",
    "cells": 1
-  },
-  {
-   "ptype": "sp?",
-   "color": "#64d8c1",
-   "cells": 1
   }
  ],
- "unmapped_cells": 97986
+ "unmapped_cells": 173891
 }

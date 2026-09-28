@@ -9,8 +9,8 @@ Owner request (2026-09-27): more detail in Napa, zoom to places across the Napa 
 | Layer | Napa Valley | Rest of California |
 |---|---|---|
 | Globe context (2 km relief, AVA outlines) | done | done, all 154 current AVAs |
-| Region frame (140 m mesh, 70 m shading, faults, towns, AVAs) | done, 55 × 72 km | not started |
-| Close-ups (17–51 m cells from ≈10 m source) | done, 16 sub-AVAs + Mount St. Helena | not started |
+| Region frame (140 m mesh, 70 m shading, faults, towns, AVAs) | done, joint Napa–Sonoma frame 76 × 77 km (Sonoma Valley included, 2026-09-28) | not started |
+| Close-ups (17–51 m cells from ≈10 m source) | done, 26 AVAs in the frame + Mount St. Helena | not started |
 | Geologic story (chapters, section panel) | done; Mount St. Helena centred | not started |
 | Soils (USDA SSURGO) | not started | not started |
 

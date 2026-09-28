@@ -191,7 +191,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
 </div>
 <div class="scalebar" id="scalebar" hidden><span id="sbKm">5 km</span><div id="sbar"></div></div>
 <div id="plcs"></div>
-<div class="locator" id="locator" style="opacity:0" aria-hidden="true"><b>Napa Valley AVA</b><svg id="locSvg" viewBox="0 0 100 130"></svg><span>Box: area shown in 3D</span></div>
+<div class="locator" id="locator" style="opacity:0" aria-hidden="true"><b id="locT">AVAs in the frame</b><svg id="locSvg" viewBox="0 0 100 130"></svg><span>Box: area shown in 3D</span></div>
 <aside class="xsec" id="sub" hidden aria-label="Animated plate cross-section">
   <header><span><b>Plates in motion</b> · W to E, 600 km across</span><button id="sdX" aria-label="Close plate animation">×</button></header>
   <canvas id="sdCv"></canvas>
@@ -202,8 +202,8 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   <canvas id="xsCv"></canvas>
   <div class="foot" id="xsNote"></div>
 </aside>
-<aside class="places" id="places" hidden aria-label="Go to a place in Napa Valley">
-  <header><span><b>Go to</b> · Napa Valley</span><button id="plX" aria-label="Close places">×</button></header>
+<aside class="places" id="places" hidden aria-label="Go to a place in the frame">
+  <header><span><b>Go to</b> · <span id="plT">Napa Valley</span></span><button id="plX" aria-label="Close places">×</button></header>
   <div class="plist" id="plist"></div>
   <div class="foot">Close-ups load finer terrain: USGS 3DEP (≈10 m source) via AWS Terrain Tiles, 17–51 m cells. You can also click an AVA name on the map.</div>
 </aside>
@@ -289,7 +289,7 @@ const CHAPTERS_BUILTIN = /*CHAPTERS*/[
  {"id": "ch_3_0ma", "age_ma": 3, "span_ma": [3.45, 2.95], "tag": "≈3.0 Ma", "title": "The Mount St. Helena volcano", "body": "Thick rhyolite lava builds the summit area, dated to about 3 million years ago. The volcanic center swells into the highest point for miles. Its true height and shape at this moment are unknown; this peak is an artist's version.", "visual_class": "illustration", "key": false},
  {"id": "ch_2_85ma", "age_ma": 2.85, "span_ma": [2.93, 2.83], "tag": "≈2.85 Ma", "title": "Caldera eruption", "body": "An enormous explosive eruption empties the magma chamber. Hot ash flows race across the land and weld into rock, and the volcano's top collapses into a caldera. The welded tuff at today's summit comes from eruptions like this one.", "visual_class": "illustration", "key": true},
  {"id": "ch_1ma", "age_ma": 1, "span_ma": [1.4, 0.45], "tag": "1 Ma", "title": "Uplift and erosion", "body": "Faults keep squeezing and lifting the Mayacamas while rain and streams tear the old volcano down. Watch the channels: runoff gathers into streams that cut back into the slopes, and the gravel they carry spreads over the valley floors. The hard welded tuff resists and is left standing high.", "visual_class": "illustration", "key": false, "dwell_s": 9},
- {"id": "today", "age_ma": 0, "span_ma": [0.0002, 0], "tag": "Today", "title": "The last two centuries to today", "body": "The peak rises about 1,320 m above Knights Valley and the head of Napa Valley. Vineyards spread across the valley floors from the mid-1800s. Volcanic soils on its flanks and river-laid gravels on the valley floors are part of the terroir of the vineyards below. Contours every 50 m; streams traced from the terrain. The gold line is the Napa Valley AVA and the pale lines are AVAs inside it, like Calistoga and Diamond Mountain District; the inset shows the whole AVA with the area drawn in 3D boxed.", "visual_class": "measured-approx", "key": true, "dwell_s": 10}
+ {"id": "today", "age_ma": 0, "span_ma": [0.0002, 0], "tag": "Today", "title": "The last two centuries to today", "body": "The peak rises about 1,320 m above Knights Valley and the head of Napa Valley. Vineyards spread across the valley floors from the mid-1800s. Volcanic soils on its flanks and river-laid gravels on the valley floors are part of the terroir of the vineyards below. Contours every 50 m; streams traced from the terrain. The gold lines are the Napa Valley and Sonoma Valley AVAs and the pale lines are the smaller AVAs in the frame, like Calistoga and Sonoma Mountain; the inset shows them all with the area drawn in 3D boxed.", "visual_class": "measured-approx", "key": true, "dwell_s": 10}
 ]/*END_CHAPTERS*/;
 const VC2CLS = {"reconstruction-stylized":"recon", "illustration":"illus", "measured-approx":"approx"};
 const toCh = c => ({id:c.id, age:c.age_ma, span:c.span_ma, tag:c.tag, t:c.title, b:c.body, cls:VC2CLS[c.visual_class], key:c.key?1:0, scale:c.scale, dur:c.dwell_s});
@@ -473,7 +473,7 @@ const markerDir = new THREE.Vector3();
 
 /* =================================================================== REGION
    Which measured terrain frame the diorama covers. Scene units are km, x east and z south of the
-   GNIS summit point. Default is the whole Napa Valley frame; ?region=mt_st_helena gives the
+   GNIS summit point. Default is the joint Napa–Sonoma frame (region id napa_valley); ?region=mt_st_helena gives the
    original 30 km block. Without any terrain file the block falls back to procedural terrain. */
 const GNIS_UTM=[531892.63,4280129.75];
 const REG = await (async function loadRegion(){
@@ -485,14 +485,16 @@ const REG = await (async function loadRegion(){
                                        fetch(base+".bin").then(r=>{ if(!r.ok) throw 0; return r.arrayBuffer(); })]);
       const g=m.browser_grid, nx=g.cols||g.cells, nz=g.rows||g.cells, h=new Int16Array(buf); if(h.length!==nx*nz) continue;
       const b=m.aoi.bbox_utm, id=m.aoi.region||"mt_st_helena";
-      return {id, h, nx, nz, x0:(b[0]-GNIS_UTM[0])/1000, x1:(b[2]-GNIS_UTM[0])/1000, z0:-(b[3]-GNIS_UTM[1])/1000, z1:-(b[1]-GNIS_UTM[1])/1000};
+      return {id, parents:m.aoi.parents||[id==="mt_st_helena"?"napa_valley":id], name:m.aoi.name||(id==="napa_valley"?"Napa Valley":"30 km block"), h, nx, nz, x0:(b[0]-GNIS_UTM[0])/1000, x1:(b[2]-GNIS_UTM[0])/1000, z0:-(b[3]-GNIS_UTM[1])/1000, z1:-(b[1]-GNIS_UTM[1])/1000};
     }catch(e){}
   }
-  return {id:"procedural", h:null, nx:224, nz:224, x0:-15, x1:15, z0:-15, z1:15};
+  return {id:"procedural", parents:["napa_valley"], h:null, nx:224, nz:224, x0:-15, x1:15, z0:-15, z1:15};
 })();
 const X0=REG.x0, X1=REG.x1, Z0=REG.z0, Z1=REG.z1, SX=X1-X0, SZ=Z1-Z0, NX=REG.nx, NZ=REG.nz;
 const CXm=(X0+X1)/2, CZm=(Z0+Z1)/2, LEXT=Math.max(SX,SZ), realDEM=!!REG.h;
-const REG_LABEL = REG.id==="napa_valley" ? `Napa Valley · ${Math.round(SX)} × ${Math.round(SZ)} km` : "30 km block · North Bay";
+const REG_LABEL = REG.id!=="mt_st_helena"&&REG.name ? `${REG.name[0].toUpperCase()+REG.name.slice(1)} · ${Math.round(SX)} × ${Math.round(SZ)} km` : "30 km block · North Bay";
+const REG_SHORT = REG.id==="mt_st_helena" ? "Napa Valley" : (REG.name||"Napa Valley").replace(/^./,c=>c.toUpperCase());
+$("plT").textContent=REG_SHORT; if(REG.id==="mt_st_helena") $("locT").textContent="Napa Valley AVA";
 // Finer shading grid for the whole frame (AWS Terrain Tiles, USGS 3DEP ≈10 m source), when present.
 async function loadGrid(base){
   const [m,buf]=await Promise.all([fetch(base+".json").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
@@ -672,7 +674,8 @@ vec3 fogit(vec3 col){ float f=smoothstep(uFogN,uFogF,distance(vW,cameraPosition)
 const FAULTS=[
  {n:"Maacama Fault", r:"≈8 mm/yr", pts:[[-1.13,18.79],[-9.52,5.92],[-14.66,-1.27],[-28.25,-16.19]]},
  {n:"Collayomi Fault", r:"≈0.5 mm/yr", pts:[[-18.67,-30.09],[-13.73,-24.45],[-6.19,-14.91],[1.96,-9.38],[6.34,-6.33]]},
- {n:"Rodgers Creek–Healdsburg Fault", r:"≈6 mm/yr", pts:[[17.16,55.67],[13.07,51.24],[8.1,44.26],[-0.37,33.97],[-3.36,28.88],[-6.21,22.37],[-10.98,16.28]]},
+ {n:"Rodgers Creek–Healdsburg Fault", r:"≈6 mm/yr", pts:[[17.16,55.67],[13.07,51.24],[8.1,44.26],[-0.37,33.97],[-3.36,28.88],[-6.21,22.37],[-10.98,16.28],[-20.33,3.55],[-31.57,-10.29]]},
+ {n:"San Andreas Fault (North Coast)", r:"≈18 mm/yr", pts:[[-12.16,71.58],[-18.65,63.47],[-22.66,58.09],[-29.12,49.19],[-31.95,44.5]]},
  {n:"West Napa Fault", r:"≈1.3 mm/yr", pts:[[13.23,17.94],[22.18,32.87],[27.54,39.97],[30.92,49.99],[34.29,55.8]]},
  {n:"Bennett Valley Fault", r:"≈1 mm/yr", pts:[[14.53,49.16],[8.62,41.77],[3.76,32.54],[-1.04,26.03],[-1.84,20.97]]},
  {n:"Green Valley Fault", r:"≈4 mm/yr", pts:[[35.93,27.94],[41.51,48.13],[44.08,56.88],[46.09,61.87]]},
@@ -950,12 +953,12 @@ $("geoBtn").onclick=()=>{ GEO.on=!GEO.on; $("geoBtn").setAttribute("aria-pressed
     let c=[531.89263,4280.12975];                       // GNIS centre (UTM km) if terrain.json is missing
     try{ const m=await fetch("assets/terrain.json").then(r=>r.json()); c=m.aoi.center_utm.map(v=>v/1000); }catch(e){}
     const toS=([e,n])=>[e-c[0], -(n-c[1])];            // scene km: x east, z south
-    AVA.data=d.avas.map(a=>({id:a.id, name:a.name, parent:a.id==="napa_valley", rings:a.rings.map(r=>r.map(toS))}));
+    AVA.data=d.avas.map(a=>({id:a.id, name:a.name, parent:!!a.parent||a.id==="napa_valley", rings:a.rings.map(r=>r.map(toS))}));
     lUni.uAva.value=avaTexture(X0,Z0,SX,SZ);
     // label each AVA at the mean of its vertices that fall inside the block
     AVA.data.forEach(a=>{ const inside=a.rings.flat().filter(([x,z])=>inExt(x,z,1)); if(inside.length<3) return;
       const x=inside.reduce((s,q)=>s+q[0],0)/inside.length, z=inside.reduce((s,q)=>s+q[1],0)/inside.length;
-      const q={x,z,el:mkLab(a.parent?"Napa Valley AVA":a.name,"plc ava")}; q.el.dataset.loc=a.parent?"":a.id; q.i=idxAt(x,z); if(q.i>=0) AVA.labels.push(q); else q.el.remove(); });
+      const q={x,z,el:mkLab(a.parent?a.name+" AVA":a.name,"plc ava")}; q.el.dataset.loc=a.parent?"":a.id; q.i=idxAt(x,z); if(q.i>=0) AVA.labels.push(q); else q.el.remove(); });
     // locator: whole valley, with the 30 km block
     const all=AVA.data.flatMap(a=>a.rings.flat()).concat([[X0,Z0],[X1,Z1]]);
     const xs=all.map(q=>q[0]), zs=all.map(q=>q[1]); const x0=Math.min(...xs), x1=Math.max(...xs), z0=Math.min(...zs), z1=Math.max(...zs);
@@ -1017,8 +1020,8 @@ function renderPicker(){
   const cur=LOC.cur?LOC.cur.id:"";
   const btn=(id,name,sub)=>`<button data-loc="${id}" aria-current="${id===cur}">${name}${sub?`<small>${sub}</small>`:""}</button>`;
   const places=LOC.list.filter(q=>q.kind==="place"), avas=LOC.list.filter(q=>q.kind!=="place");
-  $("plist").innerHTML=btn("","Whole valley",Math.round(SX)+" × "+Math.round(SZ)+" km")+places.map(q=>btn(q.id,q.name,Math.round(q.cell)+" m")).join("")
-    +"<hr>"+avas.map(q=>btn(q.id,q.name.replace(" of Napa Valley",""),Math.round(q.cell)+" m")).join("");
+  $("plist").innerHTML=btn("","Whole frame",Math.round(SX)+" × "+Math.round(SZ)+" km")+places.map(q=>btn(q.id,q.name,Math.round(q.cell)+" m")).join("")
+    +"<hr>"+avas.map(q=>btn(q.id,q.name.replace(/ of Napa Valley| Sonoma County/,""),Math.round(q.cell)+" m")).join("");
 }
 function openPlaces(on){
   $("places").hidden=!on; $("plBtn").setAttribute("aria-pressed",on); document.body.classList.toggle("pl-open",on);
@@ -1058,7 +1061,7 @@ async function selectLoc(id){
    What used to be the separate globe page: every current California AVA on the present-day globe,
    coloured by the expansion plan (assets/regions/order.json, scripts/region_order.py), with region
    names you can click to fly there. A planning layer, not legal boundaries. */
-const RGN={labels:[], fly:null, sel:null, order:[], live:REG.id==="mt_st_helena"?"napa_valley":REG.id, want:null};
+const RGN={labels:[], fly:null, sel:null, order:[], live:REG.id==="mt_st_helena"?"napa_valley":REG.id, lives:new Set([REG.id==="mt_st_helena"?"napa_valley":REG.id, ...REG.parents]), want:null};
 const RG_COL={live:"#ffd27a", next:"#7fd1a8", later:"#9fb7ff"};
 function rgCentroid(rings){ let big=rings[0]; rings.forEach(r=>{ if(r.length>big.length) big=r; });
   let A=0,cx=0,cy=0; for(let i=0,j=big.length-1;i<big.length;j=i++){ const [x0,y0]=big[j],[x1,y1]=big[i], f=x0*y1-x1*y0; A+=f; cx+=(x0+x1)*f; cy+=(y0+y1)*f; }
@@ -1068,7 +1071,8 @@ function rgCentroid(rings){ let big=rings[0]; rings.forEach(r=>{ if(r.length>big
     const [av,ord]=await Promise.all([fetch("assets/globe/ca_avas.json").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
       fetch("assets/regions/order.json").then(r=>r.ok?r.json():{order:[]}).catch(()=>({order:[]}))]);
     RGN.order=ord.order||[]; const rank={}; RGN.order.forEach((o,i)=>rank[o.id]=i);
-    const kind=id=> id===RGN.live ? "live" : rank[id]===undefined ? null : rank[id]<3 ? "next" : "later";
+    (ord.params&&ord.params.mapped||"").split(",").filter(Boolean).forEach(id=>RGN.lives.add(id));
+    const kind=id=> RGN.lives.has(id) ? "live" : rank[id]===undefined ? null : rank[id]<3 ? "next" : "later";
     const Bx=gUni.uAvBox.value, W=2048, Hh=Math.round(W*(Bx.w-Bx.y)/(Bx.z-Bx.x)/Math.cos(37*D2R));
     const cv=document.createElement("canvas"); cv.width=W; cv.height=Hh; const g=cv.getContext("2d");
     const P=([lo,la])=>[(lo-Bx.x)/(Bx.z-Bx.x)*W,(Bx.w-la)/(Bx.w-Bx.y)*Hh];
@@ -1081,7 +1085,7 @@ function rgCentroid(rings){ let big=rings[0]; rings.forEach(r=>{ if(r.length>big
     const t=new THREE.CanvasTexture(cv); t.flipY=false; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); gUni.uAvG.value=t;
     // clickable names: the live region and the next dozen in the plan
     const byId=Object.fromEntries(av.avas.map(a=>[a.id,a]));
-    [RGN.live, ...RGN.order.slice(0,12).map(o=>o.id)].forEach((id,i)=>{ const a=byId[id]; if(!a) return;
+    [...new Set([RGN.live, ...REG.parents]), ...RGN.order.slice(0,12).map(o=>o.id)].forEach((id,i)=>{ const a=byId[id]; if(!a) return;
       const [lon,lat]=rgCentroid(a.rings), k=kind(id), e=document.createElement("button");
       e.className="plc rgn"; e.style.setProperty("--c",RG_COL[k]); e.textContent=a.name; e.hidden=true; $("plcs").appendChild(e);
       const q={id, name:a.name, lat, lon, k, i:rank[id], rule:(RGN.order[rank[id]]||{}).rule, cu:(RGN.order[rank[id]]||{}).close_ups||[], size:(RGN.order[rank[id]]||{}).size_km||40, el:e, w:a.name.length*7+16};
@@ -1108,15 +1112,15 @@ function rgFly(lat,lon,dist,onEnd){ autoCam=false; RGN.fly={lat,lon,dist,t:0,dur
 function rgOverview(){ RGN.sel=null; if(ageOf(p)>0.5) { goTo(CH.length-1); } lastCh=-1; rgFly(38.3,-121.9,650); }   // the North Coast, where the plan starts
 function rgHome(){ RGN.sel=null; lastCh=-1; $("cAct").hidden=true; rgFly(null,null,0,()=>{ autoCam=true; }); }
 function rgSelect(q){
-  if(q.id===RGN.live){ rgHome(); return; }
+  if(RGN.lives.has(q.id)){ rgHome(); return; }
   RGN.sel=q; if(ageOf(p)>0.5) goTo(CH.length-1);
   rgFly(q.lat,q.lon,Math.max(60,q.size*1.8));
   setTimeout(()=>{ // after goTo's card swap
     $("cEye").textContent = q.k==="next" ? `Next up · #${q.i+1} in the expansion order` : `Planned · #${q.i+1} in the expansion order`;
     $("cTitle").textContent=q.name;
-    $("cBody").textContent=`Not mapped in detail yet (${q.rule||"in the plan"}). When the autopilot reaches it, it becomes a 3D block like Napa Valley's`+(q.cu.length?`, with close-ups of ${q.cu.length} AVA${q.cu.length>1?"s":""} inside it.`:".")+" The outline is from the UC Davis AVA Project; the relief around it is present-day terrain.";
+    $("cBody").textContent=`Not mapped in detail yet (${q.rule||"in the plan"}). When the autopilot reaches it, it becomes a 3D block like Napa and Sonoma's`+(q.cu.length?`, with close-ups of ${q.cu.length} AVA${q.cu.length>1?"s":""} inside it.`:".")+" The outline is from the UC Davis AVA Project; the relief around it is present-day terrain.";
     $("cCls").innerHTML=`<b style="--c:var(--approx)">■</b> Planning layer · not a legal boundary`;
-    glActions([["Back to Napa Valley",true,rgHome],["All regions",false,rgOverview]].map(([t,pri,f])=>{ const b=document.createElement("button"); b.textContent=t; if(pri) b.className="pri"; b.onclick=f; return b; }));
+    glActions([["Back to "+REG_SHORT,true,rgHome],["All regions",false,rgOverview]].map(([t,pri,f])=>{ const b=document.createElement("button"); b.textContent=t; if(pri) b.className="pri"; b.onclick=f; return b; }));
   }, reduce?0:300);
 }
 
@@ -1571,7 +1575,10 @@ function setCompass(deg){ rose.setAttribute("transform",`rotate(${deg.toFixed(1)
 // Towns, positioned from their coordinates relative to the GNIS summit point (approximate).
 const PLACES=[{t:"Calistoga",x:4.72,z:10.01},{t:"Middletown",x:1.56,z:-9.24},{t:"Knights Valley",x:-4.91,z:3.26},
  {t:"St. Helena",x:14.29,z:18.13},{t:"Rutherford",x:18.52,z:23.22},{t:"Oakville",x:20.38,z:25.67},{t:"Yountville",x:23.92,z:29.56},
- {t:"Napa",x:30.46,z:41.07},{t:"American Canyon",x:32.85,z:54.65},{t:"Angwin",x:16.04,z:10.28},{t:"Pope Valley",x:17.95,z:5.86}].filter(q=>inExt(q.x,q.z,0.5));
+ {t:"Napa",x:30.46,z:41.07},{t:"American Canyon",x:32.85,z:54.65},{t:"Angwin",x:16.04,z:10.28},{t:"Pope Valley",x:17.95,z:5.86},
+ {t:"Sonoma",x:15.50,z:41.79},{t:"Glen Ellen",x:9.67,z:33.81},{t:"Kenwood",x:7.73,z:28.36},{t:"Santa Rosa",x:-5.71,z:24.30},
+ {t:"Petaluma",x:-0.10,z:48.47},{t:"Rohnert Park",x:-5.77,z:36.59},{t:"Sebastopol",x:-16.52,z:29.68},{t:"Windsor",x:-15.89,z:13.59},
+ {t:"Healdsburg",x:-20.50,z:6.57}].filter(q=>inExt(q.x,q.z,0.5));
 PLACES.forEach(q=>{ q.el=document.createElement("div"); q.el.className="plc"; q.el.textContent=q.t; q.el.hidden=true; $("plcs").appendChild(q.el);
   q.i=idxAt(q.x,q.z); });
 const pl3=new THREE.Vector3(), camR=new THREE.Vector3();

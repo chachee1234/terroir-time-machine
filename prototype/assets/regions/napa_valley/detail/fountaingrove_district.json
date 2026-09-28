@@ -10,26 +10,26 @@
  "resampling": "bilinear from the tile mosaic at each UTM cell centre",
  "product": "sub-AVA close-up",
  "region": "napa_valley",
- "ava_id": "wild_horse_valley",
- "name": "Wild Horse Valley",
+ "ava_id": "fountaingrove_district",
+ "name": "Fountaingrove District",
  "bbox_utm": [
-  564314.0,
-  4233243.6,
-  575819.3,
-  4244748.9
+  522402.9,
+  4252859.1,
+  542550.2,
+  4273006.5
  ],
  "ava_bbox_utm": [
-  568514.8,
-  4234743.6,
-  571618.6,
-  4243248.9
+  523902.9,
+  4256713.8,
+  541050.2,
+  4269151.8
  ],
  "cols": 512,
  "rows": 512,
- "cell_m": 22.515,
+ "cell_m": 39.427,
  "range_m": [
-  10.64,
-  681.78
+  34.42,
+  831.16
  ],
- "sha256": "8593b6d7923ba21aff395310d4242f824e5348c7eda40837aebc3d002a130fb0"
+ "sha256": "fb918a94e83f7ca794767ef7f8aa49a84145e287677156a0ec1108f5ff9a6abc"
 }
