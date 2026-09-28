@@ -86,6 +86,21 @@ def validate(manifest, root=ROOT, registered_ids=None):
             _check_refs(frame.get("asset_ids"), set(scene.get("asset_ids") or []),
                         f"scene '{sid}' keyframe {age} Ma", "scene asset", errors)
 
+    # Viewer chapters: unique ids, oldest to youngest, span contains age
+    chapters = manifest.get("chapters", [])
+    _check_unique(chapters, "chapters", errors)
+    previous_age = None
+    for ch in chapters:
+        cid, age, span = ch.get("id"), ch.get("age_ma"), ch.get("span_ma")
+        if age is None:
+            continue
+        if previous_age is not None and age > previous_age:
+            errors.append(f"chapter '{cid}': chapters not ordered oldest to youngest")
+        previous_age = age
+        if span is not None:
+            if len(span) != 2 or not span[0] >= age >= span[1]:
+                errors.append(f"chapter '{cid}': span_ma {span} must satisfy span_ma[0] >= age_ma {age} >= span_ma[1]")
+
     # Cross-reference integrity
     for scene in scenes:
         where = f"scene '{scene.get('id')}'"
@@ -128,6 +143,24 @@ def validate(manifest, root=ROOT, registered_ids=None):
     return errors, warnings
 
 
+def validate_plates(plates):
+    """Errors for data/plates/stylized.json: labelled stylized, keyframes oldest to youngest."""
+    errors = []
+    if plates.get("class") != "reconstruction-stylized":
+        errors.append("plates: class must be 'reconstruction-stylized'")
+    if not plates.get("label"):
+        errors.append("plates: a visible label is required")
+    for pl in plates.get("plates", []):
+        ages = [k[0] for k in pl.get("keyframes", [])]
+        if len(ages) < 2:
+            errors.append(f"plate '{pl.get('id')}': needs at least two keyframes")
+        elif any(a < b for a, b in zip(ages, ages[1:])):
+            errors.append(f"plate '{pl.get('id')}': keyframes not ordered oldest to youngest")
+        elif ages[-1] != 0:
+            errors.append(f"plate '{pl.get('id')}': last keyframe must be today (0 Ma)")
+    return errors
+
+
 def schema_errors(manifest, schema_path):
     """Full JSON Schema check if jsonschema is available; None if skipped."""
     try:
@@ -165,6 +198,11 @@ def main(argv):
         warnings.append("jsonschema not installed; full schema check skipped")
     else:
         errors = schema + errors
+
+    plates_path = os.path.join(ROOT, "data", "plates", "stylized.json")
+    if os.path.isfile(plates_path):
+        with open(plates_path) as fh:
+            errors += validate_plates(json.load(fh))
 
     for msg in errors:
         print(f"ERROR: {msg}")
