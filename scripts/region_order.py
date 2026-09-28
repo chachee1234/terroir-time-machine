@@ -117,7 +117,7 @@ def order(avas, start="sonoma_valley", mapped=("napa_valley",), max_km=80.0, tou
         ps = [byname[w] for w in avas[k]["within"] if w in byname and byname[w] not in done and not covered(byname[w])]
         return min(ps, key=lambda q: size_km(avas[q])) if ps else k
 
-    if start in avas:
+    if start in avas and start not in done:
         take(start, "owner's choice", 0.0)
     while len(seq) < limit:
         todo = [k for k in frames if k not in done and not covered(k)]

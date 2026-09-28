@@ -10,26 +10,26 @@
  "resampling": "bilinear from the tile mosaic at each UTM cell centre",
  "product": "sub-AVA close-up",
  "region": "napa_valley",
- "ava_id": "wild_horse_valley",
- "name": "Wild Horse Valley",
+ "ava_id": "knights_valley",
+ "name": "Knights Valley",
  "bbox_utm": [
-  564314.0,
-  4233243.6,
-  575819.3,
-  4244748.9
+  515603.1,
+  4266646.1,
+  537975.3,
+  4289018.3
  ],
  "ava_bbox_utm": [
-  568514.8,
-  4234743.6,
-  571618.6,
-  4243248.9
+  520784.1,
+  4268146.1,
+  532794.4,
+  4287518.3
  ],
  "cols": 512,
  "rows": 512,
- "cell_m": 22.515,
+ "cell_m": 43.781,
  "range_m": [
-  10.64,
-  681.78
+  32.82,
+  1320.0
  ],
- "sha256": "8593b6d7923ba21aff395310d4242f824e5348c7eda40837aebc3d002a130fb0"
+ "sha256": "e0d3dc2092d507c5518d6ac9db975e44fd17ab8cb76a0ad86c912dc4af5a3ce3"
 }

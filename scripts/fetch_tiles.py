@@ -8,6 +8,8 @@ this replaces the manual Mac step for detail products. Tiles are cached, not com
 
   data/raw/tiles/terrarium/<z>/<x>/<y>.png   untouched tiles (git-ignored)
   data/manifest.json                         one entry per product: template, zoom, tile count, SHA-256
+  <assets_dir>/terrain.{bin,json}            with --frame-grid: the region's mesh grid (browser_cells on the long
+                                             side), block means of cell_m samples, in fetch_terrain.py's format
   <assets_dir>/dem_hi.{bin,json}             finer shading grid for the whole region frame
   <assets_dir>/detail/<id>.{bin,json}        one close-up grid per sub-AVA (Napa Valley's 16) and per
                                              extra "close_ups" entry in the region file
@@ -16,8 +18,10 @@ this replaces the manual Mac step for detail products. Tiles are cached, not com
 Grids are Int16, little-endian, row 0 = north, on NAD83 / UTM zone 10N cells; the value times
 `scale` (0.1) is metres. Usage:
 
-  fetch_tiles.py --region data/regions/napa_valley.json [--zoom 13] [--hi-cells 1024]
+  fetch_tiles.py --region data/regions/napa_valley.json [--frame-grid] [--zoom 13] [--hi-cells 1024]
                  [--detail-cell 15] [--detail-max 512] [--offline]
+
+Close-ups are made for every AVA in the region's boundary file except its "parents" (frame-sized AVAs).
 """
 import argparse
 import concurrent.futures
@@ -34,7 +38,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from fetch_terrain import utm_from_geographic  # noqa: E402
+from fetch_terrain import region_request, utm_from_geographic  # noqa: E402
 
 TEMPLATE = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
 RIGHTS = ("AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global "
@@ -205,6 +209,62 @@ def sample_grid(mos, bbox, cols, rows):
     return out, lo, hi
 
 
+def block_mean_grid(mos, bbox, w, h, nx, ny):
+    """fetch_terrain.py's browser grid from tiles: sample the w x h raw cell centres, block-mean to nx x ny.
+    Returns (grid, raw min, raw max, raw max-cell UTM)."""
+    e0, n0, e1, n1 = bbox
+    ce, cn = (e1 - e0) / w, (n1 - n0) / h
+    acc, cnt = [0.0] * (nx * ny), [0] * (nx * ny)
+    colmap = [x * nx // w for x in range(w)]
+    lo, hi, at = 1e9, -1e9, None
+    for y in range(h):
+        n = n1 - (y + 0.5) * cn
+        row = (y * ny // h) * nx
+        for x in range(w):
+            e = e0 + (x + 0.5) * ce
+            v = mos.sample(*geographic_from_utm(e, n))
+            if v < lo:
+                lo = v
+            if v > hi:
+                hi, at = v, (round(e, 1), round(n, 1))
+            k = row + colmap[x]
+            acc[k] += v
+            cnt[k] += 1
+    grid = array("h", (round(a / c) for a, c in zip(acc, cnt)))
+    if sys.byteorder != "little":
+        grid.byteswap()
+    return grid, lo, hi, at
+
+
+def write_frame_grid(region, mos, common, assets):
+    """terrain.{bin,json} for the region frame, in the same layout fetch_terrain.py writes from 3DEP."""
+    bbox = list(region["bbox_utm"])
+    w, h, nx, ny = region_request(region)
+    print(f"{region['id']}: mesh grid {nx}x{ny} from {w}x{h} samples at {region['cell_m']} m", flush=True)
+    grid, lo, hi, at = block_mean_grid(mos, bbox, w, h, nx, ny)
+    binpath = assets / "terrain.bin"
+    binpath.parent.mkdir(parents=True, exist_ok=True)
+    binpath.write_bytes(grid.tobytes())
+    sha = hashlib.sha256(binpath.read_bytes()).hexdigest()
+    meta = {"source": common["source"], "tile_template": common["tile_template"], "zoom": common["zoom"],
+            "fetched": common["fetched"], "rights": common["rights"], "horizontal_crs": common["horizontal_crs"],
+            "vertical": "metres; 3DEP 1/3 arc-second in the United States, ETOPO1 offshore, as mosaicked by Terrain Tiles",
+            "note": "Replaces the 3DEP ImageServer request (blocked from the cloud sandbox). Samples are bilinear from the "
+                    "z13 tile mosaic (~15 m pixels) at each raw cell centre.",
+            "aoi": {"description": region["description"], "region": region["id"], "name": region.get("name", region["id"]), "parents": region.get("parents") or [region["id"]],
+                    "bbox_utm": bbox, "center_utm": [round((bbox[0] + bbox[2]) / 2, 2), round((bbox[1] + bbox[3]) / 2, 2)]},
+            "raw": {"width": w, "height": h, "cell_m": float(region["cell_m"]), "nodata_cells": 0,
+                    "note": "sampled on the fly from cached tiles in data/raw/tiles/, not stored"},
+            "stats_raw_m": {"min": round(lo, 2), "max": round(hi, 2), "max_cell_utm": list(at)},
+            "browser_grid": {"file": str(binpath.relative_to(ROOT / "prototype")), "sha256": sha,
+                             "encoding": "int16 little-endian, meters, row 0 = north", "cols": nx, "rows": ny,
+                             "cell_m": round((bbox[2] - bbox[0]) / nx, 3), "resampling": "block mean from raw samples",
+                             "nodata": -32768, "vertical_exaggeration_default": 1}}
+    (assets / "terrain.json").write_text(json.dumps(meta, indent=2) + "\n")
+    print(f"  {nx}x{ny} @ {meta['browser_grid']['cell_m']} m, raw {lo:.1f}..{hi:.1f} m, max at {at}", flush=True)
+    return {"product": "region mesh grid", "sha256": sha, "file": "terrain"}
+
+
 def write_grid(path, grid, meta):
     path.parent.mkdir(parents=True, exist_ok=True)
     data = grid.tobytes()
@@ -219,7 +279,7 @@ def ava_features(region):
     for f in g["features"]:
         geom = f["geometry"]
         polys = geom["coordinates"] if geom["type"] == "MultiPolygon" else [geom["coordinates"]]
-        yield f["properties"], [c for poly in polys for ring in poly for c in ring]
+        yield dict(f["properties"], name=f["properties"]["name"].strip()), [c for poly in polys for ring in poly for c in ring]
 
 
 def close_up_features(region):
@@ -242,6 +302,7 @@ def main():
     ap.add_argument("--detail-max", type=int, default=512, help="max close-up cells per side")
     ap.add_argument("--detail-pad", type=float, default=1500.0, help="padding around each sub-AVA (m)")
     ap.add_argument("--offline", action="store_true", help="use cached tiles only")
+    ap.add_argument("--frame-grid", action="store_true", help="also write the region mesh grid terrain.{bin,json}")
     a = ap.parse_args()
 
     region = json.loads((ROOT / a.region).read_text())
@@ -255,17 +316,19 @@ def main():
               "encoding": "Int16 little-endian, row 0 = north", "scale": SCALE,
               "resampling": "bilinear from the tile mosaic at each UTM cell centre"}
 
+    products = [write_frame_grid(region, mos, common, assets)] if a.frame_grid else []
     cols, rows = grid_shape(frame, long_cells=a.hi_cells)
     print(f"{rid}: shading grid {cols}x{rows} from {len(mos.files)} z{a.zoom} tiles", flush=True)
     grid, lo, hi = sample_grid(mos, frame, cols, rows)
-    products = [write_grid(assets / "dem_hi", grid, dict(common, product="region shading grid", region=rid,
+    products += [write_grid(assets / "dem_hi", grid, dict(common, product="region shading grid", region=rid,
                 bbox_utm=frame, cols=cols, rows=rows, cell_m=round((frame[2] - frame[0]) / (cols - 1), 3),
                 range_m=[round(lo, 2), round(hi, 2)]))]
 
     index = []
     feats = []
+    parents = set(region.get("parents") or [rid])
     for props, coords in ava_features(region):
-        if props["ava_id"] != rid:
+        if props["ava_id"] not in parents:
             us = [utm_from_geographic(la, lo_) for lo_, la in coords]
             feats.append((dict(props, kind="ava"), [min(u[0] for u in us), min(u[1] for u in us),
                                                     max(u[0] for u in us), max(u[1] for u in us)], a.detail_pad))
@@ -298,8 +361,8 @@ def main():
     entries[:] = [e for e in entries if e.get("id") != mid]
     entries.append({"id": mid, "source": common["source"], "url_template": TEMPLATE, "zoom": a.zoom,
                     "tiles": len(mos.files), "tiles_sha256": mos.digest(), "fetched": today, "rights": RIGHTS,
-                    "derived": [{"file": str((assets / ("dem_hi" if p["product"] == "region shading grid" else
-                                  "detail/" + p["ava_id"])).relative_to(ROOT)) + ".bin", "sha256": p["sha256"]}
+                    "derived": [{"file": str((assets / (p.get("file") or ("dem_hi" if p["product"] == "region shading grid" else
+                                  "detail/" + p["ava_id"]))).relative_to(ROOT)) + ".bin", "sha256": p["sha256"]}
                                  for p in products]})
     man_path.write_text(json.dumps(man, indent=2) + "\n")
     print(f"{len(products)} grids written, {len(mos.files)} tiles, manifest id {mid}")

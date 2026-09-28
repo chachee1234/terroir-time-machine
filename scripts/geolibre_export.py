@@ -129,15 +129,17 @@ def region_features(rid):
         fc = json.loads((ROOT / r["boundary"]).read_text())["features"]
         props = lambda p: {"name": p["name"], "ava_id": p["ava_id"], "established": p.get("created"),
                            "within": p.get("within"), "source": "UC Davis AVA Project"}
+        parents = r.get("parents") or [rid]                           # frame-sized AVAs; the rest are close-ups
         main = [{"type": "Feature", "properties": props(f["properties"]), "geometry": round_geom(f["geometry"])}
-                for f in fc if f["properties"]["ava_id"] == rid]
+                for f in fc if f["properties"]["ava_id"] in parents]
         subs = [{"type": "Feature", "properties": props(f["properties"]), "geometry": round_geom(f["geometry"])}
-                for f in fc if f["properties"]["ava_id"] != rid]
+                for f in fc if f["properties"]["ava_id"] not in parents]
         x0, y0, x1, y1 = r["bbox_utm"]
         ring = [rnd(geographic_from_utm(e, n)[::-1]) for e, n in ((x0, y0), (x1, y0), (x1, y1), (x0, y1), (x0, y0))]
         frame = {"type": "Feature", "properties": {"name": "Viewer 3D frame", "note": r["description"]},
                  "geometry": {"type": "Polygon", "coordinates": [ring]}}
-        return main[0]["properties"]["name"], main, subs, "mapped", frame
+        name = " and ".join(f["properties"]["name"] for f in main)
+        return name, main, subs, "mapped", frame
     avas = {a["id"]: a for a in json.loads(CA_AVAS.read_text())["avas"]}
     if rid not in avas:
         raise SystemExit(f"unknown region {rid}")
@@ -156,10 +158,10 @@ def project(rid, faults):
     if frame:
         layers.append(layer(f"ttm-{rid}-frame", "Viewer 3D frame (not geology)", [frame],
                             fillOpacity=0, strokeColor="#9aa3ad", strokeWidth=1.5))
-    layers.append(layer(f"ttm-{rid}-ava", f"{name} AVA", main, fillColor="#ffd27a", fillOpacity=0.08,
+    layers.append(layer(f"ttm-{rid}-ava", f"{name} AVA" + ("s" if len(main) > 1 else ""), main, fillColor="#ffd27a", fillOpacity=0.08,
                         strokeColor="#d9a520", strokeWidth=2.5))
     if subs:
-        layers.append(layer(f"ttm-{rid}-subavas", "AVAs inside it", subs, fillColor="#7fd1a8", fillOpacity=0.12,
+        layers.append(layer(f"ttm-{rid}-subavas", "AVAs inside it" if status == "planned" else "Smaller AVAs in the frame", subs, fillColor="#7fd1a8", fillOpacity=0.12,
                             strokeColor="#2f9e6e", strokeWidth=1.5))
     near_f = [f for f in faults if near(f, bb)]
     if near_f:

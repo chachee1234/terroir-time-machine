@@ -10,26 +10,26 @@
  "resampling": "bilinear from the tile mosaic at each UTM cell centre",
  "product": "sub-AVA close-up",
  "region": "napa_valley",
- "ava_id": "wild_horse_valley",
- "name": "Wild Horse Valley",
+ "ava_id": "guenoc_valley",
+ "name": "Guenoc Valley",
  "bbox_utm": [
-  564314.0,
-  4233243.6,
-  575819.3,
-  4244748.9
+  537289.7,
+  4283707.0,
+  546651.3,
+  4293068.5
  ],
  "ava_bbox_utm": [
-  568514.8,
-  4234743.6,
-  571618.6,
-  4243248.9
+  539210.0,
+  4285207.0,
+  544731.0,
+  4291568.5
  ],
  "cols": 512,
  "rows": 512,
- "cell_m": 22.515,
+ "cell_m": 18.32,
  "range_m": [
-  10.64,
-  681.78
+  207.57,
+  705.29
  ],
- "sha256": "8593b6d7923ba21aff395310d4242f824e5348c7eda40837aebc3d002a130fb0"
+ "sha256": "b9220dd6d98553f78cb2dde492333e31acfac32e9da345b9444a5e31e6ec63ab"
 }

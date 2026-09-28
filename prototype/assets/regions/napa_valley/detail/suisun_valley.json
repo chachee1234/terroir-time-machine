@@ -10,26 +10,26 @@
  "resampling": "bilinear from the tile mosaic at each UTM cell centre",
  "product": "sub-AVA close-up",
  "region": "napa_valley",
- "ava_id": "wild_horse_valley",
- "name": "Wild Horse Valley",
+ "ava_id": "suisun_valley",
+ "name": "Suisun Valley",
  "bbox_utm": [
-  564314.0,
-  4233243.6,
-  575819.3,
-  4244748.9
+  571990.8,
+  4227999.5,
+  584100.0,
+  4242784.9
  ],
  "ava_bbox_utm": [
-  568514.8,
-  4234743.6,
-  571618.6,
-  4243248.9
+  575636.1,
+  4229499.5,
+  583131.0,
+  4241284.9
  ],
- "cols": 512,
+ "cols": 420,
  "rows": 512,
- "cell_m": 22.515,
+ "cell_m": 28.9,
  "range_m": [
-  10.64,
-  681.78
+  -9.88,
+  682.03
  ],
- "sha256": "8593b6d7923ba21aff395310d4242f824e5348c7eda40837aebc3d002a130fb0"
+ "sha256": "e026f4ed4a71fbfba7cfa0b39bebbabd38b3a1f0ab7c4eff74d1c084cbcf5272"
 }

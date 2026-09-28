@@ -4,12 +4,54 @@
  "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
  "locations": [
   {
+   "id": "guenoc_valley",
+   "name": "Guenoc Valley",
+   "kind": "ava",
+   "file": "detail/guenoc_valley",
+   "bbox_utm": [
+    537289.7,
+    4283707.0,
+    546651.3,
+    4293068.5
+   ],
+   "ava_bbox_utm": [
+    539210.0,
+    4285207.0,
+    544731.0,
+    4291568.5
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 18.32
+  },
+  {
+   "id": "knights_valley",
+   "name": "Knights Valley",
+   "kind": "ava",
+   "file": "detail/knights_valley",
+   "bbox_utm": [
+    515603.1,
+    4266646.1,
+    537975.3,
+    4289018.3
+   ],
+   "ava_bbox_utm": [
+    520784.1,
+    4268146.1,
+    532794.4,
+    4287518.3
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 43.781
+  },
+  {
    "id": "mount_st_helena",
    "name": "Mount St. Helena",
    "kind": "place",
    "file": "detail/mount_st_helena",
    "bbox_utm": [
-    528800.0,
+    527392.6,
     4275629.8,
     536392.6,
     4284629.8
@@ -20,9 +62,9 @@
     536392.6,
     4284629.8
    ],
-   "cols": 432,
+   "cols": 512,
    "rows": 512,
-   "cell_m": 17.616
+   "cell_m": 17.613
   },
   {
    "id": "calistoga",
@@ -67,6 +109,27 @@
    "cell_m": 30.302
   },
   {
+   "id": "chalk_hill",
+   "name": "Chalk Hill",
+   "kind": "ava",
+   "file": "detail/chalk_hill",
+   "bbox_utm": [
+    511930.9,
+    4259152.9,
+    529921.4,
+    4277143.4
+   ],
+   "ava_bbox_utm": [
+    513430.9,
+    4262209.4,
+    528421.4,
+    4274086.8
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 35.206
+  },
+  {
    "id": "chiles_valley",
    "name": "Chiles Valley",
    "kind": "ava",
@@ -107,6 +170,48 @@
    "cols": 512,
    "rows": 512,
    "cell_m": 23.67
+  },
+  {
+   "id": "crystal_springs_of_napa_valley",
+   "name": "Crystal Springs of Napa Valley",
+   "kind": "ava",
+   "file": "detail/crystal_springs_of_napa_valley",
+   "bbox_utm": [
+    539697.4,
+    4261761.8,
+    551638.2,
+    4273702.5
+   ],
+   "ava_bbox_utm": [
+    542688.3,
+    4263261.8,
+    548647.3,
+    4272202.5
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 23.368
+  },
+  {
+   "id": "fountaingrove_district",
+   "name": "Fountaingrove District",
+   "kind": "ava",
+   "file": "detail/fountaingrove_district",
+   "bbox_utm": [
+    522402.9,
+    4252859.1,
+    542550.2,
+    4273006.5
+   ],
+   "ava_bbox_utm": [
+    523902.9,
+    4256713.8,
+    541050.2,
+    4269151.8
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 39.427
   },
   {
    "id": "st__helena",
@@ -277,6 +382,69 @@
    "cell_m": 17.275
   },
   {
+   "id": "bennett_valley",
+   "name": "Bennett Valley",
+   "kind": "ava",
+   "file": "detail/bennett_valley",
+   "bbox_utm": [
+    526559.3,
+    4243836.9,
+    537986.7,
+    4255264.4
+   ],
+   "ava_bbox_utm": [
+    528402.1,
+    4245336.9,
+    536143.9,
+    4253764.4
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 22.363
+  },
+  {
+   "id": "moon_mountain_district_sonoma_county",
+   "name": "Moon Mountain District Sonoma County",
+   "kind": "ava",
+   "file": "detail/moon_mountain_district_sonoma_county",
+   "bbox_utm": [
+    537173.4,
+    4236270.6,
+    555705.3,
+    4254802.5
+   ],
+   "ava_bbox_utm": [
+    539950.7,
+    4237770.6,
+    552928.0,
+    4253302.5
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 36.266
+  },
+  {
+   "id": "sonoma_mountain",
+   "name": "Sonoma Mountain",
+   "kind": "ava",
+   "file": "detail/sonoma_mountain",
+   "bbox_utm": [
+    532102.2,
+    4239111.7,
+    543692.6,
+    4250702.1
+   ],
+   "ava_bbox_utm": [
+    533602.2,
+    4240807.9,
+    542192.6,
+    4249005.9
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 22.682
+  },
+  {
    "id": "oak_knoll_district_of_napa_valley",
    "name": "Oak Knoll District of Napa Valley",
    "kind": "ava",
@@ -346,7 +514,7 @@
    "file": "detail/los_carneros",
    "bbox_utm": [
     538304.0,
-    4221300.0,
+    4218203.2,
     564275.2,
     4244174.5
    ],
@@ -357,8 +525,50 @@
     4239689.9
    ],
    "cols": 512,
-   "rows": 451,
+   "rows": 512,
    "cell_m": 50.824
+  },
+  {
+   "id": "suisun_valley",
+   "name": "Suisun Valley",
+   "kind": "ava",
+   "file": "detail/suisun_valley",
+   "bbox_utm": [
+    571990.8,
+    4227999.5,
+    584100.0,
+    4242784.9
+   ],
+   "ava_bbox_utm": [
+    575636.1,
+    4229499.5,
+    583131.0,
+    4241284.9
+   ],
+   "cols": 420,
+   "rows": 512,
+   "cell_m": 28.9
+  },
+  {
+   "id": "solano_county_green_valley",
+   "name": "Solano County Green Valley",
+   "kind": "ava",
+   "file": "detail/solano_county_green_valley",
+   "bbox_utm": [
+    564511.7,
+    4227519.3,
+    579702.3,
+    4242709.9
+   ],
+   "ava_bbox_utm": [
+    568524.3,
+    4229019.3,
+    575689.7,
+    4241209.9
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 29.727
   }
  ]
 }

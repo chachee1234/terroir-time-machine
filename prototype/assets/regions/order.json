@@ -3,25 +3,12 @@
  "source": "prototype/assets/globe/ca_avas.json (UC Davis AVA Project, CC0)",
  "params": {
   "start": "sonoma_valley",
-  "mapped": "napa_valley",
+  "mapped": "napa_valley,sonoma_valley,atlas_peak,bennett_valley,calistoga,chalk_hill,chiles_valley,coombsville,crystal_springs_of_napa_valley,diamond_mountain_district,fountaingrove_district,guenoc_valley,howell_mountain,knights_valley,los_carneros,moon_mountain_district_sonoma_county,mt__veeder,oak_knoll_district_of_napa_valley,oakville,rutherford,solano_county_green_valley,sonoma_mountain,spring_mountain_district,st__helena,stags_leap_district,suisun_valley,wild_horse_valley,yountville",
   "max_km": 80.0,
   "touch_km": 1.5,
   "limit": 40
  },
  "order": [
-  {
-   "id": "sonoma_valley",
-   "name": "Sonoma Valley",
-   "rule": "owner's choice",
-   "gap_km": 0.0,
-   "size_km": 39.3,
-   "close_ups": [
-    "bennett_valley",
-    "los_carneros",
-    "moon_mountain_district_sonoma_county",
-    "sonoma_mountain"
-   ]
-  },
   {
    "id": "petaluma_gap",
    "name": "Petaluma Gap",
@@ -38,45 +25,11 @@
    "size_km": 61.0,
    "close_ups": [
     "alexander_valley",
-    "chalk_hill",
     "dry_creek_valley",
-    "knights_valley",
     "pine_mountain_cloverdale_peak",
     "rockpile",
     "russian_river_valley"
    ]
-  },
-  {
-   "id": "fountaingrove_district",
-   "name": "Fountaingrove District",
-   "rule": "touches a mapped region",
-   "gap_km": 0.0,
-   "size_km": 17.5,
-   "close_ups": []
-  },
-  {
-   "id": "crystal_springs_of_napa_valley",
-   "name": "Crystal Springs of Napa Valley ",
-   "rule": "touches a mapped region",
-   "gap_km": 0.0,
-   "size_km": 8.9,
-   "close_ups": []
-  },
-  {
-   "id": "solano_county_green_valley",
-   "name": "Solano County Green Valley",
-   "rule": "touches a mapped region",
-   "gap_km": 0.0,
-   "size_km": 12.1,
-   "close_ups": []
-  },
-  {
-   "id": "suisun_valley",
-   "name": "Suisun Valley",
-   "rule": "touches a mapped region",
-   "gap_km": 0.0,
-   "size_km": 11.7,
-   "close_ups": []
   },
   {
    "id": "west_sonoma_coast",
@@ -124,14 +77,6 @@
    "rule": "touches a mapped region",
    "gap_km": 0.0,
    "size_km": 15.2,
-   "close_ups": []
-  },
-  {
-   "id": "guenoc_valley",
-   "name": "Guenoc Valley",
-   "rule": "closest (nothing touching)",
-   "gap_km": 3.6,
-   "size_km": 6.3,
    "close_ups": []
   },
   {
@@ -379,6 +324,66 @@
    "rule": "closest (nothing touching)",
    "gap_km": 3.5,
    "size_km": 42.2,
+   "close_ups": []
+  },
+  {
+   "id": "hames_valley",
+   "name": "Hames Valley",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 11.3,
+   "close_ups": []
+  },
+  {
+   "id": "paso_robles",
+   "name": "Paso Robles",
+   "rule": "closest (nothing touching)",
+   "gap_km": 4.3,
+   "size_km": 66.8,
+   "close_ups": [
+    "adelaida_district",
+    "creston_district",
+    "el_pomar_district",
+    "paso_robles_estrella_district",
+    "paso_robles_geneseo_district",
+    "paso_robles_highlands_district",
+    "paso_robles_willow_creek_district",
+    "san_juan_creek",
+    "san_miguel_district",
+    "santa_margarita_ranch",
+    "templeton_gap_district"
+   ]
+  },
+  {
+   "id": "york_mountain",
+   "name": "York Mountain",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 8.4,
+   "close_ups": []
+  },
+  {
+   "id": "edna_valley",
+   "name": "Edna Valley",
+   "rule": "closest (nothing touching)",
+   "gap_km": 6.7,
+   "size_km": 13.8,
+   "close_ups": []
+  },
+  {
+   "id": "arroyo_grande_valley",
+   "name": "Arroyo Grande Valley",
+   "rule": "touches a mapped region",
+   "gap_km": 0.0,
+   "size_km": 18.3,
+   "close_ups": []
+  },
+  {
+   "id": "santa_maria_valley",
+   "name": "Santa Maria Valley",
+   "rule": "closest (nothing touching)",
+   "gap_km": 12.0,
+   "size_km": 27.6,
    "close_ups": []
   }
  ]
