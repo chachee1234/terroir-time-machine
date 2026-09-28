@@ -187,3 +187,12 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Checks: `python3 -m unittest discover -s scripts -p 'test_*.py'` → 60 tests OK (2 skipped). Headless Chromium (SwiftShader) at 1800, 300, 178, 150, 100, 60, 17, 15, 5, 1 Ma and Today, zoom-outs to 600 and 9000 km at Today and 150 Ma, and globe.html: no console errors. Not tested: frame rate on real hardware, touch zoom-out.
 - Next smallest action: owner review; the routine then starts on AUTOPILOT.md step E1.
 
+## One program, click-point section, minimizable card, Sonoma-first order (branch `globe-timeline`) — 2026-09-27
+- Owner asked for the time machine and globe as one program, the cross-section at the clicked point, a minimizable description box, and region order: Sonoma first, then the next AVA in the area, then the closest AVA.
+- `timemachine.html` now carries the globe page's content: at Today the globe shows all 154 California AVAs coloured by the plan (live, next three, later) with clickable region names; clicking flies there and the card describes the region with "Back to Napa Valley" and "All regions". A **Regions** chip replaces the Globe link; `?view=regions` and `?site=<ava_id>` open it. `globe.html` now only forwards old links.
+- Click (not drag) anywhere on the block: the section moves to that point (SW–NE, ±14.5 km, clipped to the frame), opens, and an orange curtain plus a dot mark the cut. The column says what is and is not known for that point (schematic away from the mapped summit rock).
+- The description card has a minimize button (remembered per browser).
+- New `scripts/region_order.py` (Tier 0, stdlib) writes `prototype/assets/regions/order.json`; AUTOPILOT.md queue now starts with Sonoma Valley and follows that file. Added `scripts/test_region_order.py`.
+- Checks: `python3 -m unittest discover -s scripts -p 'test_*.py'` → 61 tests OK (2 skipped). Headless Chromium: eras 1800/250/150/8/0 Ma, the 30 km block, `globe.html` redirect, regions view, flights to Sonoma Valley and Mendocino, card minimize, click-to-section: no console errors. Not tested: touch devices, real-hardware frame rate.
+- Next smallest action: owner review of PR #11; the nightly routine starts on AUTOPILOT R1 (Sonoma Valley).
+

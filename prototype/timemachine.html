@@ -30,6 +30,20 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .era{font-size:13px;color:var(--muted);margin-top:6px;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.7)}
 .card{position:absolute;z-index:2;left:16px;bottom:calc(118px + env(safe-area-inset-bottom,0px));width:min(430px,calc(100% - 32px));background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px 16px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:opacity .5s ease,transform .5s ease}
 .card.swap{opacity:0;transform:translateY(6px)}
+.cmin{position:absolute;top:6px;right:6px;width:30px;height:28px;border:0;border-radius:4px;background:none;color:var(--muted);font:600 18px/1 var(--sans);cursor:pointer}
+.cmin:hover,.cmin:focus-visible{color:var(--ink);background:rgba(255,255,255,.08);outline:none}
+.card.min{padding:8px 44px 8px 14px;width:auto;max-width:min(430px,calc(100% - 32px))}
+.card.min h2{font-size:16px;margin:2px 0 0}
+.card.min p,.card.min .cls,.card.min .cact{display:none}
+.cact{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.cact[hidden]{display:none}
+.cact button{font:500 13px var(--sans);color:var(--ink);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:5px;min-height:34px;padding:0 12px;cursor:pointer}
+.cact button.pri{background:var(--magma);border-color:var(--magma);color:var(--magma-ink);font-weight:600}
+.xdot{position:absolute;z-index:2;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#ffd27a;box-shadow:0 0 0 2px rgba(0,0,0,.7),0 0 10px 2px rgba(255,210,122,.6);pointer-events:none}
+.xdot[hidden]{display:none}
+.plc.rgn{pointer-events:auto;cursor:pointer;font:500 12px var(--sans);background:none;border:0;padding:2px 0;color:#f3eee4;letter-spacing:.03em}
+.plc.rgn::before{background:var(--c,#f3eee4);width:7px;height:7px}
+.plc.rgn:hover{text-decoration:underline}
 .card .eyebrow{font-family:var(--mono);font-size:12px;color:var(--ochre);letter-spacing:.04em}
 .card h2{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.2;margin:4px 0 6px;text-wrap:balance}
 .card p{margin:0;color:#d7d1c4;font-size:14.5px;max-width:62ch}
@@ -140,7 +154,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
     <button class="chip tog" id="sdBtn" aria-pressed="false" aria-controls="sub">Plates</button>
     <button class="chip tog" id="xsBtn" aria-pressed="false" aria-controls="xsec">Section</button>
     <button class="chip tog" id="plBtn" aria-pressed="false" aria-controls="places" hidden>Places</button>
-    <a class="chip tog" id="globeBtn" href="globe.html">Globe</a>
+    <button class="chip tog" id="rgBtn" title="All California AVAs and the expansion plan, on the present-day globe">Regions</button>
   </div>
 </div>
 
@@ -176,7 +190,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   <div class="foot" id="sdNote"></div>
 </aside>
 <aside class="xsec" id="xsec" hidden aria-label="Cross-section under Mount St. Helena">
-  <header><span><b>Cross-section</b> · SW to NE through the site</span><button id="xsX" aria-label="Close cross-section">×</button></header>
+  <header><span><b>Cross-section</b> · <span id="xsHead">SW to NE through the site</span></span><button id="xsX" aria-label="Close cross-section">×</button></header>
   <canvas id="xsCv"></canvas>
   <div class="foot" id="xsNote"></div>
 </aside>
@@ -188,11 +202,14 @@ body.pl-open .compass,body.pl-open .legend{display:none}
 <div class="pin" id="pin" hidden><b id="pinT">Mount St. Helena</b><span id="pinS"></span></div>
 
 <article class="card" id="card" aria-live="polite">
+  <button class="cmin" id="cMin" aria-label="Minimize the description" aria-expanded="true" title="Minimize">–</button>
   <div class="eyebrow" id="cEye"></div>
   <h2 id="cTitle"></h2>
   <p id="cBody"></p>
   <div class="cls" id="cCls"></div>
+  <div class="cact" id="cAct" hidden></div>
 </article>
+<div class="xdot" id="xdot" hidden aria-hidden="true"></div>
 
 <div class="bar">
   <div class="row">
@@ -329,7 +346,7 @@ const gUni = {
   uWest:{value:new THREE.Vector3(1,0,0)}, uRift:{value:0}, uSubd:{value:0}, uEdges:{value:1}, uFlow:{value:0},
   // present-day relief (AWS Terrain Tiles: ≈10 km global, ≈2 km California), grey "no data" wash, near-ground fog
   uReal:{value:0}, uRelief:{value:null}, uCa:{value:null}, uCaOn:{value:0}, uCaBox:{value:new THREE.Vector4(-124.6,32.4,-114.0,42.1)},
-  uRelK:{value:30}, uGrey:{value:0}, uFogCol:{value:new THREE.Color(.7,.78,.84)}, uFogN:{value:1e3}, uFogF:{value:2e3}
+  uRelK:{value:30}, uGrey:{value:0}, uAvG:{value:null}, uAvOn:{value:0}, uAvBox:{value:new THREE.Vector4(-124.6,32.4,-114.0,42.1)}, uFogCol:{value:new THREE.Color(.7,.78,.84)}, uFogN:{value:1e3}, uFogF:{value:2e3}
 };
 // Earth relief, 8-bit equirectangular (scripts/build_globe.py). Row 0 is 90N.
 new THREE.TextureLoader().load("assets/globe/relief.png", t=>{ t.flipY=false; t.wrapS=THREE.RepeatWrapping; t.minFilter=t.magFilter=THREE.LinearFilter; t.generateMipmaps=false; t.needsUpdate=true; gUni.uRelief.value=t; });
@@ -338,7 +355,7 @@ const globeMat = new THREE.ShaderMaterial({
   vertexShader:`varying vec3 vN; void main(){ vN=normalize(position); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
   fragmentShader:GLSL_NOISE+`
   uniform vec3 uC[8]; uniform float uR[8]; uniform float uGreen,uCap,uIceAll,uDesert,uTime,uRift,uSubd,uEdges,uFlow; uniform vec3 uSun,uWest;
-  uniform float uReal,uCaOn,uRelK,uGrey,uFogN,uFogF; uniform sampler2D uRelief,uCa; uniform vec4 uCaBox; uniform vec3 uFogCol;
+  uniform float uReal,uCaOn,uRelK,uGrey,uFogN,uFogF,uAvOn; uniform sampler2D uRelief,uCa,uAvG; uniform vec4 uCaBox,uAvBox; uniform vec3 uFogCol;
   float relH(vec2 uv){ float v=texture2D(uRelief,uv).r*255.0;
     return v>=128.0 ? pow((v-128.0)/127.0,2.0)*8848.0 : -pow(max(127.0-v,0.0)/127.0,2.0)*11000.0; }
   float caW(vec2 ll){ vec2 q=(ll-uCaBox.xy)/(uCaBox.zw-uCaBox.xy); vec2 e=min(q,1.0-q); return uCaOn*smoothstep(0.0,0.03,min(e.x,e.y)); }
@@ -363,7 +380,11 @@ const globeMat = new THREE.ShaderMaterial({
       c=mix(c,vec3(0.93,0.94,0.96),smoothstep(3800.0,5200.0,h+abs(lat)*40.0-1200.0));
       c=mix(c,vec3(0.93,0.95,0.98),smoothstep(0.86,0.9,abs(n.y))); }
     float diff=clamp(dot(N,uSun),0.0,1.0);
-    return c*(0.1+0.95*diff);
+    vec3 lit=c*(0.1+0.95*diff);
+    // California AVAs, coloured by the expansion plan
+    vec2 qa=(vec2(lon,lat)-uAvBox.xy)/(uAvBox.zw-uAvBox.xy);
+    if(uAvOn>0.0&&qa.x>0.0&&qa.x<1.0&&qa.y>0.0&&qa.y<1.0){ vec4 av=texture2D(uAvG,vec2(qa.x,1.0-qa.y)); lit=mix(lit,av.rgb,av.a*uAvOn); }
+    return lit;
   }
   float fl(float d,float w){ return 1.0-smoothstep(w*0.5,w,abs(d)); }
   varying vec3 vN;
@@ -908,6 +929,7 @@ function avaTexture(x0,z0,sx,sz){
     else { g.fillStyle="rgba(255,236,190,.07)"; g.fill(); g.setLineDash([14*lw,9*lw]); g.strokeStyle="rgba(20,14,4,.5)"; g.lineWidth=6*lw; g.stroke(); g.strokeStyle="rgba(255,240,205,.92)"; g.lineWidth=2.6*lw; g.stroke(); g.setLineDash([]); } }); });
   const t=new THREE.CanvasTexture(cv); t.flipY=false; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); return t;
 }
+$("rgBtn").onclick=()=>rgOverview();
 $("avaBtn").onclick=()=>{ AVA.on=!AVA.on; $("avaBtn").setAttribute("aria-pressed",AVA.on); };
 (async function loadAVA(){
   try{
@@ -1018,6 +1040,60 @@ async function selectLoc(id){
     if(want) selectLoc(want.replace(/[^a-z_]/g,""));
   }catch(e){ /* close-ups are optional */ }
 })();
+
+/* =================================================================== REGIONS
+   What used to be the separate globe page: every current California AVA on the present-day globe,
+   coloured by the expansion plan (assets/regions/order.json, scripts/region_order.py), with region
+   names you can click to fly there. A planning layer, not legal boundaries. */
+const RGN={labels:[], fly:null, sel:null, order:[], live:REG.id==="mt_st_helena"?"napa_valley":REG.id, want:null};
+const RG_COL={live:"#ffd27a", next:"#7fd1a8", later:"#9fb7ff"};
+function rgCentroid(rings){ let big=rings[0]; rings.forEach(r=>{ if(r.length>big.length) big=r; });
+  let A=0,cx=0,cy=0; for(let i=0,j=big.length-1;i<big.length;j=i++){ const [x0,y0]=big[j],[x1,y1]=big[i], f=x0*y1-x1*y0; A+=f; cx+=(x0+x1)*f; cy+=(y0+y1)*f; }
+  return Math.abs(A)<1e-12 ? big[0] : [cx/(3*A), cy/(3*A)]; }
+(async function(){
+  try{
+    const [av,ord]=await Promise.all([fetch("assets/globe/ca_avas.json").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
+      fetch("assets/regions/order.json").then(r=>r.ok?r.json():{order:[]}).catch(()=>({order:[]}))]);
+    RGN.order=ord.order||[]; const rank={}; RGN.order.forEach((o,i)=>rank[o.id]=i);
+    const kind=id=> id===RGN.live ? "live" : rank[id]===undefined ? null : rank[id]<3 ? "next" : "later";
+    const Bx=gUni.uAvBox.value, W=2048, Hh=Math.round(W*(Bx.w-Bx.y)/(Bx.z-Bx.x)/Math.cos(37*D2R));
+    const cv=document.createElement("canvas"); cv.width=W; cv.height=Hh; const g=cv.getContext("2d");
+    const P=([lo,la])=>[(lo-Bx.x)/(Bx.z-Bx.x)*W,(Bx.w-la)/(Bx.w-Bx.y)*Hh];
+    g.lineJoin="round";
+    av.avas.slice().sort((a,b)=>(kind(a.id)?1:0)-(kind(b.id)?1:0)).forEach(a=>{ const k=kind(a.id);
+      a.rings.forEach(r=>{ g.beginPath(); r.forEach((q,i)=>{ const [x,y]=P(q); i?g.lineTo(x,y):g.moveTo(x,y); }); g.closePath();
+        if(k){ g.globalAlpha=0.2; g.fillStyle=RG_COL[k]; g.fill(); g.globalAlpha=1; g.strokeStyle=RG_COL[k]; g.lineWidth=k==="live"?2.6:1.8; }
+        else { g.strokeStyle="rgba(236,230,217,.5)"; g.lineWidth=1; }
+        g.stroke(); }); });
+    const t=new THREE.CanvasTexture(cv); t.flipY=false; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); gUni.uAvG.value=t;
+    // clickable names: the live region and the next dozen in the plan
+    const byId=Object.fromEntries(av.avas.map(a=>[a.id,a]));
+    [RGN.live, ...RGN.order.slice(0,12).map(o=>o.id)].forEach((id,i)=>{ const a=byId[id]; if(!a) return;
+      const [lon,lat]=rgCentroid(a.rings), k=kind(id), e=document.createElement("button");
+      e.className="plc rgn"; e.style.setProperty("--c",RG_COL[k]); e.textContent=a.name; e.hidden=true; $("plcs").appendChild(e);
+      const q={id, name:a.name, lat, lon, k, i:rank[id], rule:(RGN.order[rank[id]]||{}).rule, cu:(RGN.order[rank[id]]||{}).close_ups||[], size:(RGN.order[rank[id]]||{}).size_km||40, el:e, w:a.name.length*7+16};
+      e.onclick=()=>rgSelect(q); RGN.labels.push(q); });
+    const qs=new URLSearchParams(location.search);
+    if(qs.get("view")==="regions"||qs.has("site")){ p=1; lastCh=-1; const q=RGN.labels.find(l=>l.id===(qs.get("site")||"").replace(/[^a-z_]/g,""));
+      if(q) rgSelect(q); else rgOverview(); }
+  }catch(e){ /* the regions layer is optional */ }
+})();
+function rgFly(lat,lon,dist,onEnd){ autoCam=false; RGN.fly={lat,lon,dist,t:0,dur:reduce?0.01:2.6,onEnd}; }
+function rgOverview(){ RGN.sel=null; if(ageOf(p)>0.5) { goTo(CH.length-1); } lastCh=-1; rgFly(38.3,-121.9,650); }   // the North Coast, where the plan starts
+function rgHome(){ RGN.sel=null; lastCh=-1; $("cAct").hidden=true; rgFly(null,null,0,()=>{ autoCam=true; }); }
+function rgSelect(q){
+  if(q.id===RGN.live){ rgHome(); return; }
+  RGN.sel=q; if(ageOf(p)>0.5) goTo(CH.length-1);
+  rgFly(q.lat,q.lon,Math.max(60,q.size*1.8));
+  setTimeout(()=>{ // after goTo's card swap
+    $("cEye").textContent = q.k==="next" ? `Next up · #${q.i+1} in the expansion order` : `Planned · #${q.i+1} in the expansion order`;
+    $("cTitle").textContent=q.name;
+    $("cBody").textContent=`Not mapped in detail yet (${q.rule||"in the plan"}). When the autopilot reaches it, it becomes a 3D block like Napa Valley's`+(q.cu.length?`, with close-ups of ${q.cu.length} AVA${q.cu.length>1?"s":""} inside it.`:".")+" The outline is from the UC Davis AVA Project; the relief around it is present-day terrain.";
+    $("cCls").innerHTML=`<b style="--c:var(--approx)">■</b> Planning layer · not a legal boundary`;
+    const ca=$("cAct"); ca.innerHTML=""; ca.hidden=false;
+    [["Back to Napa Valley",true,rgHome],["All regions",false,rgOverview]].forEach(([t,pri,f])=>{ const b=document.createElement("button"); b.textContent=t; if(pri) b.className="pri"; b.onclick=f; ca.appendChild(b); });
+  }, reduce?0:300);
+}
 
 /* =================================================================== state from age */
 const LSTAGE_A = [170,30,8,3.2,2.87,2.84,0], LSTAGE_S=[0,1,2,3,3,4,5];
@@ -1172,7 +1248,7 @@ $("ticks").innerHTML = CH.map((c,i)=>`<button class="tick${c.key?" key":" minor"
 $("ticks").addEventListener("click",e=>{ const b=e.target.closest(".tick"); if(b) goTo(+b.dataset.i); });
 
 function showCard(i){
-  if(i===lastCh) return; lastCh=i; const c=CH[i], card=$("card");
+  if(i===lastCh||RGN.sel) return; lastCh=i; const c=CH[i], card=$("card"); $("cAct").hidden=true;
   card.classList.add("swap");
   setTimeout(()=>{
     $("cEye").textContent=c.tag; $("cTitle").textContent=c.t; $("cBody").textContent=c.b;
@@ -1214,16 +1290,30 @@ xs.btn.onclick=()=>xsToggle(!xs.open); $("xsX").onclick=()=>xsToggle(false);
 function xsSize(){ const r=xs.cv.getBoundingClientRect(), d=Math.min(devicePixelRatio,2); xs.w=r.width; xs.h=r.height; xs.cv.width=Math.round(r.width*d); xs.cv.height=Math.round(r.height*d); xs.ctx.setTransform(d,0,0,d,0,0); }
 addEventListener("resize",()=>{ if(xs.open) xsSize(); });
 const XS_M=140, XS_TH=[-9.5,-3.5,3.0,10.5], XS_COTD=1.732;
-// the profile runs ±14.5 km from the summit, clipped to the terrain frame
-let XS_C0=-14.5, XS_C1=14.5; while(XS_C0<0&&!inExt(0.766*XS_C0,-0.643*XS_C0,0.2)) XS_C0+=0.1; while(XS_C1>0&&!inExt(0.766*XS_C1,-0.643*XS_C1,0.2)) XS_C1-=0.1;
-const XS_SPAN=XS_C1-XS_C0;
-// where each mapped trace crosses the SW–NE profile line (x=0.766c, z=-0.643c)
-const XS_SS=[]; FAULTS.forEach(fl=>{ for(let i=0;i<fl.pts.length-1;i++){ const [ax,az]=fl.pts[i],[bx,bz]=fl.pts[i+1];
-  const dx=bx-ax, dz=bz-az, ux=0.766, uz=-0.643, den=ux*dz-uz*dx; if(Math.abs(den)<1e-9) continue;
-  const c=(ax*dz-az*dx)/den, t=Math.abs(dx)>Math.abs(dz)?(c*ux-ax)/dx:(c*uz-az)/dz;
-  if(t>=0&&t<=1&&c>=XS_C0&&c<=XS_C1) XS_SS.push({c,n:fl.n.replace(" Fault","")}); } });
-const xsIdx=new Int32Array(XS_M), xsC=new Float32Array(XS_M), xsHs=new Float32Array(XS_M);
-for(let i=0;i<XS_M;i++){ const c=XS_C0+(XS_C1-XS_C0)*i/(XS_M-1); xsC[i]=c; xsIdx[i]=Math.max(0,idxAt(0.766*c,-0.643*c)); }
+// The profile runs SW–NE, ±14.5 km through a point (the summit until you click the map), clipped to the frame.
+let XS_C0=-14.5, XS_C1=14.5, XS_SPAN=29, XS_X=0, XS_Z=0, XS_A0=0, XS_I0=XS_M>>1;
+const XS_SS=[], xsIdx=new Int32Array(XS_M), xsC=new Float32Array(XS_M), xsHs=new Float32Array(XS_M), xsR=new Float32Array(XS_M);
+function xsSet(cx,cz){
+  XS_X=cx; XS_Z=cz; XS_A0=0.766*cx-0.643*cz;            // across-trend coordinate of the point
+  const onF=c=>inExt(cx+0.766*c,cz-0.643*c,0.2);
+  XS_C0=-14.5; XS_C1=14.5; while(XS_C0<0&&!onF(XS_C0)) XS_C0+=0.1; while(XS_C1>0&&!onF(XS_C1)) XS_C1-=0.1; XS_SPAN=Math.max(0.5,XS_C1-XS_C0);
+  // where each mapped trace crosses the profile line (x=cx+0.766c, z=cz-0.643c)
+  XS_SS.length=0; FAULTS.forEach(fl=>{ for(let i=0;i<fl.pts.length-1;i++){ const ax=fl.pts[i][0]-cx, az=fl.pts[i][1]-cz, bx=fl.pts[i+1][0]-cx, bz=fl.pts[i+1][1]-cz;
+    const dx=bx-ax, dz=bz-az, ux=0.766, uz=-0.643, den=ux*dz-uz*dx; if(Math.abs(den)<1e-9) continue;
+    const c=(ax*dz-az*dx)/den, t=Math.abs(dx)>Math.abs(dz)?(c*ux-ax)/dx:(c*uz-az)/dz;
+    if(t>=0&&t<=1&&c>=XS_C0&&c<=XS_C1) XS_SS.push({c,n:fl.n.replace(" Fault","")}); } });
+  for(let i=0;i<XS_M;i++){ const c=XS_C0+XS_SPAN*i/(XS_M-1), x=cx+0.766*c, z=cz-0.643*c; xsC[i]=c; xsIdx[i]=Math.max(0,idxAt(x,z)); xsR[i]=Math.hypot(x,z); }
+  XS_I0=clamp(Math.round(-XS_C0/XS_SPAN*(XS_M-1)),0,XS_M-1);
+  const atSummit=Math.hypot(cx,cz)<0.6;
+  $("xsHead").textContent = atSummit ? "SW to NE through Mount St. Helena · click the map to move it" : "SW to NE through the point you clicked";
+}
+xsSet(0,0);
+// the section line and its point, drawn on the map while the panel is open
+// a low curtain standing on the ground along the cut
+const xsLine=(function(){ const g=new THREE.BufferGeometry(), idx=[]; g.setAttribute("position",new THREE.BufferAttribute(new Float32Array(XS_M*6),3));
+  for(let i=0;i<XS_M-1;i++){ const a=i*2; idx.push(a,a+1,a+2, a+1,a+3,a+2); } g.setIndex(idx);
+  const m=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:0xff7a2f, transparent:true, opacity:.6, side:THREE.DoubleSide, depthWrite:false}));
+  m.renderOrder=5; m.frustumCulled=false; m.visible=false; lScene.add(m); return m; })();
 const XC={water:"rgba(38,96,128,.75)", fran:"#66705f", franL:"rgba(30,34,28,.35)", chert:"rgba(150,70,55,.55)", lava:"#4b4452", tuff:"#b89678", allu:"#c7ab72", soil:"#4a3322", fa:"#ff5a3c", fi:"#8a3a2c", ink:"#ece6d9", mut:"#a39d91"};
 function drawSection(a,w){
   const g=xs.ctx, W=xs.w, Hh=xs.h; if(!W) return;
@@ -1236,6 +1326,8 @@ function drawSection(a,w){
     $("xsNote").textContent="Planet scale: the site does not exist yet as a place you could cut through."; return; }
   g.fillStyle="rgba(170,190,205,.10)"; g.fillRect(0,0,SW+6,Y(0));
   for(let i=0;i<XS_M;i++){ let h=0; const v=xsIdx[i]; for(let k=0;k<6;k++) h+=w[k]*H[k][v]; xsHs[i]=h; }
+  { const pa=xsLine.geometry.attributes.position, ht=Math.max(0.25,lCam.position.distanceTo(lCtl.target)*0.008);
+    for(let i=0;i<XS_M;i++){ const x=XS_X+0.766*xsC[i], z=XS_Z-0.643*xsC[i], y=Math.max(xsHs[i],0)*VE; pa.setXYZ(i*2,x,y,z); pa.setXYZ(i*2+1,x,y+ht,z); } pa.needsUpdate=true; }
   const volc=a<8?sm(8,3.2,a):0, erode=lUni.uErode.value, tuffA=sm(2.9,2.83,a), soilA=sm(1.2,0.05,a), water=sm(2,8,a);
   const vt=c=>volc*(0.12+0.95*Math.exp(-((c/6)**2)))*lerp(1,0.5+0.5*Math.exp(-((c/3.5)**2)),erode);
   const tt=c=>tuffA*0.32*Math.exp(-((c/7)**2))*lerp(1,0.6+0.4*Math.exp(-((c/3)**2)),erode);
@@ -1247,17 +1339,17 @@ function drawSection(a,w){
   // Franciscan strata, shoved up on the hanging wall of each thrust
   const off=lUni.uThrOff.value;
   for(let lv=-3.4;lv<2.6;lv+=0.42){ g.beginPath();
-    for(let i=0;i<XS_M;i++){ const c=xsC[i]; let o=0; for(const t of XS_TH) o+= (c-t+lv*XS_COTD>0)?off:0; g.lineTo(X(c),Y(lv+o)); }
+    for(let i=0;i<XS_M;i++){ const c=xsC[i]; let o=0; for(const t of XS_TH) o+= (c+XS_A0-t+lv*XS_COTD>0)?off:0; g.lineTo(X(c),Y(lv+o)); }
     g.strokeStyle=(Math.round(lv/0.42)%4===0)?XC.chert:XC.franL; g.lineWidth=1; g.stroke(); }
-  band(i=>xsHs[i], i=>xsHs[i]-vt(xsC[i]), XC.lava);
-  band(i=>xsHs[i], i=>xsHs[i]-tt(xsC[i]), XC.tuff);
+  band(i=>xsHs[i], i=>xsHs[i]-vt(xsR[i]), XC.lava);
+  band(i=>xsHs[i], i=>xsHs[i]-tt(xsR[i]), XC.tuff);
   band(i=>xsHs[i], i=>xsHs[i]-al(xsC[i],xsHs[i]), XC.allu);
   if(soilA>0) band(i=>xsHs[i], i=>xsHs[i]-soilA*(0.035+0.05*sm(0.3,0.05,xsHs[i])), XC.soil);
   // faults
   const thr=lUni.uThr.value, tha=lUni.uThrAct.value, ss=lUni.uSS.value;
   g.lineWidth=1.6;
   if(thr>0.02){ g.globalAlpha=Math.min(1,thr*1.3); g.strokeStyle=tha>0.5?XC.fa:XC.fi;
-    for(const t of XS_TH){ g.beginPath(); g.moveTo(X(t-top*XS_COTD),Y(top)); g.lineTo(X(t-bot*XS_COTD),Y(bot)); g.stroke(); } }
+    for(const t0 of XS_TH){ const t=t0-XS_A0; g.beginPath(); g.moveTo(X(t-top*XS_COTD),Y(top)); g.lineTo(X(t-bot*XS_COTD),Y(bot)); g.stroke(); } }
   if(ss>0.02){ g.globalAlpha=ss; g.strokeStyle=XC.fa; for(const t of XS_SS){ g.beginPath(); g.moveTo(X(t.c),Y(top)); g.lineTo(X(t.c),Y(bot)); g.stroke(); } }
   g.globalAlpha=1; g.restore();
   // sea
@@ -1266,7 +1358,7 @@ function drawSection(a,w){
   // surface line, sea level, site marker, labels
   g.beginPath(); for(let i=0;i<XS_M;i++) g.lineTo(X(xsC[i]),Y(xsHs[i])); g.strokeStyle="rgba(236,230,217,.85)"; g.lineWidth=1.2; g.stroke();
   g.setLineDash([3,3]); g.strokeStyle="rgba(163,157,145,.6)"; g.lineWidth=1; g.beginPath(); g.moveTo(6,Y(0)); g.lineTo(SW,Y(0)); g.stroke();
-  const hc=xsHs[XS_M>>1]; g.strokeStyle=XC.ink; g.beginPath(); g.moveTo(X(0),Y(hc)-10); g.lineTo(X(0),Y(bot)); g.stroke(); g.setLineDash([]);
+  const hc=xsHs[XS_I0]; g.strokeStyle=XC.ink; g.beginPath(); g.moveTo(X(0),Y(hc)-10); g.lineTo(X(0),Y(bot)); g.stroke(); g.setLineDash([]);
   g.fillStyle=XC.ink; g.beginPath(); g.moveTo(X(0),Y(hc)-2); g.lineTo(X(0)-4,Y(hc)-9); g.lineTo(X(0)+4,Y(hc)-9); g.fill();
   g.font="10.5px "+getComputedStyle(document.body).fontFamily; g.fillStyle=XC.mut; g.textBaseline="alphabetic";
   g.fillText("SW",8,Hh-5); g.textAlign="right"; g.fillText("NE",SW,Hh-5); g.textAlign="center";
@@ -1275,23 +1367,50 @@ function drawSection(a,w){
   if(ss>0.3){ g.fillStyle=XC.fa; g.textAlign="center"; XS_SS.forEach(t=>g.fillText(t.n,X(t.c),Y(bot)-4)); g.textAlign="left"; }
   // column under the point
   const cx=SW+14, cw=colW-14, ct=6, ch=Hh-22;
-  g.fillStyle=XC.ink; g.font="600 10.5px "+getComputedStyle(document.body).fontFamily; g.fillText("Under the site",cx,ct+8);
-  const rows=[];
-  if(a<0.05){ rows.push(["O","leaf litter, duff","#2d2419",0.5],["A","dark gravelly loam","#4a3322",1],["B","reddish clay-rich subsoil","#7a4a30",1.2],["C","weathered tuff","#a58a6e",1],["R","welded tuff, Tswt","#b89678",1.6]); }
+  g.fillStyle=XC.ink; g.font="600 10.5px "+getComputedStyle(document.body).fontFamily; const summit=xsR[XS_I0]<1.2; g.fillText(summit?"Under the summit":"Under the point",cx,ct+8);
+  const rows=[], r0=xsR[XS_I0];
+  if(a<0.05&&summit){ rows.push(["O","leaf litter, duff","#2d2419",0.5],["A","dark gravelly loam","#4a3322",1],["B","reddish clay-rich subsoil","#7a4a30",1.2],["C","weathered tuff","#a58a6e",1],["R","welded tuff, Tswt","#b89678",1.6]); }
+  else if(a<0.05){ rows.push(["A","topsoil",XC.soil,1],["B","subsoil","#7a4a30",1.1],["C","weathered rock or gravel","#a58a6e",1]);
+    rows.push(["R", hc<0.25 ? "valley gravels over older rock" : tt(r0)>0.04 ? "volcanic rock, likely" : "bedrock, not yet mapped here", hc<0.25?XC.allu:tt(r0)>0.04?XC.tuff:XC.fran, 1.5]); }
   else { if(hc<0&&water>0.3) rows.push(["","seawater",XC.water,1]);
     if(soilA>0.3) rows.push(["","thin rocky soil",XC.soil,0.6]);
-    if(tuffA>0.3) rows.push(["","welded tuff (Tswt)",XC.tuff,1]);
-    if(volc>0.3) rows.push(["","volcanic lava",XC.lava,1]);
+    if(tuffA>0.3&&tt(r0)>0.03) rows.push(["","welded tuff (Tswt)",XC.tuff,1]);
+    if(volc>0.3&&vt(r0)>0.05) rows.push(["","volcanic lava",XC.lava,1]);
     if(a>28&&hc<0) rows.push(["","seafloor mud, sand",'#7f7d6a',0.8]);
     rows.push(["","Franciscan rock",XC.fran,1.5]); }
   const tot=rows.reduce((s,r)=>s+r[3],0); let yy=ct+16; const avail=ch-12;
   g.font="10px "+getComputedStyle(document.body).fontFamily;
   rows.forEach(r=>{ const hh=r[3]/tot*avail; g.fillStyle=r[2]; g.fillRect(cx,yy,18,hh-1.5);
     g.fillStyle=XC.ink; const tx=r[0]?r[0]+"  "+r[1]:r[1]; wrapText(g,tx,cx+24,yy+10,cw-26,11); yy+=hh; });
-  $("xsNote").textContent = a<0.05
+  $("xsNote").textContent = a<0.05&&!summit
+    ? "Schematic column, not a soil survey or a geologic map of this spot (USDA SSURGO soils are planned). Fault crossings are from mapped traces (USGS UCERF3). "+veTxt
+    : a<0.05
     ? "Soil horizons are schematic, typical of thin volcanic mountain soils, not a soil survey. Summit rock Tswt is mapped (USGS SIM 2956). "+veTxt
     : "Illustration: layer shapes and the old thrusts are schematic. Fault crossings are from mapped traces (USGS UCERF3). "+veTxt;
 }
+// click (not drag) on the map: move the section to that point and open the panel
+function groundHit(nx,ny){
+  const o=lCam.position.clone(), d=new THREE.Vector3(nx,ny,0.5).unproject(lCam).sub(o).normalize();
+  const hAt=(x,z)=>{ const i=idxAt(x,z); if(i<0) return null; let h=0; for(let k=0;k<6;k++) h+=w6[k]*H[k][i]; return (waterMat.uniforms.uAmt.value>0.5?Math.max(h,0):h)*VE; };
+  const far=Math.max(200,o.length()*2.5), n=900; let t0=0;
+  for(let s=1;s<=n;s++){ const t=far*s/n, x=o.x+d.x*t, y=o.y+d.y*t, z=o.z+d.z*t, h=hAt(x,z);
+    if(h!==null&&y<=h){ let a=t0, b=t; for(let k=0;k<10;k++){ const m=(a+b)/2, hm=hAt(o.x+d.x*m,o.z+d.z*m); if(hm!==null&&o.y+d.y*m<=hm) b=m; else a=m; }
+      return {x:o.x+d.x*b, z:o.z+d.z*b}; }
+    t0=t; }
+  return null;
+}
+let downAt=null;
+canvas.addEventListener("pointerdown",e=>{ downAt={x:e.clientX,y:e.clientY,t:performance.now()}; });
+canvas.addEventListener("pointerup",e=>{ if(!downAt) return; const moved=Math.hypot(e.clientX-downAt.x,e.clientY-downAt.y), dt=performance.now()-downAt.t; downAt=null;
+  if(moved>6||dt>600||!(p>=P_SWITCH)) return;
+  const r=canvas.getBoundingClientRect(), hit=groundHit((e.clientX-r.left)/r.width*2-1, -((e.clientY-r.top)/r.height*2-1));
+  if(!hit) return;
+  xsSet(hit.x,hit.z); if(!xs.open) xsToggle(true);
+});
+$("cMin").onclick=()=>{ const c=$("card"), m=!c.classList.contains("min"); c.classList.toggle("min",m);
+  $("cMin").textContent=m?"+":"–"; $("cMin").setAttribute("aria-expanded",!m); $("cMin").setAttribute("aria-label",m?"Show the description":"Minimize the description"); $("cMin").title=m?"Show":"Minimize";
+  try{ localStorage.setItem("ttm.cardMin",m?"1":"0"); }catch(e){} };
+try{ if(localStorage.getItem("ttm.cardMin")==="1") $("cMin").click(); }catch(e){}
 let xsBottom=0;
 function xsPlace(){ const b=Math.round((xs.open?xs.el:sd.el).getBoundingClientRect().bottom); if(b!==xsBottom){ xsBottom=b; document.body.style.setProperty("--xsb",b+"px"); } }
 function wrapText(g,t,x,y,mw,lh){ const ws=t.split(" "); let line="";
@@ -1454,7 +1573,7 @@ function frame(now){
   if(xs.open){ drawSection(a,w6); xsPlace(); }
   if(sd.auto && !sd.open && a<=252 && a>0.3 && !xs.open && $("places").hidden && innerWidth>640) sdToggle(true);   // opens itself once, when subduction begins
   if(sd.open){ sdDraw(a,T); xsPlace(); }
-  $("scaleChip").textContent = st.local&&lCam.position.distanceTo(lCtl.target)>LEXT*5 ? (a<0.5 ? "Planet · present-day relief" : "Planet · grey = not reconstructed") : st.local ? (LOC.cur ? LOC.cur.name.replace(" of Napa Valley","")+" · close-up" : REG_LABEL) : (a>320 ? "Planet" : "Western North America");
+  $("scaleChip").textContent = st.local&&RGN.sel ? RGN.sel.name+" · planned" : st.local&&lCam.position.distanceTo(lCtl.target)>LEXT*5 ? (a<0.5 ? "Planet · present-day relief" : "Planet · grey = not reconstructed") : st.local ? (LOC.cur ? LOC.cur.name.replace(" of Napa Valley","")+" · close-up" : REG_LABEL) : (a>320 ? "Planet" : "Western North America");
   let cam;
   let far=false;
   if(!st.local){
@@ -1463,7 +1582,7 @@ function frame(now){
     if(gCam.near!==0.01){ gCam.near=0.01; gCam.far=100; gCam.updateProjectionMatrix(); }
     gUni.uSun.value.copy(gSun);
     gUni.uFogN.value=1e3; gUni.uFogF.value=2e3; gUni.uRelK.value=30; cloudMat.uniforms.uAmt.value=cloudBase; atmoMat.uniforms.uAmt.value=1; atmo.visible=true; stars.visible=true;
-    $("space").style.opacity=0;
+    $("space").style.opacity=0; $("xdot").hidden=true; RGN.labels.forEach(q=>q.el.hidden=true); gUni.uAvOn.value=0;
     renderer.clear(); renderer.render(gScene,gCam);
     pv.copy(marker.position).project(gCam);
     const facing = marker.position.dot(tv.copy(gCam.position).normalize())>0.2;
@@ -1471,7 +1590,20 @@ function frame(now){
     $("pinT").textContent = a>700 ? "Laurentia" : a>250 ? "Western edge of Laurentia" : "Future California margin";
     $("pinS").textContent = "ancestral region, not a point";
   } else {
-    if(autoCam) driveLocalCam(a,st.hc,dt); else lCtl.update();
+    const F=RGN.fly;
+    if(F&&!F.p0&&a<5){ // start the flight once the site basis is the present-day one
+      F.p0=lCam.position.clone(); F.t0=lCtl.target.clone(); F.d0=Math.max(1,F.p0.distanceTo(F.t0)); F.dir0=F.p0.clone().sub(F.t0).normalize();
+      if(F.lat===null){ F.t1=new THREE.Vector3(CXm,0,CZm); F.d1=LEXT*1.25; }
+      else { fromGlobe(ll2v(F.lat,F.lon),tv); F.t1=tv.clone(); F.d1=F.dist; }
+      const upT=F.t1.clone().sub(new THREE.Vector3(0,-R_E,0)).normalize(), el=F.d1>600?1.35:0.75;
+      F.dir1=new THREE.Vector3(0,0,1).addScaledVector(upT,-upT.z).normalize().multiplyScalar(Math.cos(el)).addScaledVector(upT,Math.sin(el)).normalize();
+      F.hop=Math.min(1.5,F.t0.distanceTo(F.t1)/Math.max(F.d0,F.d1))*0.5; }
+    if(F&&F.p0){
+      F.t=Math.min(1,F.t+dt/F.dur); const k=sm(0,1,F.t);
+      lCtl.target.lerpVectors(F.t0,F.t1,k); tv.copy(F.dir0).lerp(F.dir1,k).normalize();
+      lCam.position.copy(lCtl.target).addScaledVector(tv,Math.exp(lerp(Math.log(F.d0),Math.log(F.d1),k))*(1+Math.sin(Math.PI*k)*F.hop)); lCam.lookAt(lCtl.target);
+      if(F.t>=1){ RGN.fly=null; if(F.onEnd) F.onEnd(); }
+    } else if(autoCam) driveLocalCam(a,st.hc,dt); else lCtl.update();
     gCtl.enabled=false; lCtl.enabled=true; cam=lCam;
     const dist=lCam.position.distanceTo(lCtl.target);
     lCtl.zoomSpeed = dist>LEXT*2 ? 3 : 1;
@@ -1481,14 +1613,24 @@ function frame(now){
     // globe around the block: same sun, same haze; clouds, air glow and stars only from high up
     gSunL.copy(bE).multiplyScalar(lUni.uSun.value.x).addScaledVector(bU,lUni.uSun.value.y).addScaledVector(bS,lUni.uSun.value.z);
     gUni.uSun.value.copy(gSun).lerp(gSunL,sm(A_DIVE,165,a)).normalize();
-    gUni.uRelK.value=lerp(6,30,sm(100,3000,altKm));        // gentler relief shading near the ground
+    gUni.uRelK.value=lerp(6,18,sm(100,3000,altKm));        // gentler relief shading near the ground
     gUni.uFogCol.value.copy(lUni.uFog.value); gUni.uFogN.value=lUni.uFogN.value/R_E; gUni.uFogF.value=lUni.uFogF.value/R_E;
     cloudMat.uniforms.uAmt.value=cloudBase*sm(80,220,altKm);
     atmoMat.uniforms.uAmt.value=sm(600,1600,altKm); atmo.visible=altKm>600; stars.visible=altKm>380;
     $("space").style.opacity=sm(150,900,altKm).toFixed(3);
+    xsLine.visible=xs.open&&!far;
+    gUni.uAvOn.value = AVA.on ? gUni.uReal.value*sm(20,120,altKm) : 0;
+    { const show=gUni.uReal.value>0.5&&(far||RGN.sel), cd=cv0.copy(gCam.position).normalize(), gl=gCam.position.length(), placed=[];
+      RGN.labels.forEach(q=>{ let vis=show&&(far ? true : q===RGN.sel);   // up close only the chosen region keeps its name
+        if(vis){ ll2v(q.lat,q.lon,pl3); vis=pl3.dot(cd)>1/gl+0.001; if(vis){ pl3.project(gCam); vis=pl3.z<1&&Math.abs(pl3.x)<1.05&&Math.abs(pl3.y)<1.05; } }
+        const x=(pl3.x+1)/2*innerWidth, y=(1-pl3.y)/2*innerHeight;
+        if(vis&&placed.some(b=>Math.abs(b.y-y)<17&&Math.abs(b.x+b.w/2-x-q.w/2)<(b.w+q.w)/2)) vis=false;
+        q.el.hidden=!vis; if(vis){ placed.push({x,y,w:q.w}); q.el.style.left=x+"px"; q.el.style.top=y+"px"; } }); }
     renderer.clear(); renderer.render(gScene,gCam); renderer.clearDepth(); renderer.render(lScene,lCam);
+    { const xd=$("xdot"); let vis=xs.open&&!far; if(vis){ pl3.set(XS_X,Math.max(xsHs[XS_I0],0)*VE+0.06,XS_Z).project(lCam); vis=pl3.z<1;
+        if(vis){ xd.style.left=((pl3.x+1)/2*innerWidth)+"px"; xd.style.top=((1-pl3.y)/2*innerHeight)+"px"; } } xd.hidden=!vis; }
     pv.set(0,st.hc*VE+0.35,0).project(lCam);
-    pin.hidden = pv.z>1;
+    pin.hidden = pv.z>1 || far;
     const today=a<0.06;
     $("pinT").textContent = today ? "Mount St. Helena" : a<3.5 ? "Mount St. Helena volcanic center" : "Future site of Mount St. Helena";
     $("pinS").textContent = today ? (realDEM?"USGS 3DEP terrain":"approximate terrain") + " · 1,323 m" : "";
@@ -1512,7 +1654,7 @@ function frame(now){
     GLAB.forEach(q=>q.el.hidden=true);
     const avaOp=AVA.on&&AVA.data ? lUni.uTopo.value : 0; lUni.uAvaOn.value=avaOp;
     AVA.labels.forEach(q=>placeLab(q,!far&&avaOp>0.3,avaOp));
-    $("locator").style.opacity=(!far&&AVA.data&&lUni.uTopo.value>0.3)?Math.min(1,lUni.uTopo.value):0;
+    $("locator").style.opacity=(!far&&!RGN.sel&&AVA.data&&lUni.uTopo.value>0.3)?Math.min(1,lUni.uTopo.value):0;
     $("lgAva").hidden=!(avaOp>0.05);
     PLACES.forEach(q=>{ let hh=0; for(let k=0;k<6;k++) hh+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][q.i];
       pl3.set(q.x,hh*VE+0.1,q.z).project(lCam); const vis=!far&&to>0.05&&pl3.z<1;
