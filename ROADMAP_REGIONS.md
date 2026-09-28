@@ -40,6 +40,7 @@ Acceptance: Napa and the 30 km block look the same as before, and a stub region 
 3. **Boundaries.** `ava_extract.py --parent …` (UC Davis, CC0).
 4. **Faults.** Clip GEM/UCERF3 to the frame and record it in SOURCES.md.
 5. **Geology.** Use the USGS or CGS map that covers the frame, draped as a "Today" layer, following the SIM 2956 method from M1.
+5b. **Satellite.** `python3 scripts/make_imagery_texture.py --region data/regions/<id>.json` picks the clearest dry-season Sentinel-2 scene covering the frame and writes `imagery.jpg` + `imagery.json` next to the terrain (no manual step; `--scene` pins a scene).
 6. **Soils.** Use USDA SSURGO map units for the section column and a soils layer.
 7. **Story.** Write `scenes.json` with each chapter's visual class and sources. Unsupported chapters stay labelled gaps (SCIENCE_RULES).
 8. **Check.** Headless run of every chapter and close-up with no console errors, a STATUS.md entry, and the globe marker switched to live.
@@ -72,7 +73,8 @@ Paso Robles (calcareous soils and the Salinian granite block), Santa Maria Valle
 | T2 region frame | ≈140 m mesh, ≈70 m shading | each region | 3DEP (Mac) or Terrain Tiles z13 |
 | T3 close-ups | 17–51 m | each sub-AVA, key peaks | Terrain Tiles z13 (≈10 m source) |
 | T4 vineyard scale (later) | 1–3 m | a few showcase vineyards | 3DEP 1 m lidar, only where it exists |
-| Imagery (later) | ≈1 m | "Today" layer | USDA NAIP, public domain |
+| Imagery | 40 m (10 m source) | "Today" Satellite layer | Sentinel-2 L2A true colour (Copernicus, attribution), done for Napa–Sonoma and the 30 km block |
+| Imagery, finer (later) | ≈1 m | "Today" layer | USDA NAIP, public domain; its hosts are blocked from the cloud sandbox |
 
 Close-ups load only when chosen, so a region's first load stays around 3 MB and each close-up adds about 0.5 MB.
 
