@@ -511,7 +511,10 @@ const idxAt=(x,z)=>inExt(x,z) ? Math.round((z-Z0)/SZ*(NZ-1))*NX+Math.round((x-X0
 const lScene = new THREE.Scene();
 const lCam = new THREE.PerspectiveCamera(42,1,0.1,Math.max(400,LEXT*8));
 const lCtl = new THREE.OrbitControls(lCam, canvas);
-lCtl.enablePan=false; lCtl.minDistance=1.2; lCtl.maxDistance=4*6371;   // zoom out from the block to the whole planet lCtl.maxPolarAngle=Math.PI*0.47; lCtl.enableDamping=true; lCtl.target.set(0,0.6,0);
+lCtl.minDistance=1.2; lCtl.maxDistance=4*6371;   // zoom out from the block to the whole planet
+lCtl.maxPolarAngle=Math.PI*0.47; lCtl.enableDamping=true; lCtl.target.set(0,0.6,0);
+// Pan slides the map over the ground (north, south, east, west): right-drag with a mouse, two-finger drag on touch screens.
+lCtl.enablePan=true; lCtl.screenSpacePanning=false; lCtl.touches={ONE:THREE.TOUCH.ROTATE, TWO:THREE.TOUCH.DOLLY_PAN};
 
 const VE = LEXT>40 ? 2.2 : 1.6, BASE=-3.2;
 // seeded value noise for terrain synthesis
@@ -1236,6 +1239,33 @@ function apply(a,p){
 /* =================================================================== cameras */
 let autoCam=true;
 [gCtl,lCtl].forEach(c=>c.addEventListener("start",()=>{ autoCam=false; }));
+/* Trackpad: a two-finger swipe moves the map (or turns the globe) the way the fingers go; pinch still zooms.
+   A pinch arrives as a wheel event with ctrlKey, which OrbitControls handles. A notched mouse wheel keeps zooming. */
+function isTrackpadSwipe(e){
+  if(e.ctrlKey || e.deltaMode!==0) return false;
+  return e.deltaX!==0 || Math.abs(e.deltaY)<40 || !Number.isInteger(e.deltaY);
+}
+const panR=new THREE.Vector3(), panF=new THREE.Vector3();
+function clampTarget(){
+  const m=LEXT*0.15, t=lCtl.target, x=clamp(t.x,X0-m,X1+m), z=clamp(t.z,Z0-m,Z1+m);
+  if(x!==t.x||z!==t.z){ lCam.position.x+=x-t.x; lCam.position.z+=z-t.z; t.x=x; t.z=z; }
+}
+lCtl.addEventListener("change", clampTarget);
+window.addEventListener("wheel", e=>{
+  if(e.target!==canvas || !isTrackpadSwipe(e)) return;
+  e.preventDefault(); e.stopPropagation(); autoCam=false;
+  if(lCtl.enabled){
+    const d=lCam.position.distanceTo(lCtl.target), k=d*0.0011;
+    lCam.getWorldDirection(panF); panF.y=0; panF.normalize();
+    panR.crossVectors(panF, up).normalize();
+    tv.copy(panR).multiplyScalar(e.deltaX*k).addScaledVector(panF, -e.deltaY*k);
+    lCtl.target.add(tv); lCam.position.add(tv); clampTarget(); lCtl.update();
+  } else if(gCtl.enabled){
+    const sp=new THREE.Spherical().setFromVector3(gCam.position.clone().sub(gCtl.target)), k=0.0025*(sp.radius-1);
+    sp.theta+=e.deltaX*k; sp.phi=clamp(sp.phi+e.deltaY*k, 0.15, Math.PI-0.15);
+    gCam.position.setFromSpherical(sp).add(gCtl.target); gCam.lookAt(gCtl.target); gCtl.update();
+  }
+}, {capture:true, passive:false});
 const tv=new THREE.Vector3(), up=new THREE.Vector3(0,1,0);
 function driveGlobeCam(a,p,dt){
   const zoom = sm(330,186,a);                          // 0 far, 1 close
