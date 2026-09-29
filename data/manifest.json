@@ -255,5 +255,16 @@
         }
       ]
     }
-  ]
+  ],
+  "locations": {
+    "gibraltar": {
+      "location_file": "data/locations/gibraltar.json",
+      "built": "2026-09-29",
+      "files": {
+        "prototype/assets/locations/gibraltar/med.bin": "f5eb3c89bbfbcf3fa85a03471ba22c2d538f2075b04063f16d22fe9df2846342",
+        "prototype/assets/locations/gibraltar/strait.bin": "8c24dba6e0d2f0f2324d34aac893c68123af9438762bceaf8193813a7fc13ea0",
+        "prototype/assets/locations/gibraltar/terrain.json": "b1b198af97153712dcbabc8aadd1202315f9dce515380e261bff3f3d5eb9ef32"
+      }
+    }
+  }
 }
