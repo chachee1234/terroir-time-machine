@@ -1,0 +1,5 @@
+{
+ "region": "petaluma_gap",
+ "places": [],
+ "gap": "No town labels yet. GNIS and Census gazetteers are blocked from the cloud sandbox, and Natural Earth 1:10m populated places (SOURCES G22) has no town inside this frame. Adding towns needs a reachable open gazetteer listed in SOURCES.md, or an owner instruction to use another source (for example OpenStreetMap, ODbL)."
+}

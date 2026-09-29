@@ -262,3 +262,13 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Commands: `curl -sSf -o data/raw/ava/avas.geojson <UC Davis avas.geojson>`; `python3 scripts/ava_extract.py --region data/regions/petaluma_gap.json --from-file data/raw/ava/avas.geojson`; `python3 scripts/fetch_tiles.py --region data/regions/petaluma_gap.json --frame-grid`; `python3 scripts/make_imagery_texture.py --region data/regions/petaluma_gap.json`; `python3 -m unittest discover -s scripts -p 'test_*.py'` (OK, 1 skipped); `python3 scripts/validate.py` (PASS).
 - Headless check: not run, because no page changed; the viewer does not load this region until step 3.
 - Next smallest action: R4.2, faults, towns and generic chapters for Petaluma Gap as region data.
+
+## Autopilot R4.2: Petaluma Gap faults, towns, chapters (branch `autopilot`) — 2026-09-29
+- Daily routine run; `Autopilot: ON`; main unchanged since yesterday, merged into `autopilot`; 1 step was awaiting review.
+- New `scripts/region_faults.py` (stdlib) clips the GEM active-faults file (G17) to a region frame into `<assets_dir>/faults.json`; tests in `scripts/test_region_faults.py`. Petaluma Gap: San Andreas (North Coast), Rodgers Creek–Healdsburg, Hayward (north), Bennett Valley.
+- Towns: gap, recorded in `prototype/assets/regions/petaluma_gap/places.json` (Natural Earth has none in the frame; GNIS/Census blocked). Needs an owner decision on another source (for example OpenStreetMap) if labels are wanted.
+- Chapters: `data/regions/petaluma_gap/scenes.json`, six shared planet-scale chapters by id, four gaps, two not applicable, one sourced "Today" card (AVA date and counties from UC Davis, terrain maximum from the G24 grid, fault names from G17).
+- Repairs: none.
+- Commands: `python3 scripts/region_faults.py --region data/regions/petaluma_gap.json --from-file <cached GEM geojson, SHA-256 37babb51…>`; `curl -sSf -o data/raw/ne/ne_10m_populated_places_simple.geojson <Natural Earth GitHub raw>` (SHA-256 matches G22); `python3 -m unittest discover -s scripts -p 'test_*.py'` (OK, 1 skipped); `python3 scripts/validate.py` (PASS).
+- Headless check: not run, because no page changed.
+- Next smallest action: R4.3, live marker, Places list, headless check and GeoLibre export for Petaluma Gap.

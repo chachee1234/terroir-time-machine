@@ -314,6 +314,19 @@
           "sha256": "cce7bca79f306f549340807c9aa301a72155e7a050b0ae5e77cc133442353b96"
         }
       ]
+    },
+    {
+      "id": "petaluma_gap-faults",
+      "source": "GEM Global Active Faults Database",
+      "url": "https://raw.githubusercontent.com/GEMScienceTools/gem-global-active-faults/master/geojson/gem_active_faults_harmonized.geojson",
+      "rights": "CC BY-SA 4.0 (GEM Global Active Faults Database, Styron & Pagani 2020); California traces from USGS UCERF3",
+      "source_sha256": "37babb516edfac22b5ae91744495d8546b3ae4676b4d4f68cc77da8222df20e1",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/petaluma_gap/faults.json",
+          "sha256": "06bd5efc37db6efdbd9aa07f9506a9c40de0d1271e3b66299811f9329afe9f57"
+        }
+      ]
     }
   ]
 }
