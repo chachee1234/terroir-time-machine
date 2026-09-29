@@ -1,0 +1,448 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gibraltar Flood · Terroir Time Machine</title>
+<meta name="ttm-location" content="gibraltar">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --void:#0b0e10; --panel:rgba(12,15,17,.78); --line:rgba(232,226,214,.14);
+  --ink:#ece6d9; --muted:#a39d91; --magma:#ff7a2f; --magma-ink:#1a0d05; --ochre:#d2a867;
+  --illus:#f0b95a; --approx:#7fd1a8; --sea:#6fc3ff;
+  --serif:"Young Serif",Georgia,"Times New Roman",serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px/1.5 var(--sans);overflow:hidden}
+#stage{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 40%,#16202a 0%,#07090b 70%)}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#fade{position:absolute;inset:0;background:#07090b;opacity:0;pointer-events:none;transition:opacity .45s ease;z-index:1}
+.ui{position:absolute;z-index:2}
+.top{top:calc(12px + env(safe-area-inset-top,0px));left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;pointer-events:none}
+.brand{font-family:var(--serif);font-size:20px;line-height:1.1;text-shadow:0 1px 12px rgba(0,0,0,.6)}
+.brand small{display:block;font-family:var(--sans);font-size:12px;color:var(--muted);letter-spacing:.04em;margin-top:4px}
+.chips{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;pointer-events:auto}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:4px 9px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+a.chip:hover{background:rgba(255,255,255,.12)}
+.readout{left:16px;top:calc(76px + env(safe-area-inset-top,0px));pointer-events:none}
+.age{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:clamp(34px,7vw,64px);font-weight:500;line-height:1;letter-spacing:-.02em;text-shadow:0 2px 24px rgba(0,0,0,.55)}
+.age span{font-size:.42em;color:var(--muted);margin-left:.25em;letter-spacing:0}
+.era{font-size:13px;color:var(--muted);margin-top:6px;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.7)}
+.lvl{margin-top:10px;font-family:var(--mono);font-size:13px;color:#cfe8ff;text-shadow:0 1px 8px rgba(0,0,0,.8)}
+.lvl b{font-weight:500}
+.clock{margin-top:4px;font-family:var(--mono);font-size:13px;color:var(--illus);text-shadow:0 1px 8px rgba(0,0,0,.8)}
+.clock:empty{display:none}
+.card{left:16px;bottom:calc(118px + env(safe-area-inset-bottom,0px));width:min(430px,calc(100% - 32px));background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px 16px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:opacity .5s ease,transform .5s ease;box-sizing:border-box}
+.card.swap{opacity:0;transform:translateY(6px)}
+.card .eyebrow{font-family:var(--mono);font-size:12px;color:var(--ochre);letter-spacing:.04em}
+.card h2{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.2;margin:4px 0 6px;text-wrap:balance}
+.card p{margin:0;color:#d7d1c4;font-size:14.5px;max-width:62ch}
+.card .cls{margin-top:10px;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.card .cls b{color:var(--c);font-weight:600}
+.card .src{margin-top:4px;font-size:12px;color:var(--muted)}
+.cmin{position:absolute;top:6px;right:6px;width:30px;height:28px;border:0;border-radius:4px;background:none;color:var(--muted);font:600 18px/1 var(--sans);cursor:pointer}
+.cmin:hover,.cmin:focus-visible{color:var(--ink);background:rgba(255,255,255,.08);outline:none}
+.card.min{padding:8px 44px 8px 14px;width:auto}
+.card.min h2{font-size:16px;margin:2px 0 0}
+.card.min p,.card.min .cls,.card.min .src{display:none}
+.lbl{position:absolute;z-index:2;transform:translate(-50%,-100%);pointer-events:none;font-size:12px;white-space:nowrap;text-align:center;text-shadow:0 1px 6px rgba(0,0,0,.95);transition:opacity .4s ease}
+.lbl b{display:block;font-family:var(--serif);font-weight:400;font-size:14px}
+.lbl::after{content:"";display:block;width:1px;height:14px;margin:3px auto 0;background:var(--ink);opacity:.6}
+.lbl.sea b{color:#bfe3ff}
+.lbl.flow b{color:var(--illus)}
+.lbl small{color:var(--muted);font-size:11px}
+.bar{position:absolute;z-index:3;left:0;right:0;bottom:0;padding:10px 16px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,rgba(8,10,12,.92),rgba(8,10,12,.72) 70%,rgba(8,10,12,0))}
+.row{display:flex;align-items:center;gap:8px}
+.btn{font:500 14px var(--sans);color:var(--ink);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:5px;min-height:40px;min-width:40px;padding:0 12px;cursor:pointer}
+.btn:hover{background:rgba(255,255,255,.12)}
+.btn.play{background:var(--magma);color:var(--magma-ink);border-color:var(--magma);font-weight:600;min-width:84px}
+#scrub{flex:1;accent-color:var(--magma);min-width:0}
+.ticks{position:relative;height:22px;margin:6px 0 0}
+.tick{position:absolute;transform:translateX(-50%);font:500 11px var(--mono);color:var(--muted);background:none;border:0;padding:2px 4px;cursor:pointer;white-space:nowrap}
+.tick:hover,.tick.on{color:var(--ink)}
+.foot{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.35}
+@media (max-width:640px){
+  .card{bottom:calc(128px + env(safe-area-inset-bottom,0px))}
+  .tick.minor{display:none}
+  .card p{font-size:13.5px}
+  .brand small{display:none}
+}
+</style>
+<div id="stage"><canvas id="gl"></canvas><div id="fade"></div></div>
+<div class="ui top">
+  <div class="brand">Terroir Time Machine<small>Strait of Gibraltar · the Mediterranean dries and refills</small></div>
+  <div class="chips">
+    <span class="chip" id="scaleChip">Mediterranean</span>
+    <span class="chip" id="exChip">Vertical ×20</span>
+    <a class="chip" href="timemachine.html" title="Back to the Napa and Sonoma time machine">Napa ↩</a>
+  </div>
+</div>
+<div class="ui readout">
+  <div class="age" id="age">7.20<span>Ma</span></div>
+  <div class="era" id="era">Late Miocene · Messinian</div>
+  <div class="lvl" id="lvl"></div>
+  <div class="clock" id="clock"></div>
+</div>
+<div class="ui card" id="card" aria-live="polite">
+  <button class="cmin" id="cmin" aria-label="Minimise card" title="Minimise">–</button>
+  <div class="eyebrow" id="cEye"></div>
+  <h2 id="cTitle"></h2>
+  <p id="cBody"></p>
+  <div class="cls" id="cCls"></div>
+  <div class="src" id="cSrc"></div>
+</div>
+<div id="labels"></div>
+<div class="bar">
+  <div class="row">
+    <button class="btn play" id="play">Play</button>
+    <button class="btn" id="prev" aria-label="Previous chapter">‹</button>
+    <button class="btn" id="next" aria-label="Next chapter">›</button>
+    <input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Timeline">
+  </div>
+  <div class="ticks" id="ticks"></div>
+  <div class="foot">Relief: AWS Terrain Tiles (SRTM, GMTED2010 courtesy USGS; ETOPO1 bathymetry, NOAA), present day. Past water levels, salt and the flood are an illustrative process on today's relief, not a reconstruction of the Messinian landscape.</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const clamp=(x,a,b)=>Math.min(b,Math.max(a,x)), lerp=(a,b,t)=>a+(b-a)*t;
+const sm=(a,b,x)=>{const t=clamp((x-a)/(b-a),0,1);return t*t*(3-2*t);};
+const ASSETS="assets/locations/gibraltar/";
+
+/* =================================================================== STORY
+   Ages and numbers are from SOURCES.md G25: Roveri, Lugli & Manzi 2025 (Annu. Rev. Mar. Sci. 17:485-509)
+   for the stage ages, the corridor closures and the debate; Garcia-Castellanos et al. 2009 (Nature 462:778-781)
+   for the flood. Every chapter except Today is an illustration on present-day relief (SCIENCE_RULES §1). */
+const ILLUS={name:"Illustrative process · geometry and timing are schematic",c:"var(--illus)"};
+const MEAS={name:"Measured/mapped data · present-day relief",c:"var(--approx)"};
+const CH=[
+ {id:"gateways",view:"med",dur:9,age:[7.2,6.8],tag:"7.2–6.8 Ma",title:"Two gateways to the Atlantic",
+  body:"Atlantic water reaches the Mediterranean through two seaways: the Betic Corridor across southern Spain and the Rifian Corridor across northern Morocco. As Africa converges on Iberia the land rises, and the Betic Corridor closes at about 7.1 Ma, the Rifian at about 6.8 Ma.",
+  cls:ILLUS,src:"Roveri et al. 2025, p. 490"},
+ {id:"one_gate",minor:true,view:"med",dur:7,age:[6.8,5.97],tag:"6.8 Ma",title:"One narrow gateway left",
+  body:"With both corridors shut, the present-day Strait of Gibraltar is the only likely ocean connection. The Mediterranean loses more water to evaporation than its rivers return, so it depends on Atlantic inflow through this one gap.",
+  cls:ILLUS,src:"Roveri et al. 2025, p. 490"},
+ {id:"stage1",view:"med",dur:8,age:[5.97,5.60],tag:"5.97 Ma",title:"The salinity crisis begins",
+  body:"Inflow is restricted and the water turns saltier. Gypsum layers build up in shallow marginal basins around the sea (pale edges). This is Stage 1 of the Messinian Salinity Crisis, 5.97 to 5.60 Ma.",
+  cls:ILLUS,src:"Roveri et al. 2025, p. 486"},
+ {id:"stage2",view:"med",dur:12,age:[5.60,5.54],tag:"5.60 Ma",title:"The sea drops and salt fills the deep basins",
+  body:"In Stage 2 (5.60 to 5.54 Ma) a large volume of salt, mainly halite, accumulates in the deepest basins. How far the water fell is debated: catastrophic-flood models put it 1,200 to 1,500 m below the Atlantic, other estimates about 600 to 800 m. The animation shows 1,500 m. Even then the deep basins stay under brine, matching the lack of clear dry-land features there.",
+  cls:ILLUS,src:"Roveri et al. 2025, pp. 486–488; Garcia-Castellanos et al. 2009"},
+ {id:"stage3",minor:true,view:"med",dur:8,age:[5.54,5.33],tag:"5.54 Ma",title:"Lago-Mare: a sea of brackish lakes",
+  body:"In Stage 3 (5.54 to 5.33 Ma) the basin holds brackish water with non-marine shellfish, ostracods and dinoflagellates, the “Lago-Mare”. The level here is held low and wobbles; its real history is not known in this detail.",
+  cls:ILLUS,src:"Roveri et al. 2025, p. 486"},
+ {id:"flood",view:"strait",dur:22,age:[5.33,5.33],tag:"5.33 Ma",title:"The Zanclean flood",
+  body:"Atlantic water spills over the barrier. The flood may start as a trickle lasting up to several thousand years, then erosion runs away: the model cuts a channel about 200 km long, removes about 500 km³ of rock, peaks above 100 million m³ a second and raises the Mediterranean more than 10 m a day. Some researchers argue the ending was less catastrophic.",
+  cls:ILLUS,src:"Garcia-Castellanos et al. 2009, pp. 778–780; Roveri et al. 2025, p. 502",clock:true},
+ {id:"refill",minor:true,view:"med",dur:9,age:[5.33,5.33],tag:"5.33 Ma",tick:"Refill",title:"The Mediterranean refills",
+  body:"In the flood model about 90 % of the water arrives in a few months to two years. The Pliocene epoch, and its first stage, the Zanclean, begin at this moment in the geologic time scale.",
+  cls:ILLUS,src:"Garcia-Castellanos et al. 2009, p. 778"},
+ {id:"today",view:"strait",dur:9,age:[5.33,0],tag:"Today",title:"The Strait of Gibraltar today",
+  body:"Atlantic water still pours in at the surface to replace what the Mediterranean evaporates. The strait's shallowest point, the Camarinal Sill, lies 284 m down. The 2009 flood study traced an eroded channel about 200 km long across the strait, buried under younger sediment.",
+  cls:MEAS,src:"Relief: AWS Terrain Tiles (G24). Sill and channel: Garcia-Castellanos et al. 2009, p. 778"}
+];
+let T=0; CH.forEach(c=>{c.t0=T; T+=c.dur; c.t1=T;}); const TOTAL=T;
+
+// Mediterranean level (m, relative to today's sea level) and layer strengths at playback time t
+const DRAW=-1500;
+function stateAt(t){
+  const i=CH.findIndex(c=>t<c.t1), c=CH[i<0?CH.length-1:i], u=clamp((t-c.t0)/c.dur,0,1);
+  const s={ch:c,u,view:c.view,med:0,carve:0,flood:0,front:CHUTE.x1+0.1,gyp:0,salt:0,brack:0,corr:0,gate:0,age:lerp(c.age[0],c.age[1],u)};
+  switch(c.id){
+    case "gateways": s.corr=1-sm(0.55,1,u); s.gate=sm(0.3,1,u); break;
+    case "one_gate": s.gate=1; break;
+    case "stage1":  s.gate=1-0.6*u; s.gyp=sm(0,0.9,u); s.med=-60*sm(0.3,1,u); break;
+    case "stage2":  s.gyp=1; s.med=lerp(-60,DRAW,sm(0.05,0.8,u)); s.salt=sm(0.2,1,u); break;
+    case "stage3":  s.gyp=1; s.salt=1; s.brack=sm(0,0.4,u); s.med=DRAW+120+90*Math.sin(u*Math.PI*5)*(1-sm(0.85,1,u))-120*sm(0.85,1,u); break;
+    case "flood": {
+      s.gyp=1; s.salt=1; s.brack=1-sm(0.3,0.9,u);
+      // 0-0.18 slow phase (trickle over the sill); then runaway incision and fast refill
+      s.flood=sm(0.02,0.12,u); s.front=lerp(CHUTE.x0,CHUTE.x1+0.1,sm(0.02,0.3,u)); s.carve=0.08*sm(0.02,0.18,u)+0.92*sm(0.18,0.6,u);
+      s.med=lerp(DRAW,-560,sm(0.2,1,u)); break; }
+    case "refill":  s.gyp=1; s.salt=1; s.carve=1; s.flood=1-sm(0.6,1,u); s.med=lerp(-560,0,sm(0,0.85,u)); break;
+    case "today":   s.carve=1; s.gyp=1; s.salt=1; break;
+  }
+  return s;
+}
+
+/* =================================================================== TERRAIN */
+const VIEWS={
+  med:{name:"Mediterranean",exag:20,step:2,seed:[5.0,40.0],cam:[0,56,62],look:[0,-2,3],
+       labels:[
+        {lon:-4.2,lat:37.55,t:"Betic Corridor",s:"closes ≈7.1 Ma",k:"flow",show:s=>s.corr},
+        {lon:-5.2,lat:34.55,t:"Rifian Corridor",s:"closes ≈6.8 Ma",k:"flow",show:s=>s.corr},
+        {lon:-5.6,lat:36.0,t:"Strait of Gibraltar",s:"",k:"flow",show:s=>s.ch.id==="one_gate"||s.ch.id==="stage1"||s.ch.id==="refill"?1:0},
+        {lon:5.0,lat:39.6,t:"Balearic basin",s:"salt under brine",k:"sea",show:s=>s.salt*(s.ch.id!=="refill"?1:0)},
+        {lon:18.5,lat:35.8,t:"Ionian basin",s:"salt under brine",k:"sea",show:s=>s.salt*(s.ch.id!=="refill"?1:0)},
+        {lon:31.5,lat:33.6,t:"Levant basin",s:"salt under brine",k:"sea",show:s=>s.salt*(s.ch.id!=="refill"?1:0)},
+        {lon:31.8,lat:43.4,t:"Black Sea",s:"not modelled, kept at today's level",k:"sea",show:s=>s.ch.id==="stage2"||s.ch.id==="stage3"?1:0},
+        {lon:12.5,lat:44.6,t:"Adriatic",s:"shallow floor exposed",k:"",show:s=>s.ch.id==="stage3"?1:0}
+       ]},
+  strait:{name:"Strait of Gibraltar",exag:4,step:1,seed:[-4.5,36.2],cam:[-3,50,58],look:[-2,-4,4],
+       labels:[
+        {lon:-5.75,lat:35.93,t:"Camarinal Sill",s:"284 m deep today",k:"sea",show:s=>s.ch.id==="today"?1:0},
+        {lon:-5.75,lat:35.93,t:"Barrier",s:"schematic land bridge",k:"flow",show:s=>s.ch.id==="flood"?1-sm(0.12,0.3,s.u):0},
+        {lon:-5.25,lat:35.95,t:"Flood channel",s:"schematic",k:"flow",show:s=>s.ch.id==="flood"?sm(0.25,0.4,s.u):0},
+        {lon:-5.60,lat:36.02,t:"Tarifa",s:"",k:"",show:()=>1},
+        {lon:-5.35,lat:36.14,t:"Gibraltar",s:"",k:"",show:()=>1},
+        {lon:-5.31,lat:35.89,t:"Ceuta",s:"",k:"",show:()=>1},
+        {lon:-5.81,lat:35.77,t:"Tangier",s:"",k:"",show:()=>1},
+        {lon:-6.2,lat:35.9,t:"Atlantic",s:"",k:"sea",show:()=>1},
+        {lon:-4.75,lat:36.1,t:"Alborán Sea",s:"",k:"sea",show:s=>s.med>-400?1:0},
+        {lon:-4.75,lat:36.1,t:"Alborán basin",s:"drained floor",k:"",show:s=>s.med<=-400?1:0}
+       ]}
+};
+// The barrier: a schematic ridge across the narrowest part of the strait (crest at the Camarinal Sill),
+// removed as the flood cuts through. Not a reconstruction of the Messinian sill.
+const GATE={lon:[-6.05,-5.2],lat:[35.80,36.14],crest:-5.72,h:80,fall:0.25};   // fall: m per 10 m east-west
+// The flood chute: water surface drops from Atlantic level at the sill to the Mediterranean level eastwards.
+const CHUTE={x0:-5.72,x1:-4.4,lat:[35.78,36.2]};   // the sheet follows the deepest line of today's strait floor east of the crest
+
+const scene=new THREE.Scene();
+const renderer=new THREE.WebGLRenderer({canvas:$("gl"),antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(2,devicePixelRatio||1));
+const camera=new THREE.PerspectiveCamera(40,1,0.1,2000);
+const controls=new THREE.OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true; controls.maxPolarAngle=Math.PI*0.47; controls.minDistance=8; controls.maxDistance=180;
+controls.screenSpacePanning=false;
+
+const VS=`
+attribute float aH; attribute float aHc; attribute float aB; attribute float aSh; attribute float aShc; attribute vec2 aLL; attribute float aAx;
+uniform float uMed,uCarve,uFlood,uK,uX0,uFront,uHalf;
+varying float vGround,vLevel,vShade,vChute,vB; varying vec2 vLL;
+void main(){
+  float ground=mix(aHc,aH,uCarve);
+  float level=-1e5;
+  float band=(1.0-smoothstep(uHalf*0.5,uHalf,aAx))*(1.0-smoothstep(uFront-0.08,uFront,aLL.x));
+  // flood sheet: east of the crest, water runs down the sea floor as a layer uFlood*(60..300) m thick
+  float fd=uFlood*band*(40.0+260.0*uCarve);
+  float sheet=max(uMed,min(0.0,ground+fd));
+  bool inChute=uFlood>0.0&&band>0.0&&aH<0.0&&aLL.x>uX0;
+  vChute=0.0;
+  if(aB>0.5&&aB<1.5) level=0.0;
+  else if(aB>1.5&&aB<2.5){ level=uMed; if(inChute){ level=sheet; vChute=band*uFlood*step(uMed+2.0,sheet); } }
+  else if(aB>2.5&&aB<3.5) level=0.0;
+  else if(aB>3.5){
+    if(uFlood>0.0){ if(aLL.x<=uX0) level=0.0; else if(inChute){ level=sheet; vChute=band*uFlood*step(uMed+2.0,sheet); } }
+    else if(uCarve>0.999) level=0.0; }
+  vGround=ground; vLevel=level; vB=aB; vLL=aLL;
+  vShade=mix(aShc,aSh,uCarve);
+  float y=max(ground,level)*uK;
+  gl_Position=projectionMatrix*modelViewMatrix*vec4(position.x,y,position.z,1.0);
+}`;
+const FS=`
+precision highp float;
+uniform float uGyp,uSalt,uBrack,uTime,uFlood,uMed;
+varying float vGround,vLevel,vShade,vChute,vB; varying vec2 vLL;
+float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
+float noise(vec2 p){ vec2 i=floor(p),f=fract(p); f=f*f*(3.0-2.0*f);
+  return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y); }
+vec3 landCol(float h){
+  vec3 c=mix(vec3(0.36,0.42,0.26),vec3(0.55,0.49,0.33),smoothstep(0.0,700.0,h));
+  c=mix(c,vec3(0.62,0.58,0.52),smoothstep(700.0,2200.0,h));
+  return mix(c,vec3(0.86,0.85,0.83),smoothstep(2600.0,3600.0,h));
+}
+void main(){
+  float d=vLevel-vGround;
+  vec3 col;
+  if(d<=0.0){
+    if(vGround>0.0) col=landCol(vGround);
+    else {
+      // exposed sea floor: pale mud; gypsum on the Mediterranean margins; salt crust in the deepest parts
+      col=vec3(0.55,0.50,0.43);
+      if(vB>1.5&&vB<2.5){
+        col=mix(col,vec3(0.86,0.82,0.72),uGyp*smoothstep(-700.0,-150.0,vGround)*0.55);
+        col=mix(col,vec3(0.93,0.93,0.90),uSalt*smoothstep(-1200.0,-1480.0,vGround)*0.8);
+      }
+    }
+    col*=vShade;
+  } else {
+    vec3 floorC=vec3(0.30,0.33,0.30)*vShade;
+    if(vB>1.5&&vB<2.5) floorC=mix(floorC,vec3(0.92,0.93,0.92)*vShade,uSalt*smoothstep(-1300.0,-1700.0,vGround)*0.9);
+    vec3 shallow=vec3(0.16,0.52,0.62), deep=vec3(0.03,0.12,0.26);
+    if(vB>1.5&&vB<2.5){ shallow=mix(shallow,vec3(0.33,0.62,0.50),uBrack); deep=mix(deep,vec3(0.10,0.24,0.20),uBrack*0.8);
+      shallow=mix(shallow,vec3(0.55,0.78,0.78),uSalt*(1.0-uBrack)*smoothstep(-900.0,-1400.0,uMed)*0.5); }
+    vec3 w=mix(shallow,deep,smoothstep(0.0,2200.0,d));
+    col=mix(floorC,w,smoothstep(0.0,120.0,d)*0.92+0.08);
+    // flood: foam streaks running east down the chute
+    if(vChute>0.001){
+      float s=noise(vec2(vLL.x*140.0-uTime*3.2,vLL.y*420.0))*0.6+noise(vec2(vLL.x*380.0-uTime*7.0,vLL.y*900.0))*0.4;
+      float foam=smoothstep(0.45,0.85,s)*vChute;
+      col=mix(col,vec3(0.72,0.80,0.78),vChute*0.55);
+      col=mix(col,vec3(0.97,0.98,0.96),foam);
+    }
+    // glint
+    col+=vec3(0.05,0.06,0.07)*noise(vec2(vLL.x*60.0+uTime*0.2,vLL.y*60.0));
+  }
+  gl_FragColor=vec4(col,1.0);
+}`;
+
+async function loadView(key){
+  const V=VIEWS[key];
+  const meta=V.meta;
+  const buf=await fetch(ASSETS+meta.file).then(r=>{ if(!r.ok) throw new Error(meta.file+" "+r.status); return r.arrayBuffer(); });
+  const H=new Int16Array(buf), W=meta.cols, R=meta.rows, [lon0,lat0,lon1,lat1]=meta.bbox_lonlat;
+  const lonAt=c=>lon0+(c+0.5)/W*(lon1-lon0), latAt=r=>lat1-(r+0.5)/R*(lat1-lat0);
+  // closed-gateway terrain
+  const Hc=new Int16Array(H);
+  for(let r=0;r<R;r++){ const la=latAt(r); if(la<GATE.lat[0]||la>GATE.lat[1]) continue;
+    for(let c=0;c<W;c++){ const lo=lonAt(c); if(lo<GATE.lon[0]||lo>GATE.lon[1]) continue; const i=r*W+c;
+      const km=Math.abs(lo-GATE.crest)*111.32*Math.cos(la*Math.PI/180), ridge=GATE.h-km*1000*GATE.fall/10;
+      if(Hc[i]<ridge) Hc[i]=Math.round(ridge); } }
+  // basins on the closed terrain: 1 Atlantic (from the west edge), 2 Mediterranean (from a seed), 3 other large water, 4 gate
+  const B=new Uint8Array(W*R), q=new Int32Array(W*R);
+  const fill=(seeds,id)=>{ let n=0,h=0; for(const s of seeds){ if(Hc[s]<0&&!B[s]){B[s]=id;q[n++]=s;} }
+    while(h<n){ const i=q[h++], r=(i/W)|0, c=i-r*W;
+      const nb=[c>0?i-1:-1,c<W-1?i+1:-1,r>0?i-W:-1,r<R-1?i+W:-1];
+      for(const j of nb) if(j>=0&&!B[j]&&Hc[j]<0){B[j]=id;q[n++]=j;} }
+    return n; };
+  const west=[]; for(let r=0;r<R;r++) west.push(r*W);
+  fill(west,1);
+  const sc=Math.round((V.seed[0]-lon0)/(lon1-lon0)*W-0.5), sr=Math.round((lat1-V.seed[1])/(lat1-lat0)*R-0.5);
+  const medN=fill([sr*W+sc],2);
+  if(!medN) console.warn("Mediterranean seed not in water");
+  // other big water bodies (Black Sea) keep today's level; small depressions stay dry land
+  for(let i=0;i<W*R;i++) if(Hc[i]<0&&!B[i]){ const n=fill([i],5); if(n>2000) for(let k=0;k<n;k++) B[q[k]]=3; else for(let k=0;k<n;k++) B[q[k]]=0; }
+  for(let i=0;i<W*R;i++) if(B[i]===5) B[i]=0;
+  for(let i=0;i<W*R;i++) if(Hc[i]!==H[i]&&Hc[i]>=0) B[i]=4;
+  // flood axis: per column east of the crest, the latitude of the deepest cell of today's floor, smoothed
+  const axLat=new Float32Array(W), raw=new Float32Array(W);
+  for(let c=0;c<W;c++){ const lo=lonAt(c); let best=1e9, bl=(CHUTE.lat[0]+CHUTE.lat[1])/2;
+    if(lo>=CHUTE.x0-0.1&&lo<=CHUTE.x1) for(let r=0;r<R;r++){ const la=latAt(r); if(la<CHUTE.lat[0]||la>CHUTE.lat[1]) continue; if(H[r*W+c]<best){best=H[r*W+c]; bl=la;} }
+    raw[c]=bl; }
+  const win=Math.max(2,Math.round(0.06/((lon1-lon0)/W)));
+  for(let c=0;c<W;c++){ let s2=0,n=0; for(let k=-win;k<=win;k++){ const j=clamp(c+k,0,W-1); s2+=raw[j]; n++; } axLat[c]=s2/n; }
+  // shading from each surface (sun from the north-west)
+  const cellKm=meta.cell_km, sizeX=100, sizeZ=100*R/W, uPerM=sizeX/(W*cellKm*1000), K=uPerM*V.exag;
+  const shade=(G)=>{ const S=new Float32Array(W*R), L=[-0.5,0.65,-0.55], ln=Math.hypot(...L);
+    for(let r=0;r<R;r++) for(let c=0;c<W;c++){ const i=r*W+c;
+      const dx=(G[r*W+Math.min(W-1,c+1)]-G[r*W+Math.max(0,c-1)])*V.exag/(2*cellKm*1000);
+      const dz=(G[Math.min(R-1,r+1)*W+c]-G[Math.max(0,r-1)*W+c])*V.exag/(2*cellKm*1000);
+      const n=[-dx,1,-dz], nl=Math.hypot(...n);
+      S[i]=0.45+0.75*Math.max(0,(n[0]*L[0]+n[1]*L[1]+n[2]*L[2])/(nl*ln)); }
+    return S; };
+  const S=shade(H), Sc=shade(Hc);
+  // decimated mesh
+  const st=V.step, cw=Math.floor((W-1)/st)+1, rh=Math.floor((R-1)/st)+1, N=cw*rh;
+  const pos=new Float32Array(N*3), aH=new Float32Array(N), aHc=new Float32Array(N), aB=new Float32Array(N),
+        aSh=new Float32Array(N), aShc=new Float32Array(N), aLL=new Float32Array(N*2), aAx=new Float32Array(N);
+  for(let rr=0;rr<rh;rr++) for(let cc=0;cc<cw;cc++){ const k=rr*cw+cc, r=rr*st, c=cc*st, i=r*W+c;
+    pos[k*3]=(c/(W-1)-0.5)*sizeX; pos[k*3+2]=(r/(R-1)-0.5)*sizeZ;
+    aH[k]=H[i]; aHc[k]=Hc[i]; aB[k]=B[i]; aSh[k]=S[i]; aShc[k]=Sc[i]; aLL[k*2]=lonAt(c); aLL[k*2+1]=latAt(r); aAx[k]=Math.abs(latAt(r)-axLat[c]); }
+  const idx=new Uint32Array((cw-1)*(rh-1)*6); let p=0;
+  for(let rr=0;rr<rh-1;rr++) for(let cc=0;cc<cw-1;cc++){ const a=rr*cw+cc,b=a+1,c2=a+cw,d=c2+1; idx[p++]=a;idx[p++]=c2;idx[p++]=b;idx[p++]=b;idx[p++]=c2;idx[p++]=d; }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute("position",new THREE.BufferAttribute(pos,3));
+  [["aH",aH],["aHc",aHc],["aB",aB],["aSh",aSh],["aShc",aShc],["aAx",aAx]].forEach(([n,a])=>g.setAttribute(n,new THREE.BufferAttribute(a,1)));
+  g.setAttribute("aLL",new THREE.BufferAttribute(aLL,2));
+  g.setIndex(new THREE.BufferAttribute(idx,1));
+  g.boundingSphere=new THREE.Sphere(new THREE.Vector3(0,0,0),80);
+  const uni={uMed:{value:0},uCarve:{value:0},uFlood:{value:0},uK:{value:K},uX0:{value:CHUTE.x0},
+    uFront:{value:CHUTE.x0},uHalf:{value:0.02},uGyp:{value:0},uSalt:{value:0},uBrack:{value:0},uTime:{value:0}};
+  const mesh=new THREE.Mesh(g,new THREE.ShaderMaterial({vertexShader:VS,fragmentShader:FS,uniforms:uni}));
+  mesh.visible=false; scene.add(mesh);
+  // helpers for labels: scene position of a lon/lat at today's ground height
+  const toScene=(lon,lat)=>{ const c=clamp(Math.round((lon-lon0)/(lon1-lon0)*W-0.5),0,W-1), r=clamp(Math.round((lat1-lat)/(lat1-lat0)*R-0.5),0,R-1);
+    return {x:(c/(W-1)-0.5)*sizeX,z:(r/(R-1)-0.5)*sizeZ,h:H[r*W+c],hc:Hc[r*W+c],b:B[r*W+c]}; };
+  Object.assign(V,{mesh,uni,K,toScene,sizeZ,medCells:medN});
+  V.labels.forEach(L=>{ if(!L.t) return; const el=document.createElement("div"); el.className="lbl "+L.k;
+    el.innerHTML="<b></b>"+(L.s?"<small></small>":""); el.querySelector("b").textContent=L.t; if(L.s) el.querySelector("small").textContent=L.s;
+    el.style.opacity=0; $("labels").appendChild(el); L.el=el; L.p=toScene(L.lon,L.lat); });
+}
+
+/* =================================================================== VIEW + PLAYBACK */
+let view=null, t=0, playing=false, last=performance.now(), userMoved=false, fadeTimer=0;
+function setView(key){
+  if(view===key) return; const first=view===null; view=key;
+  const V=VIEWS[key];
+  Object.values(VIEWS).forEach(v=>{ if(v.mesh) v.mesh.visible=(v===V); v.labels.forEach(L=>L.el&&(L.el.style.display=v===V?"":"none")); });
+  camera.position.set(...V.cam); controls.target.set(...V.look); controls.update(); userMoved=false;
+  $("scaleChip").textContent=V.name; $("exChip").textContent="Vertical ×"+V.exag;
+  if(!first){ const f=$("fade"); f.style.transition="none"; f.style.opacity=1; void f.offsetWidth; f.style.transition=""; f.style.opacity=0; }
+}
+controls.addEventListener("start",()=>{userMoved=true;});
+
+let lastCh=null;
+function showCard(c){
+  if(lastCh===c) return; lastCh=c;
+  const card=$("card"); card.classList.add("swap");
+  setTimeout(()=>{ $("cEye").textContent=c.tag; $("cTitle").textContent=c.title; $("cBody").textContent=c.body;
+    $("cCls").innerHTML=""; const b=document.createElement("b"); b.textContent=c.cls.name; $("cCls").appendChild(b); $("cCls").style.setProperty("--c",c.cls.c);
+    $("cSrc").textContent="Source: "+c.src; card.classList.remove("swap"); },lastCh&&card.dataset.init?220:0);
+  card.dataset.init=1;
+  document.querySelectorAll(".tick").forEach(el=>el.classList.toggle("on",el.dataset.id===c.id));
+}
+function fmtAge(a){ return a<=0.0005?"0.00":a.toFixed(2); }
+function apply(){
+  const s=stateAt(t); setView(s.view); showCard(s.ch);
+  const V=VIEWS[s.view], u=V.uni;
+  u.uMed.value=s.med; u.uCarve.value=s.carve; u.uFront.value=s.front; u.uHalf.value=0.02+0.04*s.carve; u.uFlood.value=s.flood; u.uGyp.value=s.gyp; u.uSalt.value=s.salt; u.uBrack.value=s.brack;
+  if(s.ch.id==="today"){ $("age").innerHTML=(s.u>0.35?"0.00":fmtAge(s.age))+"<span>Ma</span>"; $("era").textContent=s.u>0.35?"Today":"Pliocene to today"; }
+  else { $("age").innerHTML=fmtAge(s.age)+"<span>Ma</span>"; $("era").textContent=s.age>5.333?"Late Miocene · Messinian":"Early Pliocene · Zanclean"; }
+  const m=Math.round(s.med/10)*10;
+  $("lvl").innerHTML="Mediterranean level: <b>"+(m===0?"today's sea level":(m.toLocaleString("en-US")+" m"))+"</b>";
+  let clk="";
+  if(s.ch.clock){ const u2=s.u; if(u2<0.18) clk="Slow phase · a trickle over the sill, possibly for thousands of years";
+    else { const mo=Math.min(24,Math.round((u2-0.18)/0.82*30)); clk="Flood clock · about month "+Math.max(1,mo)+" (model timescale)"; } }
+  if(s.ch.id==="refill") clk="Flood clock · months to two years for about 90 % of the water";
+  $("clock").textContent=clk;
+  $("scrub").value=Math.round(t/TOTAL*1000);
+  V.state=s;
+}
+function frame(now){
+  const dt=Math.min(0.1,(now-last)/1000); last=now;
+  if(playing){ t+=dt; if(t>=TOTAL){ t=TOTAL-0.001; playing=false; $("play").textContent="Replay"; } }
+  apply();
+  const V=VIEWS[view];
+  V.uni.uTime.value=now/1000;
+  if(!userMoved){ // slow drift
+    const s=V.state, k=now/1000*0.03; const r=Math.hypot(V.cam[0]-V.look[0],V.cam[2]-V.look[2]);
+    const a0=Math.atan2(V.cam[0]-V.look[0],V.cam[2]-V.look[2])+Math.sin(k)*0.18;
+    camera.position.set(V.look[0]+Math.sin(a0)*r,V.cam[1],V.look[2]+Math.cos(a0)*r);
+  }
+  controls.update();
+  const w=renderer.domElement.clientWidth, h=renderer.domElement.clientHeight;
+  if(renderer.domElement.width!==Math.round(w*renderer.getPixelRatio())||renderer.domElement.height!==Math.round(h*renderer.getPixelRatio())){
+    renderer.setSize(w,h,false); camera.aspect=w/h; camera.fov=w<h?64:40; camera.updateProjectionMatrix(); }
+  renderer.render(scene,camera);
+  // labels
+  const s=V.state, v3=new THREE.Vector3();
+  V.labels.forEach(L=>{ if(!L.el) return; const o=clamp(+L.show(s)||0,0,1);
+    const g=Math.max(lerp(L.p.hc,L.p.h,s.carve), L.p.b===2?s.med:(L.p.b===1||L.p.b===3?0:-1e5));
+    v3.set(L.p.x,Math.max(g,0)*V.K+0.4,L.p.z).project(camera);
+    const vis=v3.z<1&&Math.abs(v3.x)<1.1&&Math.abs(v3.y)<1.1;
+    L.el.style.opacity=vis?o:0;
+    L.el.style.left=((v3.x+1)/2*w)+"px"; L.el.style.top=((1-v3.y)/2*h)+"px"; });
+  requestAnimationFrame(frame);
+}
+
+function jump(i){ t=CH[clamp(i,0,CH.length-1)].t0+0.001; apply(); }
+function cur(){ const i=CH.findIndex(c=>t<c.t1); return i<0?CH.length-1:i; }
+$("play").onclick=()=>{ if(t>=TOTAL-0.01) t=0; playing=!playing; $("play").textContent=playing?"Pause":"Play"; };
+$("prev").onclick=()=>{ const i=cur(); jump(t-CH[i].t0>1.5?i:i-1); };
+$("next").onclick=()=>jump(cur()+1);
+$("scrub").oninput=e=>{ t=e.target.value/1000*TOTAL; if(t>=TOTAL) t=TOTAL-0.001; playing=false; $("play").textContent="Play"; apply(); };
+$("cmin").onclick=()=>{ const c=$("card"); c.classList.toggle("min"); $("cmin").textContent=c.classList.contains("min")?"+":"–"; };
+addEventListener("keydown",e=>{ if(e.key===" "&&e.target.tagName!=="INPUT"){ e.preventDefault(); $("play").click(); }
+  if(e.key==="ArrowRight") $("next").click(); if(e.key==="ArrowLeft") $("prev").click(); });
+CH.forEach((c,i)=>{ const b=document.createElement("button"); b.className="tick"; b.dataset.id=c.id;
+  b.style.left=(c.t0/TOTAL*100+1.2)+"%"; b.innerHTML="<span>"+(c.tick||c.tag.split("–")[0])+"</span>";
+  b.title=c.title; b.onclick=()=>jump(i); if(c.minor) b.classList.add("minor"); if(i===CH.length-1) b.style.left="calc(100% - 22px)"; $("ticks").appendChild(b); });
+
+(async function init(){
+  const meta=await fetch(ASSETS+"terrain.json").then(r=>r.json());
+  meta.frames.forEach(f=>{ if(VIEWS[f.id]) VIEWS[f.id].meta=f; });
+  await Promise.all(Object.keys(VIEWS).map(loadView));
+  const q=new URLSearchParams(location.search), ch=q.get("chapter");
+  const i=CH.findIndex(c=>c.id===ch); t=i>=0?CH[i].t0+0.001:0;
+  if(q.has("t")) t=clamp(+q.get("t"),0,TOTAL-0.001);
+  apply(); requestAnimationFrame(frame);
+  if(!q.has("chapter")&&!q.has("t")&&!q.has("still")){ playing=true; $("play").textContent="Pause"; }
+})().catch(e=>{ console.error(e); $("cTitle").textContent="Could not load the terrain"; $("cBody").textContent=String(e.message||e)+". Serve the repository root with python3 -m http.server and open /prototype/gibraltar.html."; });
+</script>
