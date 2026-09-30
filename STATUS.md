@@ -272,3 +272,14 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Commands: `python3 scripts/region_faults.py --region data/regions/petaluma_gap.json --from-file <cached GEM geojson, SHA-256 37babb51…>`; `curl -sSf -o data/raw/ne/ne_10m_populated_places_simple.geojson <Natural Earth GitHub raw>` (SHA-256 matches G22); `python3 -m unittest discover -s scripts -p 'test_*.py'` (OK, 1 skipped); `python3 scripts/validate.py` (PASS).
 - Headless check: not run, because no page changed.
 - Next smallest action: R4.3, live marker, Places list, headless check and GeoLibre export for Petaluma Gap.
+
+## Autopilot R4.3: Petaluma Gap in the viewer (branch `autopilot`) — 2026-09-30
+- Daily routine run; `Autopilot: ON`; main unchanged, `autopilot` already current; 2 steps were awaiting review.
+- prototype/timemachine.html: for a region other than Napa or the 30 km block (`OWN`), loads `assets/regions/<id>/ava.json`, replaces the fault table with `faults.json`, and builds chapters from the shared ids plus `data/regions/<id>/scenes.json`. When Mount St. Helena lies outside the frame (`SUMMIT_IN` false) the camera stays on the frame centre and the summit pin is hidden. The subtitle shows the region name. The geology drape is only requested when the region index lists it.
+- New `prototype/assets/regions/index.json` (regions with a page, their parents and layers). The globe's regions layer labels every indexed region; clicking a mapped region that has another page opens `?region=<id>`.
+- `region_order.py --mapped` re-run with Petaluma Gap: next is Northern Sonoma. `geolibre_export.py` uses a region's own `faults.json` when present; `petaluma_gap.geolibre.json` added (Napa and Sonoma projects byte-identical). `build_share.py` bundles `data/regions/*/scenes.json`.
+- Places: the Places panel lists the region's close-up (Sonoma Mountain) from `detail/index.json`. The approximate town labels already in the viewer (G22: Petaluma, Rohnert Park, Glen Ellen, Sonoma) show where they fall in the frame; the Petaluma Gap `places.json` gap stands.
+- Checks: unit tests OK (1 skipped); validate PASS; headless Chromium (swiftshader) with no console errors and no failed requests: `?region=petaluma_gap` at 250 Ma, 20 Ma and today, default page at today, `?view=regions`, and the Petaluma Gap globe label opening `?region=petaluma_gap`.
+- Repairs: one. The first headless run logged a 404 for the absent geology legend; fixed by the index `layers` check.
+- Commands: `python3 scripts/region_order.py --mapped <28 Napa-frame AVA ids>,petaluma_gap`; `python3 scripts/geolibre_export.py --regions napa_valley,sonoma_valley,petaluma_gap`; `python3 -m unittest discover -s scripts -p 'test_*.py'`; `python3 scripts/validate.py`; Playwright scripts in the session scratchpad.
+- Next smallest action: owner review of PR 20 (3 steps); next region R4 Northern Sonoma step 1.
