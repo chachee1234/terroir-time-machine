@@ -260,6 +260,10 @@
           "sha256": "161d08ebebfe77a7d809902e8a5131d8c24cf2723e54723ecd72318bb75184b4"
         },
         {
+          "file": "prototype/assets/regions/napa_valley/detail/corison.imagery.jpg",
+          "sha256": "bb9660d7079b91c8670f8dd61eade58c6767b5e9d8f7460c49945245c439e571"
+        },
+        {
           "file": "prototype/assets/regions/napa_valley/detail/crystal_springs_of_napa_valley.imagery.jpg",
           "sha256": "8357f581e0070cdeb99442fcf70da52e80be3bf57f7aa261107a3cd22fc11243"
         },
@@ -360,6 +364,60 @@
         {
           "file": "prototype/assets/imagery.jpg",
           "sha256": "bfde8ff53b1452c53a3790c73284a29fcdb51583a9fdd9b0c5cbda0861852de1"
+        }
+      ]
+    },
+    {
+      "id": "napa_valley-nhd-rivers",
+      "source": "U.S. Geological Survey, National Hydrography Dataset (NHD) high resolution, HU8 staged products (NHDFlowline)",
+      "packages": [
+        {
+          "hu8": "18050002",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/HU8/Shape/NHD_H_18050002_HU8_Shape.zip",
+          "sha256": "4f16eaa32198f2ce2820ce2d3212114f071f759af6da80e2956b31c65e8ba2e7",
+          "bytes": 40069683
+        },
+        {
+          "hu8": "18010110",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/HU8/Shape/NHD_H_18010110_HU8_Shape.zip",
+          "sha256": "51e372a5fe9e3ebe20c7867cb9c30889abe2ba8b9ee3291b656241590803817c",
+          "bytes": 16316968
+        },
+        {
+          "hu8": "18020162",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/HU8/Shape/NHD_H_18020162_HU8_Shape.zip",
+          "sha256": "16a63268c7461466aa25ba5ac45170a0d1ae3c07bb5183f00af938fd23b38bce",
+          "bytes": 11841615
+        },
+        {
+          "hu8": "18050001",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/HU8/Shape/NHD_H_18050001_HU8_Shape.zip",
+          "sha256": "2e11f9007c45f97f997a92900161604cd3924ecec8ebef440a0710afa41cdca3",
+          "bytes": 12646716
+        }
+      ],
+      "fetched": "2026-09-30",
+      "rights": "USGS-produced, public domain in the U.S.; credit U.S. Geological Survey (SOURCES.md G26)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/rivers.json",
+          "sha256": "71e1db0ed8d63bce0daef269f6fd7f00f321696bb72769a1232a5f03e1836ea9"
+        }
+      ]
+    },
+    {
+      "id": "napa_valley-terrain-tiles-z15-corison",
+      "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "zoom": 15,
+      "tiles": 72,
+      "tiles_sha256": "23423be8a09f3773436e37c6c3a43c6143800442d555730d2da123469a22e313",
+      "fetched": "2026-09-30",
+      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/corison.bin",
+          "sha256": "397fb93d9e79d0f99f0d8ac77ae181753020c1969dcf84fe5fb33eecc5a16a50"
         }
       ]
     }

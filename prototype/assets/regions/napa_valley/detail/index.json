@@ -277,6 +277,27 @@
    "cell_m": 22.185
   },
   {
+   "id": "corison",
+   "name": "Corison winery",
+   "kind": "site",
+   "file": "detail/corison",
+   "bbox_utm": [
+    545699.2,
+    4257271.8,
+    550699.2,
+    4262271.8
+   ],
+   "ava_bbox_utm": [
+    545699.2,
+    4257271.8,
+    550699.2,
+    4262271.8
+   ],
+   "cols": 501,
+   "rows": 501,
+   "cell_m": 10.0
+  },
+  {
    "id": "oakville",
    "name": "Oakville",
    "kind": "ava",

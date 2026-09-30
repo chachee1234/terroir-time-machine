@@ -18,10 +18,17 @@ CONUS mean transformation (dX -8, dY 160, dZ 176 m; NIMA TR8350.2). That is a ba
 metres), well below the grid's cell size; it is not NADCON (STATUS.md keeps the high-accuracy transform
 as a pending check).
 
+Close-ups (--closeups): the same map on every close-up grid in <out-dir>/detail/index.json (fetch_tiles.py
+grids: cols x rows points from bbox corner to corner, so ~8 to 50 m instead of the frame's 140 m), written as
+detail/<id>.geology.png plus detail/geology.json (units per close-up). Colours come from the frame's
+geology_legend.json so a unit keeps its colour when you zoom in; units the frame grid missed get new ones.
+The map is still 1:100,000: finer cells show its contacts more smoothly, not more precisely.
+
 Tier 0, standard library only (GDAL is not installed; no dependency added).
 Usage: make_geology_texture.py data/raw/eswn-geol.e00                          # the 30 km block (?region=mt_st_helena)
        make_geology_texture.py data/raw/eswn-geol.e00 --terrain prototype/assets/regions/napa_valley/terrain.json \
            --out-dir prototype/assets/regions/napa_valley                     # the default Napa Valley frame
+       make_geology_texture.py data/raw/eswn-geol.e00 --out-dir prototype/assets/regions/napa_valley --closeups
 """
 import argparse
 import bisect
@@ -277,12 +284,68 @@ def build(e00, terrain, out_dir):
     return legend
 
 
+def unit_at(arcs, pat, e, n):
+    """PTYPE at one NAD83 / UTM 10N point ("" outside the map)."""
+    de, dn = nad83_to_nad27_offset(e, n)
+    p = rasterize(arcs, e + de - 0.5, n + dn + 0.5, 1.0, 1, 1)[0][0]
+    return pat[p - 1]["PTYPE"] if 1 < p <= len(pat) else ""
+
+
+def build_closeups(e00, out_dir):
+    """detail/<id>.geology.png on each close-up grid (grid points, corner to corner) and detail/geology.json."""
+    out = Path(out_dir)
+    index = json.loads((out / "detail" / "index.json").read_text())
+    frame_legend = json.loads((out / "geology_legend.json").read_text())
+    known = {u["ptype"]: u["color"] for u in frame_legend["units"]}
+    arcs, pat = read_e00(e00)
+    all_types = {r["PTYPE"] for r in pat[1:] if r.get("PTYPE")}
+    extra = palette(all_types - set(known))
+    colour = dict(extra, **known)
+    places = []
+    for q in index["locations"]:
+        x0, y0, x1, y1 = q["bbox_utm"]
+        cols, rows = q["cols"], q["rows"]
+        cx, cy = (x1 - x0) / (cols - 1), (y1 - y0) / (rows - 1)
+        de, dn = nad83_to_nad27_offset((x0 + x1) / 2, (y0 + y1) / 2)
+        poly = rasterize(arcs, x0 - cx / 2 + de, y1 + cy / 2 + dn, cx, cols, rows, cy)   # cell centres on the grid points
+        counts = {}
+        rgba = bytearray(cols * rows * 4)
+        for r, row in enumerate(poly):
+            for c, p in enumerate(row):
+                t = pat[p - 1]["PTYPE"] if 1 < p <= len(pat) else ""
+                if t:
+                    counts[t] = counts.get(t, 0) + 1
+                    h = colour[t]
+                    rgba[(r * cols + c) * 4:(r * cols + c + 1) * 4] = bytes((int(h[1:3], 16), int(h[3:5], 16), int(h[5:7], 16), 255))
+        if not counts:
+            continue
+        write_png(out / "detail" / f"{q['id']}.geology.png", rgba, cols, rows)
+        places.append({"id": q["id"], "file": f"{q['id']}.geology.png", "cols": cols, "rows": rows,
+                       "cell_m": [round(cx, 3), round(cy, 3)], "mapped_fraction": round(sum(counts.values()) / (cols * rows), 3),
+                       "units": [{"ptype": t, "color": colour[t], "cells": k} for t, k in sorted(counts.items(), key=lambda kv: -kv[1])]})
+    doc = {"label": frame_legend["label"], "source": frame_legend["source"], "rights": frame_legend["rights"],
+           "input": frame_legend["input"],
+           "grid": "each close-up's own grid (detail/index.json), NAD83 / UTM 10N, row 0 = north, grid points sampled",
+           "limits": "Published at 1:100,000: a finer grid draws the map's contacts smoothly, it does not make them more "
+                     "precise (a line on the map is roughly 50 m wide on the ground). Transparent cells are outside the mapped area.",
+           "closeups": places}
+    (out / "detail" / "geology.json").write_text(json.dumps(doc, indent=1) + "\n")
+    return doc
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("e00")
     ap.add_argument("--terrain", default=str(ROOT / "prototype" / "assets" / "terrain.json"))
     ap.add_argument("--out-dir", default=str(ROOT / "prototype" / "assets"))
+    ap.add_argument("--closeups", action="store_true", help="write detail/<id>.geology.png for every close-up instead")
     a = ap.parse_args()
+    if a.closeups:
+        doc = build_closeups(a.e00, a.out_dir)
+        for q in doc["closeups"]:
+            print(f"  {q['id']}: {q['cols']}x{q['rows']}, {round(q['mapped_fraction'] * 100)} % mapped, "
+                  + ", ".join(u["ptype"] for u in q["units"][:5]))
+        return
     lg = build(a.e00, a.terrain, a.out_dir)
     print(f"{lg['grid']['cols']}x{lg['grid']['rows']} cells, {len(lg['units'])} units, {lg['unmapped_cells']} unmapped; "
           + ", ".join(f"{u['ptype']} {u['cells']}" for u in lg["units"][:8]))

@@ -114,6 +114,23 @@
    ],
    "sha256": "161d08ebebfe77a7d809902e8a5131d8c24cf2723e54723ecd72318bb75184b4"
   },
+  "corison": {
+   "file": "corison.imagery.jpg",
+   "width": 500,
+   "height": 500,
+   "bbox_utm": [
+    545699.2,
+    4257271.8,
+    550699.2,
+    4262271.8
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.0,
+    10.0
+   ],
+   "sha256": "bb9660d7079b91c8670f8dd61eade58c6767b5e9d8f7460c49945245c439e571"
+  },
   "crystal_springs_of_napa_valley": {
    "file": "crystal_springs_of_napa_valley.imagery.jpg",
    "width": 1194,
