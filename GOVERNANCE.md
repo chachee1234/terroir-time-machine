@@ -2,9 +2,9 @@
 
 **Terroir Time Machine — Autonomous Operations Policy**
 
-Version: 1.4  
+Version: 1.5  
 Effective: September 20, 2026  
-Last revised: September 28, 2026 (v1.4: FreeLLMAPI also inside GitHub Actions jobs, Workflow F weekly location, Workflow G weekly questions, 95% automation target; v1.3: cost layers L0–L3 and an optional local FreeLLMAPI pool, off by default, §2a; v1.2: OAuth token lifetime is 1 year, rotate yearly; v1.1: all-linked sources award raised from 20 to 30 so the maximum score is 100)  
+Last revised: October 1, 2026 (v1.5: automation budget raised to up to 50% of the Claude Pro weekly limit, owner approval 2026-10-01; v1.4: FreeLLMAPI also inside GitHub Actions jobs, Workflow F weekly location, Workflow G weekly questions, 95% automation target; v1.3: cost layers L0–L3 and an optional local FreeLLMAPI pool, off by default, §2a; v1.2: OAuth token lifetime is 1 year, rotate yearly; v1.1: all-linked sources award raised from 20 to 30 so the maximum score is 100)  
 Authority: Developer + Claude Agent (within defined rules)
 
 ---
@@ -504,7 +504,7 @@ an unanswered question blocks only the work that depends on it.
 
 **Your development:** Assume your own Claude.ai usage consumes 50–70% of weekly quota.
 
-**Headroom:** Autonomous operations target <10% of weekly budget, leaving 20–30% as safety margin.
+**Automation budget (v1.5, approved by the developer 2026-10-01: "budget plan approved up to 50%", on the Claude Pro plan):** autonomous operations may use **up to 50% of the weekly Claude Pro limit**, in at most three overnight runs a week, plus scheduled jobs on free GitHub Actions minutes (L0 and L1 cost no Claude quota). The rest of the week's limit is the developer's own use and safety margin. Claude may not raise this ceiling itself; only the developer can, by amendment (§12).
 
 **FreeLLMAPI (§2a):** Its free-tier usage does not count against the Claude weekly limit, but it is not guaranteed capacity and is not part of this budget. Plan every workload so it still fits the Claude budget with FreeLLMAPI unavailable. Claude's tokens for writing L1 prompts and verifying L1 output do count.
 
@@ -754,7 +754,7 @@ Example:
 - Sunday 4 PM: Audit (Tier 2)
 - Sunday 5 PM: Digest email
 
-**Quota target:** <10% of Pro weekly limit
+**Quota ceiling:** up to 50% of the Pro weekly limit (v1.5)
 
 **Escalation:** Anything ambiguous → human decision
 

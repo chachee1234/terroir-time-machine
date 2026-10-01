@@ -268,3 +268,7 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Not done: Workflows F and G are not built (no YAML, no scripts); FreeLLMAPI is not installed; no secrets or variables added; Actions minutes not re-checked.
 - Commands: `git merge origin/main`; `python3 -m unittest discover -s scripts -p 'test_*.py'`; `python3 scripts/validate.py`.
 - Next smallest action: owner review of PR #17; if accepted, build Workflow F and G files (YAML plus scripts/region_order.py and facts.json writer) in a new PR.
+
+## Governance v1.5: automation budget up to 50% (branch `freellmapi-budget`) — 2026-10-01
+- Owner: "budget plan approved up to 50% ... Assume Claude Pro Plan, disregard $100."
+- GOVERNANCE.md §6: autonomous operations may use up to 50% of the Claude Pro weekly limit, in at most three overnight runs a week, plus free GitHub Actions jobs; quick reference updated; version 1.5. Plan stays Claude Pro (the "$100/month" note is dropped by owner instruction).
