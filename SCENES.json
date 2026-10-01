@@ -55,11 +55,10 @@
       "id": "ch_150ma",
       "age_ma": 150,
       "tag": "150 Ma",
-      "title": "Zoom in: this spot is deep ocean",
-      "body": "We drop to the ground that will one day hold Mount St. Helena and Napa Valley. It is seafloor. The Farallon plate slides east into a deep trench, and mud, sand and slices of ocean crust are scraped off and piled up. That pile becomes the Franciscan Complex and Coast Range ophiolite beneath the Mayacamas. The red lines on the cut faces trace thrust faults, where slices of seafloor are shoved up and stacked on each other.",
+      "title": "This spot is deep ocean",
+      "body": "The ground that will one day hold Mount St. Helena and Napa Valley is seafloor. The Farallon plate slides east into a deep trench, and mud, sand and slices of ocean crust are scraped off and piled up. That pile becomes the Franciscan Complex and Coast Range ophiolite beneath the Mayacamas. The cut in the globe shows the ocean plate sinking beneath the continent.",
       "visual_class": "illustration",
-      "key": true,
-      "scale": "local"
+      "key": true
     },
     {
       "id": "ch_66ma",
@@ -75,7 +74,7 @@
       "age_ma": 28,
       "tag": "28 Ma",
       "title": "The San Andreas system is born",
-      "body": "The spreading ridge between the Pacific and Farallon plates reaches the trench. Subduction shuts off piece by piece and a sliding boundary, the San Andreas system, takes over. The pile of old seafloor starts rising out of the sea.",
+      "body": "The spreading ridge between the Pacific and Farallon plates reaches the trench. Subduction shuts off piece by piece and a sliding boundary, the San Andreas system, takes over. The pile of old seafloor starts rising out of the sea. From here the view drops from the planet to the ground.",
       "visual_class": "illustration",
       "key": true
     },

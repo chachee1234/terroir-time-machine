@@ -128,6 +128,24 @@ class ImageryTest(unittest.TestCase):
             self.assertEqual([round(v, 2) for v in terrain], [round(v, 2) for v in m["image"]["bbox_utm"]])
             self.assertIn("Copernicus Sentinel data", m["credit"])
 
+    def test_committed_closeup_textures_match_their_close_ups(self):
+        folder = mi.ROOT / "prototype" / "assets" / "regions" / "napa_valley" / "detail"
+        if not (folder / "imagery.json").exists():
+            self.skipTest("no close-up imagery")
+        meta = json.loads((folder / "imagery.json").read_text())
+        index = {q["id"]: q for q in json.loads((folder / "index.json").read_text())["locations"]}
+        frame = json.loads((folder.parent / "imagery.json").read_text())
+        self.assertEqual(meta["scenes"], [s["scene"] for s in frame["scenes"]])      # same acquisition as the frame
+        self.assertEqual(set(meta["locations"]), set(index))
+        for qid, q in meta["locations"].items():
+            self.assertEqual(q["bbox_utm"], index[qid]["bbox_utm"], qid)
+            jpg = (folder / q["file"]).read_bytes()
+            sof = jpg.index(b"\xff\xc0")
+            h, w = struct.unpack(">HH", jpg[sof + 5:sof + 9])
+            self.assertEqual((w, h), (q["width"], q["height"]), qid)
+            self.assertLess(abs(q["cell_m"][0] - 10), 0.05, qid)
+        self.assertIn("Copernicus Sentinel data", meta["credit"])
+
 
 if __name__ == "__main__":
     unittest.main()
