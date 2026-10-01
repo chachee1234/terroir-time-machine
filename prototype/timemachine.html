@@ -363,6 +363,69 @@ function plateAt(pl,a,out){
   return ll2v(lat, lon, out);
 }
 
+/* Real continents, 410 Ma to today: Müller et al. (2019) plate model with Young et al. (2019) rotations before
+   250 Ma (EarthByte Group, CC BY 3.0; scripts/make_plate_model.py, SOURCES.md G32). Each present-day coastline
+   polygon is rotated by its plate's absolute rotation (quaternions every few Ma, slerped in between) and drawn
+   into an equirectangular canvas the globe shader reads as its land mask. Before 410 Ma the stylized blobs stay. */
+const pmQ=[0,0,0,0], pmR=[0,0,0], pmV=new THREE.Vector3(), pmE2=new THREE.Vector3(), pmE3=new THREE.Vector3();
+const PM={ok:false, W:2048, H:1024, cv:document.createElement("canvas"), ctx:null, tex:null, lastA:-1, ages:null, q:null, polys:[], pid:{}, w:0};
+PM.cv.width=PM.W; PM.cv.height=PM.H; PM.ctx=PM.cv.getContext("2d");
+PM.MAX=410; PM.FADE=[430,400];
+// stylized continent i -> the plate whose rotation carries its label once the model takes over
+PM.LAB=[101,302,401,201,701,801,802,501];
+function pmQuat(pi,a,out){
+  const A=PM.ages, step=A[1]-A[0], n=A.length, x=clamp(a/step,0,n-1), i=Math.min(n-2,Math.floor(x)), t=x-i;
+  const o=(pi*n+i)*4, Q=PM.q;
+  let w1=Q[o+4],x1=Q[o+5],y1=Q[o+6],z1=Q[o+7], d=Q[o]*w1+Q[o+1]*x1+Q[o+2]*y1+Q[o+3]*z1;
+  if(d<0){ w1=-w1; x1=-x1; y1=-y1; z1=-z1; d=-d; }
+  let k0=1-t, k1=t;
+  if(d<0.9995){ const th=Math.acos(d), s=Math.sin(th); k0=Math.sin((1-t)*th)/s; k1=Math.sin(t*th)/s; }
+  out[0]=k0*Q[o]+k1*w1; out[1]=k0*Q[o+1]+k1*x1; out[2]=k0*Q[o+2]+k1*y1; out[3]=k0*Q[o+3]+k1*z1;
+  const m=Math.hypot(out[0],out[1],out[2],out[3]); for(let j=0;j<4;j++) out[j]/=m; return out;
+}
+function pmRot(q,x,y,z,out){ // q (w,x,y,z) applied to an Earth-centred vector
+  const w=q[0],a=q[1],b=q[2],c=q[3], tx=2*(b*z-c*y), ty=2*(c*x-a*z), tz=2*(a*y-b*x);
+  out[0]=x+w*tx+(b*tz-c*ty); out[1]=y+w*ty+(c*tx-a*tz); out[2]=z+w*tz+(a*ty-b*tx); return out;
+}
+const pmE2V=(e,out)=>(out||new THREE.Vector3()).set(e[0],e[2],-e[1]);   // Earth-centred -> globe coordinates (ll2v)
+function pmLoad(d){
+  PM.ages=d.ages; PM.q=new Float32Array(d.quats); d.plates.forEach((p,i)=>PM.pid[p]=i);
+  PM.polys=d.polys.map(r=>{ const n=(r.length-3)/2, v=new Float32Array(n*3); let la=0,lo=0;
+    for(let k=0;k<n;k++){ la+=r[3+2*k]; lo+=r[4+2*k]; const p=la/100*D2R, l=lo/100*D2R;
+      v[3*k]=Math.cos(p)*Math.cos(l); v[3*k+1]=Math.cos(p)*Math.sin(l); v[3*k+2]=Math.sin(p); }
+    return {pi:r[0], from:r[1], to:r[2], v}; });
+  PM.tex=new THREE.CanvasTexture(PM.cv); PM.tex.wrapS=THREE.RepeatWrapping; PM.tex.minFilter=PM.tex.magFilter=THREE.LinearFilter; PM.tex.generateMipmaps=false;
+  gUni.uLand.value=PM.tex; PM.ok=true; PM.lastA=-1;
+}
+function pmDraw(a){
+  if(!PM.ok || Math.abs(a-PM.lastA)<0.02) return; PM.lastA=a;
+  const g=PM.ctx, W=PM.W, H=PM.H, qs={}, r=[0,0,0];
+  g.fillStyle="#000"; g.fillRect(0,0,W,H); g.fillStyle=g.strokeStyle="#fff"; g.lineWidth=1.5; g.lineJoin="round";
+  for(const P of PM.polys){
+    if(a>P.from || a<P.to) continue;
+    const q=qs[P.pi]||(qs[P.pi]=pmQuat(P.pi,a,[0,0,0,0])), v=P.v, m=v.length/3, xs=[], ys=[], r0=[0,0,0];
+    let prev=0;
+    const put=(x,y,z)=>{ const h=Math.hypot(x,y,z), lat=Math.asin(clamp(z/h,-1,1))/D2R; let lon=Math.atan2(y,x)/D2R;
+      if(xs.length){ while(lon-prev>180) lon-=360; while(lon-prev<-180) lon+=360; } prev=lon;
+      xs.push((lon+180)/360*W); ys.push((90-lat)/180*H); };
+    for(let k=0;k<m;k++){ pmRot(q,v[3*k],v[3*k+1],v[3*k+2],r);
+      if(k){ // near a pole a short edge can sweep many degrees of longitude: follow its great circle, not a straight line on the map
+        let dl=Math.atan2(r[1],r[0])/D2R-prev; dl-=360*Math.round(dl/360); const s=Math.min(64,Math.floor(Math.abs(dl)/4));
+        for(let j=1;j<=s;j++){ const t=j/(s+1); put(r0[0]+(r[0]-r0[0])*t,r0[1]+(r[1]-r0[1])*t,r0[2]+(r[2]-r0[2])*t); } }
+      put(r[0],r[1],r[2]); r0[0]=r[0]; r0[1]=r[1]; r0[2]=r[2]; }
+    const n=xs.length;
+    // a ring around a pole winds by a whole turn: finish the closing edge one turn along, then close over the pole
+    let c=xs[0]-xs[n-1]; c-=W*Math.round(c/W); const turn=xs[n-1]+c-xs[0], wrap=Math.abs(turn)>W/2;
+    let ym=0; for(let k=0;k<n;k++) ym+=ys[k]; const yp=ym/n<H/2?0:H;
+    for(const off of [-W,0,W]){
+      g.beginPath(); g.moveTo(xs[0]+off,ys[0]); for(let k=1;k<n;k++) g.lineTo(xs[k]+off,ys[k]);
+      if(wrap){ g.lineTo(xs[0]+turn+off,ys[0]); g.lineTo(xs[0]+turn+off,yp); g.lineTo(xs[0]+off,yp); }
+      g.closePath(); g.fill(); g.stroke(); }   // the stroke closes hairline seams where two terranes meet
+  }
+  PM.tex.needsUpdate=true;
+}
+fetch("assets/plates/muller2019.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{ pmLoad(d); DATA.plateModel="assets/plates/muller2019.json"; }).catch(()=>{});
+
 const gUni = {
   uC:{value:PLATES.map(()=>new THREE.Vector3())}, uR:{value:PLATES.map(p=>p.r)},
   uGreen:{value:0}, uCap:{value:1}, uIceAll:{value:0}, uDesert:{value:0}, uSun:{value:new THREE.Vector3(1,0,0)}, uTime:{value:0},
@@ -370,7 +433,7 @@ const gUni = {
   // present-day relief (AWS Terrain Tiles: ≈10 km global, ≈2 km California), grey "no data" wash, near-ground fog
   uReal:{value:0}, uRelief:{value:null}, uCa:{value:null}, uCaOn:{value:0}, uCaBox:{value:new THREE.Vector4(-124.6,32.4,-114.0,42.1)},
   uCutOn:{value:0}, uCutC:{value:new THREE.Vector3(1,0,0)}, uCutW:{value:new THREE.Vector3(0,0,1)}, uCutN:{value:new THREE.Vector3(0,1,0)}, uCutTh:{value:new THREE.Vector2()}, uCutS:{value:0.22},
-  uRelK:{value:30}, uGrey:{value:0}, uAvG:{value:null}, uAvOn:{value:0}, uAvBox:{value:new THREE.Vector4(-124.6,32.4,-114.0,42.1)}, uFogCol:{value:new THREE.Color(.7,.78,.84)}, uFogN:{value:1e3}, uFogF:{value:2e3}
+  uRelK:{value:30}, uGrey:{value:0}, uLand:{value:null}, uModel:{value:0}, uAvG:{value:null}, uAvOn:{value:0}, uAvBox:{value:new THREE.Vector4(-124.6,32.4,-114.0,42.1)}, uFogCol:{value:new THREE.Color(.7,.78,.84)}, uFogN:{value:1e3}, uFogF:{value:2e3}
 };
 // Earth relief, 8-bit equirectangular (scripts/build_globe.py). Row 0 is 90N.
 new THREE.TextureLoader().load("assets/globe/relief.png", t=>{ t.flipY=false; t.wrapS=THREE.RepeatWrapping; t.minFilter=t.magFilter=THREE.LinearFilter; t.generateMipmaps=false; t.needsUpdate=true; gUni.uRelief.value=t; });
@@ -380,7 +443,7 @@ const globeMat = new THREE.ShaderMaterial({
   fragmentShader:GLSL_NOISE+`
   uniform vec3 uC[8]; uniform float uR[8]; uniform float uGreen,uCap,uIceAll,uDesert,uTime,uRift,uSubd,uEdges,uFlow; uniform vec3 uSun,uWest;
   uniform float uCutOn,uCutS; uniform vec3 uCutC,uCutW,uCutN; uniform vec2 uCutTh;
-  uniform float uReal,uCaOn,uRelK,uGrey,uFogN,uFogF,uAvOn; uniform sampler2D uRelief,uCa,uAvG; uniform vec4 uCaBox,uAvBox; uniform vec3 uFogCol;
+  uniform float uReal,uCaOn,uRelK,uGrey,uFogN,uFogF,uAvOn,uModel; uniform sampler2D uRelief,uCa,uAvG,uLand; uniform vec4 uCaBox,uAvBox; uniform vec3 uFogCol;
   float relH(vec2 uv){ float v=texture2D(uRelief,uv).r*255.0;
     return v>=128.0 ? pow((v-128.0)/127.0,2.0)*8848.0 : -pow(max(127.0-v,0.0)/127.0,2.0)*11000.0; }
   float caW(vec2 ll){ vec2 q=(ll-uCaBox.xy)/(uCaBox.zw-uCaBox.xy); vec2 e=min(q,1.0-q); return uCaOn*smoothstep(0.0,0.03,min(e.x,e.y)); }
@@ -423,7 +486,20 @@ const globeMat = new THREE.ShaderMaterial({
     for(int i=0;i<8;i++){ float di=uR[i]-acos(clamp(dot(n,uC[i]),-1.0,1.0)); f=smax(f, di, 0.09);
       if(i==0) dL=di; if(di>d1){ d2=d1; d1=di; } else if(di>d2){ d2=di; } }
     float e=f+(fbm(n*3.1)-0.5)*0.24+(fbm(n*11.0)-0.5)*0.07;
-    float land=smoothstep(0.0,0.012,e);
+    float mCoast=0.5, nearL=1.0;
+    if(uModel>0.0){ // continents rotated by the plate model (PM below), drawn into an equirectangular mask
+      float lat=degrees(asin(clamp(n.y,-1.0,1.0))), lon=degrees(atan(-n.z,n.x));
+      vec2 uv=vec2(lon/360.0+0.5,0.5+lat/180.0), px=vec2(2.5/2048.0,2.5/1024.0);
+      float m0=texture2D(uLand,uv).r;
+      float m=(m0*2.0+texture2D(uLand,uv+vec2(px.x,0.0)).r+texture2D(uLand,uv-vec2(px.x,0.0)).r
+               +texture2D(uLand,uv+vec2(0.0,px.y)).r+texture2D(uLand,uv-vec2(0.0,px.y)).r)/6.0;
+      mCoast=m0;
+      // within about 4 degrees of land: where the margin's trench and incoming sea floor may be drawn
+      vec2 r4=vec2(4.0/360.0/max(cos(radians(lat)),0.2),4.0/180.0); float nl=0.0;
+      for(int k=0;k<8;k++){ float an=float(k)*0.7854; nl=max(nl,texture2D(uLand,uv+r4*vec2(cos(an),sin(an))).r); }
+      nearL=nl;
+      e=mix(e,(m-0.5)*0.3+(fbm(n*11.0)-0.5)*0.02,uModel); }
+    float land=smoothstep(0.0,mix(0.012,0.04,uModel),e);
     vec3 deep=vec3(0.02,0.07,0.18), shallow=vec3(0.06,0.30,0.42);
     vec3 ocean=mix(deep,shallow,smoothstep(-0.14,0.0,e));
     float v=fbm(n*6.0);
@@ -444,19 +520,20 @@ const globeMat = new THREE.ShaderMaterial({
     float edge=fl(d1,w1)*step(d2,-0.015);
     float sut=fl(d1-d2,max(fwidth(d1-d2)*1.6,0.005))*step(-0.02,d2);
     vec3 lc2=vec3(1.0,0.78,0.42)*(0.35+0.65*diff+0.25);
-    col=mix(col,lc2,edge*0.55*uEdges*(1.0-uReal));
-    col=mix(col,vec3(1.0,0.35,0.2)*(0.5+0.5*diff+0.3),sut*0.95*uEdges*(1.0-uReal));
+    col=mix(col,lc2,edge*0.55*uEdges*(1.0-uReal)*(1.0-uModel));
+    col=mix(col,vec3(1.0,0.35,0.2)*(0.5+0.5*diff+0.3),sut*0.95*uEdges*(1.0-uReal)*(1.0-uModel));
+    col=mix(col,lc2,fl(mCoast-0.5,max(fwidth(mCoast)*1.2,0.02))*0.45*uEdges*uModel*(1.0-uReal));
     // Laurentia's western margin: rift (dashed) then subduction (teeth)
-    float wside=smoothstep(0.0,0.25,dot(normalize(n-uC[0]*dot(n,uC[0])),uWest));
+    float wside=smoothstep(mix(0.0,0.55,uModel),mix(0.25,0.8,uModel),dot(normalize(n-uC[0]*dot(n,uC[0])),uWest));
     float mar=fl(dL,max(fwidth(dL)*2.2,0.006))*wside;
     float along=atan(n.y,length(n.xz))*60.0+atan(n.z,n.x)*20.0;
     col=mix(col,vec3(1.0,0.55,0.25),mar*uRift*step(0.45,fract(along)));
     float teeth=step(0.0,-dL)*step(-dL,0.03)*wside*step(fract(along*1.2),0.35);
-    col=mix(col,vec3(1.0,0.3,0.18)*(1.0+0.3*sin(uTime*3.0)),max(mar,teeth)*uSubd*(1.0-uReal));
+    col=mix(col,vec3(1.0,0.3,0.18)*(1.0+0.3*sin(uTime*3.0)),max(mar,teeth)*uSubd*(1.0-uReal)*mix(1.0,(1.0-land)*nearL,uModel));
     // ocean floor moving toward the trench: chevrons on the ocean side of the margin
     float chev=step(0.72,fract(dL*42.0-uTime*0.55+abs(fract(along*0.12)-0.5)*1.6));
     float zone=smoothstep(-0.26,-0.12,dL)*step(dL,-0.006)*wside*(1.0-land);
-    col=mix(col,vec3(0.75,0.93,1.0)*(0.4+0.6*diff),chev*zone*uFlow*0.5);
+    col=mix(col,vec3(0.75,0.93,1.0)*(0.4+0.6*diff),chev*zone*uFlow*0.5*mix(1.0,nearL,uModel));
     if(uReal>0.0){ float sea; vec3 rc=realEarth(n,sea);
       rc+=vec3(1.0,0.95,0.85)*pow(max(dot(reflect(-uSun,n),V),0.0),48.0)*sea*0.5;
       col=mix(col,rc,uReal); }
@@ -1344,11 +1421,26 @@ function apply(a,p){
   // ---- globe (drawn in every era; below A_DIVE it surrounds the block)
   {
     PLATES.forEach((pl,i)=>plateAt(pl,a,gUni.uC.value[i]));
+    const mk = PM.ok ? sm(PM.FADE[0],PM.FADE[1],a) : 0;     // plate model takes over from the stylized blobs
+    gUni.uModel.value = mk;
+    if(mk>0){ pmDraw(a);
+      PLATES.forEach((pl,i)=>{ const pi=PM.pid[PM.LAB[i]]; if(pi===undefined) return;
+        if(i===0){ // Laurentia: centre the margin "blob" so its west edge sits on the trench off today's Napa coast (38.6 N, 125.5 W), carried by the North American plate
+          pmRot(pmQuat(pi,a,pmQ),Math.cos(38.6*D2R)*Math.cos(-125.5*D2R),Math.cos(38.6*D2R)*Math.sin(-125.5*D2R),Math.sin(38.6*D2R),pmR);
+          const tP=pmE2V(pmR,pmV), E=pmE2.set(tP.z,0,-tP.x).normalize(), R0=gUni.uR.value[0];
+          gUni.uC.value[0].lerp(pmE3.copy(tP).multiplyScalar(Math.cos(R0)).addScaledVector(E,Math.sin(R0)),mk).normalize(); return; }
+        const k0=pl.k[pl.k.length-1], la=k0[1]*D2R, lo=k0[2]*D2R;
+        pmRot(pmQuat(pi,a,pmQ),Math.cos(la)*Math.cos(lo),Math.cos(la)*Math.sin(lo),Math.sin(la),pmR);
+        gUni.uC.value[i].lerp(pmE2V(pmR,pmV),mk).normalize(); }); }
     const c=gUni.uC.value[0], east=new THREE.Vector3(c.z,0,-c.x).normalize();
     gUni.uWest.value.copy(east).multiplyScalar(-1);
     gUni.uRift.value = band(a,760,540,30); gUni.uSubd.value = sm(270,240,a);
     gUni.uFlow.value = sm(270,240,a)*sm(8,12,a);             // the Farallon plate stops arriving here about 10 Ma
     markerDir.copy(c).multiplyScalar(Math.cos(0.3)).addScaledVector(east,-Math.sin(0.3)).normalize();
+    if(mk>0 && PM.pid[101]!==undefined){ // North American plate carries the site in the model
+      const la=38.6694*D2R, lo=-122.6333*D2R;
+      pmRot(pmQuat(PM.pid[101],a,pmQ),Math.cos(la)*Math.cos(lo),Math.cos(la)*Math.sin(lo),Math.sin(la),pmR);
+      markerDir.lerp(pmE2V(pmR,pmV),mk).normalize(); }
     // the stylized ancestral spot slides onto the true summit position as the real map fades in
     markerDir.lerp(SITE_DIR, sm(30,5,a)).normalize();
     marker.position.copy(markerDir).multiplyScalar(1.03);
@@ -1494,7 +1586,7 @@ fetch("../SCENES.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(m=>
 fetch("../data/plates/stylized.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{
   const L=d.plates||[];
   if(d.class!=="reconstruction-stylized" || L.length!==PLATES.length || L.some(q=>!(q.keyframes||[]).length)) throw "unusable plates";
-  L.forEach((q,i)=>{ Object.assign(PLATES[i],toPlate(q)); gUni.uR.value[i]=q.radius; GLAB[i].el.textContent=q.label+" · stylized"; });
+  L.forEach((q,i)=>{ Object.assign(PLATES[i],toPlate(q)); gUni.uR.value[i]=q.radius; GLAB[i].el.textContent=q.label+" · stylized"; }); PM.legend=null;
   DATA.plates="data/plates/stylized.json";
 }).catch(()=>{});
 $("ticks").addEventListener("click",e=>{ const b=e.target.closest(".tick"); if(b) goTo(+b.dataset.i); });
@@ -1506,7 +1598,7 @@ function showCard(i){
   card.classList.add("swap");
   setTimeout(()=>{
     $("cEye").textContent=c.tag; $("cTitle").textContent=c.t; $("cBody").textContent=c.b;
-    const k=CLS[c.cls]; $("cCls").innerHTML=`<b style="--c:${k.c}">■</b> ${k.name}`;
+    const k=CLS[c.cls], kn=(c.cls==="recon"&&PM.ok&&c.age<=PM.MAX)?"Reconstruction · Müller et al. 2019 plate model":k.name; $("cCls").innerHTML=`<b style="--c:${k.c}">■</b> ${kn}`;
     const chip=$("clsChip"); chip.style.setProperty("--c",k.c); chip.lastElementChild.textContent=k.name.split(" · ")[0];
     if(i===CH.length-1) glActions(null);             // Today: the live region opens in GeoLibre
     if(i===CH.length-1&&SITE.cur) siteCard();
@@ -1890,7 +1982,7 @@ function sdDraw(a,t,tg){               // tg: another canvas to draw into (the g
   g.closePath(); g.fillStyle=win>0.5?"#3c4750":"#46525c"; g.fill();
   // magnetic stripes riding the plate, the motion cue
   if(sub||win<1){ const L=slab.length*4, sp=40;
-    for(let s=((t*v)%sp); s<L; s+=sp){ const i=Math.min(slab.length-1,Math.floor(s/4)), [x,z,an]=slab[i], zz=z+(x>SD_XT+20?drop:0);
+    for(let s=(((t*v)%sp)+sp)%sp; s<L; s+=sp){ const i=Math.min(slab.length-1,Math.floor(s/4)), [x,z,an]=slab[i], zz=z+(x>SD_XT+20?drop:0);
       g.beginPath(); g.moveTo(X(x),Y(zz)); g.lineTo(X(x-Math.sin(an)*TH),Y(zz+Math.cos(an)*TH)); g.strokeStyle=(Math.floor(s/sp+(t*v)/sp)%2)?"rgba(160,190,210,.45)":"rgba(40,50,60,.5)"; g.lineWidth=Math.max(1.5,sp*k*0.35); g.stroke(); } }
   g.restore();
   // Pacific plate in the west once the ridge has passed: moving north-west, out of the page
@@ -1970,7 +2062,7 @@ const PLAB=[{x:X0+Math.min(3,SX*0.06), z:Z1-Math.min(3,SZ*0.06), t:a=>a>8?"Faral
 function placeLab(q,show,op){ let hh=0; for(let k=0;k<6;k++) hh+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][q.i];
   pl3.set(q.x,Math.max(hh,0)*VE+0.25,q.z).project(lCam); const vis=show&&pl3.z<1; q.el.hidden=!vis;
   if(vis){ q.el.style.opacity=op.toFixed(2); q.el.style.left=((pl3.x+1)/2*innerWidth)+"px"; q.el.style.top=((1-pl3.y)/2*innerHeight)+"px"; } }
-if((new URLSearchParams(location.search)).has("debug")) window.TTM={lCam,lCtl,gCam,gUni,lUni,DATA,CH,PLATES,SITE,RIV,GEO,LOC,get st(){ return {p,autoCam}; }};
+if((new URLSearchParams(location.search)).has("debug")) window.TTM={lCam,lCtl,gCam,gUni,lUni,DATA,CH,PLATES,SITE,RIV,GEO,LOC,PM,markerDir,get st(){ return {p,autoCam}; }};
 let last=performance.now(), T=0;
 function frame(now){
   const dt=Math.min(0.05,(now-last)/1000); last=now; T+=dt;
@@ -2100,7 +2192,9 @@ function frame(now){
   if(!st.local){
     const d=markerDir; nrm.set(0,1,0).addScaledVector(d,-d.y).normalize();
     setCompass(screenAngle(marker.position,nrm,gCam));
-    ["lgFault","lgThr","lgStream","lgTopo","lgAva","lgGeo","lgSat","lgRiv"].forEach(id=>$(id).hidden=true); $("spin").hidden=true; $("locator").style.opacity=0; AVA.labels.forEach(q=>q.el.hidden=true); $("lgEdge").hidden=false; $("lgSut").hidden=false; legend.style.opacity=1;
+    ["lgFault","lgThr","lgStream","lgTopo","lgAva","lgGeo","lgSat","lgRiv"].forEach(id=>$(id).hidden=true); $("spin").hidden=true; $("locator").style.opacity=0; AVA.labels.forEach(q=>q.el.hidden=true); $("lgEdge").hidden=false; $("lgSut").hidden=gUni.uModel.value>0.5; legend.style.opacity=1;
+    { const mod=gUni.uModel.value>0.5, t=mod?"Coastlines · Müller et al. 2019 plate model (EarthByte)":"Continent edge, stylized (hand-drawn, not a plate model)";
+      if(PM.legend!==t){ PM.legend=t; $("lgEdge").lastChild.textContent=t; GLAB.forEach((q,i)=>q.el.textContent=PLATES[i].lb+(mod?" · plate model":" · stylized")); } }
     sbar.hidden=true; PLACES.forEach(q=>q.el.hidden=true); FLAB.forEach(q=>q.el.hidden=true); PLAB.forEach(q=>q.el.hidden=true);
     // plate names
     GLAB.forEach((q,i)=>{ const c=gUni.uC.value[i]; pl3.copy(c).multiplyScalar(1.02); const face=pl3.dot(cv0.copy(gCam.position).normalize())>0.35;

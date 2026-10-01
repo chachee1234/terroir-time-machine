@@ -291,3 +291,12 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Finding: Corison sits in SFEI's Valley Oak Savanna; no historical channel or paleochannel under it; nearest historical channel 0.96 km SW, paleochannels ~1.7 km NE by the river. The "ancient river" is not mapped by SFEI; a prehistoric fan channel remains possible (Qf fan, stratified gravelly alluvium) but unmapped.
 - Command: `python3 scripts/make_historical_ecology.py --zip <uploaded zip> --region data/regions/napa_valley.json`; tests 121 pass, 1 skipped.
 - Next smallest action: viewer layer for historical channels/habitats (toggle "1800s") and climate/vineyards; retry SSURGO.
+
+## Real continent motion on the globe (branch `plate-model`) — 2026-10-01
+- Owner asked to analyse open plate-movement databases and refine the plate animation. Chosen: Müller et al. 2019 (+ Young 2019 to 410 Ma), CC BY 3.0, from GPlates/pygplates-tutorials (G32). Merdith 2021 / Cao 2024 sit on Zenodo, unreachable here.
+- New `scripts/make_plate_model.py` → `prototype/assets/plates/muller2019.json`; the globe now draws the model's continents from 410 Ma to today (fading in from the stylized blobs at 430–400 Ma). The Napa marker, Laurentia's label and the western trench ride the North American plate; trench teeth and chevrons stay on the ocean side of the real coast.
+- New `scripts/test_plate_model.py` (7 tests). `python3 -m unittest discover -s scripts -p 'test_*.py'` → 128 pass, 1 skipped; `python3 scripts/validate.py` PASS.
+- Headless Chromium at 410/250/150/60/30/5 Ma: Pangaea at 250 Ma, Gulf of Mexico opening at 150 Ma, marker on the coast at 60/30 Ma. Not tested: real-hardware frame rate (the mask redraws when the age changes), phones.
+- Command: `python3 scripts/make_plate_model.py --src <pygplates-tutorials checkout>`.
+- Next smallest action: owner review; optional plate-boundary lines (the model's topologies) or past shorelines (paleogeography) if wanted.
+
