@@ -1,0 +1,15 @@
+{
+ "sites": [
+  {
+   "id": "corison",
+   "name": "Corison winery",
+   "vineyard": "Kronos Vineyard",
+   "file": "sites/corison.json",
+   "utm": [
+    548199.2,
+    4259771.8
+   ],
+   "closeup": "corison"
+  }
+ ]
+}
