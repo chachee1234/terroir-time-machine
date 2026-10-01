@@ -183,7 +183,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
 <div class="legend" id="legend" style="opacity:0">
   <div id="lgFault"><i style="--c:#ff5a3c"></i>Fault, mapped trace (UCERF3)</div>
   <div id="lgThr"><i style="--c:#8a3a2c"></i>Old thrust, schematic</div>
-  <div id="lgEdge"><i style="--c:#ffc76b"></i>Continent edge, stylized</div>
+  <div id="lgEdge"><i style="--c:#ffc76b"></i>Continent edge, stylized (hand-drawn, not a plate model)</div>
   <div id="lgSut"><i style="--c:#ff5a3c"></i>Collision zone / margin</div>
   <div id="lgStream"><i style="--c:#6fb6e8"></i>Streams, from terrain</div>
   <div id="lgAva"><i style="--c:#ffd27a"></i>AVA boundary</div>
@@ -284,9 +284,9 @@ const CHAPTERS_BUILTIN = /*CHAPTERS*/[
  {"id": "ch_700ma", "age_ma": 700, "tag": "700 Ma", "title": "Snowball Earth, and a coastline is born", "body": "Ice may have reached the equator. Meanwhile Rodinia tears apart, and the tear becomes the western edge of Laurentia. California will eventually be built against this edge, piece by piece, from material the ocean delivers.", "visual_class": "reconstruction-stylized", "key": true},
  {"id": "ch_430ma", "age_ma": 430, "tag": "430 Ma", "title": "Life reaches land", "body": "The first plants spread across the continents and turn them green. Off western North America, the coast is a quiet edge facing open ocean.", "visual_class": "reconstruction-stylized", "key": false},
  {"id": "ch_250ma", "age_ma": 250, "tag": "250 Ma", "title": "Pangaea, and the long subduction begins", "body": "Every major continent is joined. Off the west coast an ocean plate begins sinking beneath the continent. That subduction zone will run for about 200 million years and build much of California.", "visual_class": "reconstruction-stylized", "key": true},
- {"id": "ch_150ma", "age_ma": 150, "tag": "150 Ma", "title": "Zoom in: this spot is deep ocean", "body": "We drop to the ground that will one day hold Mount St. Helena and Napa Valley. It is seafloor. The Farallon plate slides east into a deep trench, and mud, sand and slices of ocean crust are scraped off and piled up. That pile becomes the Franciscan Complex and Coast Range ophiolite beneath the Mayacamas. The red lines on the cut faces trace thrust faults, where slices of seafloor are shoved up and stacked on each other.", "visual_class": "illustration", "key": true, "scale": "local"},
+ {"id": "ch_150ma", "age_ma": 150, "tag": "150 Ma", "title": "This spot is deep ocean", "body": "The ground that will one day hold Mount St. Helena and Napa Valley is seafloor. The Farallon plate slides east into a deep trench, and mud, sand and slices of ocean crust are scraped off and piled up. That pile becomes the Franciscan Complex and Coast Range ophiolite beneath the Mayacamas. The cut in the globe shows the ocean plate sinking beneath the continent.", "visual_class": "illustration", "key": true},
  {"id": "ch_66ma", "age_ma": 66, "tag": "66 Ma", "title": "A distant impact darkens the sky", "body": "An asteroid strikes what is now Mexico. The dust dims sunlight worldwide and ends the age of dinosaurs. Here, the scraped-up seafloor keeps accumulating under the waves.", "visual_class": "illustration", "key": false},
- {"id": "ch_28ma", "age_ma": 28, "tag": "28 Ma", "title": "The San Andreas system is born", "body": "The spreading ridge between the Pacific and Farallon plates reaches the trench. Subduction shuts off piece by piece and a sliding boundary, the San Andreas system, takes over. The pile of old seafloor starts rising out of the sea.", "visual_class": "illustration", "key": true},
+ {"id": "ch_28ma", "age_ma": 28, "tag": "28 Ma", "title": "The San Andreas system is born", "body": "The spreading ridge between the Pacific and Farallon plates reaches the trench. Subduction shuts off piece by piece and a sliding boundary, the San Andreas system, takes over. The pile of old seafloor starts rising out of the sea. From here the view drops from the planet to the ground.", "visual_class": "illustration", "key": true},
  {"id": "ch_8ma", "age_ma": 8, "tag": "8 Ma", "title": "The Sonoma Volcanics begin", "body": "A gap opens in the sinking plate and hot mantle rises through it. Volcanoes erupt across what is now Sonoma and Napa for about five million years, generally younger toward the north. Subduction here has ended and the old thrusts go quiet. The bright lines are today's mapped Maacama and Collayomi faults, part of the Pacific–North American plate boundary zone; the dashes show their right-lateral slip.", "visual_class": "illustration", "key": true},
  {"id": "ch_3_0ma", "age_ma": 3, "span_ma": [3.45, 2.95], "tag": "≈3.0 Ma", "title": "The Mount St. Helena volcano", "body": "Thick rhyolite lava builds the summit area, dated to about 3 million years ago. The volcanic center swells into the highest point for miles. Its true height and shape at this moment are unknown; this peak is an artist's version.", "visual_class": "illustration", "key": false},
  {"id": "ch_2_85ma", "age_ma": 2.85, "span_ma": [2.93, 2.83], "tag": "≈2.85 Ma", "title": "Caldera eruption", "body": "An enormous explosive eruption empties the magma chamber. Hot ash flows race across the land and weld into rock, and the volcano's top collapses into a caldera. The welded tuff at today's summit comes from eruptions like this one.", "visual_class": "illustration", "key": true},
@@ -299,7 +299,9 @@ const CH = CHAPTERS_BUILTIN.map(toCh);
 function prepChapters(){ CH.forEach(c=>{ c.trig = c.span ? c.span[0] : c.age; c.p = pOf(c.trig); }); }
 prepChapters();
 const DATA = {chapters:"built-in", plates:"built-in"};   // which copy is in use (window.TTM with ?debug)
-const A_DIVE = 186, P_SWITCH = pOf(A_DIVE);   // older: globe camera; younger: one camera from orbit to the ground
+const A_DIVE = 27, A_LAND = 10, P_SWITCH = pOf(A_DIVE);   // older: globe camera; younger: one camera from orbit to the ground (the dive runs A_DIVE to A_LAND)
+// where the globe camera rests before the dive: whole planet in view (distance, east and up offsets, globe units)
+const G_END={d:3.2, e:0.3, u:0.2};
 
 /* ------------------------------------------------------------------ renderer */
 const canvas = $("gl");
@@ -331,10 +333,19 @@ const PLATES = PLATES_BUILTIN.plates.map(toPlate);
 const D2R = Math.PI/180;
 function ll2v(lat,lon,out){ lat*=D2R; lon*=D2R; return (out||new THREE.Vector3()).set(Math.cos(lat)*Math.cos(lon), Math.sin(lat), -Math.cos(lat)*Math.sin(lon)); }
 function plateAt(pl,a,out){
+  // Smooth path through the stylized keyframes: a Hermite spline whose speed carries through each keyframe
+  // (tangents from the neighbouring keyframes, scaled by their age gaps), so continents no longer stop at every key.
   const k=pl.k; let i=0; while(i<k.length-2 && a<k[i+1][0]) i++;
-  const A=k[i], B=k[i+1]; const t=sm(0,1,clamp((A[0]-a)/(A[0]-B[0]),0,1));
-  let dl=((B[2]-A[2]+540)%360)-180;
-  return ll2v(lerp(A[1],B[1],t), A[2]+dl*t, out);
+  const A=k[i], B=k[i+1], P=k[Math.max(0,i-1)], N=k[Math.min(k.length-1,i+2)];
+  const t=clamp((A[0]-a)/(A[0]-B[0]),0,1), h=A[0]-B[0];
+  const un=(lon,ref)=>ref+(((lon-ref+540)%360)-180);          // unwrap longitudes next to A
+  const bl=un(B[2],A[2]), pl0=un(P[2],A[2]), nl=un(N[2],bl);
+  const tan=(q0,q1,t0,t1)=> t0===t1 ? 0 : (q1-q0)/(t0-t1)*h;   // per unit t
+  const m1la=tan(P[1],B[1],P[0],B[0]), m2la=tan(A[1],N[1],A[0],N[0]);
+  const m1lo=tan(pl0,bl,P[0],B[0]), m2lo=tan(A[2],nl,A[0],N[0]);
+  const t2=t*t, t3=t2*t, h00=2*t3-3*t2+1, h10=t3-2*t2+t, h01=-2*t3+3*t2, h11=t3-t2;
+  const lat=clamp(h00*A[1]+h10*m1la+h01*B[1]+h11*m2la,-89,89), lon=h00*A[2]+h10*m1lo+h01*bl+h11*m2lo;
+  return ll2v(lat, lon, out);
 }
 
 const gUni = {
@@ -343,6 +354,7 @@ const gUni = {
   uWest:{value:new THREE.Vector3(1,0,0)}, uRift:{value:0}, uSubd:{value:0}, uEdges:{value:1}, uFlow:{value:0},
   // present-day relief (AWS Terrain Tiles: ≈10 km global, ≈2 km California), grey "no data" wash, near-ground fog
   uReal:{value:0}, uRelief:{value:null}, uCa:{value:null}, uCaOn:{value:0}, uCaBox:{value:new THREE.Vector4(-124.6,32.4,-114.0,42.1)},
+  uCutOn:{value:0}, uCutC:{value:new THREE.Vector3(1,0,0)}, uCutW:{value:new THREE.Vector3(0,0,1)}, uCutN:{value:new THREE.Vector3(0,1,0)}, uCutTh:{value:new THREE.Vector2()}, uCutS:{value:0.22},
   uRelK:{value:30}, uGrey:{value:0}, uAvG:{value:null}, uAvOn:{value:0}, uAvBox:{value:new THREE.Vector4(-124.6,32.4,-114.0,42.1)}, uFogCol:{value:new THREE.Color(.7,.78,.84)}, uFogN:{value:1e3}, uFogF:{value:2e3}
 };
 // Earth relief, 8-bit equirectangular (scripts/build_globe.py). Row 0 is 90N.
@@ -352,6 +364,7 @@ const globeMat = new THREE.ShaderMaterial({
   vertexShader:`varying vec3 vN; void main(){ vN=normalize(position); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
   fragmentShader:GLSL_NOISE+`
   uniform vec3 uC[8]; uniform float uR[8]; uniform float uGreen,uCap,uIceAll,uDesert,uTime,uRift,uSubd,uEdges,uFlow; uniform vec3 uSun,uWest;
+  uniform float uCutOn,uCutS; uniform vec3 uCutC,uCutW,uCutN; uniform vec2 uCutTh;
   uniform float uReal,uCaOn,uRelK,uGrey,uFogN,uFogF,uAvOn; uniform sampler2D uRelief,uCa,uAvG; uniform vec4 uCaBox,uAvBox; uniform vec3 uFogCol;
   float relH(vec2 uv){ float v=texture2D(uRelief,uv).r*255.0;
     return v>=128.0 ? pow((v-128.0)/127.0,2.0)*8848.0 : -pow(max(127.0-v,0.0)/127.0,2.0)*11000.0; }
@@ -388,6 +401,8 @@ const globeMat = new THREE.ShaderMaterial({
   float smax(float a,float b,float k){ float h=clamp(0.5+0.5*(a-b)/k,0.0,1.0); return mix(b,a,h)+k*h*(1.0-h); }
   void main(){
     vec3 n=normalize(vN);
+    if(uCutOn>0.5){ float cs=dot(n,uCutN);                     // the pit in front of the subduction section (see SUB3D)
+      if(cs>0.0&&cs<sin(uCutS)){ vec3 q=n-uCutN*cs; float th=atan(dot(q,uCutW),dot(q,uCutC)); if(th>uCutTh.x&&th<uCutTh.y&&dot(q,uCutC)>0.0) discard; } }
     float f=-1.0;
     float d1=-9.0, d2=-9.0, dL=-9.0;
     for(int i=0;i<8;i++){ float di=uR[i]-acos(clamp(dot(n,uC[i]),-1.0,1.0)); f=smax(f, di, 0.09);
@@ -437,6 +452,56 @@ const globeMat = new THREE.ShaderMaterial({
 });
 const globe = new THREE.Mesh(new THREE.SphereGeometry(1,288,216), globeMat);
 gScene.add(globe);
+/* Subduction on the globe: the "Plates in motion" section (sdDraw below) stands in a pit cut into the
+   globe at Laurentia's stylized western margin and moves with it. Illustration, enlarged SUB3D.S times:
+   the section is 600 km across and 235 km deep; the pit's other faces are plain mantle. */
+const SUB3D={on:true, S:3, cv:document.createElement("canvas"), w:1200, h:506, ctx:null, tex:null, vis:0,
+  mid:new THREE.Vector3(), cam:new THREE.Vector3()};
+SUB3D.cv.width=SUB3D.w; SUB3D.cv.height=SUB3D.h; SUB3D.ctx=SUB3D.cv.getContext("2d");
+SUB3D.tex=new THREE.CanvasTexture(SUB3D.cv); SUB3D.tex.minFilter=THREE.LinearFilter; SUB3D.tex.generateMipmaps=false;
+const cutUni={uC:gUni.uCutC, uW:gUni.uCutW, uN:gUni.uCutN, uTex:{value:SUB3D.tex}, uOp:{value:0}, uOpen:{value:0}};
+const CUT_VS=`attribute vec3 aP; attribute float aK; uniform vec3 uC,uW,uN; uniform float uOpen; varying vec2 vUv; varying float vK,vR;
+  void main(){ vec3 d=uC*cos(aP.x)+uW*sin(aP.x); float s=aP.y*uOpen, r=1.0-(1.0-aP.z)*uOpen; vec3 p=(d*cos(s)+uN*sin(s))*r; vUv=uv; vK=aK; vR=aP.z;
+    gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0); }`;
+function cutGeom(quads,nu,nv){           // quads: functions (u,v) in [0,1]² -> [theta, s, r], plus a shade per quad
+  const P=[],U=[],K=[],I=[]; let base=0;
+  quads.forEach(([f,k])=>{ for(let j=0;j<=nv;j++) for(let i=0;i<=nu;i++){ P.push(...f(i/nu,j/nv)); U.push(i/nu,1-j/nv); K.push(k); }
+    for(let j=0;j<nv;j++) for(let i=0;i<nu;i++){ const q=base+j*(nu+1)+i; I.push(q,q+1,q+nu+1, q+1,q+nu+2,q+nu+1); } base+=(nu+1)*(nv+1); });
+  const g=new THREE.BufferGeometry(); g.setAttribute("aP",new THREE.Float32BufferAttribute(P,3)); g.setAttribute("uv",new THREE.Float32BufferAttribute(U,2));
+  g.setAttribute("aK",new THREE.Float32BufferAttribute(K,1)); g.setAttribute("position",new THREE.Float32BufferAttribute(new Float32Array(P.length),3)); g.setIndex(I);
+  g.boundingSphere=new THREE.Sphere(new THREE.Vector3(),1.2); return g; }
+function buildSub3d(R0){
+  const S=SUB3D.S, km=S/R_E, th=x=>R0-(x-SD_XT)*km, ztop=-20/2, zbot=(SUB3D.h-20)/2;   // canvas: 2 px per km, surface 20 px down
+  const ta=th(300), tb=th(-300), rf=1-zbot*km, W=0.22;              // pit width (rad); the shaders scale it with the opening
+  gUni.uCutTh.value.set(ta,tb);
+  const wall=[[(u,v)=>[lerp(tb,ta,u), 0, 1-lerp(ztop,zbot,v)*km], 0]];
+  const box=[[(u,v)=>[lerp(tb,ta,u), lerp(0,W,v), rf], 1],                       // floor
+             [(u,v)=>[lerp(tb,ta,u), W, lerp(1,rf,v)], 2],                        // far face
+             [(u,v)=>[ta, lerp(0,W,u), lerp(1,rf,v)], 3], [(u,v)=>[tb, lerp(0,W,u), lerp(1,rf,v)], 3]];
+  return [cutGeom(wall,60,24), cutGeom(box,40,12)];
+}
+function initSub3d(R0){ const [gw,gb]=buildSub3d(R0); SUB3D.R0=R0;
+  SUB3D.wall=new THREE.Mesh(gw,new THREE.ShaderMaterial({uniforms:cutUni, transparent:true, side:THREE.DoubleSide, depthWrite:true,
+    vertexShader:CUT_VS, fragmentShader:`uniform sampler2D uTex; uniform float uOp; varying vec2 vUv; void main(){ vec4 c=texture2D(uTex,vUv); if(c.a<0.08) discard; gl_FragColor=vec4(c.rgb,c.a*uOp); }`}));
+  SUB3D.box=new THREE.Mesh(gb,new THREE.ShaderMaterial({uniforms:cutUni, side:THREE.DoubleSide, transparent:true,
+    vertexShader:CUT_VS, fragmentShader:`uniform float uOp; varying float vK,vR; void main(){ float d=clamp((1.0-vR)/0.115,0.0,1.0);
+      vec3 c=mix(vec3(0.36,0.23,0.16),vec3(0.54,0.29,0.15),d)*(vK==1.0?0.62:vK==2.0?0.9:0.75); gl_FragColor=vec4(c,uOp); }`}));
+  SUB3D.wall.renderOrder=2; SUB3D.box.renderOrder=1; SUB3D.wall.frustumCulled=SUB3D.box.frustumCulled=false;
+  gScene.add(SUB3D.box, SUB3D.wall); SUB3D.wall.visible=SUB3D.box.visible=false; }
+const sN=new THREE.Vector3(), sW=new THREE.Vector3();
+function updateSub3d(a,T){                 // after apply(): Laurentia's centre and the pit, then the section drawing
+  const far=!SUB3D.local||lCam.position.distanceTo(lCtl.target)>LEXT*20;   // on the block, only once zoomed out to the planet
+  const v=SUB3D.on&&!RGN.sel&&far ? sm(262,248,a)*sm(29,34,a)*(1-gUni.uReal.value) : 0, open=sm(0,1,v*1.4-0.2);   // the pit closes as subduction here ends, about 28 Ma
+  SUB3D.vis=open; gUni.uCutOn.value=open>0.02?1:0; gUni.uCutS.value=0.22*open; cutUni.uOpen.value=open; cutUni.uOp.value=sm(0.2,0.8,open);
+  if(open<=0.02){ if(SUB3D.wall) SUB3D.wall.visible=SUB3D.box.visible=false; return; }
+  if(!SUB3D.wall||SUB3D.R0!==gUni.uR.value[0]){ if(SUB3D.wall){ gScene.remove(SUB3D.wall,SUB3D.box); SUB3D.wall.geometry.dispose(); SUB3D.box.geometry.dispose(); } initSub3d(gUni.uR.value[0]); }
+  const c=gUni.uC.value[0]; sW.set(-c.z,0,c.x).normalize(); sN.crossVectors(c,sW).normalize();   // the pit opens to the south, so the section reads west to east from the camera
+  gUni.uCutC.value.copy(c); gUni.uCutW.value.copy(sW); gUni.uCutN.value.copy(sN);
+  const tm=(gUni.uCutTh.value.x+gUni.uCutTh.value.y)/2;
+  SUB3D.mid.copy(c).multiplyScalar(Math.cos(tm)).addScaledVector(sW,Math.sin(tm)).multiplyScalar(0.95);   // middle of the section wall
+  SUB3D.cam.copy(SUB3D.mid).multiplyScalar(2.3/0.95).addScaledVector(sN,1.0).normalize().multiplyScalar(G_END.d);   // south of the pit, far enough out to keep the whole planet in view
+  SUB3D.wall.visible=SUB3D.box.visible=true; sdDraw(a,T,SUB3D); SUB3D.tex.needsUpdate=true;
+}
 
 const cloudMat = new THREE.ShaderMaterial({
   uniforms:{uTime:gUni.uTime, uSun:gUni.uSun, uAmt:{value:1}}, transparent:true, depthWrite:false,
@@ -515,7 +580,10 @@ const idxAt=(x,z)=>inExt(x,z) ? Math.round((z-Z0)/SZ*(NZ-1))*NX+Math.round((x-X0
 const lScene = new THREE.Scene();
 const lCam = new THREE.PerspectiveCamera(42,1,0.1,Math.max(400,LEXT*8));
 const lCtl = new THREE.OrbitControls(lCam, canvas);
-lCtl.enablePan=false; lCtl.minDistance=1.2; lCtl.maxDistance=4*6371;   // zoom out from the block to the whole planet lCtl.maxPolarAngle=Math.PI*0.47; lCtl.enableDamping=true; lCtl.target.set(0,0.6,0);
+lCtl.minDistance=1.2; lCtl.maxDistance=4*6371;   // zoom out from the block to the whole planet
+lCtl.maxPolarAngle=Math.PI*0.47; lCtl.enableDamping=true; lCtl.target.set(0,0.6,0);
+// Pan slides the map over the ground (north, south, east, west): right-drag with a mouse, two-finger drag on touch screens.
+lCtl.enablePan=true; lCtl.screenSpacePanning=false; lCtl.touches={ONE:THREE.TOUCH.ROTATE, TWO:THREE.TOUCH.DOLLY_PAN};
 
 const VE = LEXT>40 ? 2.2 : 1.6, BASE=-3.2;
 // seeded value noise for terrain synthesis
@@ -964,7 +1032,7 @@ const GEO={on:false, ok:false};
   }catch(e){ /* no drape for this region */ }
 })();
 // Satellite drape: scripts/make_imagery_texture.py crops a Sentinel-2 true-colour scene to this region's frame.
-const SAT={on:false, ok:false};
+const SAT={on:true, ok:false, detail:null};   // on by default: fades in by itself as the timeline reaches today
 (async function loadImagery(){
   const base = REG.id==="mt_st_helena" ? "assets/" : "assets/regions/"+REG.id+"/";
   if(!realDEM) return;
@@ -973,10 +1041,25 @@ const SAT={on:false, ok:false};
     const t=await new Promise((ok,no)=>new THREE.TextureLoader().load(base+m.image.file,ok,undefined,no));
     t.flipY=false; t.minFilter=THREE.LinearFilter; t.generateMipmaps=false; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); t.needsUpdate=true;
     const b=m.image.bbox_utm;                                   // the image covers bbox_utm exactly, row 0 north
-    lUni.uSatExt.value.set((b[0]-GNIS_UTM[0])/1000, -(b[3]-GNIS_UTM[1])/1000, (b[2]-b[0])/1000, (b[3]-b[1])/1000); lUni.uSat.value=t; SAT.ok=true; $("satBtn").hidden=false;
-    $("satLb").textContent=`${m.label} · ${m.credit.split(",")[0]}`;
+    lUni.uSatExt.value.set((b[0]-GNIS_UTM[0])/1000, -(b[3]-GNIS_UTM[1])/1000, (b[2]-b[0])/1000, (b[3]-b[1])/1000); lUni.uSat.value=t; SAT.ok=true; $("satBtn").hidden=false; $("satBtn").setAttribute("aria-pressed",SAT.on);
+    SAT.label=`${m.label} · ${m.credit.split(",")[0]}`;
+    $("satLb").textContent=SAT.label;
+    // full-resolution (10 m) crops for the close-ups, same scene (make_imagery_texture.py --closeups)
+    SAT.detail=REG.id==="mt_st_helena" ? null : await fetch(base+"detail/imagery.json").then(r=>r.ok?r.json():null).catch(()=>null);
+    try{ if(LOC.mesh&&LOC.cur) loadPatchImagery(LOC.cur); }catch(e){ /* close-ups not set up yet */ }
   }catch(e){ /* no imagery for this region */ }
 })();
+function loadPatchImagery(q){
+  const d=SAT.detail&&SAT.detail.locations[q.id]; if(!d||!LOC.mesh) return;
+  const mesh=LOC.mesh, base=REG.id==="mt_st_helena" ? "assets/" : "assets/regions/"+REG.id+"/";
+  new THREE.TextureLoader().load(base+"detail/"+d.file, t=>{
+    if(LOC.mesh!==mesh){ t.dispose(); return; }
+    t.flipY=false; t.minFilter=THREE.LinearMipmapLinearFilter; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); t.needsUpdate=true;
+    const b=d.bbox_utm, u=mesh.material.uniforms;
+    u.uSat={value:t}; u.uSatExt={value:new THREE.Vector4((b[0]-GNIS_UTM[0])/1000, -(b[3]-GNIS_UTM[1])/1000, (b[2]-b[0])/1000, (b[3]-b[1])/1000)};
+    mesh.material.uniformsNeedUpdate=true; SAT.patchLabel=`${SAT.detail.label}, ${Math.round(d.cell_m[0])} m close-up`;
+  });
+}
 $("satBtn").onclick=()=>{ SAT.on=!SAT.on; $("satBtn").setAttribute("aria-pressed",SAT.on); if(SAT.on&&ageOf(p)>0.06) goTo(CH.length-1); };
 $("geoBtn").onclick=()=>{ GEO.on=!GEO.on; $("geoBtn").setAttribute("aria-pressed",GEO.on); if(GEO.on&&ageOf(p)>0.06) goTo(CH.length-1); };
 (async function loadAVA(){
@@ -1017,7 +1100,7 @@ function sampleGrid(arr,x,z){
 }
 function clearPatch(){
   if(LOC.mesh){ lScene.remove(LOC.mesh); LOC.mesh.geometry.dispose(); const u=LOC.mesh.material.uniforms;
-    [u.uDem.value, u.uAva!==lUni.uAva&&u.uAva.value].forEach(t=>{ if(t) t.dispose(); }); LOC.mesh.material.dispose(); LOC.mesh=null; }
+    [u.uDem.value, u.uAva!==lUni.uAva&&u.uAva.value, u.uSat!==lUni.uSat&&u.uSat.value].forEach(t=>{ if(t) t.dispose(); }); SAT.patchLabel=null; LOC.mesh.material.dispose(); LOC.mesh=null; }
   lUni.uHole.value.set(0,0,0,0);
 }
 function buildPatch(q,m,h16){
@@ -1045,7 +1128,7 @@ function buildPatch(q,m,h16){
     uDemTexel:{value:new THREE.Vector2(1/nx,1/nzz)}, uDemCell:{value:new THREE.Vector2(cx,cz)}, uDemExt:{value:new THREE.Vector4(b.x0,b.z0,sx,sz)}});
   if(AVA.data){ mat.uniforms.uAva={value:avaTexture(b.x0,b.z0,sx,sz)}; mat.uniforms.uExt={value:new THREE.Vector4(b.x0,b.z0,sx,sz)}; }
   mat.polygonOffset=true; mat.polygonOffsetFactor=-1; mat.polygonOffsetUnits=-4;
-  LOC.mesh=new THREE.Mesh(g,mat); lScene.add(LOC.mesh);
+  LOC.mesh=new THREE.Mesh(g,mat); lScene.add(LOC.mesh); loadPatchImagery(q);
   const inset=Math.min(0.6*bc, sx*0.05); lUni.uHole.value.set(b.x0+inset,b.z0+inset,b.x1-inset,b.z1-inset);
 }
 function renderPicker(){
@@ -1201,7 +1284,9 @@ const bE=new THREE.Vector3(), bU=new THREE.Vector3(), bN=new THREE.Vector3(), bS
 function siteBasis(){ bU.copy(markerDir); bE.set(bU.z,0,-bU.x).normalize(); bN.crossVectors(bU,bE); bS.copy(bN).negate(); mB.makeBasis(bE,bU,bS); qB.setFromRotationMatrix(mB); }
 function toGlobe(P,out){ return out.copy(bE).multiplyScalar(P.x).addScaledVector(bU,P.y+R_E).addScaledVector(bS,P.z).multiplyScalar(1/R_E); }
 function fromGlobe(G,out){ const x=G.dot(bE)*R_E, y=G.dot(bU)*R_E-R_E, z=G.dot(bS)*R_E; return out.set(x,y,z); }
-const gSun=new THREE.Vector3(1,0,0), gSunL=new THREE.Vector3();
+const gSun=new THREE.Vector3(1,0,0), gSunL=new THREE.Vector3(), sR=new THREE.Vector3();
+// light from over the viewer's shoulder (up and to the right), so the side of the planet in view is always lit
+function viewSun(pos,out){ const d=out.copy(pos).normalize(); sR.crossVectors(up,d).normalize(); return d.multiplyScalar(0.75).addScaledVector(sR,0.55).addScaledVector(up,0.35).normalize(); }
 function apply(a,p){
   const local = p >= P_SWITCH;
   // ---- globe (drawn in every era; below A_DIVE it surrounds the block)
@@ -1217,7 +1302,7 @@ function apply(a,p){
     marker.position.copy(markerDir).multiplyScalar(1.03);
     marker.visible = !local;
     gUni.uReal.value = sm(0.5,0.005,a);                      // present-day relief only for the present
-    gUni.uGrey.value = local ? sm(A_DIVE,160,a)*(1-gUni.uReal.value) : 0;   // outside the block nothing is reconstructed
+    gUni.uGrey.value = local ? sm(A_DIVE,20,a)*(1-gUni.uReal.value) : 0;   // outside the block nothing is reconstructed
     siteBasis();
     gUni.uGreen.value = sm(470,390,a);
     gUni.uIceAll.value = Math.max(band(a,717,660,8), band(a,650,635,5));
@@ -1233,9 +1318,9 @@ function apply(a,p){
   lUni.uLava.value = Math.max(dome*0.55, big);
   ash.material.uniforms.uE.value = Math.max(dome*0.3, big);
   lUni.uAsh.value = a<2.86 ? sm(2.2,2.86,a) : big*0.6;
-  lUni.uVines.value = sm(0.00017,0.00004,a)*(GEO.on||SAT.on?0.25:1);   // vineyards spread from the mid-1800s (dimmed under the geology map)
+  lUni.uVines.value = sm(0.00017,0.00004,a)*((GEO.on&&GEO.ok)||(SAT.on&&SAT.ok)?0.25:1);   // vineyards spread from the mid-1800s (dimmed under the geology map)
   lUni.uGeoOn.value = GEO.on&&GEO.ok ? sm(0.06,0.0005,a) : 0;
-  lUni.uSatOn.value = SAT.on&&SAT.ok ? sm(0.06,0.0005,a) : 0;     // the satellite image shows today's ground only   // the geologic map shows today's ground only
+  lUni.uSatOn.value = SAT.on&&SAT.ok ? sm(0.06,0.0005,a) : 0;     // the satellite image shows today's ground only: it fades in over the last few thousand years of the slider
   lUni.uThr.value = sm(175,150,a)*lerp(0.35,1,sm(6,10,a)); lUni.uThrAct.value = sm(7,10,a); lUni.uThrOff.value = 0.12*sm(170,40,a);
   lUni.uSS.value = sm(9.5,7.5,a); lUni.uSSAct.value = sm(9.5,7.5,a);
   lUni.uErode.value = sm(2.8,0.5,a);
@@ -1251,16 +1336,47 @@ function apply(a,p){
 }
 
 /* =================================================================== cameras */
-let autoCam=true;
-[gCtl,lCtl].forEach(c=>c.addEventListener("start",()=>{ autoCam=false; }));
+let autoCam=true, greyK=1;   // greyK: how much of the grey (not reconstructed) planet shows, from altitude during the dive
+[gCtl,lCtl].forEach(c=>c.addEventListener("start",()=>{ autoCam=false; gCam.up.set(0,1,0); }));
+/* Trackpad: a two-finger swipe moves the map (or turns the globe) the way the fingers go; pinch still zooms.
+   A pinch arrives as a wheel event with ctrlKey, which OrbitControls handles. A notched mouse wheel keeps zooming. */
+function isTrackpadSwipe(e){
+  if(e.ctrlKey || e.deltaMode!==0) return false;
+  return e.deltaX!==0 || Math.abs(e.deltaY)<40 || !Number.isInteger(e.deltaY);
+}
+const panR=new THREE.Vector3(), panF=new THREE.Vector3();
+function clampTarget(){
+  const m=LEXT*0.15, t=lCtl.target, x=clamp(t.x,X0-m,X1+m), z=clamp(t.z,Z0-m,Z1+m);
+  if(x!==t.x||z!==t.z){ lCam.position.x+=x-t.x; lCam.position.z+=z-t.z; t.x=x; t.z=z; }
+}
+lCtl.addEventListener("change", clampTarget);
+window.addEventListener("wheel", e=>{
+  if(e.target!==canvas || !isTrackpadSwipe(e)) return;
+  e.preventDefault(); e.stopPropagation(); autoCam=false;
+  if(lCtl.enabled){
+    const d=lCam.position.distanceTo(lCtl.target), k=d*0.0011;
+    lCam.getWorldDirection(panF); panF.y=0; panF.normalize();
+    panR.crossVectors(panF, up).normalize();
+    tv.copy(panR).multiplyScalar(e.deltaX*k).addScaledVector(panF, -e.deltaY*k);
+    lCtl.target.add(tv); lCam.position.add(tv); clampTarget(); lCtl.update();
+  } else if(gCtl.enabled){
+    const sp=new THREE.Spherical().setFromVector3(gCam.position.clone().sub(gCtl.target)), k=0.0025*(sp.radius-1);
+    sp.theta+=e.deltaX*k; sp.phi=clamp(sp.phi+e.deltaY*k, 0.15, Math.PI-0.15);
+    gCam.position.setFromSpherical(sp).add(gCtl.target); gCam.lookAt(gCtl.target); gCtl.update();
+  }
+}, {capture:true, passive:false});
 const tv=new THREE.Vector3(), up=new THREE.Vector3(0,1,0);
 function driveGlobeCam(a,p,dt){
-  const zoom = sm(330,186,a);                          // 0 far, 1 close
-  const dist = lerp(3.4,1.42,zoom);
+  const zoom = sm(330,A_DIVE,a);                       // 0 far, 1 at the start of the dive; the whole planet stays in view
+  const dist = lerp(3.4,G_END.d,zoom);
   const east = new THREE.Vector3().crossVectors(up,markerDir).normalize();
-  tv.copy(markerDir).addScaledVector(east, lerp(0.55,0.1,zoom)).addScaledVector(up, lerp(0.35,0.05,zoom)).normalize().multiplyScalar(dist);
-  gCam.position.lerp(tv, 1-Math.exp(-dt*3));
-  gCtl.target.set(0,0,0); gCam.lookAt(0,0,0);
+  tv.copy(markerDir).addScaledVector(east, lerp(0.55,G_END.e,zoom)).addScaledVector(up, lerp(0.35,G_END.u,zoom)).normalize().multiplyScalar(dist);
+  const ws=SUB3D.vis;                      // swing round to face the subduction pit while it is open
+  if(ws>0) tv.lerp(SUB3D.cam, ws);
+  const k=1-Math.exp(-dt*1.2);             // slow, smooth follow
+  gCam.position.lerp(tv, k);
+  gCtl.target.set(0,0,0); SUB3D.look=(SUB3D.look||new THREE.Vector3()).lerp(tv.set(0,0,0).lerp(SUB3D.mid,ws*0.5), k);
+  gCam.up.set(0,1,0).lerp(SUB3D.mid,ws*0.5).normalize(); gCam.lookAt(SUB3D.look);   // local up over the pit, so its far wall is at the top
 }
 const g0=new THREE.Vector3(0,0,3.4), P0=new THREE.Vector3(), T0=new THREE.Vector3(), d0=new THREE.Vector3(), d1=new THREE.Vector3(), qa=new THREE.Quaternion(), qb=new THREE.Quaternion(), yL=new THREE.Vector3();
 // the globe camera, derived each frame from the block camera
@@ -1284,16 +1400,19 @@ function driveLocalCam(a,hc,dt){
     tx=L.fx; tz=L.fz; dist=clamp(L.fr*2.3,3,30); elev=0.6; ty=Math.max(0,hl)*VE*0.8; lift=0; }
   if(!lInit){ lInit=true; lCam.position.set(tx+Math.sin(orbit)*30*kL,34*kL,tz+Math.cos(orbit)*30*kL); }
   tv.set(tx+Math.sin(orbit)*Math.cos(elev)*dist, Math.sin(elev)*dist + ty + lift, tz+Math.cos(orbit)*Math.cos(elev)*dist);
-  const z=sm(A_DIVE,150,a);
+  const zs=clamp((A_DIVE-a)/(A_DIVE-A_LAND),0,1), z=zs*zs*zs*(zs*(zs*6-15)+10);   // smootherstep: eases in and out, no jolt at either end
   if(z<1){ // the dive: from where the globe camera left off down to the block, altitude on a log scale
     // where the globe camera sits at the end of its approach (driveGlobeCam at full zoom)
-    g0.set(bU.z,0,-bU.x).normalize().multiplyScalar(0.1).add(bU).addScaledVector(up,0.05).normalize().multiplyScalar(1.42);
+    g0.set(bU.z,0,-bU.x).normalize().multiplyScalar(G_END.e).add(bU).addScaledVector(up,G_END.u).normalize().multiplyScalar(G_END.d);
     fromGlobe(g0,P0); T0.set(0,-R_E,0);
     const wT=sm(0,0.55,z), T1=new THREE.Vector3(tx,ty,tz), tgt=T0.clone().lerp(T1,wT);
     d0.copy(P0); const l0=d0.length(); d0.normalize();
     d1.copy(tv).sub(T1); const l1=d1.length(); d1.normalize();
     qa.setFromUnitVectors(d0,d1); qb.identity().slerp(qa,sm(0.2,1,z));
     lCam.position.set(tx,ty,tz).multiplyScalar(wT).add(d0.applyQuaternion(qb).multiplyScalar(Math.exp(lerp(Math.log(l0),Math.log(l1),z))));
+    // altitude above the ground falls on a log scale, so each factor of ten takes the same time (no rush at the start)
+    const alt0=P0.distanceTo(T0)-R_E, alt1=Math.max(0.05,tv.distanceTo(T0)-R_E), r=R_E+Math.exp(lerp(Math.log(alt0),Math.log(alt1),z));
+    lCam.position.sub(T0).normalize().multiplyScalar(r).add(T0);
     lCtl.target.copy(tgt);
     // roll: start with the globe's north up, end with the block's up
     yL.set(0,bU.y,bS.y).lerp(up,sm(0.2,1,z)).normalize(); lCam.up.copy(yL);
@@ -1325,7 +1444,7 @@ Promise.all([fetch("../SCENES.json").then(r=>r.ok?r.json():Promise.reject(r.stat
 fetch("../data/plates/stylized.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{
   const L=d.plates||[];
   if(d.class!=="reconstruction-stylized" || L.length!==PLATES.length || L.some(q=>!(q.keyframes||[]).length)) throw "unusable plates";
-  L.forEach((q,i)=>{ Object.assign(PLATES[i],toPlate(q)); gUni.uR.value[i]=q.radius; GLAB[i].el.textContent=q.label; });
+  L.forEach((q,i)=>{ Object.assign(PLATES[i],toPlate(q)); gUni.uR.value[i]=q.radius; GLAB[i].el.textContent=q.label+" · stylized"; });
   DATA.plates="data/plates/stylized.json";
 }).catch(()=>{});
 $("ticks").addEventListener("click",e=>{ const b=e.target.closest(".tick"); if(b) goTo(+b.dataset.i); });
@@ -1508,9 +1627,11 @@ function wrapText(g,t,x,y,mw,lh){ const ws=t.split(" "); let line="";
    85 Ma, the ridge arriving, a slab window, then sideways sliding) follows the chapter sources. */
 const sd={el:$("sub"), cv:$("sdCv"), btn:$("sdBtn"), open:false, auto:true, ctx:null, w:0, h:0};
 sd.ctx=sd.cv.getContext("2d");
-function sdToggle(on,user){ if(user) sd.auto=false; if(on&&xs.open) xsToggle(false); if(on&&!$("places").hidden) openPlaces(false);
-  sd.open=on; sd.el.hidden=!on; sd.btn.setAttribute("aria-pressed",on); document.body.classList.toggle("xs-open",on||xs.open); if(on) sdSize(); }
-sd.btn.onclick=()=>sdToggle(!sd.open,true); $("sdX").onclick=()=>sdToggle(false,true);
+function sdToggle(on,user){ if(user) sd.auto=false; if(!on) sd.btn.setAttribute("aria-pressed",SUB3D.on&&!SUB3D.local); else sd.btn.setAttribute("aria-pressed",true); if(on&&xs.open) xsToggle(false); if(on&&!$("places").hidden) openPlaces(false);
+  sd.open=on; sd.el.hidden=!on; document.body.classList.toggle("xs-open",on||xs.open); if(on) sdSize(); }
+sd.btn.onclick=()=>{ if(SUB3D.local) sdToggle(!sd.open,true);        // on the block: the section panel
+  else { SUB3D.on=!SUB3D.on; sd.btn.setAttribute("aria-pressed",SUB3D.on); if(SUB3D.on&&(ageOf(p)>262||ageOf(p)<30)) goTo(CH.findIndex(c=>ageOf(c.p)<=252)); } };   // on the globe: the pit
+sd.btn.setAttribute("aria-pressed",SUB3D.on); $("sdX").onclick=()=>sdToggle(false,true);
 function sdSize(){ const r=sd.cv.getBoundingClientRect(), d=Math.min(devicePixelRatio,2); sd.w=r.width; sd.h=r.height; sd.cv.width=Math.round(r.width*d); sd.cv.height=Math.round(r.height*d); sd.ctx.setTransform(d,0,0,d,0,0); }
 addEventListener("resize",()=>{ if(sd.open) sdSize(); });
 const SD_XT=-70;                 // trench, km (0 = centre of the panel)
@@ -1521,14 +1642,14 @@ function slabPath(dip,len){      // top of the down-going plate: flat, a bend of
     pts.push([x,z,ang]); x+=Math.cos(ang)*ds; z+=Math.sin(ang)*ds; if(z>235) break; }
   return pts;
 }
-function sdDraw(a,t){
-  const g=sd.ctx, W=sd.w, Hh=sd.h; if(!W) return;
+function sdDraw(a,t,tg){               // tg: another canvas to draw into (the globe section, SUB3D); default the panel
+  const g=(tg||sd).ctx, W=(tg||sd).w, Hh=(tg||sd).h; if(!W) return;
   const oy=20, k=Math.min(W/600,(Hh-16-oy)/235), ox=W/2, X=x=>ox+x*k, Y=z=>oy+z*k;
   const font=getComputedStyle(document.body).fontFamily;
   g.clearRect(0,0,W,Hh);
   if(a>262){ g.fillStyle=XC.mut; g.font="12px "+font; g.textAlign="center";
     wrapText(g,"No subduction here yet. Until about 250 million years ago this was a quiet continental edge facing open ocean.",W/2,Hh/2-14,W-60,16); g.textAlign="left";
-    $("sdNote").textContent="The animation starts when the ocean plate begins sinking beneath the margin, about 250 Ma."; return; }
+    if(!tg) $("sdNote").textContent="The animation starts when the ocean plate begins sinking beneath the margin, about 250 Ma."; return; }
   const sub=a>10, win=sm(10,7,a);                              // subduction here ends as the triple junction passes (about 10 Ma)
   const dip=a>90?32:a>45?lerp(18,32,sm(70,90,a)):lerp(30,18,sm(55,45,a));
   const wedge=lerp(25,95,sm(240,30,a)), arc=sm(250,235,a)*sm(78,90,a);
@@ -1598,6 +1719,7 @@ function sdDraw(a,t){
   g.fillStyle="#ffb27a"; g.fillText("◆ rocks now under Mt. St. Helena",X(sx)-6,Y(0)-6);
   g.fillStyle=XC.mut; g.fillText("mantle",X(200),Y(200));
   const s100=100*k; g.fillRect(W-12-s100,Hh-9,s100,1.5); g.textAlign="right"; g.fillText("100 km",W-12,Hh-12); g.textAlign="left";
+  if(tg){ g.font="600 13px "+font; g.fillStyle="#ffd9b0"; g.textAlign="left"; g.fillText("Illustration · section enlarged "+tg.S+"×, geometry schematic",8,14); return; }
   $("sdNote").textContent = (win>0.5
       ? "Illustration. The ridge has passed: the old plate's last piece is sinking away and hot mantle rises through the gap, feeding the Sonoma Volcanics (about 8 to 3 Ma). The plates now slide sideways."
       : "Illustration. The ocean plate moves east at roughly 5 to 15 cm a year (shown about ten trillion times faster), bends into the trench and sinks. Sediment and slices of seafloor scraped off at the trench build the Franciscan rocks."+(arc>0.3?" Where the slab reaches about 100 km, melt rises to feed the arc.":a<24&&a>10?" The Pacific–Farallon ridge is approaching from the west; when it reaches the trench, subduction here stops.":a<90&&a>10?" The arc shut off about 85 Ma as the slab flattened.":""))
@@ -1623,7 +1745,7 @@ PLACES.forEach(q=>{ q.el=document.createElement("div"); q.el.className="plc"; q.
   q.i=idxAt(q.x,q.z); });
 const pl3=new THREE.Vector3(), camR=new THREE.Vector3();
 const mkLab=(t,cls)=>{ const e=document.createElement("div"); e.className=cls; e.textContent=t; e.hidden=true; $("plcs").appendChild(e); return e; };
-const GLAB=PLATES.map(pl=>({el:mkLab(pl.lb,"plc plate")}));
+const GLAB=PLATES.map(pl=>({el:mkLab(pl.lb+" · stylized","plc plate")}));
 const FLAB=FAULTS.filter(fl=>fl.lab).map(fl=>{ const q={x:fl.lab[0], z:fl.lab[1], el:mkLab(fl.n+" · "+fl.r,"plc flt")}; q.i=idxAt(q.x,q.z); return q; });
 // plate names at the block's SW and NE edges (along the across-trend line)
 const PLAB=[{x:X0+Math.min(3,SX*0.06), z:Z1-Math.min(3,SZ*0.06), t:a=>a>8?"Farallon plate, sinking east →":"← Pacific plate: ≈55 km west of the summit, across the San Andreas"},
@@ -1656,18 +1778,18 @@ function frame(now){
   $("era").textContent = eraName(a);
   showCard(dwell?dwell.i:chapterIndex(p));
 
-  const st=apply(a,p);
+  const st=apply(a,p); SUB3D.local=st.local;
   if(xs.open){ drawSection(a,w6); xsPlace(); }
-  if(sd.auto && !sd.open && a<=252 && a>0.3 && !xs.open && $("places").hidden && innerWidth>640) sdToggle(true);   // opens itself once, when subduction begins
+  updateSub3d(a,T);                        // subduction now plays on the globe itself; the panel opens only from the Plates chip
   if(sd.open){ sdDraw(a,T); xsPlace(); }
-  $("scaleChip").textContent = st.local&&RGN.sel ? RGN.sel.name+" · planned" : st.local&&lCam.position.distanceTo(lCtl.target)>LEXT*5 ? (a<0.5 ? "Planet · present-day relief" : "Planet · grey = not reconstructed") : st.local ? (LOC.cur ? LOC.cur.name.replace(" of Napa Valley","")+" · close-up" : REG_LABEL) : (a>320 ? "Planet" : "Western North America");
+  $("scaleChip").textContent = st.local&&RGN.sel ? RGN.sel.name+" · planned" : st.local&&lCam.position.distanceTo(lCtl.target)>LEXT*5 ? (a<0.5 ? "Planet · present-day relief" : gUni.uGrey.value*greyK<0.5 ? "Western North America" : "Planet · grey = not reconstructed") : st.local ? (LOC.cur ? LOC.cur.name.replace(" of Napa Valley","")+" · close-up" : REG_LABEL) : (a>320 ? "Planet" : "Western North America");
   let cam;
   let far=false;
   if(!st.local){
     if(autoCam) driveGlobeCam(a,p,dt); else gCtl.update();
     lCtl.enabled=false; gCtl.enabled=true; cam=gCam;
     if(gCam.near!==0.01){ gCam.near=0.01; gCam.far=100; gCam.updateProjectionMatrix(); }
-    gUni.uSun.value.copy(gSun);
+    viewSun(gCam.position,gSun); gUni.uSun.value.copy(gSun);
     gUni.uFogN.value=1e3; gUni.uFogF.value=2e3; gUni.uRelK.value=30; cloudMat.uniforms.uAmt.value=cloudBase; atmoMat.uniforms.uAmt.value=1; atmo.visible=true; stars.visible=true;
     $("space").style.opacity=0; $("xdot").hidden=true; RGN.labels.forEach(q=>q.el.hidden=true); gUni.uAvOn.value=0;
     renderer.clear(); renderer.render(gScene,gCam);
@@ -1699,7 +1821,9 @@ function frame(now){
     const altKm=deriveGlobeCam(); far = dist>LEXT*5;
     // globe around the block: same sun, same haze; clouds, air glow and stars only from high up
     gSunL.copy(bE).multiplyScalar(lUni.uSun.value.x).addScaledVector(bU,lUni.uSun.value.y).addScaledVector(bS,lUni.uSun.value.z);
-    gUni.uSun.value.copy(gSun).lerp(gSunL,sm(A_DIVE,165,a)).normalize();
+    tv.set(bU.z,0,-bU.x).normalize().multiplyScalar(G_END.e).add(bU).addScaledVector(up,G_END.u); viewSun(tv,gSun);   // the same light as where the dive began
+    gUni.uSun.value.copy(gSun).lerp(gSunL,sm(A_DIVE,18,a)).normalize();
+    greyK = Math.max(sm(900,90,altKm), sm(14,A_LAND,a)); gUni.uGrey.value *= greyK;   // during the dive keep the stylized planet in view high up; grey (not reconstructed) near the ground
     gUni.uRelK.value=lerp(6,18,sm(100,3000,altKm));        // gentler relief shading near the ground
     gUni.uFogCol.value.copy(lUni.uFog.value); gUni.uFogN.value=lUni.uFogN.value/R_E; gUni.uFogF.value=lUni.uFogF.value/R_E;
     cloudMat.uniforms.uAmt.value=cloudBase*sm(80,220,altKm);
@@ -1727,7 +1851,7 @@ function frame(now){
     const lf=lUni.uSS.value>0.05, lh=lUni.uThr.value>0.05, ls=lUni.uErode.value>0.05, lt=lUni.uTopo.value>0.05;
     $("lgAva").hidden=!(lUni.uAvaOn.value>0.05);
     $("lgEdge").hidden=true; $("lgSut").hidden=true; $("lgThr").hidden=!lh;
-    const lg=lUni.uGeoOn.value>0.05; $("lgGeo").hidden=!lg; const lsat=lUni.uSatOn.value>0.05; $("lgSat").hidden=!lsat;
+    const lg=lUni.uGeoOn.value>0.05; $("lgGeo").hidden=!lg; const lsat=lUni.uSatOn.value>0.05; $("lgSat").hidden=!lsat; if(lsat&&SAT.label){ const t=SAT.patchLabel||SAT.label; if($("satLb").textContent!==t) $("satLb").textContent=t; }
     $("lgFault").hidden=!lf; $("lgStream").hidden=!ls; $("lgTopo").hidden=!lt; legend.style.opacity=(lf||lh||ls||lt||lg||lsat)?1:0;
     // 5 km scale bar measured at the summit, across the screen
     camR.setFromMatrixColumn(lCam.matrixWorld,0); camR.y=0; camR.normalize();

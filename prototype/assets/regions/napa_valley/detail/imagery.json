@@ -1,0 +1,475 @@
+{
+ "label": "Sentinel-2 true colour, 2026-07-14",
+ "credit": "Contains modified Copernicus Sentinel data 2026, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+ "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+ "class": "measured-approx",
+ "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+ "scenes": [
+  "S2A_10SEH_20260714_0_L2A"
+ ],
+ "date": "2026-07-14",
+ "encoding": "baseline JPEG, quality 80, row 0 = north",
+ "resampling": "nearest full-resolution (10 m) pixel at each cell centre",
+ "limits": "One summer acquisition: shadows and colours are that day's; 8-bit TCI stretch as delivered by ESA; clouds in the scene (see cloud_cover_percent) are not masked.",
+ "locations": {
+  "atlas_peak": {
+   "file": "atlas_peak.imagery.jpg",
+   "width": 1321,
+   "height": 1321,
+   "bbox_utm": [
+    557709.5,
+    4246400.2,
+    570921.2,
+    4259611.9
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.001,
+    10.001
+   ],
+   "sha256": "5c6ddf079ce9c0fe6cffcf251e88932d1c1b7fa3a769a92d6fac810c27c933b5"
+  },
+  "bennett_valley": {
+   "file": "bennett_valley.imagery.jpg",
+   "width": 1143,
+   "height": 1143,
+   "bbox_utm": [
+    526559.3,
+    4243836.9,
+    537986.7,
+    4255264.4
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.998,
+    9.998
+   ],
+   "sha256": "6c4757029aebf8bbdf7e9c655fd77a2797735f1bc7f87cf8aff8c3ba2dbe1564"
+  },
+  "calistoga": {
+   "file": "calistoga.imagery.jpg",
+   "width": 1601,
+   "height": 1601,
+   "bbox_utm": [
+    529260.4,
+    4263507.5,
+    545273.7,
+    4279520.8
+   ],
+   "missing_cells": 1,
+   "cell_m": [
+    10.002,
+    10.002
+   ],
+   "sha256": "e1cb1a4b9ebf1e4558836d0a52a3e6623cfcf8750a06055000b0917135a954f9"
+  },
+  "chalk_hill": {
+   "file": "chalk_hill.imagery.jpg",
+   "width": 1799,
+   "height": 1799,
+   "bbox_utm": [
+    511930.9,
+    4259152.9,
+    529921.4,
+    4277143.4
+   ],
+   "missing_cells": 1,
+   "cell_m": [
+    10.0,
+    10.0
+   ],
+   "sha256": "f1c54a0782d2fedc8a99c6ded0c376f8fee80ab82cdacf0cec7f5654d9cb276c"
+  },
+  "chiles_valley": {
+   "file": "chiles_valley.imagery.jpg",
+   "width": 1506,
+   "height": 1506,
+   "bbox_utm": [
+    549952.3,
+    4259131.9,
+    565011.4,
+    4274191.0
+   ],
+   "missing_cells": 1,
+   "cell_m": [
+    9.999,
+    9.999
+   ],
+   "sha256": "b8c63fdf20288d83f378eaf26945c7176f0d21f11e07020dd0b281682b4f9967"
+  },
+  "coombsville": {
+   "file": "coombsville.imagery.jpg",
+   "width": 1203,
+   "height": 1203,
+   "bbox_utm": [
+    560064.5,
+    4234032.0,
+    572093.7,
+    4246061.2
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.999,
+    9.999
+   ],
+   "sha256": "161d08ebebfe77a7d809902e8a5131d8c24cf2723e54723ecd72318bb75184b4"
+  },
+  "crystal_springs_of_napa_valley": {
+   "file": "crystal_springs_of_napa_valley.imagery.jpg",
+   "width": 1194,
+   "height": 1194,
+   "bbox_utm": [
+    539697.4,
+    4261761.8,
+    551638.2,
+    4273702.5
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.001,
+    10.001
+   ],
+   "sha256": "8357f581e0070cdeb99442fcf70da52e80be3bf57f7aa261107a3cd22fc11243"
+  },
+  "diamond_mountain_district": {
+   "file": "diamond_mountain_district.imagery.jpg",
+   "width": 1210,
+   "height": 1210,
+   "bbox_utm": [
+    531015.6,
+    4261912.9,
+    543111.1,
+    4274008.4
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.996,
+    9.996
+   ],
+   "sha256": "1b4486f0179aae63dbdb75fee71c621dae89a1b7872413e587003f1c5ba6ecdc"
+  },
+  "fountaingrove_district": {
+   "file": "fountaingrove_district.imagery.jpg",
+   "width": 2015,
+   "height": 2015,
+   "bbox_utm": [
+    522402.9,
+    4252859.1,
+    542550.2,
+    4273006.5
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.999,
+    9.999
+   ],
+   "sha256": "ed484d08e008cb8008e09204678088e1b78e587603ab7a6a123719a65d3873ad"
+  },
+  "guenoc_valley": {
+   "file": "guenoc_valley.imagery.jpg",
+   "width": 936,
+   "height": 936,
+   "bbox_utm": [
+    537289.7,
+    4283707.0,
+    546651.3,
+    4293068.5
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.002,
+    10.002
+   ],
+   "sha256": "fc077f900eee1efe29de56d2d78be6f93194fb39cb25e5d86733f2be132bfb34"
+  },
+  "howell_mountain": {
+   "file": "howell_mountain.imagery.jpg",
+   "width": 1548,
+   "height": 1548,
+   "bbox_utm": [
+    540130.3,
+    4262458.9,
+    555614.8,
+    4277943.5
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.003,
+    10.003
+   ],
+   "sha256": "1e84b454a2fbac9677e7ea94dfefc48b8682faa2d3cf7b613c5733a37cee44dd"
+  },
+  "knights_valley": {
+   "file": "knights_valley.imagery.jpg",
+   "width": 2237,
+   "height": 2237,
+   "bbox_utm": [
+    515603.1,
+    4266646.1,
+    537975.3,
+    4289018.3
+   ],
+   "missing_cells": 1,
+   "cell_m": [
+    10.001,
+    10.001
+   ],
+   "sha256": "3d1e2b2ef3b2a030360dacd64e8913da823c049039ae4aab8d9046ad40ffcc88"
+  },
+  "los_carneros": {
+   "file": "los_carneros.imagery.jpg",
+   "width": 2597,
+   "height": 2597,
+   "bbox_utm": [
+    538304.0,
+    4218203.2,
+    564275.2,
+    4244174.5
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.0,
+    10.001
+   ],
+   "sha256": "a0cc5777d86cbfc0725a7f813e47c9266649711b5371a5036e012fabaf899409"
+  },
+  "moon_mountain_district_sonoma_county": {
+   "file": "moon_mountain_district_sonoma_county.imagery.jpg",
+   "width": 1853,
+   "height": 1853,
+   "bbox_utm": [
+    537173.4,
+    4236270.6,
+    555705.3,
+    4254802.5
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.001,
+    10.001
+   ],
+   "sha256": "3c684acdecff19d1932fc3bbe167cba01ef2de067cd35a8100c9d2e3d5044b2f"
+  },
+  "mount_st_helena": {
+   "file": "mount_st_helena.imagery.jpg",
+   "width": 900,
+   "height": 900,
+   "bbox_utm": [
+    527392.6,
+    4275629.8,
+    536392.6,
+    4284629.8
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.0,
+    10.0
+   ],
+   "sha256": "2982d878c08f42d1fe505ed6125de3effba83e5ed3ea2980568e9d6b4b4f35a0"
+  },
+  "mt__veeder": {
+   "file": "mt__veeder.imagery.jpg",
+   "width": 2083,
+   "height": 2083,
+   "bbox_utm": [
+    540175.0,
+    4235303.0,
+    561008.4,
+    4256136.3
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.002,
+    10.002
+   ],
+   "sha256": "826ed37e51dab540c3b69f029033e2266fb9efbebaf1bdf1a36b7d3ab8defdbd"
+  },
+  "oak_knoll_district_of_napa_valley": {
+   "file": "oak_knoll_district_of_napa_valley.imagery.jpg",
+   "width": 1136,
+   "height": 1136,
+   "bbox_utm": [
+    553608.5,
+    4239009.7,
+    564964.7,
+    4250365.8
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.997,
+    9.997
+   ],
+   "sha256": "4837825d14fa8dfa6a52a90cf85a3bb10e933d6c20c2a0285f3c77cd83e76584"
+  },
+  "oakville": {
+   "file": "oakville.imagery.jpg",
+   "width": 1238,
+   "height": 1238,
+   "bbox_utm": [
+    547557.9,
+    4247713.8,
+    559941.0,
+    4260096.8
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.003,
+    10.002
+   ],
+   "sha256": "c74a054197b744e6cbd09947c5b0df7d01875712f779e83b62cd2de717541ea5"
+  },
+  "rutherford": {
+   "file": "rutherford.imagery.jpg",
+   "width": 1134,
+   "height": 1134,
+   "bbox_utm": [
+    545163.1,
+    4252168.9,
+    556499.6,
+    4263505.3
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.997,
+    9.997
+   ],
+   "sha256": "58444724c9593a66265cf2a75ca47f05b6130235e741971c32454b10bc9e6874"
+  },
+  "solano_county_green_valley": {
+   "file": "solano_county_green_valley.imagery.jpg",
+   "width": 1519,
+   "height": 1519,
+   "bbox_utm": [
+    564511.7,
+    4227519.3,
+    579702.3,
+    4242709.9
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.0,
+    10.0
+   ],
+   "sha256": "0e3bc38111a5ebbcb08b3fe5dcf6e65c3506a959d9a8e5389f48f07e5619ce8e"
+  },
+  "sonoma_mountain": {
+   "file": "sonoma_mountain.imagery.jpg",
+   "width": 1159,
+   "height": 1159,
+   "bbox_utm": [
+    532102.2,
+    4239111.7,
+    543692.6,
+    4250702.1
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.0,
+    10.0
+   ],
+   "sha256": "4d0f1af5abab0e63e2d5b8185a4f87fc5d7c728d8aaf36f467acf2407fcfb8e0"
+  },
+  "spring_mountain_district": {
+   "file": "spring_mountain_district.imagery.jpg",
+   "width": 1229,
+   "height": 1229,
+   "bbox_utm": [
+    535126.0,
+    4256266.6,
+    547415.0,
+    4268555.5
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.999,
+    9.999
+   ],
+   "sha256": "abc6e0a0a45ad65c766381322484a6c1166e50e95c173388a64144cd18e064ab"
+  },
+  "st__helena": {
+   "file": "st__helena.imagery.jpg",
+   "width": 1305,
+   "height": 1305,
+   "bbox_utm": [
+    540154.5,
+    4257230.0,
+    553203.4,
+    4270278.9
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.999,
+    9.999
+   ],
+   "sha256": "7fcbac8074a9439c2ab647a149903a3a2e7cc6e2a0053f4a95ffe51b13c51110"
+  },
+  "stags_leap_district": {
+   "file": "stags_leap_district.imagery.jpg",
+   "width": 883,
+   "height": 883,
+   "bbox_utm": [
+    554528.6,
+    4246495.5,
+    563355.9,
+    4255322.9
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.997,
+    9.997
+   ],
+   "sha256": "e60b81ad47edf11d780d98555350df3c5cc70156bbe33bb9c63084a092333eb7"
+  },
+  "suisun_valley": {
+   "file": "suisun_valley.imagery.jpg",
+   "width": 1211,
+   "height": 1479,
+   "bbox_utm": [
+    571990.8,
+    4227999.5,
+    584100.0,
+    4242784.9
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.999,
+    9.997
+   ],
+   "sha256": "365ea2992afef35407f6d7c72cb8aa81a0009f33b8c05b4fed97f701ac5f93ee"
+  },
+  "wild_horse_valley": {
+   "file": "wild_horse_valley.imagery.jpg",
+   "width": 1151,
+   "height": 1151,
+   "bbox_utm": [
+    564314.0,
+    4233243.6,
+    575819.3,
+    4244748.9
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.996,
+    9.996
+   ],
+   "sha256": "a6f64e6979a1ec06c3d8aed5d6436ead86dfc5e6d404a9e782a73e373a61e98f"
+  },
+  "yountville": {
+   "file": "yountville.imagery.jpg",
+   "width": 1343,
+   "height": 1343,
+   "bbox_utm": [
+    548878.5,
+    4243674.3,
+    562303.9,
+    4257099.7
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.997,
+    9.997
+   ],
+   "sha256": "88efd4445bcd336325c9fd2f5635ad7ccbee2bdfc3303d07319c09be4cd24670"
+  }
+ }
+}

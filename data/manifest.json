@@ -234,6 +234,114 @@
         {
           "file": "prototype/assets/regions/napa_valley/imagery.jpg",
           "sha256": "6ef43e445ee227ade46c7b8821769ed19602223ba0e849406a5ffc647a2a1dd9"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/atlas_peak.imagery.jpg",
+          "sha256": "5c6ddf079ce9c0fe6cffcf251e88932d1c1b7fa3a769a92d6fac810c27c933b5"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/bennett_valley.imagery.jpg",
+          "sha256": "6c4757029aebf8bbdf7e9c655fd77a2797735f1bc7f87cf8aff8c3ba2dbe1564"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/calistoga.imagery.jpg",
+          "sha256": "e1cb1a4b9ebf1e4558836d0a52a3e6623cfcf8750a06055000b0917135a954f9"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/chalk_hill.imagery.jpg",
+          "sha256": "f1c54a0782d2fedc8a99c6ded0c376f8fee80ab82cdacf0cec7f5654d9cb276c"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/chiles_valley.imagery.jpg",
+          "sha256": "b8c63fdf20288d83f378eaf26945c7176f0d21f11e07020dd0b281682b4f9967"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/coombsville.imagery.jpg",
+          "sha256": "161d08ebebfe77a7d809902e8a5131d8c24cf2723e54723ecd72318bb75184b4"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/crystal_springs_of_napa_valley.imagery.jpg",
+          "sha256": "8357f581e0070cdeb99442fcf70da52e80be3bf57f7aa261107a3cd22fc11243"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/diamond_mountain_district.imagery.jpg",
+          "sha256": "1b4486f0179aae63dbdb75fee71c621dae89a1b7872413e587003f1c5ba6ecdc"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/fountaingrove_district.imagery.jpg",
+          "sha256": "ed484d08e008cb8008e09204678088e1b78e587603ab7a6a123719a65d3873ad"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/guenoc_valley.imagery.jpg",
+          "sha256": "fc077f900eee1efe29de56d2d78be6f93194fb39cb25e5d86733f2be132bfb34"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/howell_mountain.imagery.jpg",
+          "sha256": "1e84b454a2fbac9677e7ea94dfefc48b8682faa2d3cf7b613c5733a37cee44dd"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/knights_valley.imagery.jpg",
+          "sha256": "3d1e2b2ef3b2a030360dacd64e8913da823c049039ae4aab8d9046ad40ffcc88"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/los_carneros.imagery.jpg",
+          "sha256": "a0cc5777d86cbfc0725a7f813e47c9266649711b5371a5036e012fabaf899409"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/moon_mountain_district_sonoma_county.imagery.jpg",
+          "sha256": "3c684acdecff19d1932fc3bbe167cba01ef2de067cd35a8100c9d2e3d5044b2f"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/mount_st_helena.imagery.jpg",
+          "sha256": "2982d878c08f42d1fe505ed6125de3effba83e5ed3ea2980568e9d6b4b4f35a0"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/mt__veeder.imagery.jpg",
+          "sha256": "826ed37e51dab540c3b69f029033e2266fb9efbebaf1bdf1a36b7d3ab8defdbd"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/oak_knoll_district_of_napa_valley.imagery.jpg",
+          "sha256": "4837825d14fa8dfa6a52a90cf85a3bb10e933d6c20c2a0285f3c77cd83e76584"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/oakville.imagery.jpg",
+          "sha256": "c74a054197b744e6cbd09947c5b0df7d01875712f779e83b62cd2de717541ea5"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/rutherford.imagery.jpg",
+          "sha256": "58444724c9593a66265cf2a75ca47f05b6130235e741971c32454b10bc9e6874"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/solano_county_green_valley.imagery.jpg",
+          "sha256": "0e3bc38111a5ebbcb08b3fe5dcf6e65c3506a959d9a8e5389f48f07e5619ce8e"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/sonoma_mountain.imagery.jpg",
+          "sha256": "4d0f1af5abab0e63e2d5b8185a4f87fc5d7c728d8aaf36f467acf2407fcfb8e0"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/spring_mountain_district.imagery.jpg",
+          "sha256": "abc6e0a0a45ad65c766381322484a6c1166e50e95c173388a64144cd18e064ab"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/st__helena.imagery.jpg",
+          "sha256": "7fcbac8074a9439c2ab647a149903a3a2e7cc6e2a0053f4a95ffe51b13c51110"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/stags_leap_district.imagery.jpg",
+          "sha256": "e60b81ad47edf11d780d98555350df3c5cc70156bbe33bb9c63084a092333eb7"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/suisun_valley.imagery.jpg",
+          "sha256": "365ea2992afef35407f6d7c72cb8aa81a0009f33b8c05b4fed97f701ac5f93ee"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/wild_horse_valley.imagery.jpg",
+          "sha256": "a6f64e6979a1ec06c3d8aed5d6436ead86dfc5e6d404a9e782a73e373a61e98f"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/yountville.imagery.jpg",
+          "sha256": "88efd4445bcd336325c9fd2f5635ad7ccbee2bdfc3303d07319c09be4cd24670"
         }
       ]
     },
@@ -312,6 +420,10 @@
         {
           "file": "prototype/assets/regions/petaluma_gap/imagery.jpg",
           "sha256": "cce7bca79f306f549340807c9aa301a72155e7a050b0ae5e77cc133442353b96"
+        },
+        {
+          "file": "prototype/assets/regions/petaluma_gap/detail/sonoma_mountain.imagery.jpg",
+          "sha256": "731fe90fed397db477c3ccc6efc266f5b36183b23a87618a8b37515ffde52c15"
         }
       ]
     },
