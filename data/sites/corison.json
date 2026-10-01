@@ -31,6 +31,7 @@
   "S4": {"title": "USDA-NRCS Official Soil Series Description, BALE (rev. 3/97), via the SoilKnowledgeBase JSON snapshot", "url": "https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/B/BALE.json", "kind": "official soil series description (USDA, public domain; SoilKnowledgeBase packaging MIT)"},
   "S5": {"title": "Graymer et al. 2007, USGS SIM 2956 geologic map (SOURCES.md G07)", "kind": "geologic map, 1:100,000"},
   "S6": {"title": "USGS National Hydrography Dataset, high resolution (SOURCES.md G26)", "kind": "mapped streams, today"},
-  "S7": {"title": "AWS Terrain Tiles z15 (USGS 3DEP 1/3 arc-second source; SOURCES.md G19)", "kind": "terrain"}
+  "S7": {"title": "AWS Terrain Tiles z15 (USGS 3DEP 1/3 arc-second source; SOURCES.md G19)", "kind": "terrain"},
+  "S8": {"title": "PRISM Climate Group, Oregon State University, 800 m 1991-2020 normals (SOURCES.md G29)", "url": "https://prism.oregonstate.edu", "kind": "climate normals, 800 m grid"}
  }
 }

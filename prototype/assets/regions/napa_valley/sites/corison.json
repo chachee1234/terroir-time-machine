@@ -78,6 +78,11 @@
   "S7": {
    "title": "AWS Terrain Tiles z15 (USGS 3DEP 1/3 arc-second source; SOURCES.md G19)",
    "kind": "terrain"
+  },
+  "S8": {
+   "title": "PRISM Climate Group, Oregon State University, 800 m 1991-2020 normals (SOURCES.md G29)",
+   "url": "https://prism.oregonstate.edu",
+   "kind": "climate normals, 800 m grid"
   }
  },
  "soil": {
@@ -825,5 +830,26 @@
    "source": "S7",
    "cell_m": 10.0
   }
+ },
+ "climate": {
+  "ppt_mm": 861.1,
+  "tmean_c": 15.3,
+  "tmin_c": 7.6,
+  "tmax_c": 23.0,
+  "gdd_f": 3318,
+  "winkler": "Region III",
+  "cell": {
+   "lon": -122.45,
+   "lat": 38.48333
+  },
+  "source": "S8",
+  "units": {
+   "ppt_mm": "mm/year",
+   "tmean_c": "C",
+   "tmin_c": "C",
+   "tmax_c": "C",
+   "gdd_f": "F degree-days, Apr-Oct, base 50 F (Winkler index)"
+  },
+  "limits": "800 m cells: one value per cell, so a hillside and the valley floor beside it can share a cell. 30-year averages, not any one year."
  }
 }

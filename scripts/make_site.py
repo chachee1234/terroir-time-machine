@@ -11,6 +11,7 @@ then adds, each from its own source:
   profile  ground elevation along that line from the site's close-up terrain grid (fetch_tiles.py --only <id>)
   streams  where USGS NHD channels (rivers.json, make_rivers.py) cross the line
   ava      which AVA polygons (UC Davis AVA Project) contain the site
+  climate  PRISM 800 m 1991-2020 normals in the cell under the site (climate.json, make_climate.py), if built
 Output: <assets_dir>/sites/<id>.json and <assets_dir>/sites/index.json.
 
 Nothing here is an animation: the viewer animates the layers in the order they were laid down, and labels
@@ -31,6 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_terrain import utm_from_geographic  # noqa: E402
 import make_geology_texture as mg  # noqa: E402
+import make_climate  # noqa: E402
 
 OSD_URL = "https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/{c}/{s}.json"
 OSD_CACHE = ROOT / "data" / "raw" / "osd"
@@ -222,6 +224,10 @@ def build(site_path, e00, half=1900.0, step=10.0, offline=False):
                        "ground_m": [round(g, 1) for g in ground], "units": runs,
                        "streams": stream_crossings(rivers, e0, n0, half),
                        "terrain": {"file": f"detail/{site['id']}", "source": "S7", "cell_m": meta["cell_m"]}}}
+    if (assets / "climate.json").exists():
+        cl = json.loads((assets / "climate.json").read_text())
+        out["climate"] = dict(make_climate.at(cl, lat, lon) or {}, source=site.get("climate_source", "S8"),
+                              units=cl["units"], limits=cl["limits"])
     (assets / "sites").mkdir(exist_ok=True)
     (assets / "sites" / f"{site['id']}.json").write_text(json.dumps(out, indent=1) + "\n")
     idx_path = assets / "sites" / "index.json"
