@@ -1,0 +1,36 @@
+{
+  "id": "northern_sonoma",
+  "name": "Northern Sonoma",
+  "description": "Northern Sonoma AVA bounding box (UC Davis AVA Project, CC0) padded by 2 km; ~48 x 65 km. Frame for the viewer, not a geological boundary.",
+  "epsg": 26910,
+  "utm_zone": 10,
+  "bbox_utm": [
+    486400.0,
+    4237200.0,
+    534800.0,
+    4302400.0
+  ],
+  "anchor": {
+    "utm": [
+      510614.5,
+      4269817.1
+    ],
+    "kind": "computed",
+    "note": "centre of the Northern Sonoma AVA bounding box (UC Davis outline); a frame reference, not a named feature"
+  },
+  "cell_m": 30,
+  "browser_cells": 468,
+  "assets_dir": "prototype/assets/regions/northern_sonoma",
+  "boundary": "data/ava/northern_sonoma_avas.geojson",
+  "ava_viewer": "prototype/assets/regions/northern_sonoma/ava.json",
+  "parents": [
+    "northern_sonoma"
+  ],
+  "ava_rule": "the parent AVA, every current AVA nested in it, and every current AVA whose bounding box lies inside the frame",
+  "close_ups": [],
+  "frame_note": "Two nested AVAs are kept whole but run past the frame and are cut at its edge in the viewer: Rockpile (about 7.8 km past the west edge) and Pine Mountain-Cloverdale Peak (about 0.9 km past the north edge, into Mendocino County). Widening the frame west was tried and dropped: it pulls in the Sonoma coast, where the terrain tiles have spurious depths down to about -14,900 m along the shoreline.",
+  "frame_cut_avas": [
+    "pine_mountain_cloverdale_peak",
+    "rockpile"
+  ]
+}

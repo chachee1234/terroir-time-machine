@@ -336,3 +336,10 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Command: `python3 scripts/make_plate_model.py --src <pygplates-tutorials checkout>`.
 - Next smallest action: owner review; optional plate-boundary lines (the model's topologies) or past shorelines (paleogeography) if wanted.
 
+
+## Autopilot R4.1: Northern Sonoma step 1 (branch `autopilot`) — 2026-10-01
+- `autopilot` restarted from main (PR #20 merged). New `data/regions/northern_sonoma.json` (≈48 × 65 km frame, computed anchor, `utm_zone` 10, `frame_cut_avas`); nine AVA outlines in `prototype/assets/regions/northern_sonoma/ava.json` (Napa's `ava.json` unchanged); terrain (320 z13 tiles, 110 newly fetched) with eight close-ups; Sentinel-2 40 m texture and 10 m close-up images (asset folder ≈22 MB). SOURCES G33.
+- Repairs (2): `test_ava.py` failed because Rockpile and Pine Mountain-Cloverdale Peak run past the frame. (1) Widened the frame west and north: the wider frame takes in the coast, where the tiles give spurious depths to ≈−14,900 m, so it was dropped and the original terrain regenerated from cache. (2) The test now accepts a nested AVA past the edge only when the region file lists it in `frame_cut_avas` and it still has vertices inside; the viewer paints outlines on a canvas, so they are clipped at the frame.
+- Known limits: a north–south brightness seam on land where the S2A and S2B scenes meet; bytes downloaded from Sentinel were not measured (tiles well under the 600 cap).
+- Commands: `python3 scripts/ava_extract.py --region data/regions/northern_sonoma.json --from-file data/raw/ava/avas.geojson`; `python3 scripts/fetch_tiles.py --region data/regions/northern_sonoma.json --frame-grid`; `python3 scripts/make_imagery_texture.py --region data/regions/northern_sonoma.json` and `--closeups-only`; `python3 -m unittest discover -s scripts -p 'test_*.py'` → 133 pass, 1 skipped; `python3 scripts/validate.py` → PASS. No page touched (the viewer does not load this region until R4.3), so no headless check this step.
+- Next smallest action: owner review; R4.2 Northern Sonoma faults, towns and chapters.

@@ -1,0 +1,27 @@
+{
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 13,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "fetched": "2026-10-01",
+ "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+ "encoding": "Int16 little-endian, row 0 = north",
+ "scale": 0.1,
+ "resampling": "bilinear from the tile mosaic at each UTM cell centre",
+ "product": "region shading grid",
+ "region": "northern_sonoma",
+ "bbox_utm": [
+  486400.0,
+  4237200.0,
+  534800.0,
+  4302400.0
+ ],
+ "cols": 760,
+ "rows": 1024,
+ "cell_m": 63.768,
+ "range_m": [
+  -86.95,
+  1433.16
+ ],
+ "sha256": "bf0ff33b8c9cd2f96b5c862adcd2f5e8c6806f8ed815bd0fce3064d858de15ae"
+}

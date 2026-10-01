@@ -1,0 +1,155 @@
+{
+ "label": "Sentinel-2 true colour, 2026-07-27",
+ "credit": "Contains modified Copernicus Sentinel data 2026, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+ "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+ "class": "measured-approx",
+ "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+ "scenes": [
+  "S2A_10SDH_20260727_1_L2A",
+  "S2A_10SDJ_20260727_1_L2A",
+  "S2B_10SEH_20260727_0_L2A",
+  "S2B_10SEJ_20260727_0_L2A"
+ ],
+ "date": "2026-07-27",
+ "encoding": "baseline JPEG, quality 80, row 0 = north",
+ "resampling": "nearest full-resolution (10 m) pixel at each cell centre",
+ "limits": "One summer acquisition: shadows and colours are that day's; 8-bit TCI stretch as delivered by ESA; clouds in the scene (see cloud_cover_percent) are not masked.",
+ "locations": {
+  "alexander_valley": {
+   "file": "alexander_valley.imagery.jpg",
+   "width": 3407,
+   "height": 3382,
+   "bbox_utm": [
+    491451.7,
+    4268582.5,
+    525524.6,
+    4302400.0
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.001,
+    9.999
+   ],
+   "sha256": "e11ba6a3e3dda7ddf8d489d7ac4d2b4d3243b8daa1b93d2946ab5d799a15b1b4"
+  },
+  "chalk_hill": {
+   "file": "chalk_hill.imagery.jpg",
+   "width": 1799,
+   "height": 1799,
+   "bbox_utm": [
+    511930.9,
+    4259152.9,
+    529921.4,
+    4277143.4
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.0,
+    10.0
+   ],
+   "sha256": "b6eb0fc915ec39f7995e711d335e4ce2d9a850ef4336dead8b5b9e3e820384cf"
+  },
+  "dry_creek_valley": {
+   "file": "dry_creek_valley.imagery.jpg",
+   "width": 2575,
+   "height": 2575,
+   "bbox_utm": [
+    488414.6,
+    4264788.9,
+    514160.2,
+    4290534.5
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.998,
+    9.998
+   ],
+   "sha256": "8db2c954cad4bb0a7bb574e8d86db14dcee68428be09faf785d5f5e381f747df"
+  },
+  "green_valley_of_russian_river_valley": {
+   "file": "green_valley_of_russian_river_valley.imagery.jpg",
+   "width": 1687,
+   "height": 1687,
+   "bbox_utm": [
+    501629.6,
+    4246267.8,
+    518499.9,
+    4263138.1
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.0,
+    10.0
+   ],
+   "sha256": "d2f4e818fda61a6ea3d456a3b16804256d7649f7667b2dfcc495978aabf37f8e"
+  },
+  "knights_valley": {
+   "file": "knights_valley.imagery.jpg",
+   "width": 1920,
+   "height": 2237,
+   "bbox_utm": [
+    515603.1,
+    4266646.1,
+    534800.0,
+    4289018.3
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.998,
+    10.001
+   ],
+   "sha256": "81ac75f5c784cc1373f0d42f90cc32290d886a3624f6bbb03fe382f7753c22a5"
+  },
+  "pine_mountain_cloverdale_peak": {
+   "file": "pine_mountain_cloverdale_peak.imagery.jpg",
+   "width": 879,
+   "height": 593,
+   "bbox_utm": [
+    497920.7,
+    4296472.9,
+    506714.9,
+    4302400.0
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.005,
+    9.995
+   ],
+   "sha256": "8b450826df4888cb9ed4b28ea2419aec5e2ba57fc463cfa429abeeed6d580379"
+  },
+  "rockpile": {
+   "file": "rockpile.imagery.jpg",
+   "width": 1028,
+   "height": 1958,
+   "bbox_utm": [
+    486400.0,
+    4280256.5,
+    496677.7,
+    4299833.2
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.998,
+    9.998
+   ],
+   "sha256": "9844b2d0423b1d9c42318f3b4bbf31950a7442aae268fd07e375bb0a6c4a61ac"
+  },
+  "russian_river_valley": {
+   "file": "russian_river_valley.imagery.jpg",
+   "width": 4201,
+   "height": 4201,
+   "bbox_utm": [
+    491853.8,
+    4237695.8,
+    533864.7,
+    4279706.6
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.0,
+    10.0
+   ],
+   "sha256": "6431101f39c2ff59cee3a8ed46039ef84d95db37c3e1c141dcd410e76009d197"
+  }
+ }
+}

@@ -634,6 +634,128 @@
           "sha256": "ca99a45871b01e5cc0432bc656c877b9cc953338eb972becbf3c91d3e8716294"
         }
       ]
+    },
+    {
+      "id": "northern_sonoma-sentinel2-imagery",
+      "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+      "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs",
+      "scenes": [
+        "S2A_10SDH_20260727_1_L2A",
+        "S2A_10SDJ_20260727_1_L2A",
+        "S2B_10SEH_20260727_0_L2A",
+        "S2B_10SEJ_20260727_0_L2A"
+      ],
+      "date": "2026-07-27",
+      "fetched": "2026-10-01",
+      "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+      "credit": "Contains modified Copernicus Sentinel data 2026, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/northern_sonoma/imagery.jpg",
+          "sha256": "31b1605ecf10138eb742e99187de804f08aac3ec9ca2f117b1d795f14e70b6ce"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/alexander_valley.imagery.jpg",
+          "sha256": "e11ba6a3e3dda7ddf8d489d7ac4d2b4d3243b8daa1b93d2946ab5d799a15b1b4"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/chalk_hill.imagery.jpg",
+          "sha256": "b6eb0fc915ec39f7995e711d335e4ce2d9a850ef4336dead8b5b9e3e820384cf"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/dry_creek_valley.imagery.jpg",
+          "sha256": "8db2c954cad4bb0a7bb574e8d86db14dcee68428be09faf785d5f5e381f747df"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/green_valley_of_russian_river_valley.imagery.jpg",
+          "sha256": "d2f4e818fda61a6ea3d456a3b16804256d7649f7667b2dfcc495978aabf37f8e"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/knights_valley.imagery.jpg",
+          "sha256": "81ac75f5c784cc1373f0d42f90cc32290d886a3624f6bbb03fe382f7753c22a5"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/pine_mountain_cloverdale_peak.imagery.jpg",
+          "sha256": "8b450826df4888cb9ed4b28ea2419aec5e2ba57fc463cfa429abeeed6d580379"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/rockpile.imagery.jpg",
+          "sha256": "9844b2d0423b1d9c42318f3b4bbf31950a7442aae268fd07e375bb0a6c4a61ac"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/russian_river_valley.imagery.jpg",
+          "sha256": "6431101f39c2ff59cee3a8ed46039ef84d95db37c3e1c141dcd410e76009d197"
+        }
+      ]
+    },
+    {
+      "id": "ava-northern-sonoma",
+      "source": "UC Davis Library & DataLab, American Viticultural Areas (AVA) Project",
+      "url": "https://raw.githubusercontent.com/UCDavisLibrary/ava/master/avas_aggregated_files/avas.geojson",
+      "rights": "CC0 1.0",
+      "source_sha256": "c90068f7154764519f0a7c6fb2788e597b7c56bf7581e8c0faa979554d984926",
+      "derived": [
+        {
+          "file": "data/ava/northern_sonoma_avas.geojson",
+          "sha256": "189949134dde6e0035b8521bd9daf510fd0e32c902dee45a43eeda30de1338d4"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/ava.json",
+          "sha256": "213645e2aeb3c930f3170fb2d488729a33946ab83484caae7ac162429e84339f"
+        }
+      ]
+    },
+    {
+      "id": "northern_sonoma-terrain-tiles-z13",
+      "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "zoom": 13,
+      "tiles": 320,
+      "tiles_sha256": "ad029aa8fde1efd08136fd81c826d07991510f641cd7c6d400f11e3388ed0494",
+      "fetched": "2026-10-01",
+      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/northern_sonoma/terrain.bin",
+          "sha256": "2e83e65038b2c16b66b37750d9f6472efeef04530b9ee4d324ec3939e00649b4"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/dem_hi.bin",
+          "sha256": "bf0ff33b8c9cd2f96b5c862adcd2f5e8c6806f8ed815bd0fce3064d858de15ae"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/alexander_valley.bin",
+          "sha256": "2dc4557c2d850a130d7e6a120bd23a679443a7d45149982a553625f65c64bbcb"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/chalk_hill.bin",
+          "sha256": "30b796df22f6032eef52eb5df340456d31d2980b22fe19b0833dc8b86dc8bb2d"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/dry_creek_valley.bin",
+          "sha256": "e02c20e52bfc9554b59eb607668026d94ed889e0abdb68146158858765349689"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/green_valley_of_russian_river_valley.bin",
+          "sha256": "62047c8c59071dcd4d59236d80c5f027eb68e77d45f194458ecafaaa0eb6d7ee"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/knights_valley.bin",
+          "sha256": "8343e95ffc8ef1d1c0d7ce144c522e5e4f6ebb0385d28bb64b3e15aef227d5f8"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/pine_mountain_cloverdale_peak.bin",
+          "sha256": "8df333b86507bac506d29f3bbb96301ca769552ef321213204d65a19918140af"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/rockpile.bin",
+          "sha256": "eebac0b61c7643a64c9eed668771fd8d10b5ed7761136d2d7f2a00b9ea0aa439"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/russian_river_valley.bin",
+          "sha256": "436dc0792459563ec8ac4ee482efdc33630dfcee79171fa3e111f1ce84f0f8ce"
+        }
+      ]
     }
   ]
 }
