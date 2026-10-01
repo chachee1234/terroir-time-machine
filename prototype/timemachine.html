@@ -48,6 +48,13 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .card .eyebrow{font-family:var(--mono);font-size:12px;color:var(--ochre);letter-spacing:.04em}
 .card h2{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.2;margin:4px 0 6px;text-wrap:balance}
 .card p{margin:0;color:#d7d1c4;font-size:14.5px;max-width:62ch}
+.prof{margin:10px 0 0;max-height:min(38vh,320px);overflow:auto;font-size:13px;color:#d7d1c4;display:grid;grid-template-columns:auto 1fr;gap:5px 10px}
+.prof[hidden]{display:none}
+.prof dt{color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding-top:2px}
+.prof dd{margin:0}
+.prof dd small{color:var(--muted)}
+.prof a{color:inherit}
+.card.min .prof{display:none}
 .card .cls{margin-top:10px;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
 .card .cls b{color:var(--c);font-weight:600}
 .pin{position:absolute;z-index:2;transform:translate(-50%,-100%);pointer-events:none;font-size:12px;white-space:nowrap;text-align:center;text-shadow:0 1px 6px rgba(0,0,0,.9)}
@@ -229,6 +236,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   <div class="eyebrow" id="cEye"></div>
   <h2 id="cTitle"></h2>
   <p id="cBody"></p>
+  <dl class="prof" id="cProf" hidden></dl>
   <div class="cls" id="cCls"></div>
   <div class="cact" id="cAct" hidden></div>
 </article>
@@ -1376,7 +1384,7 @@ $("plcs").addEventListener("click",e=>{ const el=e.target.closest(".plc.ava"); i
 async function selectLoc(id){
   const q=LOC.list.find(l=>l.id===id)||null;
   LOC.cur=q; clearPatch(); renderPicker(); autoCam=true;
-  siteSelect(q&&q.kind==="site"?q:null);
+  siteSelect(q&&q.kind==="site"?q:null); avaSelect(q&&q.kind==="ava"?q:null);
   if(!q) return;
   if(ageOf(p)>150) goTo(CH.length-1);                     // from the globe, go to today's valley
   try{
@@ -1459,7 +1467,7 @@ function rgSelect(q){
   rgFly(q.lat,q.lon,Math.max(60,q.size*1.8));
   setTimeout(()=>{ // after goTo's card swap
     $("cEye").textContent = q.k==="next" ? `Next up · #${q.i+1} in the expansion order` : `Planned · #${q.i+1} in the expansion order`;
-    $("cTitle").textContent=q.name;
+    $("cTitle").textContent=q.name; $("cProf").hidden=true;
     $("cBody").textContent=`Not mapped in detail yet (${q.rule||"in the plan"}). When the autopilot reaches it, it becomes a 3D block like Napa and Sonoma's`+(q.cu.length?`, with close-ups of ${q.cu.length} AVA${q.cu.length>1?"s":""} inside it.`:".")+" The outline is from the UC Davis AVA Project; the relief around it is present-day terrain.";
     $("cCls").innerHTML=`<b style="--c:var(--approx)">■</b> Planning layer · not a legal boundary`;
     glActions([["Back to "+REG_SHORT,true,rgHome],["All regions",false,rgOverview]].map(([t,pri,f])=>{ const b=document.createElement("button"); b.textContent=t; if(pri) b.className="pri"; b.onclick=f; return b; }));
@@ -1688,7 +1696,8 @@ $("ticks").addEventListener("click",e=>{ const b=e.target.closest(".tick"); if(b
 function showCard(i){
   if(i===lastCh||RGN.sel) return;
   if(SITE.cur&&i===CH.length-1&&SITE.card){ lastCh=i; placeCaption(i); document.querySelectorAll(".tick").forEach((t,j)=>t.classList.toggle("on",j===i)); return; }
-  SITE.card=false; lastCh=i; const c=CH[i], card=$("card"); $("cAct").hidden=true;
+  if(AVAP.cur&&i===CH.length-1){ lastCh=i; placeCaption(i); document.querySelectorAll(".tick").forEach((t,j)=>t.classList.toggle("on",j===i)); return; }
+  SITE.card=false; AVAP.cur=null; lastCh=i; const c=CH[i], card=$("card"); $("cAct").hidden=true; $("cProf").hidden=true;
   card.classList.add("swap");
   setTimeout(()=>{
     $("cEye").textContent=c.tag; $("cTitle").textContent=c.t; $("cBody").textContent=c.b;
@@ -1883,7 +1892,7 @@ function siteReplay(){ SITE.t0=performance.now(); }
 $("xsPlay").onclick=siteReplay;
 const siteKm=m=>(Math.abs(m)/1000).toFixed(1).replace(/\.0$/,"")+" km";
 function siteCard(){
-  const d=SITE.cur; if(!d||ageOf(p)>0.06) return; SITE.card=true;
+  const d=SITE.cur; if(!d||ageOf(p)>0.06) return; SITE.card=true; AVAP.cur=null; $("cProf").hidden=true;
   const ava=d.avas.filter(v=>v.id!=="napa_valley").map(v=>v.name).join(", ")||"Napa Valley";
   const hz=d.soil.horizons, grav=hz.find(h=>h.gravel_pct), sec=d.section;
   const named=sec.streams.filter(c=>c.name).sort((a,b)=>Math.abs(a.offset_m)-Math.abs(b.offset_m))[0];
@@ -1900,6 +1909,41 @@ function siteCard(){
   const src=document.createElement("a"); src.href="sources.html#"+d.id; src.target="_blank"; src.rel="noopener"; src.textContent="Sources for this site ↗";
   const rp=document.createElement("button"); rp.textContent="Replay the layers"; rp.className="pri"; rp.onclick=()=>{ if(!xs.open) xsToggle(true); SITE.on=true; xsSet(SITE.sx,SITE.sz); siteReplay(); };
   const ca=$("cAct"); ca.innerHTML=""; ca.appendChild(rp); ca.appendChild(src); ca.hidden=false;
+}
+/* AVA profile in the description card: elevation, soils, geology, grape acres and notable producers for the chosen
+   close-up (assets/regions/<id>/ava_profiles.json from scripts/make_ava_profiles.py). Shares are of the whole AVA
+   outline, not of its vineyards; the producer lists come from web search summaries and are marked unverified. */
+const AVAP={p:null, cur:null, q:null};
+const lc1=t=>t.charAt(0).toLowerCase()+t.slice(1);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function avaSelect(q){
+  AVAP.q=q; if(!q){ if(AVAP.cur){ AVAP.cur=null; lastCh=-1; } return; }
+  (AVAP.p||(AVAP.p=fetch(LOC.base+"ava_profiles.json").then(r=>r.ok?r.json():null).catch(()=>null))).then(d=>{
+    const a=d&&d.avas[q.id]; if(!a||AVAP.q!==q) return;
+    setTimeout(()=>{ if(AVAP.q===q&&ageOf(p)<=0.06) avaCard(a,d); }, reduce?0:450);
+  });
+}
+function avaCard(a,d){
+  AVAP.cur=a; SITE.card=false;
+  const e=a.elevation_m, pc=x=>Math.round(x)+"%", geo=a.geology||[], so=a.soils, pr=a.producers, va=a.vineyard_acres;
+  $("cEye").textContent="AVA profile"+(a.established?` · established ${a.established.slice(0,4)}`:"");
+  $("cTitle").textContent=a.name;
+  $("cBody").textContent=`${a.area_km2.toLocaleString()} km²`+(e?`, ${e.min}–${e.max} m above sea level, half of it below ${e.median} m`:"")+". "
+    +(geo.length?`Mostly ${lc1(geo[0].name||geo[0].ptype)}`+(geo[1]?` and ${lc1(geo[1].name||geo[1].ptype)}`:"")+". ":"")
+    +(so&&so.map_units.length?`Leading soils: ${so.map_units.slice(0,2).map(m=>m.name).join(" and ")}.`:"");
+  const rows=[];
+  if(e) rows.push(["Elevation",`${e.min}–${e.max} m · median ${e.median} m<br><small>80% of the area lies between ${e.p10} and ${e.p90} m</small>`]);
+  if(so&&so.map_units.length){ const g=so.share_by_name;
+    rows.push(["Soils",so.map_units.map(m=>`${esc(m.name)} ${pc(m.pct)}`).join(" · ")
+      +`<br><small>By map-unit name: ${pc(g.clay)} clay, ${pc(g["gravelly or cobbly"])} gravelly or cobbly, ${pc(g["rock outcrop"])} rock outcrop. USDA SSURGO, ${so.n_names} soil names in all</small>`]); }
+  rows.push(["Geology",geo.length?geo.map(u=>`${esc(u.name||u.ptype)} <small>(${esc(u.ptype)})</small> ${pc(u.pct)}`).join(" · ")+"<br><small>USGS SIM 2956, 1:100,000</small>"
+    :"<small>Outside the USGS SIM 2956 geologic map, so not shown yet</small>"]);
+  if(va&&va.acres) rows.push(["Vineyards",`${va.acres.toLocaleString()} acres of grapes <small>(USDA Cropland Data Layer ${esc(va.year)})</small>`]);
+  if(pr&&pr.producers.length) rows.push(["Producers",pr.producers.map(esc).join(" · ")
+    +`<br><small>From web search, not yet checked against the source pages: `+pr.sources.map((u,i)=>`<a href="${esc(u)}" target="_blank" rel="noopener">source ${i+1}</a>`).join(", ")+"</small>"]);
+  const dl=$("cProf"); dl.innerHTML=rows.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join(""); dl.hidden=false;
+  $("cCls").innerHTML=`<b style="--c:var(--approx)">■</b> Measured from mapped data · shares are of the whole AVA, not its vineyards`;
+  glActions(null);
 }
 /* Masks for the site story on the close-up surface (SITE_GLSL): built in the browser from files already here.
    A (on the close-up grid): r young deposits (SIM 2956 Q units, the close-up's geology), g height above the nearest
