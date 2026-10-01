@@ -1,0 +1,38 @@
+{
+ "id": "corison",
+ "name": "Corison winery",
+ "vineyard": "Kronos Vineyard",
+ "region": "napa_valley",
+ "location": {
+  "lat": 38.484983,
+  "lon": -122.44736,
+  "accuracy_m": 100,
+  "source": "S3",
+  "note": "Winery point on Highway 29 (987 St. Helena Hwy). The vineyard is next to the winery; its outline is not mapped here yet."
+ },
+ "soil": {
+  "series": "BALE",
+  "reported_as": "Bale gravelly loam",
+  "status": "reported",
+  "source": "S1",
+  "note": "Reported from the soil maps Cathy Corison used when choosing the site. The USDA soil survey polygon under the vineyard has not been checked yet (SSURGO is blocked from the build sandbox)."
+ },
+ "claims": [
+  {"text": "Kronos Vineyard lies between Rutherford and St. Helena.", "source": "S2"},
+  {"text": "The vines were planted in 1971 on St. George rootstock and are farmed organically.", "source": "S2"},
+  {"text": "Cathy Corison bought the property in 1995 after looking for Bale gravelly loam, the alluvial soil of the Rutherford Bench.", "source": "S1"},
+  {"text": "Owner recollection: loam, gravel and clay, with an ancient river crossing the property.", "source": "S0"}
+ ],
+ "sources": {
+  "S0": {"title": "Charlie Crebs, project owner, in the project thread (2026-09-30)", "kind": "owner recollection, not verified"},
+  "S1": {"title": "Alder Yarrow, The Majesty of Time: 25 Years of Corison's Kronos Cabernet, Vinography, December 2024", "url": "https://www.vinography.com/2024/12/the-majesty-of-time-25-years-of-corisons-kronos-cabernet", "kind": "press interview"},
+  "S2": {"title": "Corison Winery, Vineyards page", "url": "https://www.corison.com/vineyards/", "kind": "winery website"},
+  "S3": {"title": "Tesla destination-charger listing, Corison Winery, 987 Saint Helena Hwy (coordinates 38.484983, -122.44736)", "url": "https://www.tesla.com/findus/location/charger/dc5022", "kind": "published point location"},
+  "S4": {"title": "USDA-NRCS Official Soil Series Description, BALE (rev. 3/97), via the SoilKnowledgeBase JSON snapshot", "url": "https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/B/BALE.json", "kind": "official soil series description (USDA, public domain; SoilKnowledgeBase packaging MIT)"},
+  "S5": {"title": "Graymer et al. 2007, USGS SIM 2956 geologic map (SOURCES.md G07)", "kind": "geologic map, 1:100,000"},
+  "S6": {"title": "USGS National Hydrography Dataset, high resolution (SOURCES.md G26)", "kind": "mapped streams, today"},
+  "S7": {"title": "AWS Terrain Tiles z15 (USGS 3DEP 1/3 arc-second source; SOURCES.md G19)", "kind": "terrain"},
+  "S8": {"title": "PRISM Climate Group, Oregon State University, 800 m 1991-2020 normals (SOURCES.md G29)", "url": "https://prism.oregonstate.edu", "kind": "climate normals, 800 m grid"},
+  "S9": {"title": "San Francisco Estuary Institute 2011, Napa Valley Historical Ecology Atlas GIS data (SOURCES.md G31)", "url": "https://www.sfei.org/data/napa-historical-ecology-atlas-gis-data", "kind": "historical landscape reconstruction, c. 1769-1850 (GPL v3)"}
+ }
+}

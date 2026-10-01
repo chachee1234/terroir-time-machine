@@ -1,0 +1,175 @@
+{
+ "source": "USDA NASS Cropland Data Layer (CDL), 30 m, via CropScape (https://nassgeodata.gmu.edu/CropScape/)",
+ "rights": "Public domain (USDA). Credit: USDA National Agricultural Statistics Service Cropland Data Layer.",
+ "built": "2026-10-01",
+ "class": "CDL 69 Grapes",
+ "cell_m": 30.0,
+ "frame_cells": [
+  2540,
+  2550
+ ],
+ "limits": "Satellite classification, not a vineyard survey: young vines and small blocks are missed, some other crops are labelled Grapes. Read single-year acres as estimates.",
+ "years": {
+  "2012": {
+   "frame_acres": 85586,
+   "ava_acres": {
+    "Napa Valley": 35575,
+    "Los Carneros": 10878,
+    "Sonoma Valley": 9134,
+    "Oak Knoll District of Napa Valley": 5099,
+    "Rutherford": 4670,
+    "Oakville": 3850,
+    "St. Helena": 3679,
+    "Calistoga": 3243,
+    "Yountville": 3182,
+    "Stags Leap District": 1749,
+    "Chalk Hill": 1574,
+    "Knights Valley": 1546,
+    "Coombsville": 745,
+    "Suisun Valley": 529,
+    "Chiles Valley": 399,
+    "Guenoc Valley": 265,
+    "Howell Mountain": 263,
+    "Fountaingrove District": 180,
+    "Spring Mountain District": 179,
+    "Bennett Valley": 116,
+    "Moon Mountain District Sonoma County": 112,
+    "Diamond Mountain District": 89,
+    "Mt. Veeder": 67,
+    "Crystal Springs of Napa Valley": 35,
+    "Atlas Peak": 34,
+    "Sonoma Mountain": 34,
+    "Solano County Green Valley": 22,
+    "Wild Horse Valley": 0
+   }
+  },
+  "2016": {
+   "frame_acres": 81673,
+   "ava_acres": {
+    "Napa Valley": 34953,
+    "Los Carneros": 11044,
+    "Sonoma Valley": 9296,
+    "Oak Knoll District of Napa Valley": 5249,
+    "Rutherford": 4965,
+    "Oakville": 4096,
+    "St. Helena": 3483,
+    "Yountville": 3322,
+    "Calistoga": 3038,
+    "Stags Leap District": 1763,
+    "Suisun Valley": 1751,
+    "Chalk Hill": 1329,
+    "Knights Valley": 1069,
+    "Coombsville": 502,
+    "Chiles Valley": 464,
+    "Guenoc Valley": 255,
+    "Moon Mountain District Sonoma County": 224,
+    "Mt. Veeder": 124,
+    "Solano County Green Valley": 87,
+    "Bennett Valley": 81,
+    "Sonoma Mountain": 77,
+    "Fountaingrove District": 67,
+    "Spring Mountain District": 55,
+    "Diamond Mountain District": 49,
+    "Howell Mountain": 44,
+    "Crystal Springs of Napa Valley": 37,
+    "Atlas Peak": 25,
+    "Wild Horse Valley": 0
+   }
+  },
+  "2020": {
+   "frame_acres": 75149,
+   "ava_acres": {
+    "Napa Valley": 34512,
+    "Los Carneros": 11065,
+    "Sonoma Valley": 9367,
+    "Oak Knoll District of Napa Valley": 4117,
+    "Rutherford": 4017,
+    "Oakville": 3436,
+    "Calistoga": 2731,
+    "St. Helena": 2726,
+    "Yountville": 2668,
+    "Suisun Valley": 1885,
+    "Knights Valley": 1480,
+    "Stags Leap District": 1398,
+    "Chalk Hill": 1275,
+    "Coombsville": 815,
+    "Chiles Valley": 624,
+    "Atlas Peak": 534,
+    "Moon Mountain District Sonoma County": 432,
+    "Guenoc Valley": 418,
+    "Howell Mountain": 321,
+    "Bennett Valley": 225,
+    "Spring Mountain District": 214,
+    "Mt. Veeder": 198,
+    "Sonoma Mountain": 179,
+    "Solano County Green Valley": 173,
+    "Fountaingrove District": 163,
+    "Diamond Mountain District": 103,
+    "Crystal Springs of Napa Valley": 50,
+    "Wild Horse Valley": 18
+   }
+  },
+  "2024": {
+   "frame_acres": 97803,
+   "ava_acres": {
+    "Napa Valley": 40517,
+    "Sonoma Valley": 10109,
+    "Los Carneros": 10049,
+    "Oak Knoll District of Napa Valley": 4729,
+    "Rutherford": 3842,
+    "Suisun Valley": 3637,
+    "Oakville": 3571,
+    "Calistoga": 2898,
+    "St. Helena": 2839,
+    "Yountville": 2714,
+    "Knights Valley": 2275,
+    "Chalk Hill": 1917,
+    "Stags Leap District": 1410,
+    "Coombsville": 1393,
+    "Atlas Peak": 1051,
+    "Fountaingrove District": 895,
+    "Moon Mountain District Sonoma County": 803,
+    "Bennett Valley": 742,
+    "Chiles Valley": 705,
+    "Mt. Veeder": 571,
+    "Sonoma Mountain": 443,
+    "Howell Mountain": 400,
+    "Spring Mountain District": 375,
+    "Guenoc Valley": 299,
+    "Solano County Green Valley": 280,
+    "Diamond Mountain District": 249,
+    "Crystal Springs of Napa Valley": 98,
+    "Wild Horse Valley": 44
+   }
+  }
+ },
+ "files": {
+  "2012": {
+   "file": "cdl_napa_valley_2012.tif",
+   "sha256": "629b8b175925ad9f452225aa36abb765281997028f974458c1db9d4dda36de56"
+  },
+  "2016": {
+   "file": "cdl_napa_valley_2016.tif",
+   "sha256": "21184840dd0a50e4d300d2b3b161411ff7df8b8216ae85d51a07b1b1ebafcae6"
+  },
+  "2020": {
+   "file": "cdl_napa_valley_2020.tif",
+   "sha256": "ebfd6b16fb935877ccf2c73b2681ed133a68542975afb175d5ba98ab5ce3ee93"
+  },
+  "2024": {
+   "file": "cdl_napa_valley_2024.tif",
+   "sha256": "e464f10fa964b0204ee2b4e58a05db25af53b95a63bf5da41f2a3c1239327f60"
+  }
+ },
+ "drape": {
+  "file": "vineyards.png",
+  "year": 2024,
+  "bbox_utm": [
+   507900.0,
+   4216800.0,
+   584100.0,
+   4293300.0
+  ],
+  "epsg": 26910
+ }
+}
