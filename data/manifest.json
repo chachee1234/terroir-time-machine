@@ -260,6 +260,10 @@
           "sha256": "161d08ebebfe77a7d809902e8a5131d8c24cf2723e54723ecd72318bb75184b4"
         },
         {
+          "file": "prototype/assets/regions/napa_valley/detail/corison.imagery.jpg",
+          "sha256": "bb9660d7079b91c8670f8dd61eade58c6767b5e9d8f7460c49945245c439e571"
+        },
+        {
           "file": "prototype/assets/regions/napa_valley/detail/crystal_springs_of_napa_valley.imagery.jpg",
           "sha256": "8357f581e0070cdeb99442fcf70da52e80be3bf57f7aa261107a3cd22fc11243"
         },
@@ -437,6 +441,197 @@
         {
           "file": "prototype/assets/regions/petaluma_gap/faults.json",
           "sha256": "06bd5efc37db6efdbd9aa07f9506a9c40de0d1271e3b66299811f9329afe9f57"
+        }
+      ]
+    },
+    {
+      "id": "napa_valley-nhd-rivers",
+      "source": "U.S. Geological Survey, National Hydrography Dataset (NHD) high resolution, HU8 staged products (NHDFlowline)",
+      "packages": [
+        {
+          "hu8": "18050002",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/HU8/Shape/NHD_H_18050002_HU8_Shape.zip",
+          "sha256": "4f16eaa32198f2ce2820ce2d3212114f071f759af6da80e2956b31c65e8ba2e7",
+          "bytes": 40069683
+        },
+        {
+          "hu8": "18010110",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/HU8/Shape/NHD_H_18010110_HU8_Shape.zip",
+          "sha256": "51e372a5fe9e3ebe20c7867cb9c30889abe2ba8b9ee3291b656241590803817c",
+          "bytes": 16316968
+        },
+        {
+          "hu8": "18020162",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/HU8/Shape/NHD_H_18020162_HU8_Shape.zip",
+          "sha256": "16a63268c7461466aa25ba5ac45170a0d1ae3c07bb5183f00af938fd23b38bce",
+          "bytes": 11841615
+        },
+        {
+          "hu8": "18050001",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/HU8/Shape/NHD_H_18050001_HU8_Shape.zip",
+          "sha256": "2e11f9007c45f97f997a92900161604cd3924ecec8ebef440a0710afa41cdca3",
+          "bytes": 12646716
+        }
+      ],
+      "fetched": "2026-09-30",
+      "rights": "USGS-produced, public domain in the U.S.; credit U.S. Geological Survey (SOURCES.md G26)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/rivers.json",
+          "sha256": "71e1db0ed8d63bce0daef269f6fd7f00f321696bb72769a1232a5f03e1836ea9"
+        }
+      ]
+    },
+    {
+      "id": "napa_valley-terrain-tiles-z15-corison",
+      "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "zoom": 15,
+      "tiles": 72,
+      "tiles_sha256": "23423be8a09f3773436e37c6c3a43c6143800442d555730d2da123469a22e313",
+      "fetched": "2026-09-30",
+      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/corison.bin",
+          "sha256": "397fb93d9e79d0f99f0d8ac77ae181753020c1969dcf84fe5fb33eecc5a16a50"
+        }
+      ]
+    },
+    {
+      "id": "napa_valley-prism-normals",
+      "source": "PRISM Climate Group, Oregon State University, 800 m 1991-2020 normals (lower 48 GeoTIFFs)",
+      "packages": [
+        {
+          "name": "ppt_annual",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/ppt/annual",
+          "sha256": "763f97b677711112ff7b1082c794476e2d9b7abe1f6e55dd4f1166e32523ccd3",
+          "bytes": 62685097
+        },
+        {
+          "name": "tmean_annual",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/annual",
+          "sha256": "1282f0da54bf2fdf107ab444b2877f46551c864dfd49e8d9c344ca517bebac51",
+          "bytes": 37244201
+        },
+        {
+          "name": "tmin_annual",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmin/annual",
+          "sha256": "c541da8764ca4a1b186da7c4f5a1909aad247db87ee5a67cb55bfd2ae9d1cc9a",
+          "bytes": 39724178
+        },
+        {
+          "name": "tmax_annual",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmax/annual",
+          "sha256": "08f22e4eec65494639c2a9d84c71475e065084500e5999a3a8ef6f843b3ec156",
+          "bytes": 29783365
+        },
+        {
+          "name": "tmean_04",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/04",
+          "sha256": "5c4edee1e95f53613fb149e46974d9079c90bab7a89afcd48d5810af81c80c7d",
+          "bytes": 58489252
+        },
+        {
+          "name": "tmean_05",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/05",
+          "sha256": "a0a7f5c785fa56b4d387bb39aaa5371735f411898c36e4794144e5db488b6239",
+          "bytes": 57962373
+        },
+        {
+          "name": "tmean_06",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/06",
+          "sha256": "740fe4a1263fe93c5c3a7c5f8a0494c62de627b5ab6db4fe6ebda74f165e9398",
+          "bytes": 58421874
+        },
+        {
+          "name": "tmean_07",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/07",
+          "sha256": "4a5dc11da05bdc6f1a925d3dd65f36b63ecd8a13ca6fbbb27fe2ba0483082535",
+          "bytes": 58539297
+        },
+        {
+          "name": "tmean_08",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/08",
+          "sha256": "9258ef129795abcd8e2926a72f423fbc319222cf14b475fcded70ad087c818da",
+          "bytes": 58469707
+        },
+        {
+          "name": "tmean_09",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/09",
+          "sha256": "4df867e90beef6dc9807e3fa06b7da848f677ad582aea07221300e8d3f9c5358",
+          "bytes": 58038384
+        },
+        {
+          "name": "tmean_10",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/10",
+          "sha256": "2d3cdf7cfb56b84e15bcb039e8298cced3606a816378bd7149e7c4746d9d25bc",
+          "bytes": 57852127
+        }
+      ],
+      "fetched": "2026-10-01",
+      "rights": "Free with credit to the PRISM Climate Group, Oregon State University (SOURCES.md G29)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/climate.json",
+          "sha256": "6ace5a61f1f9011bc27d295324ebcb45bafa640c60b6c76f4dbfd208ab25dc57"
+        }
+      ]
+    },
+    {
+      "id": "napa_valley-cdl-grapes",
+      "source": "USDA NASS Cropland Data Layer via CropScape GetCDLFile, clipped to the frame's Albers envelope",
+      "packages": [
+        {
+          "year": 2012,
+          "file": "cdl_napa_valley_2012.tif",
+          "sha256": "629b8b175925ad9f452225aa36abb765281997028f974458c1db9d4dda36de56",
+          "bytes": 10019141
+        },
+        {
+          "year": 2016,
+          "file": "cdl_napa_valley_2016.tif",
+          "sha256": "21184840dd0a50e4d300d2b3b161411ff7df8b8216ae85d51a07b1b1ebafcae6",
+          "bytes": 10019229
+        },
+        {
+          "year": 2020,
+          "file": "cdl_napa_valley_2020.tif",
+          "sha256": "ebfd6b16fb935877ccf2c73b2681ed133a68542975afb175d5ba98ab5ce3ee93",
+          "bytes": 10019184
+        },
+        {
+          "year": 2024,
+          "file": "cdl_napa_valley_2024.tif",
+          "sha256": "e464f10fa964b0204ee2b4e58a05db25af53b95a63bf5da41f2a3c1239327f60",
+          "bytes": 10019130
+        }
+      ],
+      "fetched": "2026-10-01",
+      "rights": "Public domain (USDA); credit USDA NASS Cropland Data Layer (SOURCES.md G30)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/vineyards.json",
+          "sha256": "031d524f235aa14f84ce164e363a30449d46badb42c8fd574147dda7568231cb"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/vineyards.png",
+          "sha256": "ecea373238c900900ea8d1656d54b8a16d1faa0174a3b116dae2b27263b9f2ae"
+        }
+      ]
+    },
+    {
+      "id": "napa_valley-sfei-historical-ecology",
+      "source": "San Francisco Estuary Institute 2011, Napa Valley Historical Ecology Atlas GIS data (owner upload)",
+      "raw_file": "/mnt/project-files/uploads/hearth/6449b4f5-304d-462e-91f1-428bb5321496",
+      "raw_sha256": "de76c4d3e5829bed3eb33d87413af659b240da5827b1833198fe30ca47b11eb1",
+      "bytes": 2422448,
+      "fetched": "2026-10-01",
+      "rights": "SFEI 2011, GNU GPL v3 or later; credit San Francisco Estuary Institute (SOURCES.md G31)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/historical_ecology.json",
+          "sha256": "ca99a45871b01e5cc0432bc656c877b9cc953338eb972becbf3c91d3e8716294"
         }
       ]
     }
