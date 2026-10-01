@@ -1,0 +1,104 @@
+# Workflow H (GOVERNANCE.md §2a, §5): L1 hand-off queue. Free models draft the ready L1 task cards in
+# queue/cards/ while Claude's own work waits for its limit to reset. No Claude calls.
+# FreeLLMAPI runs only inside this job, built from a pinned commit, published on 127.0.0.1 only.
+# Drafts are committed back to the same working branch, never to the default branch, and stay
+# untrusted until Claude checks them (queue/README.md).
+name: L1 hand-off queue
+
+on:
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - "queue/cards/**"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: l1-runner-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  FREELLMAPI_COMMIT: dbf3a84c885b3c05c4b1525fd69df51bab534883 # tashfeenahmed/freellmapi, 2026-09-30, MIT
+
+jobs:
+  draft:
+    if: >-
+      vars.AGENT_ENABLED == 'true' && vars.FREELLMAPI_ENABLED == 'true' &&
+      github.ref_name != github.event.repository.default_branch &&
+      github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Install validation dependency
+        run: python3 -m pip install --quiet -r requirements.txt
+
+      - name: Count ready L1 cards
+        id: pending
+        run: |
+          grep -qF '**Switch:** `FreeLLMAPI: ON`' GOVERNANCE.md || { echo "GOVERNANCE.md switch is OFF"; echo "count=0" >> "$GITHUB_OUTPUT"; exit 0; }
+          echo "count=$(python3 scripts/l1_runner.py --pending)" >> "$GITHUB_OUTPUT"
+
+      - name: Start FreeLLMAPI (pinned commit, localhost only)
+        if: steps.pending.outputs.count != '0'
+        env:
+          GROQ: ${{ secrets.FREELLMAPI_GROQ_KEY }}
+          CEREBRAS: ${{ secrets.FREELLMAPI_CEREBRAS_KEY }}
+          MISTRAL: ${{ secrets.FREELLMAPI_MISTRAL_KEY }}
+        run: |
+          src="$RUNNER_TEMP/freellmapi"
+          git init -q "$src"
+          git -C "$src" fetch -q --depth 1 https://github.com/tashfeenahmed/freellmapi "$FREELLMAPI_COMMIT"
+          git -C "$src" checkout -q FETCH_HEAD
+          docker build -q -t freellmapi --build-arg FREELLMAPI_COMMIT_SHA="$FREELLMAPI_COMMIT" "$src" > /dev/null
+
+          # Only providers whose terms don't train on prompts (GOVERNANCE.md §2a). Keys stay in this file.
+          mkdir -p "$RUNNER_TEMP/fl-config" "$RUNNER_TEMP/fl-data"
+          umask 077
+          python3 - "$RUNNER_TEMP/fl-config/config.json" <<'PY'
+          import json, os, sys
+          keys = [{"platform": p, "key": os.environ[v], "label": "actions"}
+                  for p, v in (("groq", "GROQ"), ("cerebras", "CEREBRAS"), ("mistral", "MISTRAL")) if os.environ.get(v)]
+          if not keys:
+              sys.exit("No FREELLMAPI_*_KEY secrets are set.")
+          json.dump({"keys": keys, "routing": {"strategy": "smartest"}}, open(sys.argv[1], "w"))
+          PY
+          chmod 644 "$RUNNER_TEMP/fl-config/config.json"
+
+          docker run -d --name freellmapi -p 127.0.0.1:3001:3001 \
+            -e ENCRYPTION_KEY="$(openssl rand -hex 32)" \
+            -e FREEAPI_CONFIG_PATH=/config/config.json \
+            -e FREELLMAPI_UPDATE_CHECK=off \
+            -v "$RUNNER_TEMP/fl-config:/config:ro" \
+            -v "$RUNNER_TEMP/fl-data:/app/server/data" \
+            freellmapi > /dev/null
+          for i in $(seq 60); do curl -sf http://127.0.0.1:3001/api/ping > /dev/null && break; sleep 2; done
+          curl -sf http://127.0.0.1:3001/api/ping > /dev/null || { docker logs freellmapi 2>&1 | tail -40; exit 1; }
+
+          key=$(sudo python3 -c "import sqlite3,sys; print(sqlite3.connect(sys.argv[1]).execute(\"SELECT value FROM settings WHERE key='unified_api_key'\").fetchone()[0])" "$RUNNER_TEMP/fl-data/freellmapi.db")
+          echo "::add-mask::$key"
+          echo "FREELLMAPI_KEY=$key" >> "$GITHUB_ENV"
+
+      - name: Draft ready L1 cards
+        if: steps.pending.outputs.count != '0'
+        run: python3 scripts/l1_runner.py --base-url http://127.0.0.1:3001 --limit 5
+
+      - name: Stop FreeLLMAPI
+        if: always() && steps.pending.outputs.count != '0'
+        run: docker rm -f freellmapi > /dev/null 2>&1 || true
+
+      - name: Check and commit drafts to this branch
+        if: steps.pending.outputs.count != '0'
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_l1_runner.py'
+          git add queue/cards data/drafts/l1
+          if git diff --cached --quiet; then echo "Nothing drafted."; exit 0; fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "L1 drafts (FreeLLMAPI, untrusted until Claude checks them)" \
+            -m "Workflow H, run ${{ github.run_id }}. See queue/README.md."
+          git push origin "HEAD:${{ github.ref_name }}"
