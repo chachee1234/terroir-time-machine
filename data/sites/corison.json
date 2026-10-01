@@ -32,6 +32,7 @@
   "S5": {"title": "Graymer et al. 2007, USGS SIM 2956 geologic map (SOURCES.md G07)", "kind": "geologic map, 1:100,000"},
   "S6": {"title": "USGS National Hydrography Dataset, high resolution (SOURCES.md G26)", "kind": "mapped streams, today"},
   "S7": {"title": "AWS Terrain Tiles z15 (USGS 3DEP 1/3 arc-second source; SOURCES.md G19)", "kind": "terrain"},
-  "S8": {"title": "PRISM Climate Group, Oregon State University, 800 m 1991-2020 normals (SOURCES.md G29)", "url": "https://prism.oregonstate.edu", "kind": "climate normals, 800 m grid"}
+  "S8": {"title": "PRISM Climate Group, Oregon State University, 800 m 1991-2020 normals (SOURCES.md G29)", "url": "https://prism.oregonstate.edu", "kind": "climate normals, 800 m grid"},
+  "S9": {"title": "San Francisco Estuary Institute 2011, Napa Valley Historical Ecology Atlas GIS data (SOURCES.md G31)", "url": "https://www.sfei.org/data/napa-historical-ecology-atlas-gis-data", "kind": "historical landscape reconstruction, c. 1769-1850 (GPL v3)"}
  }
 }

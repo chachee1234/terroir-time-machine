@@ -12,6 +12,8 @@ then adds, each from its own source:
   streams  where USGS NHD channels (rivers.json, make_rivers.py) cross the line
   ava      which AVA polygons (UC Davis AVA Project) contain the site
   climate  PRISM 800 m 1991-2020 normals in the cell under the site (climate.json, make_climate.py), if built
+  history  SFEI historical habitat at the site and historical channels crossing the line, c. 1769-1850
+           (historical_ecology.json, make_historical_ecology.py), if built
 Output: <assets_dir>/sites/<id>.json and <assets_dir>/sites/index.json.
 
 Nothing here is an animation: the viewer animates the layers in the order they were laid down, and labels
@@ -145,12 +147,38 @@ def avas_at(lat, lon, boundary):
     return out
 
 
+def historical(he, e0, n0, half):
+    """SFEI habitat polygon under the site and SFEI channels crossing the section line (c. 1769-1850)."""
+    cert = {2: "high", 1: "medium", 0: "low", -1: None}
+    habitat = None
+    for row in he["habitats"]:
+        rings = []
+        for r in row[3:]:
+            x, y, ring = r[0], r[1], [(r[0], r[1])]
+            for k in range(2, len(r), 2):
+                x, y = x + r[k], y + r[k + 1]
+                ring.append((x, y))
+            rings.append(ring)
+        if point_in_rings(e0, n0, rings):
+            habitat = {"type": he["classes"]["habitats"][row[0]], "interp_cert": cert[row[1]], "loc_cert": cert[row[2]]}
+            break
+    channels = [{"offset_m": o, "kind": he["classes"]["channels"][row[0]], "interp_cert": cert[row[1]],
+                 "loc_cert": cert[row[2]]} for o, row in line_crossings(he["channels"], e0, n0, half)]
+    return {"source": "S9", "period": he["period"], "habitat_at_site": habitat, "channels": channels,
+            "certainty": he["certainty"]}
+
+
 def stream_crossings(rivers, e0, n0, half):
     """Offsets (m, SW negative) where mapped channels cross the section line."""
+    return [{"offset_m": o, "name": rivers["names"][row[0]] if row[0] >= 0 else None, "size_class": row[1],
+             "perennial": bool(row[2])} for o, row in line_crossings(rivers["lines"], e0, n0, half)]
+
+
+def line_crossings(lines, e0, n0, half):
+    """(offset m, SW negative, row) wherever a line [a, b, c, x0, y0, dx1, dy1, ...] crosses the section line."""
     out = []
     ax, ay, bx, by = e0 - UX * half, n0 - UY * half, e0 + UX * half, n0 + UY * half
-    for row in rivers["lines"]:
-        ni, sc, per = row[0], row[1], row[2]
+    for row in lines:
         x, y, pts = row[3], row[4], [(row[3], row[4])]
         for k in range(5, len(row), 2):
             x, y = x + row[k], y + row[k + 1]
@@ -163,9 +191,8 @@ def stream_crossings(rivers, e0, n0, half):
             t = ((px - ax) * d2y - (py - ay) * d2x) / den
             s = ((px - ax) * d1y - (py - ay) * d1x) / den
             if 0 <= t <= 1 and 0 <= s <= 1:
-                out.append({"offset_m": round(-half + 2 * half * t), "name": rivers["names"][ni] if ni >= 0 else None,
-                            "size_class": sc, "perennial": bool(per)})
-    out.sort(key=lambda c: c["offset_m"])
+                out.append((round(-half + 2 * half * t), row))
+    out.sort(key=lambda c: c[0])
     return out
 
 
@@ -228,6 +255,8 @@ def build(site_path, e00, half=1900.0, step=10.0, offline=False):
         cl = json.loads((assets / "climate.json").read_text())
         out["climate"] = dict(make_climate.at(cl, lat, lon) or {}, source=site.get("climate_source", "S8"),
                               units=cl["units"], limits=cl["limits"])
+    if (assets / "historical_ecology.json").exists():
+        out["historical"] = historical(json.loads((assets / "historical_ecology.json").read_text()), e0, n0, half)
     (assets / "sites").mkdir(exist_ok=True)
     (assets / "sites" / f"{site['id']}.json").write_text(json.dumps(out, indent=1) + "\n")
     idx_path = assets / "sites" / "index.json"

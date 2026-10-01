@@ -285,3 +285,9 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Not done: SSURGO under Corison (USDA's Soil Data Access is failing on their side); SFEI historical channels (Cloudflare blocks scripts). See SOURCES.md "Gaps after the 2026-10-01 host change".
 - Commands: `python3 scripts/make_climate.py --region data/regions/napa_valley.json`; `python3 scripts/make_vineyards.py --region data/regions/napa_valley.json`; `python3 -m unittest discover -s scripts -p 'test_*.py'` → 117 pass, 1 skipped; `python3 scripts/validate.py`.
 - Next smallest action: retry SSURGO; owner uploads the SFEI zip; viewer chips for Climate and Vineyards (data is in place, not drawn yet).
+
+## SFEI historical channels and habitats (branch `deep-terroir`) — 2026-10-01
+- Owner uploaded the SFEI Napa Historical Ecology GIS zip (sfei.org blocks scripts). New `scripts/make_historical_ecology.py` (stdlib file-geodatabase reader) → `historical_ecology.json` (G31); `make_site.py` adds a `historical` block (habitat at the site, SFEI channels crossing the section line; refactored `line_crossings`); new `scripts/test_historical_ecology.py` (4 tests).
+- Finding: Corison sits in SFEI's Valley Oak Savanna; no historical channel or paleochannel under it; nearest historical channel 0.96 km SW, paleochannels ~1.7 km NE by the river. The "ancient river" is not mapped by SFEI; a prehistoric fan channel remains possible (Qf fan, stratified gravelly alluvium) but unmapped.
+- Command: `python3 scripts/make_historical_ecology.py --zip <uploaded zip> --region data/regions/napa_valley.json`; tests 121 pass, 1 skipped.
+- Next smallest action: viewer layer for historical channels/habitats (toggle "1800s") and climate/vineyards; retry SSURGO.

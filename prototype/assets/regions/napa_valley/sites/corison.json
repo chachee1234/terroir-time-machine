@@ -83,6 +83,11 @@
    "title": "PRISM Climate Group, Oregon State University, 800 m 1991-2020 normals (SOURCES.md G29)",
    "url": "https://prism.oregonstate.edu",
    "kind": "climate normals, 800 m grid"
+  },
+  "S9": {
+   "title": "San Francisco Estuary Institute 2011, Napa Valley Historical Ecology Atlas GIS data (SOURCES.md G31)",
+   "url": "https://www.sfei.org/data/napa-historical-ecology-atlas-gis-data",
+   "kind": "historical landscape reconstruction, c. 1769-1850 (GPL v3)"
   }
  },
  "soil": {
@@ -851,5 +856,35 @@
    "gdd_f": "F degree-days, Apr-Oct, base 50 F (Winkler index)"
   },
   "limits": "800 m cells: one value per cell, so a hillside and the valley floor beside it can share a cell. 30-year averages, not any one year."
+ },
+ "historical": {
+  "source": "S9",
+  "period": "circa 1769-1850 (before Euro-American modification), per SFEI",
+  "habitat_at_site": {
+   "type": "Valley Oak Savanna",
+   "interp_cert": "high",
+   "loc_cert": "high"
+  },
+  "channels": [
+   {
+    "offset_m": -959,
+    "kind": "Historical Channel",
+    "interp_cert": "high",
+    "loc_cert": "high"
+   },
+   {
+    "offset_m": 1595,
+    "kind": "Floodplain Slough",
+    "interp_cert": "high",
+    "loc_cert": "low"
+   },
+   {
+    "offset_m": 2184,
+    "kind": "Mainstem Channel",
+    "interp_cert": "high",
+    "loc_cert": "high"
+   }
+  ],
+  "certainty": "interp/loc: 2 = high, 1 = medium, 0 = low, -1 = not given. Location high < 50 m, medium < 150 m, low < 500 m maximum displacement (SFEI metadata)."
  }
 }
