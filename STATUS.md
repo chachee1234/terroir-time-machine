@@ -336,3 +336,9 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Command: `python3 scripts/make_plate_model.py --src <pygplates-tutorials checkout>`.
 - Next smallest action: owner review; optional plate-boundary lines (the model's topologies) or past shorelines (paleogeography) if wanted.
 
+
+## Project skills from ECC (branch `ecc-skills`) — 2026-10-01
+- Owner asked to analyse ECC (affaan-m/ECC) for TTM and approved the recommendation: copy four ECC skills (MIT) into `.claude/skills/` instead of installing the plugin, whose ~24 always-on hooks would cost budget in every autopilot run and overlap GOVERNANCE/AUTOPILOT.
+- Added: verification-loop, browser-qa, search-first, scientific-thinking-literature-review, each with a "Terroir Time Machine notes" section mapping it to this repo (unittest + validate.py, static viewer in headless Chromium, SOURCES.md/SCIENCE_RULES.md). Attribution in `.claude/skills/README.md` and `LICENSE-ECC`.
+- No code or data changes. `python3 -m unittest discover -s scripts -p 'test_*.py'` → 132 pass, 1 skipped.
+- Next smallest action: owner review and merge.
