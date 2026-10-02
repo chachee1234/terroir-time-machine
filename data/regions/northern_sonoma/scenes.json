@@ -1,0 +1,65 @@
+{
+  "region": "northern_sonoma",
+  "schema": "SCENES.json chapter objects, plus optional span_ma, camera and focus (ROADMAP_REGIONS.md item 2)",
+  "status": "generic chapters only; written by the autopilot (R4.2), not reviewed",
+  "shared": {
+    "note": "planet-scale chapters reused verbatim from SCENES.json by id; their text does not name a place in the Napa frame",
+    "ids": [
+      "ch_1_8ga",
+      "ch_1_1ga",
+      "ch_700ma",
+      "ch_430ma",
+      "ch_250ma",
+      "ch_28ma"
+    ]
+  },
+  "gaps": [
+    {
+      "id": "ch_150ma",
+      "reason": "SCENES.json text describes the ground under Mount St. Helena and Napa Valley; no source in SOURCES.md yet describes the Franciscan rocks of this frame"
+    },
+    {
+      "id": "ch_66ma",
+      "reason": "its last sentence describes the Napa frame; kept out until a Northern Sonoma version is sourced"
+    },
+    {
+      "id": "ch_8ma",
+      "reason": "Sonoma Volcanics chapter not written for this frame: no mapped geology for this frame is in SOURCES.md yet"
+    },
+    {
+      "id": "ch_3_0ma",
+      "reason": "the Mount St. Helena summit lies just inside this frame's east edge, but the chapter's camera, focus and illustrated peak are built for the Napa frame; to be adapted"
+    },
+    {
+      "id": "ch_2_85ma",
+      "reason": "as ch_3_0ma: the caldera eruption chapter is staged for the Napa frame"
+    },
+    {
+      "id": "ch_1ma",
+      "reason": "uplift and erosion text is written for the Mayacamas; no source for this frame yet"
+    }
+  ],
+  "not_applicable": [],
+  "chapters": [
+    {
+      "id": "today",
+      "age_ma": 0,
+      "span_ma": [
+        0.0002,
+        0
+      ],
+      "tag": "Today",
+      "title": "Northern Sonoma today",
+      "body": "The Northern Sonoma AVA lies in Sonoma County; the UC Davis AVA Project lists it as established on 17 June 1985. Eight AVAs nested in it are outlined here: Alexander Valley, Chalk Hill, Dry Creek Valley, Green Valley of Russian River Valley, Knights Valley, Pine Mountain-Cloverdale Peak, Rockpile and Russian River Valley; Rockpile and Pine Mountain-Cloverdale Peak run past the frame edge. The highest ground in the frame, about 1,440 m, is in its northern part. Traces of five faults from the USGS UCERF3 fault model enter the frame, all right-lateral: the San Andreas (North Coast), Maacama, Rodgers Creek–Healdsburg, Bennett Valley and Collayomi faults. The gold lines are the AVA boundaries.",
+      "visual_class": "measured-approx",
+      "key": true,
+      "dwell_s": 10,
+      "sources": [
+        "G18",
+        "G19",
+        "G17",
+        "G33"
+      ]
+    }
+  ]
+}

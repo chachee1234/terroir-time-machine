@@ -756,6 +756,19 @@
           "sha256": "436dc0792459563ec8ac4ee482efdc33630dfcee79171fa3e111f1ce84f0f8ce"
         }
       ]
+    },
+    {
+      "id": "northern_sonoma-faults",
+      "source": "GEM Global Active Faults Database",
+      "url": "https://raw.githubusercontent.com/GEMScienceTools/gem-global-active-faults/master/geojson/gem_active_faults_harmonized.geojson",
+      "rights": "CC BY-SA 4.0 (GEM Global Active Faults Database, Styron & Pagani 2020); California traces from USGS UCERF3",
+      "source_sha256": "37babb516edfac22b5ae91744495d8546b3ae4676b4d4f68cc77da8222df20e1",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/northern_sonoma/faults.json",
+          "sha256": "649e791320fec503117be787e3fb323c3391583b8859102cf3e853f64e3ce6a8"
+        }
+      ]
     }
   ]
 }

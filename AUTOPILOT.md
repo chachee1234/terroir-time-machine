@@ -36,7 +36,7 @@ Region work comes first. Each region takes three steps; any engine change a step
   - [x] R4.2 Petaluma Gap step 2 (2026-09-29): `faults.json` (4 UCERF3 traces via GEM, new `scripts/region_faults.py`), `places.json` (towns a labelled gap: no reachable listed gazetteer covers the frame), `data/regions/petaluma_gap/scenes.json` (six shared chapters, Napa-only ones listed as gaps, a sourced "Today" card). SOURCES G24.
   - [x] R4.3 Petaluma Gap step 3 (2026-09-30): `timemachine.html?region=petaluma_gap` loads the region's own outlines, faults and chapters (Napa unchanged); `prototype/assets/regions/index.json` lists regions with a page and their layers; the globe shows Petaluma Gap as live and its label opens that page; `order.json` re-run; GeoLibre project `petaluma_gap.geolibre.json`. Headless check clean.
   - [x] R4.1 Northern Sonoma step 1 (2026-10-01): `data/regions/northern_sonoma.json` (frame, `anchor`, `utm_zone`, `frame_cut_avas`), nine AVA outlines in the region's own `ava.json`, terrain and eight close-ups, Sentinel-2 texture and 10 m close-up images. SOURCES G33.
-  - [ ] R4.2 Northern Sonoma step 2: faults, towns, chapters.
+  - [x] R4.2 Northern Sonoma step 2 (2026-10-02): `faults.json` (5 UCERF3 traces via GEM), `places.json` (Santa Rosa from Natural Earth; other towns a labelled gap), `data/regions/northern_sonoma/scenes.json` (six shared chapters, Napa-staged ones listed as gaps, a sourced "Today" card). SOURCES G33.
   - [ ] R4.3 Northern Sonoma step 3: live page, index, globe marker, GeoLibre export.
 Present-day detail, done between regions when a region step is blocked:
 - [ ] D1. Soils: SSURGO map units for the section column and a "Today" soils drape (Soil Data Access query script, cached).
