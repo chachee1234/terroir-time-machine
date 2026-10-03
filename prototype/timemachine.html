@@ -1109,11 +1109,13 @@ $("rgBtn").onclick=()=>rgOverview();
 $("avaBtn").onclick=()=>{ AVA.on=!AVA.on; $("avaBtn").setAttribute("aria-pressed",AVA.on); };
 // Geology drape: scripts/make_geology_texture.py rasterizes USGS SIM 2956 onto this region's terrain grid.
 const GEO={on:false, ok:false, legend:null, detail:null, patch:null, lgKey:null};
+// An autopilot region only asks for the drapes and data files regions/index.json lists under its "layers".
+const OWN_LAYERS = OWN ? fetch("assets/regions/index.json").then(r=>r.ok?r.json():null).catch(()=>null)
+  .then(idx=>(((idx&&idx.regions)||[]).find(q=>q.id===REG.id)||{}).layers||[]) : Promise.resolve(null);
 (async function loadGeology(){
   const base = REG.id==="mt_st_helena" ? "assets/" : "assets/regions/"+REG.id+"/";
   if(!realDEM) return;
-  if(OWN){ const idx=await fetch("assets/regions/index.json").then(r=>r.ok?r.json():null).catch(()=>null);   // only ask for a drape the region has
-    const g=idx&&(idx.regions||[]).find(q=>q.id===REG.id); if(!g||!(g.layers||[]).includes("geology")) return; }
+  if(OWN&&!(await OWN_LAYERS).includes("geology")) return;
   try{
     const lg=await fetch(base+"geology_legend.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
     const t=await new Promise((ok,no)=>new THREE.TextureLoader().load(base+"geology.png",ok,undefined,no));
@@ -1179,6 +1181,7 @@ $("satBtn").onclick=()=>{ SAT.on=!SAT.on; $("satBtn").setAttribute("aria-pressed
 const RIV={on:true, ok:false, lines:null, names:[]};
 (async function loadRivers(){
   if(!realDEM||REG.id==="mt_st_helena") return;
+  if(OWN&&!(await OWN_LAYERS).includes("rivers")) return;
   try{
     const d=await fetch("assets/regions/"+REG.id+"/rivers.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
     RIV.names=d.names;
@@ -2064,12 +2067,14 @@ function screenAngle(p0,dir,cam){ // screen-space heading (deg, clockwise from u
 function setCompass(deg){ rose.setAttribute("transform",`rotate(${deg.toFixed(1)})`);
   ["cN","cE","cS","cW"].forEach(id=>{ const t=$(id); t.setAttribute("transform",`rotate(${(-deg).toFixed(1)} ${t.getAttribute("x")} ${t.getAttribute("y")})`); }); }
 // Towns, positioned from their coordinates relative to the GNIS summit point (approximate).
-const PLACES=[{t:"Calistoga",x:4.72,z:10.01},{t:"Middletown",x:1.56,z:-9.24},{t:"Knights Valley",x:-4.91,z:3.26},
+// An autopilot region lists its own towns in places.json (UTM metres; an empty list is a recorded gap).
+const OWN_PL = OWN ? await fetch("assets/regions/"+REG.id+"/places.json").then(r=>r.ok?r.json():null).catch(()=>null) : null;
+const PLACES=(OWN ? ((OWN_PL&&OWN_PL.places)||[]).map(q=>({t:q.name, x:(q.utm[0]-GNIS_UTM[0])/1000, z:-(q.utm[1]-GNIS_UTM[1])/1000})) : [{t:"Calistoga",x:4.72,z:10.01},{t:"Middletown",x:1.56,z:-9.24},{t:"Knights Valley",x:-4.91,z:3.26},
  {t:"St. Helena",x:14.29,z:18.13},{t:"Rutherford",x:18.52,z:23.22},{t:"Oakville",x:20.38,z:25.67},{t:"Yountville",x:23.92,z:29.56},
  {t:"Napa",x:30.46,z:41.07},{t:"American Canyon",x:32.85,z:54.65},{t:"Angwin",x:16.04,z:10.28},{t:"Pope Valley",x:17.95,z:5.86},
  {t:"Sonoma",x:15.50,z:41.79},{t:"Glen Ellen",x:9.67,z:33.81},{t:"Kenwood",x:7.73,z:28.36},{t:"Santa Rosa",x:-5.71,z:24.30},
  {t:"Petaluma",x:-0.10,z:48.47},{t:"Rohnert Park",x:-5.77,z:36.59},{t:"Sebastopol",x:-16.52,z:29.68},{t:"Windsor",x:-15.89,z:13.59},
- {t:"Healdsburg",x:-20.50,z:6.57}].filter(q=>inExt(q.x,q.z,0.5));
+ {t:"Healdsburg",x:-20.50,z:6.57}]).filter(q=>inExt(q.x,q.z,0.5));
 PLACES.forEach(q=>{ q.el=document.createElement("div"); q.el.className="plc"; q.el.textContent=q.t; q.el.hidden=true; $("plcs").appendChild(q.el);
   q.i=idxAt(q.x,q.z); });
 const pl3=new THREE.Vector3(), camR=new THREE.Vector3();

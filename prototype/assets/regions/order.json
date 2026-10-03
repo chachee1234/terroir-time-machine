@@ -3,26 +3,12 @@
  "source": "prototype/assets/globe/ca_avas.json (UC Davis AVA Project, CC0)",
  "params": {
   "start": "sonoma_valley",
-  "mapped": "napa_valley,sonoma_valley,atlas_peak,bennett_valley,calistoga,chalk_hill,chiles_valley,coombsville,crystal_springs_of_napa_valley,diamond_mountain_district,fountaingrove_district,guenoc_valley,howell_mountain,knights_valley,los_carneros,moon_mountain_district_sonoma_county,mt__veeder,oak_knoll_district_of_napa_valley,oakville,rutherford,solano_county_green_valley,sonoma_mountain,spring_mountain_district,st__helena,stags_leap_district,suisun_valley,wild_horse_valley,yountville,petaluma_gap",
+  "mapped": "napa_valley,sonoma_valley,atlas_peak,bennett_valley,calistoga,chalk_hill,chiles_valley,coombsville,crystal_springs_of_napa_valley,diamond_mountain_district,fountaingrove_district,guenoc_valley,howell_mountain,knights_valley,los_carneros,moon_mountain_district_sonoma_county,mt__veeder,oak_knoll_district_of_napa_valley,oakville,rutherford,solano_county_green_valley,sonoma_mountain,spring_mountain_district,st__helena,stags_leap_district,suisun_valley,wild_horse_valley,yountville,petaluma_gap,northern_sonoma",
   "max_km": 80.0,
   "touch_km": 1.5,
   "limit": 40
  },
  "order": [
-  {
-   "id": "northern_sonoma",
-   "name": "Northern Sonoma",
-   "rule": "parent of Russian River Valley, which touches a mapped region",
-   "gap_km": 0.0,
-   "size_km": 61.0,
-   "close_ups": [
-    "alexander_valley",
-    "dry_creek_valley",
-    "pine_mountain_cloverdale_peak",
-    "rockpile",
-    "russian_river_valley"
-   ]
-  },
   {
    "id": "west_sonoma_coast",
    "name": "West Sonoma Coast",
@@ -390,6 +376,14 @@
     "los_olivos_district",
     "sta__rita_hills"
    ]
+  },
+  {
+   "id": "alisos_canyon",
+   "name": "Alisos Canyon",
+   "rule": "closest (nothing touching)",
+   "gap_km": 1.7,
+   "size_km": 8.0,
+   "close_ups": []
   }
  ]
 }
