@@ -1,0 +1,56 @@
+{
+ "label": "Sentinel-2 true colour, 2026-07-27",
+ "credit": "Contains modified Copernicus Sentinel data 2026, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+ "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+ "class": "measured-approx",
+ "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+ "bucket": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs",
+ "scenes": [
+  {
+   "scene": "S2A_10SDH_20260727_1_L2A",
+   "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/10/S/DH/2026/7/S2A_10SDH_20260727_1_L2A/TCI.tif",
+   "overview": 2,
+   "pixel_m": 40.0,
+   "cloud_cover": 0.092484,
+   "datetime": "2026-07-27T19:14:12.775000Z"
+  },
+  {
+   "scene": "S2B_10SEH_20260727_0_L2A",
+   "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/10/S/EH/2026/7/S2B_10SEH_20260727_0_L2A/TCI.tif",
+   "overview": 2,
+   "pixel_m": 40.0,
+   "cloud_cover": 0.010289,
+   "datetime": "2026-07-27T19:03:55.501000Z"
+  }
+ ],
+ "date": "2026-07-27",
+ "cloud_cover_percent": 0.09,
+ "months": [
+  6,
+  7,
+  8,
+  9
+ ],
+ "max_cloud": 20.0,
+ "image": {
+  "file": "imagery.jpg",
+  "sha256": "7a284199551fe6af531103ab78acc96d1ae2e24bc54182e08a474e0f92d8d489",
+  "width": 1625,
+  "height": 1335,
+  "cell_m": [
+   40.0,
+   40.0
+  ],
+  "bbox_utm": [
+   451600.0,
+   4241000.0,
+   516600.0,
+   4294400.0
+  ],
+  "crs": "EPSG:26910 frame; imagery WGS84 / UTM 10N, datum difference (~1 m) ignored",
+  "resampling": "nearest overview pixel at each cell centre",
+  "missing_cells": 0,
+  "encoding": "baseline JPEG, quality 85, row 0 = north"
+ },
+ "limits": "One summer acquisition: shadows and colours are that day's; 8-bit TCI stretch as delivered by ESA; clouds in the scene (see cloud_cover_percent) are not masked."
+}

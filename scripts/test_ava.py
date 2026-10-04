@@ -66,6 +66,9 @@ class RegionTests(unittest.TestCase):
     def test_northern_sonoma_frame_has_its_own_outline_file(self):
         self.check_own_outlines("northern_sonoma")
 
+    def test_west_sonoma_coast_frame_has_its_own_outline_file(self):
+        self.check_own_outlines("west_sonoma_coast")
+
     def test_petaluma_gap_frame_has_its_own_outline_file(self):
         self.check_own_outlines("petaluma_gap")
 

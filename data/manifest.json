@@ -769,6 +769,88 @@
           "sha256": "649e791320fec503117be787e3fb323c3391583b8859102cf3e853f64e3ce6a8"
         }
       ]
+    },
+    {
+      "id": "ava-west-sonoma-coast",
+      "source": "UC Davis Library & DataLab, American Viticultural Areas (AVA) Project",
+      "url": "https://raw.githubusercontent.com/UCDavisLibrary/ava/master/avas_aggregated_files/avas.geojson",
+      "rights": "CC0 1.0",
+      "source_sha256": "c90068f7154764519f0a7c6fb2788e597b7c56bf7581e8c0faa979554d984926",
+      "derived": [
+        {
+          "file": "data/ava/west_sonoma_coast_avas.geojson",
+          "sha256": "decc894461a001dab69b6d52d378cb8c57f3026dc933a21ef3ff2c3442388de3"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/ava.json",
+          "sha256": "c6e374eff87cad4e351ba79025b521c8aefd5ae71fbcdea9d4ba2c57720e4fd2"
+        }
+      ]
+    },
+    {
+      "id": "west_sonoma_coast-terrain-tiles-z13",
+      "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "zoom": 13,
+      "tiles": 340,
+      "tiles_sha256": "80ca5dcd49674e3df6ad192f9b382ee908a06387d352d4923a7c85c126a82415",
+      "fetched": "2026-10-04",
+      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/terrain.bin",
+          "sha256": "3c7598ccd5fc3ef065a0eefdceaa4e51f21656603a1fee78163d85e434a8b7e4"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/dem_hi.bin",
+          "sha256": "e16d659bdcfb7997c6584da7d8663da7c60015d1b47d2e5a6ee9bb398e6cd42f"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/detail/dry_creek_valley.bin",
+          "sha256": "e02c20e52bfc9554b59eb607668026d94ed889e0abdb68146158858765349689"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/detail/fort_ross_seaview.bin",
+          "sha256": "c5fca73d212eb901c23a27ca5553371d392cfb15bf1da655573adff1069dcd9f"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/detail/green_valley_of_russian_river_valley.bin",
+          "sha256": "94c1e7f156dd483843140e6cf435cb7f31bfdbe87b2efac9b9791d058339fbfc"
+        }
+      ],
+      "pit_floor_m": -200,
+      "pit_pixels_set_to_0m": 2824
+    },
+    {
+      "id": "west_sonoma_coast-sentinel2-imagery",
+      "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+      "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs",
+      "scenes": [
+        "S2A_10SDH_20260727_1_L2A",
+        "S2B_10SEH_20260727_0_L2A"
+      ],
+      "date": "2026-07-27",
+      "fetched": "2026-10-04",
+      "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+      "credit": "Contains modified Copernicus Sentinel data 2026, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/imagery.jpg",
+          "sha256": "7a284199551fe6af531103ab78acc96d1ae2e24bc54182e08a474e0f92d8d489"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/detail/dry_creek_valley.imagery.jpg",
+          "sha256": "8db2c954cad4bb0a7bb574e8d86db14dcee68428be09faf785d5f5e381f747df"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/detail/fort_ross_seaview.imagery.jpg",
+          "sha256": "dee16305b4a6d189c87e453f72b9a010d3b6f91642fb74f6dc446643c0b06de3"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/detail/green_valley_of_russian_river_valley.imagery.jpg",
+          "sha256": "4be244d1698a5c4f916e855ec366901363b5d05399ffb4b58abd7e7f53423815"
+        }
+      ]
     }
   ]
 }
