@@ -336,3 +336,12 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Command: `python3 scripts/make_plate_model.py --src <pygplates-tutorials checkout>`.
 - Next smallest action: owner review; optional plate-boundary lines (the model's topologies) or past shorelines (paleogeography) if wanted.
 
+
+## Vineyard fields from California DWR crop mapping (builder ready, not yet run) — 2026-10-01
+- Owner: "Integrate CA DWR" (free field-by-field vineyard source, after the Vinous maps question).
+- New `scripts/make_dwr_vineyards.py` (G33): reads DWR's statewide shapefile ZIP in place, keeps class V vineyard fields in the frame, writes `vineyard_fields.json` (acres per AVA, DWR's own acres, nearest CDL year beside it) and a 20 m `vineyard_fields.png`; adds the layer to `regions/index.json` and `data/manifest.json`.
+- Viewer (`timemachine.html`): loads `vineyard_fields.png` when present and paints today's vines on mapped fields (incl. hillside blocks) instead of the random flat-floor pattern; falls back to the old pattern when the file is missing or the GPU's texture limit is under 3825 px. Close-ups share the drape.
+- Not run: this sandbox cannot reach data.cnra.ca.gov (proxy 403); DWR's ArcGIS services need a token. The real ZIP's field names and projection are therefore unverified; the script checks both and stops with the fields/values it found.
+- Tests: new `scripts/test_dwr_vineyards.py` (11 tests: Web Mercator and Teale Albers round trips, Albers matches make_vineyards' EPSG:5070, scanline fill with holes, synthetic DWR ZIP end to end, clear errors; committed-drape check skips until built). `python3 -m unittest discover -s scripts -p 'test_*.py'`; `python3 scripts/validate.py`.
+- Headless Chromium (three r128 served locally) with a temporary stand-in mask (the CDL vineyards.png, not committed): drape requested and applied, no shader or page errors; vines follow the mask, incl. slopes; without the file the viewer 404s quietly and keeps the old pattern.
+- Next smallest action: on the owner's computer, `python3 scripts/make_dwr_vineyards.py --region data/regions/napa_valley.json` (downloads the 2023 ZIP once into data/raw/dwr/), check the printed acres against CDL, commit the two assets plus index/manifest, move the "Vineyard fields and acreage" row on sources.html out of "Coming next".
