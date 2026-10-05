@@ -815,7 +815,7 @@ const lUni = {
   uExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uDemExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uHole:{value:new THREE.Vector4()}, uFogN:{value:LEXT*1.5}, uFogF:{value:LEXT*4.7},
   // vineyard site story on the close-up surface (SEVO below); uSiteHere is 1 only on that close-up's own mesh
   uSiteOn:{value:0}, uSiteHere:{value:0}, uSiteT:{value:1}, uSiteFront:{value:0}, uSiteP:{value:new THREE.Vector2()}, uSiteExt:{value:new THREE.Vector4(0,0,1,1)},
-  uSiteA:{value:null}, uSiteB:{value:null}, uSoilC:{value:new THREE.Color(0.30,0.24,0.18)}
+  uSiteA:{value:null}, uSoilC:{value:new THREE.Color(0.30,0.24,0.18)}
 };
 if(HI) buildDemTexture(HI.h,HI.m.cols,HI.m.rows,HI.m.scale||1); else if(realDEM) buildDemTexture(REG.h,NX,NZ);
 const TERRAIN_VS = `
@@ -885,16 +885,16 @@ float fline(float d,float px){ float w=max(px*1.2,0.05); return 1.0-smoothstep(w
 `;
 /* Vineyard site story drawn on the close-up surface, in step with the cross-section (same clock, uSiteT 0..1):
    hills -> creeks spread a gravel fan across the valley floor (front = the section's fan front) -> two floods leave loam
-   over a darkened topsoil -> soil and the 1800s valley oak savanna and channels (SFEI) -> vineyard rows on the fields
+   over a darkened topsoil -> soil under grassland and scattered oaks -> vineyard rows on the fields
    USDA CDL maps as grapes in 2024 -> today's satellite image. Masks (uSiteA): r = young deposits (SIM 2956 Q units),
-   g = height above the nearest channel (m/10, from the close-up's own drainage), b = CDL grapes, a = SFEI oak savanna.
-   uSiteB: SFEI 1800s channels and wet habitats. Where things happen is from those maps; the motion is illustrated. */
+   g = height above the nearest channel (m/10, from the close-up's own drainage), b = CDL grapes, a unused.
+   Where things happen is from those maps; the motion is illustrated. */
 const SITE_GLSL = `
 vec3 siteSurface(vec3 col, float slope, inout float wet){
   vec2 su=(vW.xz-uSiteExt.xy)/uSiteExt.zw;
   if(su.x<=0.0||su.x>=1.0||su.y<=0.0||su.y>=1.0) return col;
-  vec4 A=texture2D(uSiteA,su), B=texture2D(uSiteB,su);
-  float young=smoothstep(0.3,0.7,A.r), hand=A.g*25.5, vineM=smoothstep(0.3,0.7,A.b), oakM=A.a;
+  vec4 A=texture2D(uSiteA,su);
+  float young=smoothstep(0.3,0.7,A.r), hand=A.g*25.5, vineM=smoothstep(0.3,0.7,A.b);
   vec2 lm=(vW.xz-uSiteP)*1000.0;                                   // metres from the site, x east, y south
   float o=dot(lm,vec2(0.766,-0.643)), cr=dot(lm,vec2(0.643,0.766)); // along the section (SW -, NE +) and across it
   float T=uSiteT, kSoil=smoothstep(0.76,0.92,T), kVine=smoothstep(0.88,0.97,T), kNow=smoothstep(0.965,1.0,T);
@@ -934,24 +934,22 @@ vec3 siteSurface(vec3 col, float slope, inout float wet){
   float topsoil=young*smoothstep(0.62,0.70,T)*0.55*(1.0-s2*smoothstep(0.70,0.74,T));   // a topsoil darkens, then floods bury it
   yc=mix(yc,loam,max(s1,s2)*0.85);
   yc=mix(yc,mix(yc,uSoilC,0.7),topsoil*(1.0-max(s1,s2)*0.6)*(1.0-kSoil));
-  // soil forms; grassland and valley oak savanna (SFEI) before the vineyards
+  // soil forms; grassland with scattered oaks before the vineyards (illustrated)
   vec3 grass=mix(vec3(0.62,0.55,0.34),vec3(0.71,0.63,0.40),nF*mid);
   grass=mix(grass,vec3(0.40,0.45,0.24),0.35*smoothstep(0.55,0.8,nM));
   vec3 soilT=mix(uSoilC,grass,0.6+0.25*nB);
   yc=mix(yc,soilT,kSoil*young);
   vec3 c=mix(hill,yc,young);
-  // trees: oak savanna on the valley floor where SFEI maps it, oak woodland on the hills; cleared where vines go in
+  // trees: scattered oaks on the valley floor, oak woodland on the hills (illustrated); cleared where vines go in
   vec2 cell=floor(lm/24.0); float th=h21(cell), tr=3.2+1.6*h21(cell+7.1);
   vec2 tp=(cell+0.22+0.56*vec2(h21(cell+1.3),h21(cell+2.9)))*24.0;
-  float dens=mix(0.55*smoothstep(0.15,0.3,slope+0.15),0.08+0.55*oakM,young)*mix(1.0,kSoil,young)*(1.0-vineM*kVine);
+  float dens=mix(0.55*smoothstep(0.15,0.3,slope+0.15),0.12,young)*mix(1.0,kSoil,young)*(1.0-vineM*kVine);
   float tree=step(th,dens);
   vec2 sh=normalize(-uSun.xz+vec2(1e-4))*tr*0.9;
   float shadow=tree*(1.0-smoothstep(tr*0.75,tr,length(lm-tp-sh)));
   float crown=tree*(1.0-smoothstep(tr*0.8,tr,length(lm-tp)));
   c=mix(c,c*0.55,shadow*mid*0.8);
   c=mix(c,mix(vec3(0.16,0.22,0.11),vec3(0.27,0.33,0.16),nG),crown*mix(0.25,1.0,mid));
-  // 1800s channels and wet habitats (SFEI), shown with the soil step, fading as the vineyard era arrives
-  c=mix(c,B.rgb,B.a*smoothstep(0.78,0.88,T)*(1.0-kNow*0.85));
   // vineyards: rows 2.4 m apart in blocks planted one after another, where CDL maps grapes today
   vec2 blk=floor((lm+vec2(37.0,11.0))/140.0); float bh=h21(blk+5.5), ang=h21(floor((lm+vec2(201.0,77.0))/430.0))>0.45?0.70:2.27;
   float on=vineM*step(bh*0.9,kVine-0.05);
@@ -973,7 +971,7 @@ const terrainMat = new THREE.ShaderMaterial({
   fragmentShader:GLSL_NOISE+FAULT_GLSL+`
   uniform vec3 uSun,uSunCol,uFog,uWb; uniform float uVE,uVolc,uLava,uAsh,uVines,uGold,uTime,uErode,uTopo;
   uniform sampler2D uDem,uAva,uGeo,uSat,uRiv; uniform float uDemOn,uAvaOn,uGeoOn,uSatOn,uRivOn; uniform vec4 uGeoExt,uSatExt; uniform vec2 uDemTexel,uDemCell; uniform vec4 uExt,uDemExt,uHole;
-  uniform float uSiteOn,uSiteHere,uSiteT,uSiteFront; uniform vec2 uSiteP; uniform vec4 uSiteExt; uniform sampler2D uSiteA,uSiteB; uniform vec3 uSoilC;
+  uniform float uSiteOn,uSiteHere,uSiteT,uSiteFront; uniform vec2 uSiteP; uniform vec4 uSiteExt; uniform sampler2D uSiteA; uniform vec3 uSoilC;
   varying vec3 vW; varying float vH; varying float vS; varying float vR; varying float vFlow; varying float vDist;
   float h21(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
   `+LIGHT_FOG+SITE_GLSL+`
@@ -1333,7 +1331,7 @@ function sampleGrid(arr,x,z){
 }
 function clearPatch(){
   if(LOC.mesh){ lScene.remove(LOC.mesh); LOC.mesh.geometry.dispose(); const u=LOC.mesh.material.uniforms;
-    [u.uSiteA!==lUni.uSiteA&&u.uSiteA.value, u.uSiteB!==lUni.uSiteB&&u.uSiteB.value, u.uDem.value, u.uAva!==lUni.uAva&&u.uAva.value, u.uSat!==lUni.uSat&&u.uSat.value, u.uGeo!==lUni.uGeo&&u.uGeo.value, u.uRiv!==lUni.uRiv&&u.uRiv.value].forEach(t=>{ if(t) t.dispose(); });
+    [u.uSiteA!==lUni.uSiteA&&u.uSiteA.value, u.uDem.value, u.uAva!==lUni.uAva&&u.uAva.value, u.uSat!==lUni.uSat&&u.uSat.value, u.uGeo!==lUni.uGeo&&u.uGeo.value, u.uRiv!==lUni.uRiv&&u.uRiv.value].forEach(t=>{ if(t) t.dispose(); });
     SAT.patchLabel=null; GEO.patch=null; LOC.mesh.material.dispose(); LOC.mesh=null; }
   lUni.uHole.value.set(0,0,0,0);
 }
@@ -1923,8 +1921,7 @@ function siteCard(){
 }
 /* Masks for the site story on the close-up surface (SITE_GLSL): built in the browser from files already here.
    A (on the close-up grid): r young deposits (SIM 2956 Q units, the close-up's geology), g height above the nearest
-   channel in m/10 (this close-up's drainage, channels draining 0.4 km² or more), b USDA CDL grapes 2024, a SFEI oak
-   savanna. B (1024²): SFEI 1800s channels and wet habitats. */
+   channel in m/10 (this close-up's drainage, channels draining 0.4 km² or more), b USDA CDL grapes 2024. */
 const SEVO={ok:false, id:null};
 function loadImg(src){ return new Promise((ok,no)=>{ const im=new Image(); im.onload=()=>ok(im); im.onerror=no; im.src=src; }); }
 async function buildSiteLayers(q,mat,nx,nzz,h5,dr){
@@ -1954,28 +1951,10 @@ async function buildSiteLayers(q,mat,nx,nzz,h5,dr){
     const c=cv(nx,nzz), g=c.getContext("2d"); g.imageSmoothingEnabled=false;
     g.drawImage(im,(E0-bb[0])*kx,(bb[3]-N0)*ky,WE*kx,HN*ky,0,0,nx,nzz); const px=g.getImageData(0,0,nx,nzz).data;
     for(let i=0;i<n;i++) if(px[i*4+3]>128) A[i*4+2]=255; }).catch(()=>{}));
-  // SFEI 1800s landscape: oak savanna into A, channels and wet habitats into B
-  const cB=cv(1024,1024), gB=cB.getContext("2d");
-  tasks.push(fetch("assets/regions/"+REG.id+"/historical_ecology.json").then(r=>r.ok?r.json():null).then(h=>{ if(!h) return;
-    const cO=cv(nx,nzz), gO=cO.getContext("2d");
-    const path=(g,arr,k0,W,H)=>{ let x=arr[k0], y=arr[k0+1]; g.moveTo((x-E0)/WE*W,(N0-y)/HN*H);
-      for(let k=k0+2;k<arr.length;k+=2){ x+=arr[k]; y+=arr[k+1]; g.lineTo((x-E0)/WE*W,(N0-y)/HN*H); } };
-    const HC=h.classes.habitats, oak=new Set(["Valley Oak Savanna","Live Oak Savanna"]);
-    const wetC={"Wet Meadow":"rgba(120,150,90,.55)","Valley Freshwater Marsh":"rgba(80,120,95,.7)","Willow Grove":"rgba(60,95,45,.75)",
-      "Broad Riparian Forest":"rgba(45,80,40,.8)","Perennial Freshwater Pond":"rgba(60,110,140,.85)","Vernal Pool/Swale Area":"rgba(110,140,130,.5)","Braided Channel":"rgba(150,140,115,.7)"};
-    h.habitats.forEach(r=>{ const nm=HC[r[0]];
-      if(oak.has(nm)){ gO.beginPath(); for(let k=3;k<r.length;k++) path(gO,r[k],0,nx,nzz); gO.fillStyle="#fff"; gO.fill("evenodd"); }
-      else if(wetC[nm]){ gB.beginPath(); for(let k=3;k<r.length;k++) path(gB,r[k],0,1024,1024); gB.fillStyle=wetC[nm]; gB.fill("evenodd"); } });
-    const CC=h.classes.channels, pxm=1024/WE;
-    gB.lineCap=gB.lineJoin="round";
-    h.channels.forEach(r=>{ const nm=CC[r[0]]; if(/Tidal|Paleo/.test(nm)) return;
-      gB.beginPath(); path(gB,r,3,1024,1024); gB.strokeStyle="rgba(70,130,170,.95)"; gB.lineWidth=Math.max(1.2,(nm==="Mainstem Channel"?14:6)*pxm); gB.stroke(); });
-    const px=gO.getImageData(0,0,nx,nzz).data; for(let i=0;i<n;i++) A[i*4+3]=px[i*4+3]; }).catch(()=>{}));
   await Promise.all(tasks);
   if(mat!==(LOC.mesh&&LOC.mesh.material)) return;
   const tA=new THREE.DataTexture(A,nx,nzz,THREE.RGBAFormat); tA.magFilter=tA.minFilter=THREE.LinearFilter; tA.needsUpdate=true;
-  const tB=new THREE.CanvasTexture(cB); tB.flipY=false; tB.minFilter=THREE.LinearFilter; tB.generateMipmaps=false;
-  mat.uniforms.uSiteA={value:tA}; mat.uniforms.uSiteB={value:tB};
+  mat.uniforms.uSiteA={value:tA};
   mat.uniforms.uSiteExt={value:new THREE.Vector4(b.x0-cx/2,b.z0-cz/2,b.x1-b.x0+cx,b.z1-b.z0+cz)};
   mat.uniformsNeedUpdate=true; SEVO.ok=true; if(SITE.mode) siteReplay();   // start the story once the map can show it
 }
@@ -2057,11 +2036,11 @@ function drawSiteSection(){
     g.globalAlpha=1; });
   // caption for the step being shown
   const cr=sec.streams.filter(c=>!c.name).sort((a,b)=>Math.abs(a.offset_m)-Math.abs(b.offset_m))[0], nr=sec.streams.filter(c=>c.name).sort((a,b)=>Math.abs(a.offset_m)-Math.abs(b.offset_m))[0];
-  const tail=` Map: fan and floods drawn on the mapped young deposits (SIM 2956) and today's terrain, spread and timing illustrated; 1800s channels, wetlands and oak savanna from SFEI; vineyards where USDA CDL maps grapes in 2024. Layers: USDA series description, typical pedon (not a pit at this vineyard). Units: ${d.geology.label}. Deposit thickness and timing illustrated. Vertical ×${ve.toFixed(0)}.`;
+  const tail=` Map: fan and floods drawn on the mapped young deposits (SIM 2956) and today's terrain, spread and timing illustrated; vineyards where USDA CDL maps grapes in 2024. Layers: USDA series description, typical pedon (not a pit at this vineyard). Units: ${d.geology.label}. Deposit thickness and timing illustrated. Vertical ×${ve.toFixed(0)}.`;
   const note = tau<0.10 ? "First the hills: older rock on the flanks of the valley (USGS map units)."
     : tau<0.58 ? "Creeks from the western hills spread gravel, sand and silt over the valley floor and build the fan (Qf); on the map, braided channels sweep across it. The lowest soil layers are that stream sand and gravel."
     : tau<0.76 ? `Floods lay loam over old ground surfaces and bury two older topsoils. Channels today: ${cr?"a creek "+siteKm(cr.offset_m)+(cr.offset_m<0?" SW":" NE"):""}${cr&&nr?", ":""}${nr?"the "+nr.name+" "+siteKm(nr.offset_m)+(nr.offset_m<0?" SW":" NE"):""} (USGS NHD).`
-    : "Soil forms in the top loam under grassland and valley oak savanna, with the 1800s creeks and wetlands (SFEI); then vineyard blocks go in. Today's vineyard soil. The buried gravel is an old stream bed; exactly where that channel ran under the vineyard is not mapped yet."+tail;
+    : "Soil forms in the top loam under grassland and scattered oaks (illustrated); then vineyard blocks go in. Today's vineyard soil. The buried gravel is an old stream bed; exactly where that channel ran under the vineyard is not mapped yet."+tail;
   if($("xsNote").textContent!==note) $("xsNote").textContent=note;
 }
 
