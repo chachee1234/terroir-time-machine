@@ -344,6 +344,13 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Not done: finer terrain or imagery. USGS 1 m lidar and 60 cm NAIP need hosts this environment blocks (s3.amazonaws.com, prd-tnm.s3.amazonaws.com, Planetary Computer); the surface is still the 10 m grid.
 - Checked: `python3 -m unittest discover -s scripts -p 'test_*.py'` → 128 OK, 1 skipped; `python3 scripts/validate.py` PASS; headless Chromium (swiftshader, three r128 from a git checkout of the r128 tag) at story moments 0.05–1.0 from 0.15, 0.95, 1.6 and 2.2 km, no page errors. Not tested: real-hardware frame rate, phones, Safari.
 - Next smallest action: owner review of the animation; optional 1 m lidar and NAIP once the hosts are allowed.
+
+## 2026-10-01 — AVA profiles in the description card (branch ava-profiles)
+- Choosing any of the 26 AVA close-ups now shows an AVA profile in the description card: elevation range and median, leading SSURGO soils with clay/gravel/rock-outcrop shares, SIM 2956 geology units with names, CDL 2024 grape acres, and notable producers with source links.
+- New `scripts/make_ava_profiles.py` → `prototype/assets/regions/napa_valley/ava_profiles.json`; producers in `data/ava_producers.json`; SOURCES.md G33.
+- Producers are from web search summaries (source pages blocked from the sandbox) and are labelled unverified on the card and in the data.
+- Commands: `python3 scripts/make_ava_profiles.py --region data/regions/napa_valley.json` (Soil Data Access live); `python3 -m unittest discover -s scripts -p 'test_*.py'` → 136 OK, 1 skipped; `python3 scripts/validate.py` PASS; headless Chromium screenshots of the Rutherford and Wild Horse Valley cards, no page errors.
+- Next smallest action: owner review; verify producer lists against the source pages when the hosts are reachable.
 ## 2026-10-05 — Sunday audit fix
 - Cause of every failed audit/intake run: the `CLAUDE_CODE_OAUTH_TOKEN` secret was invalid, then re-saved with a line break (Charlie re-saved it on one line 2026-10-05). With a working token the audit then hit its 3-turn cap reading the diff from disk.
 - `sunday-audit.yml` now puts the past week's diff in the prompt (as GOVERNANCE.md §3 Tier 2 specifies): file list for every change, patch body without generated JSON, capped at 60 KB. Max turns stays 3.
