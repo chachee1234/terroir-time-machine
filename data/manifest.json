@@ -836,6 +836,19 @@
           "sha256": "4be244d1698a5c4f916e855ec366901363b5d05399ffb4b58abd7e7f53423815"
         }
       ]
+    },
+    {
+      "id": "west_sonoma_coast-faults",
+      "source": "GEM Global Active Faults Database",
+      "url": "https://raw.githubusercontent.com/GEMScienceTools/gem-global-active-faults/master/geojson/gem_active_faults_harmonized.geojson",
+      "rights": "CC BY-SA 4.0 (GEM Global Active Faults Database, Styron & Pagani 2020); California traces from USGS UCERF3",
+      "source_sha256": "37babb516edfac22b5ae91744495d8546b3ae4676b4d4f68cc77da8222df20e1",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/faults.json",
+          "sha256": "57f18d7b95c84b2c534b2d9c4a8bb0ff35df7e16bcc005f7e308de4d4111e166"
+        }
+      ]
     }
   ]
 }
