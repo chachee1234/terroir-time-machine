@@ -336,3 +336,8 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Command: `python3 scripts/make_plate_model.py --src <pygplates-tutorials checkout>`.
 - Next smallest action: owner review; optional plate-boundary lines (the model's topologies) or past shorelines (paleogeography) if wanted.
 
+
+## 2026-10-05 — Sunday audit fix
+- Cause of every failed audit/intake run: the `CLAUDE_CODE_OAUTH_TOKEN` secret was invalid, then re-saved with a line break (Charlie re-saved it on one line 2026-10-05). With a working token the audit then hit its 3-turn cap reading the diff from disk.
+- `sunday-audit.yml` now puts the past week's diff in the prompt (as GOVERNANCE.md §3 Tier 2 specifies): file list for every change, patch body without generated JSON, capped at 60 KB. Max turns stays 3.
+- Checks: `python3 scripts/test_workflows.py` OK; YAML parses; diff step dry-run locally (80 KB prompt diff); workflow_dispatch run on branch `fix-audit-turns` (see PR).
