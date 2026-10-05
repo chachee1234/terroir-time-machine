@@ -143,7 +143,7 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .xskey i{display:inline-block;width:11px;height:9px;margin-right:4px;vertical-align:-1px;border-radius:2px;background:var(--c);box-shadow:0 0 0 1px rgba(0,0,0,.45)}
 @media (prefers-reduced-motion:reduce){.xsteps .nav.go.wait{animation:none}}
 @media (max-height:860px){.xsec.site canvas{height:240px}}
-@media (max-width:640px){.xsec.site canvas{height:180px} .xsteps p{max-height:80px} .xsteps ol button{font-size:9.5px;letter-spacing:0}}
+@media (max-width:640px){.xsec.site{max-height:calc(100dvh - 200px);overflow-y:auto} .xsec.site canvas{height:180px} .xsteps p{max-height:80px} .xsteps ol button{font-size:9.5px;letter-spacing:0}}
 body.xs-open .compass{top:calc(var(--xsb,320px) + 10px)}
 body.xs-open .legend{top:calc(var(--xsb,320px) + 82px)}
 body.xs-open .locator{display:none}
@@ -2106,7 +2106,7 @@ function siteStepText(i){
     +`<em>Measured: the buried layers and their depths; which ground is low, from the 10 m terrain. Illustrated: the number and height of the floods on the map, and when they happened.</em>`;
   case "soil": return `With the floods over, roots, rain and soil life turn the top loam into soil: ${list(3)}.${src("S4")} `
     +(/clay films/.test(hz.map(h=>h.narrative).join(" "))?`The subsoil has thin clay coatings, washed down from above. `:"")
-    +(/Cumulic/.test(tx)&&/olls$/.test(tx)?`Its class, ${esc(tx.split(", ").pop())}, means a dark, rich topsoil (a Mollisol) in a dry-summer climate, thickened as new sediment kept arriving (cumulic). `:"")
+    +(/Cumulic/.test(tx)&&/olls$/.test(tx)?`Its class, ${esc(tx.split(", ").pop().replace(/^thermic /,""))}, means a dark, rich topsoil (a Mollisol) in a dry-summer climate, thickened as new sediment kept arriving (cumulic). `:"")
     +(siteSentence(d.soil.use,/Native vegetation/)?`${esc(siteSentence(d.soil.use,/Native vegetation/))}${src("S4")} `:"")
     +`<em>Illustrated: the grassland and scattered oaks on the map, and when this happened.</em>`;
   case "vines": { const p=claim(/1971/), b=claim(/1995/), ap=hz.find(h=>/^Ap/.test(h.name)), cl=d.climate;
@@ -2115,7 +2115,8 @@ function siteStepText(i){
     +(cl?`Climate here: ${Math.round(cl.ppt_mm)} mm of rain a year, mean ${cl.tmean_c} °C, Winkler ${esc(cl.winkler)} (${cl.gdd_f} degree-days, 1991–2020 averages).${src(cl.source)} `:"")
     +`<em>Measured: where USDA CDL maps grapes in 2024. Illustrated: the order the blocks are planted.</em>`; }
   default: { const r=claim(/river/i);
-    return `Today's satellite image comes back under the rows. ${esc(siteSentence(d.soil.drainage,/^Somewhat|drained;/))} ${esc(siteSentence(d.soil.drainage,/artificially drained/))}${src("S4")} `
+    const dr=siteSentence(d.soil.drainage,/drained;/);
+    return `Today's satellite image comes back under the rows. `+(dr?`The soil survey calls this soil ${esc(lc1(dr).replace(/;.*$/,""))}. `:"")+`${esc(siteSentence(d.soil.drainage,/water table/))} ${esc(siteSentence(d.soil.drainage,/artificially drained/))}${src("S4")} `
     +(r?`${esc(r.text)}${src(r.source)} `:"")
     +`The buried gravel is an old stream bed; exactly where that channel ran under the vineyard is not mapped yet.`; }
   }
