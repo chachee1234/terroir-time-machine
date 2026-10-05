@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_terrain import utm_from_geographic  # noqa: E402
-from fetch_tiles import decode_png_rgb, geographic_from_utm, grid_shape, merc_px, terrarium_heights  # noqa: E402
+from fetch_tiles import Mosaic, decode_png_rgb, geographic_from_utm, grid_shape, merc_px, terrarium_heights  # noqa: E402
 from build_globe import encode  # noqa: E402
 
 
@@ -34,6 +34,18 @@ class TestTiles(unittest.TestCase):
         rows = [[128, 0, 0, 133, 37, 128], [127, 246, 0, 128, 0, 0]]
         h = terrarium_heights(png_rgb(2, 2, rows))
         self.assertEqual(list(h), [0.0, 1317.5, -10.0, 0.0])
+
+    def test_pit_floor_sets_coastline_pits_to_sea_level_and_keeps_shelf(self):
+        # -5000 m is (108, 120, 0): a pit; -110 m is (127, 146, 0): real shelf, kept
+        png = png_rgb(2, 2, [[108, 120, 0, 127, 146, 0], [128, 0, 0, 133, 37, 128]])
+        file = type("F", (), {"read_bytes": lambda self: png})()
+        m = Mosaic(13, offline=True, pit_floor=-200)
+        m.files[(0, 0)] = file
+        self.assertEqual(list(m.tile(0, 0)), [0.0, -110.0, 0.0, 1317.5])
+        self.assertEqual(m.pits, 1)
+        plain = Mosaic(13, offline=True)
+        plain.files[(0, 0)] = file
+        self.assertEqual(list(plain.tile(0, 0))[0], -5000.0)
 
     def test_png_filters(self):
         rows = [[10, 20, 30, 40, 50, 60], [1, 2, 3, 4, 5, 6]]

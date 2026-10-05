@@ -1,0 +1,33 @@
+{
+  "id": "west_sonoma_coast",
+  "name": "West Sonoma Coast",
+  "description": "West Sonoma Coast AVA bounding box (UC Davis AVA Project, CC0) padded by 2 km; ~65 x 53 km. Frame for the viewer, not a geological boundary.",
+  "epsg": 26910,
+  "utm_zone": 10,
+  "bbox_utm": [
+    451600.0,
+    4241000.0,
+    516600.0,
+    4294400.0
+  ],
+  "anchor": {
+    "utm": [
+      484103.0,
+      4267688.5
+    ],
+    "kind": "computed",
+    "note": "centre of the West Sonoma Coast AVA bounding box (UC Davis outline); a frame reference, not a named feature"
+  },
+  "cell_m": 30,
+  "browser_cells": 467,
+  "assets_dir": "prototype/assets/regions/west_sonoma_coast",
+  "boundary": "data/ava/west_sonoma_coast_avas.geojson",
+  "ava_viewer": "prototype/assets/regions/west_sonoma_coast/ava.json",
+  "parents": [
+    "west_sonoma_coast"
+  ],
+  "ava_rule": "the parent AVA, every current AVA nested in it, and every current AVA whose bounding box lies inside the frame",
+  "close_ups": [],
+  "pit_floor_m": -200,
+  "pit_note": "Along this shoreline the terrain tiles have narrow pits, down to about -16,000 m, where land and sea data meet. The real seafloor in the frame (ETOPO1 in the tiles, south-west corner) is no deeper than about 115 m, and no land lies below sea level, so tile pixels below -200 m are treated as pits and set to 0 m, the tiles' sea surface along the coast. The count is recorded in data/manifest.json."
+}

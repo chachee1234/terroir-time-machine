@@ -1,0 +1,35 @@
+{
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 13,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "fetched": "2026-10-01",
+ "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+ "encoding": "Int16 little-endian, row 0 = north",
+ "scale": 0.1,
+ "resampling": "bilinear from the tile mosaic at each UTM cell centre",
+ "product": "sub-AVA close-up",
+ "region": "northern_sonoma",
+ "ava_id": "russian_river_valley",
+ "name": "Russian River Valley",
+ "bbox_utm": [
+  491853.8,
+  4237695.8,
+  533864.7,
+  4279706.6
+ ],
+ "ava_bbox_utm": [
+  497297.1,
+  4239195.8,
+  528421.4,
+  4278206.6
+ ],
+ "cols": 512,
+ "rows": 512,
+ "cell_m": 82.213,
+ "range_m": [
+  -55.66,
+  1246.81
+ ],
+ "sha256": "436dc0792459563ec8ac4ee482efdc33630dfcee79171fa3e111f1ce84f0f8ce"
+}

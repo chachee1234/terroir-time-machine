@@ -63,21 +63,32 @@ class RegionTests(unittest.TestCase):
                 for x, y in ring:
                     self.assertTrue(x0 <= x * 1000 <= x1 and y0 <= y * 1000 <= y1, a["id"])
 
+    def test_northern_sonoma_frame_has_its_own_outline_file(self):
+        self.check_own_outlines("northern_sonoma")
+
+    def test_west_sonoma_coast_frame_has_its_own_outline_file(self):
+        self.check_own_outlines("west_sonoma_coast")
+
     def test_petaluma_gap_frame_has_its_own_outline_file(self):
-        r = self.load("petaluma_gap.json")
+        self.check_own_outlines("petaluma_gap")
+
+    def check_own_outlines(self, rid):
+        r = self.load(rid + ".json")
         self.assertEqual(r["utm_zone"], 10)
         self.assertNotEqual(r["ava_viewer"], "prototype/assets/ava.json")   # never overwrites the Napa outlines
         with open(os.path.join(ROOT, r["ava_viewer"])) as f:
             v = json.load(f)
-        self.assertEqual(v["region"], "petaluma_gap")
-        self.assertEqual([a["id"] for a in v["avas"] if a.get("parent")], ["petaluma_gap"])
+        self.assertEqual(v["region"], rid)
+        self.assertEqual([a["id"] for a in v["avas"] if a.get("parent")], [rid])
         x0, y0, x1, y1 = r["bbox_utm"]
         ax, ay = r["anchor"]["utm"]
         self.assertTrue(x0 < ax < x1 and y0 < ay < y1)
+        cut = set(r.get("frame_cut_avas", []))   # nested AVAs kept whole that run past the frame (viewer clips them)
         for a in v["avas"]:
-            for ring in a["rings"]:
-                for x, y in ring:
-                    self.assertTrue(x0 <= x * 1000 <= x1 and y0 <= y * 1000 <= y1, a["id"])
+            pts = [(x * 1000, y * 1000) for ring in a["rings"] for x, y in ring]
+            inside = [x0 <= x <= x1 and y0 <= y <= y1 for x, y in pts]
+            self.assertTrue(all(inside) or (a["id"] in cut and any(inside)), a["id"])
+        self.assertTrue(cut <= {a["id"] for a in v["avas"]})
 
     def test_frame_rule_adds_avas_wholly_inside_and_drops_partial_ones(self):
         def sq(ava_id, within, lon0, lat0, d=0.05):

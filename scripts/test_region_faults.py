@@ -30,7 +30,13 @@ class RegionFaultTests(unittest.TestCase):
         self.assertEqual(got[0]["dip_deg"], 90.0)
 
     def test_petaluma_gap_file_matches_its_frame(self):
-        with open(os.path.join(ROOT, "data", "regions", "petaluma_gap.json")) as f:
+        self.check_frame("petaluma_gap")
+
+    def test_northern_sonoma_file_matches_its_frame(self):
+        self.check_frame("northern_sonoma")
+
+    def check_frame(self, rid):
+        with open(os.path.join(ROOT, "data", "regions", rid + ".json")) as f:
             r = json.load(f)
         with open(os.path.join(ROOT, r["assets_dir"], "faults.json")) as f:
             d = json.load(f)

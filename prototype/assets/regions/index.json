@@ -40,6 +40,26 @@
     "ava",
     "faults"
    ]
+  },
+  {
+   "id": "northern_sonoma",
+   "name": "Northern Sonoma",
+   "parents": [
+    "northern_sonoma"
+   ],
+   "bbox_utm": [
+    486400.0,
+    4237200.0,
+    534800.0,
+    4302400.0
+   ],
+   "status": "mapped",
+   "layers": [
+    "imagery",
+    "closeup_imagery",
+    "ava",
+    "faults"
+   ]
   }
  ]
 }

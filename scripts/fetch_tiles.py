@@ -137,8 +137,9 @@ def fetch(z, x, y, offline=False):
 class Mosaic:
     """Lazily decoded tiles with bilinear sampling across tile edges."""
 
-    def __init__(self, z, offline=False):
+    def __init__(self, z, offline=False, pit_floor=None):
         self.z, self.offline, self.tiles, self.files = z, offline, {}, {}
+        self.pit_floor, self.pits = pit_floor, 0   # see the region file's "pit_floor_m"
 
     def prefetch(self, tiles):
         todo = [t for t in tiles if t not in self.files]
@@ -151,7 +152,13 @@ class Mosaic:
         if key not in self.tiles:
             if key not in self.files:
                 self.files[key] = fetch(self.z, tx, ty, self.offline)
-            self.tiles[key] = terrarium_heights(self.files[key].read_bytes())
+            hs = terrarium_heights(self.files[key].read_bytes())
+            if self.pit_floor is not None:   # coastline pits: pixels far below the tiles' 0 m sea surface
+                bad = [i for i, v in enumerate(hs) if v < self.pit_floor]
+                for i in bad:
+                    hs[i] = 0.0
+                self.pits += len(bad)
+            self.tiles[key] = hs
         return self.tiles[key]
 
     def px(self, gx, gy):
@@ -260,6 +267,9 @@ def write_frame_grid(region, mos, common, assets):
                              "encoding": "int16 little-endian, meters, row 0 = north", "cols": nx, "rows": ny,
                              "cell_m": round((bbox[2] - bbox[0]) / nx, 3), "resampling": "block mean from raw samples",
                              "nodata": -32768, "vertical_exaggeration_default": 1}}
+    if region.get("pit_floor_m") is not None:
+        meta["pit_floor"] = {"m": region["pit_floor_m"], "note": region.get("pit_note", ""),
+                             "rule": "tile pixels below this height are set to 0 m before sampling"}
     (assets / "terrain.json").write_text(json.dumps(meta, indent=2) + "\n")
     print(f"  {nx}x{ny} @ {meta['browser_grid']['cell_m']} m, raw {lo:.1f}..{hi:.1f} m, max at {at}", flush=True)
     return {"product": "region mesh grid", "sha256": sha, "file": "terrain"}
@@ -314,7 +324,7 @@ def main():
     region = json.loads((ROOT / a.region).read_text())
     rid, frame, assets = region["id"], region["bbox_utm"], ROOT / region["assets_dir"]
     today = datetime.date.today().isoformat()
-    mos = Mosaic(a.zoom, a.offline)
+    mos = Mosaic(a.zoom, a.offline, region.get("pit_floor_m"))
     if not a.only:
         mos.prefetch(tiles_for_bbox(frame, a.zoom))
     common = {"source": "AWS Open Data Terrain Tiles, Terrarium encoding", "tile_template": TEMPLATE,
@@ -379,6 +389,11 @@ def main():
                                   "detail/" + p["ava_id"]))).relative_to(ROOT)) + ".bin", "sha256": p["sha256"]}
                                  for p in products]})
     man_path.write_text(json.dumps(man, indent=2) + "\n")
+    if mos.pit_floor is not None:
+        entries[-1]["pit_floor_m"] = mos.pit_floor
+        entries[-1]["pit_pixels_set_to_0m"] = mos.pits
+        man_path.write_text(json.dumps(man, indent=2) + "\n")
+        print(f"tile pixels below {mos.pit_floor} m set to 0 m: {mos.pits}")
     print(f"{len(products)} grids written, {len(mos.files)} tiles, manifest id {mid}")
 
 
