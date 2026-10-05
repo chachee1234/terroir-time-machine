@@ -368,6 +368,83 @@
       ]
     },
     {
+      "id": "ava-petaluma-gap",
+      "source": "UC Davis Library & DataLab, American Viticultural Areas (AVA) Project",
+      "url": "https://raw.githubusercontent.com/UCDavisLibrary/ava/master/avas_aggregated_files/avas.geojson",
+      "rights": "CC0 1.0",
+      "source_sha256": "c90068f7154764519f0a7c6fb2788e597b7c56bf7581e8c0faa979554d984926",
+      "derived": [
+        {
+          "file": "data/ava/petaluma_gap_avas.geojson",
+          "sha256": "d149f9c7ef942eecc5bff310e3da378f5cb0340ba33c3a2b494a0910d777e525"
+        },
+        {
+          "file": "prototype/assets/regions/petaluma_gap/ava.json",
+          "sha256": "e1c47a62533d617c191d2902da683c979c3131da7a800855995da9c13c65ebfb"
+        }
+      ]
+    },
+    {
+      "id": "petaluma_gap-terrain-tiles-z13",
+      "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "zoom": 13,
+      "tiles": 228,
+      "tiles_sha256": "9a05c5686e08b582885c44d3312fac6e93f04329c3d28b08b84e4e21ad2dd6e8",
+      "fetched": "2026-09-28",
+      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/petaluma_gap/terrain.bin",
+          "sha256": "297db6aa49bc5f626bed07fe0ed8c3f7d744d92ffa2752450b0a2dc4ee668791"
+        },
+        {
+          "file": "prototype/assets/regions/petaluma_gap/dem_hi.bin",
+          "sha256": "acdd1e496b9d7d61c3387e795f9d0d4368bc5f9589bde8ecf4bd043150414632"
+        },
+        {
+          "file": "prototype/assets/regions/petaluma_gap/detail/sonoma_mountain.bin",
+          "sha256": "3ed2ea28447b8e8bf507cbd1a2c52eaa0421d8aa7918c31f1dbdfb4ffd48bece"
+        }
+      ]
+    },
+    {
+      "id": "petaluma_gap-sentinel2-imagery",
+      "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+      "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs",
+      "scenes": [
+        "S2A_10SDH_20260727_1_L2A",
+        "S2B_10SEH_20260727_0_L2A"
+      ],
+      "date": "2026-07-27",
+      "fetched": "2026-09-28",
+      "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+      "credit": "Contains modified Copernicus Sentinel data 2026, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/petaluma_gap/imagery.jpg",
+          "sha256": "cce7bca79f306f549340807c9aa301a72155e7a050b0ae5e77cc133442353b96"
+        },
+        {
+          "file": "prototype/assets/regions/petaluma_gap/detail/sonoma_mountain.imagery.jpg",
+          "sha256": "731fe90fed397db477c3ccc6efc266f5b36183b23a87618a8b37515ffde52c15"
+        }
+      ]
+    },
+    {
+      "id": "petaluma_gap-faults",
+      "source": "GEM Global Active Faults Database",
+      "url": "https://raw.githubusercontent.com/GEMScienceTools/gem-global-active-faults/master/geojson/gem_active_faults_harmonized.geojson",
+      "rights": "CC BY-SA 4.0 (GEM Global Active Faults Database, Styron & Pagani 2020); California traces from USGS UCERF3",
+      "source_sha256": "37babb516edfac22b5ae91744495d8546b3ae4676b4d4f68cc77da8222df20e1",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/petaluma_gap/faults.json",
+          "sha256": "06bd5efc37db6efdbd9aa07f9506a9c40de0d1271e3b66299811f9329afe9f57"
+        }
+      ]
+    },
+    {
       "id": "napa_valley-nhd-rivers",
       "source": "U.S. Geological Survey, National Hydrography Dataset (NHD) high resolution, HU8 staged products (NHDFlowline)",
       "packages": [
@@ -540,21 +617,6 @@
         {
           "file": "prototype/assets/regions/napa_valley/vineyards.png",
           "sha256": "ecea373238c900900ea8d1656d54b8a16d1faa0174a3b116dae2b27263b9f2ae"
-        }
-      ]
-    },
-    {
-      "id": "napa_valley-sfei-historical-ecology",
-      "source": "San Francisco Estuary Institute 2011, Napa Valley Historical Ecology Atlas GIS data (owner upload)",
-      "raw_file": "/mnt/project-files/uploads/hearth/6449b4f5-304d-462e-91f1-428bb5321496",
-      "raw_sha256": "de76c4d3e5829bed3eb33d87413af659b240da5827b1833198fe30ca47b11eb1",
-      "bytes": 2422448,
-      "fetched": "2026-10-01",
-      "rights": "SFEI 2011, GNU GPL v3 or later; credit San Francisco Estuary Institute (SOURCES.md G31)",
-      "derived": [
-        {
-          "file": "prototype/assets/regions/napa_valley/historical_ecology.json",
-          "sha256": "ca99a45871b01e5cc0432bc656c877b9cc953338eb972becbf3c91d3e8716294"
         }
       ]
     }

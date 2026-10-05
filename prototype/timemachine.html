@@ -659,6 +659,10 @@ const REG = await (async function loadRegion(){
 })();
 const X0=REG.x0, X1=REG.x1, Z0=REG.z0, Z1=REG.z1, SX=X1-X0, SZ=Z1-Z0, NX=REG.nx, NZ=REG.nz;
 const CXm=(X0+X1)/2, CZm=(Z0+Z1)/2, LEXT=Math.max(SX,SZ), realDEM=!!REG.h;
+// Autopilot regions (not Napa or the block) bring their own outlines, faults and chapters (data/regions/<id>/, assets/regions/<id>/).
+const OWN = realDEM && REG.id!=="napa_valley" && REG.id!=="mt_st_helena";
+const SUMMIT_IN = X0<0 && X1>0 && Z0<0 && Z1>0;              // Mount St. Helena, the scene origin, lies inside the frame
+if(OWN) document.querySelector(".brand small").textContent = (REG.name||REG.id)+" · California";
 const REG_LABEL = REG.id!=="mt_st_helena"&&REG.name ? `${REG.name[0].toUpperCase()+REG.name.slice(1)} · ${Math.round(SX)} × ${Math.round(SZ)} km` : "30 km block · North Bay";
 const REG_SHORT = REG.id==="mt_st_helena" ? "Napa Valley" : (REG.name||"Napa Valley").replace(/^./,c=>c.toUpperCase());
 $("plT").textContent=REG_SHORT; if(REG.id==="mt_st_helena") $("locT").textContent="Napa Valley AVA";
@@ -819,7 +823,7 @@ const lUni = {
   uExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uDemExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uHole:{value:new THREE.Vector4()}, uFogN:{value:LEXT*1.5}, uFogF:{value:LEXT*4.7},
   // vineyard site story on the close-up surface (SEVO below); uSiteHere is 1 only on that close-up's own mesh
   uSiteOn:{value:0}, uSiteHere:{value:0}, uSiteT:{value:1}, uSiteFront:{value:0}, uSiteP:{value:new THREE.Vector2()}, uSiteExt:{value:new THREE.Vector4(0,0,1,1)},
-  uSiteA:{value:null}, uSiteB:{value:null}, uSoilC:{value:new THREE.Color(0.30,0.24,0.18)}
+  uSiteA:{value:null}, uSoilC:{value:new THREE.Color(0.30,0.24,0.18)}
 };
 if(HI) buildDemTexture(HI.h,HI.m.cols,HI.m.rows,HI.m.scale||1); else if(realDEM) buildDemTexture(REG.h,NX,NZ);
 const TERRAIN_VS = `
@@ -859,6 +863,13 @@ const FAULTS=[
  {n:"Great Valley thrust (Gordon Valley)", r:"reverse, ≈1 mm/yr", k:0, pts:[[51.14,15.25],[52.81,25.08],[60.26,41.98]]},
  {n:"Great Valley thrust (Mysterious Ridge)", r:"reverse, ≈1.3 mm/yr", k:0, pts:[[30.55,-49.87],[50.87,-2.69]]}
 ];
+// An autopilot region replaces the table with its own traces (scripts/region_faults.py, same GEM/UCERF3 source), UTM km to scene km.
+if(OWN){ const own=await fetch("assets/regions/"+REG.id+"/faults.json").then(r=>r.ok?r.json():null).catch(()=>null);
+  if(own&&own.faults&&own.faults.length) FAULTS.splice(0,FAULTS.length,...own.faults.map(q=>{
+    const b=(q.net_slip_mm_yr||[])[0], rev=/reverse|thrust/i.test(q.slip_type||""), lab=(q.label||q.name).replace(" - ","–");
+    const n=/\(No\)$/.test(lab) ? lab.replace(/\s*\(No\)$/," Fault (north end)") : lab.includes("(") ? lab.replace(" (", " Fault (") : lab+" Fault";
+    return {n, r:(rev?"reverse, ":"")+(b==null?"rate not given":"≈"+(b<1?b.toFixed(1):Math.round(b))+" mm/yr"), k:rev?0:1,
+            pts:q.pts_km.map(([e,nn])=>[+(e-GNIS_UTM[0]/1000).toFixed(2), +(-(nn-GNIS_UTM[1]/1000)).toFixed(2)])}; })); }
 // orient every trace south→north so the dash motion reads right-lateral; label at a vertex inside the frame
 FAULTS.forEach(fl=>{ if(fl.pts[0][1]<fl.pts[fl.pts.length-1][1]) fl.pts.reverse(); if(fl.k===undefined) fl.k=1;
   const ins=fl.pts.map((p,i)=>i<fl.pts.length-1?[(p[0]+fl.pts[i+1][0])/2,(p[1]+fl.pts[i+1][1])/2]:null).filter(p=>p&&inExt(p[0],p[1],1.5));
@@ -882,16 +893,16 @@ float fline(float d,float px){ float w=max(px*1.2,0.05); return 1.0-smoothstep(w
 `;
 /* Vineyard site story drawn on the close-up surface, in step with the cross-section (same clock, uSiteT 0..1):
    hills -> creeks spread a gravel fan across the valley floor (front = the section's fan front) -> two floods leave loam
-   over a darkened topsoil -> soil and the 1800s valley oak savanna and channels (SFEI) -> vineyard rows on the fields
+   over a darkened topsoil -> soil under grassland and scattered oaks -> vineyard rows on the fields
    USDA CDL maps as grapes in 2024 -> today's satellite image. Masks (uSiteA): r = young deposits (SIM 2956 Q units),
-   g = height above the nearest channel (m/10, from the close-up's own drainage), b = CDL grapes, a = SFEI oak savanna.
-   uSiteB: SFEI 1800s channels and wet habitats. Where things happen is from those maps; the motion is illustrated. */
+   g = height above the nearest channel (m/10, from the close-up's own drainage), b = CDL grapes, a unused.
+   Where things happen is from those maps; the motion is illustrated. */
 const SITE_GLSL = `
 vec3 siteSurface(vec3 col, float slope, inout float wet){
   vec2 su=(vW.xz-uSiteExt.xy)/uSiteExt.zw;
   if(su.x<=0.0||su.x>=1.0||su.y<=0.0||su.y>=1.0) return col;
-  vec4 A=texture2D(uSiteA,su), B=texture2D(uSiteB,su);
-  float young=smoothstep(0.3,0.7,A.r), hand=A.g*25.5, vineM=smoothstep(0.3,0.7,A.b), oakM=A.a;
+  vec4 A=texture2D(uSiteA,su);
+  float young=smoothstep(0.3,0.7,A.r), hand=A.g*25.5, vineM=smoothstep(0.3,0.7,A.b);
   vec2 lm=(vW.xz-uSiteP)*1000.0;                                   // metres from the site, x east, y south
   float o=dot(lm,vec2(0.766,-0.643)), cr=dot(lm,vec2(0.643,0.766)); // along the section (SW -, NE +) and across it
   float T=uSiteT, kSoil=smoothstep(0.76,0.92,T), kVine=smoothstep(0.88,0.97,T), kNow=smoothstep(0.965,1.0,T);
@@ -931,24 +942,22 @@ vec3 siteSurface(vec3 col, float slope, inout float wet){
   float topsoil=young*smoothstep(0.62,0.70,T)*0.55*(1.0-s2*smoothstep(0.70,0.74,T));   // a topsoil darkens, then floods bury it
   yc=mix(yc,loam,max(s1,s2)*0.85);
   yc=mix(yc,mix(yc,uSoilC,0.7),topsoil*(1.0-max(s1,s2)*0.6)*(1.0-kSoil));
-  // soil forms; grassland and valley oak savanna (SFEI) before the vineyards
+  // soil forms; grassland with scattered oaks before the vineyards (illustrated)
   vec3 grass=mix(vec3(0.62,0.55,0.34),vec3(0.71,0.63,0.40),nF*mid);
   grass=mix(grass,vec3(0.40,0.45,0.24),0.35*smoothstep(0.55,0.8,nM));
   vec3 soilT=mix(uSoilC,grass,0.6+0.25*nB);
   yc=mix(yc,soilT,kSoil*young);
   vec3 c=mix(hill,yc,young);
-  // trees: oak savanna on the valley floor where SFEI maps it, oak woodland on the hills; cleared where vines go in
+  // trees: scattered oaks on the valley floor, oak woodland on the hills (illustrated); cleared where vines go in
   vec2 cell=floor(lm/24.0); float th=h21(cell), tr=3.2+1.6*h21(cell+7.1);
   vec2 tp=(cell+0.22+0.56*vec2(h21(cell+1.3),h21(cell+2.9)))*24.0;
-  float dens=mix(0.55*smoothstep(0.15,0.3,slope+0.15),0.08+0.55*oakM,young)*mix(1.0,kSoil,young)*(1.0-vineM*kVine);
+  float dens=mix(0.55*smoothstep(0.15,0.3,slope+0.15),0.12,young)*mix(1.0,kSoil,young)*(1.0-vineM*kVine);
   float tree=step(th,dens);
   vec2 sh=normalize(-uSun.xz+vec2(1e-4))*tr*0.9;
   float shadow=tree*(1.0-smoothstep(tr*0.75,tr,length(lm-tp-sh)));
   float crown=tree*(1.0-smoothstep(tr*0.8,tr,length(lm-tp)));
   c=mix(c,c*0.55,shadow*mid*0.8);
   c=mix(c,mix(vec3(0.16,0.22,0.11),vec3(0.27,0.33,0.16),nG),crown*mix(0.25,1.0,mid));
-  // 1800s channels and wet habitats (SFEI), shown with the soil step, fading as the vineyard era arrives
-  c=mix(c,B.rgb,B.a*smoothstep(0.78,0.88,T)*(1.0-kNow*0.85));
   // vineyards: rows 2.4 m apart in blocks planted one after another, where CDL maps grapes today
   vec2 blk=floor((lm+vec2(37.0,11.0))/140.0); float bh=h21(blk+5.5), ang=h21(floor((lm+vec2(201.0,77.0))/430.0))>0.45?0.70:2.27;
   float on=vineM*step(bh*0.9,kVine-0.05);
@@ -970,7 +979,7 @@ const terrainMat = new THREE.ShaderMaterial({
   fragmentShader:GLSL_NOISE+FAULT_GLSL+`
   uniform vec3 uSun,uSunCol,uFog,uWb; uniform float uVE,uVolc,uLava,uAsh,uVines,uGold,uTime,uErode,uTopo;
   uniform sampler2D uDem,uAva,uGeo,uSat,uRiv; uniform float uDemOn,uAvaOn,uGeoOn,uSatOn,uRivOn; uniform vec4 uGeoExt,uSatExt; uniform vec2 uDemTexel,uDemCell; uniform vec4 uExt,uDemExt,uHole;
-  uniform float uSiteOn,uSiteHere,uSiteT,uSiteFront; uniform vec2 uSiteP; uniform vec4 uSiteExt; uniform sampler2D uSiteA,uSiteB; uniform vec3 uSoilC;
+  uniform float uSiteOn,uSiteHere,uSiteT,uSiteFront; uniform vec2 uSiteP; uniform vec4 uSiteExt; uniform sampler2D uSiteA; uniform vec3 uSoilC;
   varying vec3 vW; varying float vH; varying float vS; varying float vR; varying float vFlow; varying float vDist;
   float h21(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
   `+LIGHT_FOG+SITE_GLSL+`
@@ -1202,6 +1211,8 @@ const GEO={on:false, ok:false, legend:null, detail:null, patch:null, lgKey:null}
 (async function loadGeology(){
   const base = REG.id==="mt_st_helena" ? "assets/" : "assets/regions/"+REG.id+"/";
   if(!realDEM) return;
+  if(OWN){ const idx=await fetch("assets/regions/index.json").then(r=>r.ok?r.json():null).catch(()=>null);   // only ask for a drape the region has
+    const g=idx&&(idx.regions||[]).find(q=>q.id===REG.id); if(!g||!(g.layers||[]).includes("geology")) return; }
   try{
     const lg=await fetch(base+"geology_legend.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
     const t=await new Promise((ok,no)=>new THREE.TextureLoader().load(base+"geology.png",ok,undefined,no));
@@ -1292,7 +1303,7 @@ $("rivBtn").onclick=()=>{ RIV.on=!RIV.on; $("rivBtn").setAttribute("aria-pressed
 $("geoBtn").onclick=()=>{ GEO.on=!GEO.on; $("geoBtn").setAttribute("aria-pressed",GEO.on); if(GEO.on&&ageOf(p)>0.06) goTo(CH.length-1); };
 (async function loadAVA(){
   try{
-    const d=await fetch("assets/ava.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
+    const d=await fetch(OWN?"assets/regions/"+REG.id+"/ava.json":"assets/ava.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
     let c=[531.89263,4280.12975];                       // GNIS centre (UTM km) if terrain.json is missing
     try{ const m=await fetch("assets/terrain.json").then(r=>r.json()); c=m.aoi.center_utm.map(v=>v/1000); }catch(e){}
     const toS=([e,n])=>[e-c[0], -(n-c[1])];            // scene km: x east, z south
@@ -1328,7 +1339,7 @@ function sampleGrid(arr,x,z){
 }
 function clearPatch(){
   if(LOC.mesh){ lScene.remove(LOC.mesh); LOC.mesh.geometry.dispose(); const u=LOC.mesh.material.uniforms;
-    [u.uSiteA!==lUni.uSiteA&&u.uSiteA.value, u.uSiteB!==lUni.uSiteB&&u.uSiteB.value, u.uDem.value, u.uAva!==lUni.uAva&&u.uAva.value, u.uSat!==lUni.uSat&&u.uSat.value, u.uGeo!==lUni.uGeo&&u.uGeo.value, u.uRiv!==lUni.uRiv&&u.uRiv.value].forEach(t=>{ if(t) t.dispose(); });
+    [u.uSiteA!==lUni.uSiteA&&u.uSiteA.value, u.uDem.value, u.uAva!==lUni.uAva&&u.uAva.value, u.uSat!==lUni.uSat&&u.uSat.value, u.uGeo!==lUni.uGeo&&u.uGeo.value, u.uRiv!==lUni.uRiv&&u.uRiv.value].forEach(t=>{ if(t) t.dispose(); });
     SAT.patchLabel=null; GEO.patch=null; LOC.mesh.material.dispose(); LOC.mesh=null; }
   lUni.uHole.value.set(0,0,0,0);
 }
@@ -1411,15 +1422,17 @@ async function selectLoc(id){
    What used to be the separate globe page: every current California AVA on the present-day globe,
    coloured by the expansion plan (assets/regions/order.json, scripts/region_order.py), with region
    names you can click to fly there. A planning layer, not legal boundaries. */
-const RGN={labels:[], fly:null, sel:null, order:[], live:REG.id==="mt_st_helena"?"napa_valley":REG.id, lives:new Set([REG.id==="mt_st_helena"?"napa_valley":REG.id, ...REG.parents]), want:null};
+const RGN={labels:[], pages:{}, fly:null, sel:null, order:[], live:REG.id==="mt_st_helena"?"napa_valley":REG.id, lives:new Set([REG.id==="mt_st_helena"?"napa_valley":REG.id, ...REG.parents]), want:null};
 const RG_COL={live:"#ffd27a", next:"#7fd1a8", later:"#9fb7ff"};
 function rgCentroid(rings){ let big=rings[0]; rings.forEach(r=>{ if(r.length>big.length) big=r; });
   let A=0,cx=0,cy=0; for(let i=0,j=big.length-1;i<big.length;j=i++){ const [x0,y0]=big[j],[x1,y1]=big[i], f=x0*y1-x1*y0; A+=f; cx+=(x0+x1)*f; cy+=(y0+y1)*f; }
   return Math.abs(A)<1e-12 ? big[0] : [cx/(3*A), cy/(3*A)]; }
 (async function(){
   try{
-    const [av,ord]=await Promise.all([fetch("assets/globe/ca_avas.json").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
-      fetch("assets/regions/order.json").then(r=>r.ok?r.json():{order:[]}).catch(()=>({order:[]}))]);
+    const [av,ord,idx]=await Promise.all([fetch("assets/globe/ca_avas.json").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
+      fetch("assets/regions/order.json").then(r=>r.ok?r.json():{order:[]}).catch(()=>({order:[]})),
+      fetch("assets/regions/index.json").then(r=>r.ok?r.json():{regions:[]}).catch(()=>({regions:[]}))]);
+    (idx.regions||[]).forEach(g=>[g.id,...(g.parents||[])].forEach(id=>RGN.pages[id]=g.id));   // which page opens each mapped AVA
     RGN.order=ord.order||[]; const rank={}; RGN.order.forEach((o,i)=>rank[o.id]=i);
     (ord.params&&ord.params.mapped||"").split(",").filter(Boolean).forEach(id=>RGN.lives.add(id));
     const kind=id=> RGN.lives.has(id) ? "live" : rank[id]===undefined ? null : rank[id]<3 ? "next" : "later";
@@ -1435,7 +1448,7 @@ function rgCentroid(rings){ let big=rings[0]; rings.forEach(r=>{ if(r.length>big
     const t=new THREE.CanvasTexture(cv); t.flipY=false; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); gUni.uAvG.value=t;
     // clickable names: the live region and the next dozen in the plan
     const byId=Object.fromEntries(av.avas.map(a=>[a.id,a]));
-    [...new Set([RGN.live, ...REG.parents]), ...RGN.order.slice(0,12).map(o=>o.id)].forEach((id,i)=>{ const a=byId[id]; if(!a) return;
+    [...new Set([RGN.live, ...REG.parents, ...(idx.regions||[]).map(g=>g.id)]), ...RGN.order.slice(0,12).map(o=>o.id)].forEach((id,i)=>{ const a=byId[id]; if(!a) return;
       const [lon,lat]=rgCentroid(a.rings), k=kind(id), e=document.createElement("button");
       e.className="plc rgn"; e.style.setProperty("--c",RG_COL[k]); e.textContent=a.name; e.hidden=true; $("plcs").appendChild(e);
       const q={id, name:a.name, lat, lon, k, i:rank[id], rule:(RGN.order[rank[id]]||{}).rule, cu:(RGN.order[rank[id]]||{}).close_ups||[], size:(RGN.order[rank[id]]||{}).size_km||40, el:e, w:a.name.length*7+16};
@@ -1462,7 +1475,9 @@ function rgFly(lat,lon,dist,onEnd){ autoCam=false; RGN.fly={lat,lon,dist,t:0,dur
 function rgOverview(){ RGN.sel=null; if(ageOf(p)>0.5) { goTo(CH.length-1); } lastCh=-1; rgFly(38.3,-121.9,650); }   // the North Coast, where the plan starts
 function rgHome(){ RGN.sel=null; lastCh=-1; $("cAct").hidden=true; rgFly(null,null,0,()=>{ autoCam=true; }); }
 function rgSelect(q){
-  if(RGN.lives.has(q.id)){ rgHome(); return; }
+  if(RGN.lives.has(q.id)){ const pg=RGN.pages[q.id], here=REG.id==="mt_st_helena"?"napa_valley":REG.id;
+    if(pg&&pg!==here){ const u=new URLSearchParams(location.search); u.set("region",pg); u.delete("site"); u.delete("loc"); u.delete("view"); location.search=u.toString(); return; }   // another mapped region: open its page
+    rgHome(); return; }
   RGN.sel=q; if(ageOf(p)>0.5) goTo(CH.length-1);
   rgFly(q.lat,q.lon,Math.max(60,q.size*1.8));
   setTimeout(()=>{ // after goTo's card swap
@@ -1639,7 +1654,7 @@ function driveLocalCam(a,hc,dt){
   if(!reduce) orbit += dt*0.045*(playing?1:0.6);
   const t=sm(170,0,a), kL=LEXT/30;
   // volcano chapters frame the summit; the ocean era and today frame the whole region
-  const focus=sm(0.05,0.6,a);   // the Mount St. Helena block from the dive until the last million years; the whole region today
+  const focus=SUMMIT_IN?sm(0.05,0.6,a):0;   // the Mount St. Helena block from the dive until the last million years; the whole region today
   let tx=lerp(CXm,0,focus), tz=lerp(CZm,0,focus), dist=lerp(lerp(48,27,t)*kL*0.95, lerp(48,27,t), focus), elev=lerp(0.4,0.34,t),   /* low enough to keep the horizon, and the globe around the block, in view */ ty=Math.max(0.3,hc*VE*0.45*focus), lift=hc*0.4;
   const L=LOC.cur;
   if(L){ // a chosen place: frame it close, whatever the era
@@ -1680,10 +1695,13 @@ function chapterIndex(pp){ let k=0; for(let i=0;i<CH.length;i++) if(CH[i].p<=pp+
 function renderTicks(){ $("ticks").innerHTML = CH.map((c,i)=>`<button class="tick${c.key?" key":" minor"}" data-i="${i}" style="left:${(c.p*100).toFixed(2)}%" aria-label="Jump to ${c.tag}: ${c.t}"><span>${c.tag}</span></button>`).join(""); }
 renderTicks();
 // Load the data copies; keep the built-in ones on any failure or on data the viewer can't use.
-fetch("../SCENES.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(m=>{
-  const list=m.chapters||[];
+// an autopilot region keeps the shared planet-scale chapters it lists and adds its own (data/regions/<id>/scenes.json)
+Promise.all([fetch("../SCENES.json").then(r=>r.ok?r.json():Promise.reject(r.status)),
+             OWN ? fetch("../data/regions/"+REG.id+"/scenes.json").then(r=>r.ok?r.json():null).catch(()=>null) : null]).then(([m,own])=>{
+  let list=m.chapters||[];
+  if(own){ const keep=new Set((own.shared&&own.shared.ids)||[]); list=list.filter(c=>keep.has(c.id)).concat(own.chapters||[]).sort((x,y)=>y.age_ma-x.age_ma); }
   if(list.length<2 || list.some(c=>!VC2CLS[c.visual_class] || typeof c.age_ma!=="number")) throw "unusable chapters";
-  CH.splice(0,CH.length,...list.map(toCh)); prepChapters(); renderTicks(); lastCh=-1; DATA.chapters="SCENES.json";
+  CH.splice(0,CH.length,...list.map(toCh)); prepChapters(); renderTicks(); lastCh=-1; DATA.chapters=own?"SCENES.json + data/regions/"+REG.id+"/scenes.json":"SCENES.json";
 }).catch(()=>{});
 fetch("../data/plates/stylized.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{
   const L=d.plates||[];
@@ -1947,8 +1965,7 @@ function avaCard(a,d){
 }
 /* Masks for the site story on the close-up surface (SITE_GLSL): built in the browser from files already here.
    A (on the close-up grid): r young deposits (SIM 2956 Q units, the close-up's geology), g height above the nearest
-   channel in m/10 (this close-up's drainage, channels draining 0.4 km² or more), b USDA CDL grapes 2024, a SFEI oak
-   savanna. B (1024²): SFEI 1800s channels and wet habitats. */
+   channel in m/10 (this close-up's drainage, channels draining 0.4 km² or more), b USDA CDL grapes 2024. */
 const SEVO={ok:false, id:null};
 function loadImg(src){ return new Promise((ok,no)=>{ const im=new Image(); im.onload=()=>ok(im); im.onerror=no; im.src=src; }); }
 async function buildSiteLayers(q,mat,nx,nzz,h5,dr){
@@ -1978,28 +1995,10 @@ async function buildSiteLayers(q,mat,nx,nzz,h5,dr){
     const c=cv(nx,nzz), g=c.getContext("2d"); g.imageSmoothingEnabled=false;
     g.drawImage(im,(E0-bb[0])*kx,(bb[3]-N0)*ky,WE*kx,HN*ky,0,0,nx,nzz); const px=g.getImageData(0,0,nx,nzz).data;
     for(let i=0;i<n;i++) if(px[i*4+3]>128) A[i*4+2]=255; }).catch(()=>{}));
-  // SFEI 1800s landscape: oak savanna into A, channels and wet habitats into B
-  const cB=cv(1024,1024), gB=cB.getContext("2d");
-  tasks.push(fetch("assets/regions/"+REG.id+"/historical_ecology.json").then(r=>r.ok?r.json():null).then(h=>{ if(!h) return;
-    const cO=cv(nx,nzz), gO=cO.getContext("2d");
-    const path=(g,arr,k0,W,H)=>{ let x=arr[k0], y=arr[k0+1]; g.moveTo((x-E0)/WE*W,(N0-y)/HN*H);
-      for(let k=k0+2;k<arr.length;k+=2){ x+=arr[k]; y+=arr[k+1]; g.lineTo((x-E0)/WE*W,(N0-y)/HN*H); } };
-    const HC=h.classes.habitats, oak=new Set(["Valley Oak Savanna","Live Oak Savanna"]);
-    const wetC={"Wet Meadow":"rgba(120,150,90,.55)","Valley Freshwater Marsh":"rgba(80,120,95,.7)","Willow Grove":"rgba(60,95,45,.75)",
-      "Broad Riparian Forest":"rgba(45,80,40,.8)","Perennial Freshwater Pond":"rgba(60,110,140,.85)","Vernal Pool/Swale Area":"rgba(110,140,130,.5)","Braided Channel":"rgba(150,140,115,.7)"};
-    h.habitats.forEach(r=>{ const nm=HC[r[0]];
-      if(oak.has(nm)){ gO.beginPath(); for(let k=3;k<r.length;k++) path(gO,r[k],0,nx,nzz); gO.fillStyle="#fff"; gO.fill("evenodd"); }
-      else if(wetC[nm]){ gB.beginPath(); for(let k=3;k<r.length;k++) path(gB,r[k],0,1024,1024); gB.fillStyle=wetC[nm]; gB.fill("evenodd"); } });
-    const CC=h.classes.channels, pxm=1024/WE;
-    gB.lineCap=gB.lineJoin="round";
-    h.channels.forEach(r=>{ const nm=CC[r[0]]; if(/Tidal|Paleo/.test(nm)) return;
-      gB.beginPath(); path(gB,r,3,1024,1024); gB.strokeStyle="rgba(70,130,170,.95)"; gB.lineWidth=Math.max(1.2,(nm==="Mainstem Channel"?14:6)*pxm); gB.stroke(); });
-    const px=gO.getImageData(0,0,nx,nzz).data; for(let i=0;i<n;i++) A[i*4+3]=px[i*4+3]; }).catch(()=>{}));
   await Promise.all(tasks);
   if(mat!==(LOC.mesh&&LOC.mesh.material)) return;
   const tA=new THREE.DataTexture(A,nx,nzz,THREE.RGBAFormat); tA.magFilter=tA.minFilter=THREE.LinearFilter; tA.needsUpdate=true;
-  const tB=new THREE.CanvasTexture(cB); tB.flipY=false; tB.minFilter=THREE.LinearFilter; tB.generateMipmaps=false;
-  mat.uniforms.uSiteA={value:tA}; mat.uniforms.uSiteB={value:tB};
+  mat.uniforms.uSiteA={value:tA};
   mat.uniforms.uSiteExt={value:new THREE.Vector4(b.x0-cx/2,b.z0-cz/2,b.x1-b.x0+cx,b.z1-b.z0+cz)};
   mat.uniformsNeedUpdate=true; SEVO.ok=true; if(SITE.mode) siteReplay();   // start the story once the map can show it
 }
@@ -2081,11 +2080,11 @@ function drawSiteSection(){
     g.globalAlpha=1; });
   // caption for the step being shown
   const cr=sec.streams.filter(c=>!c.name).sort((a,b)=>Math.abs(a.offset_m)-Math.abs(b.offset_m))[0], nr=sec.streams.filter(c=>c.name).sort((a,b)=>Math.abs(a.offset_m)-Math.abs(b.offset_m))[0];
-  const tail=` Map: fan and floods drawn on the mapped young deposits (SIM 2956) and today's terrain, spread and timing illustrated; 1800s channels, wetlands and oak savanna from SFEI; vineyards where USDA CDL maps grapes in 2024. Layers: USDA series description, typical pedon (not a pit at this vineyard). Units: ${d.geology.label}. Deposit thickness and timing illustrated. Vertical ×${ve.toFixed(0)}.`;
+  const tail=` Map: fan and floods drawn on the mapped young deposits (SIM 2956) and today's terrain, spread and timing illustrated; vineyards where USDA CDL maps grapes in 2024. Layers: USDA series description, typical pedon (not a pit at this vineyard). Units: ${d.geology.label}. Deposit thickness and timing illustrated. Vertical ×${ve.toFixed(0)}.`;
   const note = tau<0.10 ? "First the hills: older rock on the flanks of the valley (USGS map units)."
     : tau<0.58 ? "Creeks from the western hills spread gravel, sand and silt over the valley floor and build the fan (Qf); on the map, braided channels sweep across it. The lowest soil layers are that stream sand and gravel."
     : tau<0.76 ? `Floods lay loam over old ground surfaces and bury two older topsoils. Channels today: ${cr?"a creek "+siteKm(cr.offset_m)+(cr.offset_m<0?" SW":" NE"):""}${cr&&nr?", ":""}${nr?"the "+nr.name+" "+siteKm(nr.offset_m)+(nr.offset_m<0?" SW":" NE"):""} (USGS NHD).`
-    : "Soil forms in the top loam under grassland and valley oak savanna, with the 1800s creeks and wetlands (SFEI); then vineyard blocks go in. Today's vineyard soil. The buried gravel is an old stream bed; exactly where that channel ran under the vineyard is not mapped yet."+tail;
+    : "Soil forms in the top loam under grassland and scattered oaks (illustrated); then vineyard blocks go in. Today's vineyard soil. The buried gravel is an old stream bed; exactly where that channel ran under the vineyard is not mapped yet."+tail;
   if($("xsNote").textContent!==note) $("xsNote").textContent=note;
 }
 
@@ -2352,7 +2351,7 @@ function frame(now){
     { const xd=$("xdot"); let vis=xs.open&&!far; if(vis){ pl3.set(XS_X,Math.max(xsHs[XS_I0],0)*VE+0.06,XS_Z).project(lCam); vis=pl3.z<1;
         if(vis){ xd.style.left=((pl3.x+1)/2*innerWidth)+"px"; xd.style.top=((1-pl3.y)/2*innerHeight)+"px"; } } xd.hidden=!vis; }
     pv.set(0,st.hc*VE+0.35,0).project(lCam);
-    pin.hidden = pv.z>1 || far;
+    pin.hidden = pv.z>1 || far || !SUMMIT_IN;
     { const sp=$("spin"); let vis=!!SITE.cur&&a<0.06&&!far;
       if(vis){ const G=SITE.cur.section.ground_m; pl3.set(SITE.sx,G[G.length>>1]/1000*VE+0.02,SITE.sz).project(lCam); vis=pl3.z<1;
         if(vis){ sp.style.left=((pl3.x+1)/2*innerWidth)+"px"; sp.style.top=((1-pl3.y)/2*innerHeight-6)+"px";
