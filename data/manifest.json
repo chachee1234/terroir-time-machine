@@ -619,21 +619,6 @@
           "sha256": "ecea373238c900900ea8d1656d54b8a16d1faa0174a3b116dae2b27263b9f2ae"
         }
       ]
-    },
-    {
-      "id": "napa_valley-sfei-historical-ecology",
-      "source": "San Francisco Estuary Institute 2011, Napa Valley Historical Ecology Atlas GIS data (owner upload)",
-      "raw_file": "/mnt/project-files/uploads/hearth/6449b4f5-304d-462e-91f1-428bb5321496",
-      "raw_sha256": "de76c4d3e5829bed3eb33d87413af659b240da5827b1833198fe30ca47b11eb1",
-      "bytes": 2422448,
-      "fetched": "2026-10-01",
-      "rights": "SFEI 2011, GNU GPL v3 or later; credit San Francisco Estuary Institute (SOURCES.md G31)",
-      "derived": [
-        {
-          "file": "prototype/assets/regions/napa_valley/historical_ecology.json",
-          "sha256": "ca99a45871b01e5cc0432bc656c877b9cc953338eb972becbf3c91d3e8716294"
-        }
-      ]
     }
   ]
 }

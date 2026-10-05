@@ -345,3 +345,8 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 ## 2026-10-05 — Audit #34 hosts approved
 - Owner approved all five new download hosts flagged by the first working weekly audit (#34), plus the viewer's CDN loads; listed under AUTOPILOT.md "Allowed sources" with their SOURCES.md entries. GPL bundling of SFEI G31 into the share HTML recorded there as an open owner decision.
 - Next: owner decides the GPL bundling question; next Sunday's audit should no longer flag these hosts.
+
+## 2026-10-05 — SFEI data removed (owner decision)
+- Owner: do not use SFEI (GPL v3). Removed `historical_ecology.json`, `make_historical_ecology.py` and its test, the Corison site's `historical` block and S9, the manifest entry and the sources-page row. SOURCES.md G31 marked withdrawn; AUTOPILOT.md lists SFEI as not allowed and other GPL sources as needing an owner instruction. The pre-farming landscape is now a labelled gap.
+- Checks: all 18 `scripts/test_*.py` pass; `python3 scripts/validate.py` PASS; headless load of `sources.html` and `timemachine.html` shows no new errors (one remote 404 on sources.html also happens on main).
+- Open PRs #24 and #25 (and #28's branch) still carry SFEI in their viewer and data; they need the same removal before merging. Share HTML files rebuilt without SFEI.
