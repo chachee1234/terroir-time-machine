@@ -43,6 +43,7 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ github.token }}
+          show_full_output: true
           prompt: |
             You are the weekly architecture auditor for Terroir Time Machine.
             Review ONLY the changes in .audit/diff.patch (the past 7 days). Do NOT review the entire repo.
