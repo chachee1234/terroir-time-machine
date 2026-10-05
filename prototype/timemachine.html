@@ -119,6 +119,31 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .note a{color:var(--ink)}
 .toast{position:absolute;z-index:6;left:50%;top:calc(56px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:7px 12px;font-size:13px;pointer-events:none;transition:opacity .4s ease}
 .xsec .foot{padding:4px 12px 8px;font-size:11px;color:var(--muted);line-height:1.35}
+.xsteps{padding:6px 12px 2px;border-top:1px solid var(--line)}
+.xsteps .row{display:flex;align-items:center;gap:6px}
+.xsteps ol{display:flex;flex:1;gap:3px;margin:0;padding:0;list-style:none}
+.xsteps ol li{flex:1}
+.xsteps ol button{width:100%;min-height:28px;padding:3px 2px 2px;background:none;border:0;border-top:3px solid rgba(255,255,255,.14);color:var(--muted);font:inherit;font-size:10.5px;letter-spacing:.03em;cursor:pointer;transition:color .3s,border-color .3s}
+.xsteps ol button.done{border-top-color:rgba(255,122,47,.45)}
+.xsteps ol button[aria-current="step"]{border-top-color:var(--magma);color:var(--ink)}
+.xsteps .nav{background:none;border:1px solid var(--line);color:var(--ink);font:inherit;font-size:11.5px;min-height:28px;padding:0 9px;border-radius:4px;cursor:pointer;white-space:nowrap}
+.xsteps .nav:disabled{opacity:.35;cursor:default}
+.xsteps .nav.go{border-color:var(--magma);color:var(--magma)}
+.xsteps .nav.go.wait{animation:xsPulse 1.6s ease-in-out infinite}
+@keyframes xsPulse{50%{background:rgba(255,122,47,.16)}}
+.xsteps h3{margin:7px 0 2px;font-size:13.5px;font-weight:600;color:var(--ink)}
+.xsteps h3 span{font:500 11px var(--mono);color:var(--magma);margin-right:6px}
+.xsteps p{margin:0;font-size:12px;line-height:1.45;color:var(--ink);max-height:118px;overflow:auto;transition:opacity .35s}
+.xsteps p em{font-style:normal;color:var(--muted)}
+.xskey{margin:6px 0 0;font-size:10.8px;color:var(--muted);line-height:1.5}
+.xskey div{display:flex;flex-wrap:wrap;align-items:center;gap:1px 9px}
+.xskey b{font-weight:600;color:var(--ink);margin-right:2px}
+.xskey span{white-space:nowrap;transition:opacity .4s}
+.xskey span.off{opacity:.3}
+.xskey i{display:inline-block;width:11px;height:9px;margin-right:4px;vertical-align:-1px;border-radius:2px;background:var(--c);box-shadow:0 0 0 1px rgba(0,0,0,.45)}
+@media (prefers-reduced-motion:reduce){.xsteps .nav.go.wait{animation:none}}
+@media (max-height:860px){.xsec.site canvas{height:240px}}
+@media (max-width:640px){.xsec.site canvas{height:180px} .xsteps p{max-height:80px} .xsteps ol button{font-size:9.5px;letter-spacing:0}}
 body.xs-open .compass{top:calc(var(--xsb,320px) + 10px)}
 body.xs-open .legend{top:calc(var(--xsb,320px) + 82px)}
 body.xs-open .locator{display:none}
@@ -218,8 +243,14 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   <div class="foot" id="sdNote"></div>
 </aside>
 <aside class="xsec" id="xsec" hidden aria-label="Cross-section under Mount St. Helena">
-  <header><span><b>Cross-section</b> · <span id="xsHead">SW to NE through the site</span></span><span><button class="xsp" id="xsPlay" hidden aria-label="Play the layers again">Replay</button><button id="xsX" aria-label="Close cross-section">×</button></span></header>
+  <header><span><b>Cross-section</b> · <span id="xsHead">SW to NE through the site</span></span><span><button class="xsp" id="xsPlay" hidden aria-label="Start the layers again from step 1">Start over</button><button id="xsX" aria-label="Close cross-section">×</button></span></header>
   <canvas id="xsCv"></canvas>
+  <div class="xsteps" id="xsSteps" hidden>
+    <div class="row"><button class="nav" id="xsPrev" aria-label="Previous step">◂</button><ol id="xsDots" aria-label="Steps in how the ground formed"></ol><button class="nav go" id="xsNext">Next ▸</button></div>
+    <h3 id="xsT"></h3>
+    <p id="xsD" aria-live="polite"></p>
+    <div class="xskey" id="xsKey" aria-label="Color key"><div id="xsKeySec"></div><div id="xsKeyMap"></div></div>
+  </div>
   <div class="foot" id="xsNote"></div>
 </aside>
 <aside class="places" id="places" hidden aria-label="Go to a place in the frame">
@@ -905,7 +936,7 @@ vec3 siteSurface(vec3 col, float slope, inout float wet){
   float young=smoothstep(0.3,0.7,A.r), hand=A.g*25.5, vineM=smoothstep(0.3,0.7,A.b);
   vec2 lm=(vW.xz-uSiteP)*1000.0;                                   // metres from the site, x east, y south
   float o=dot(lm,vec2(0.766,-0.643)), cr=dot(lm,vec2(0.643,0.766)); // along the section (SW -, NE +) and across it
-  float T=uSiteT, kSoil=smoothstep(0.76,0.92,T), kVine=smoothstep(0.88,0.97,T), kNow=smoothstep(0.965,1.0,T);
+  float T=uSiteT, kSoil=smoothstep(0.76,0.88,T), kVine=smoothstep(0.88,0.955,T), kNow=smoothstep(0.96,1.0,T);
   float mpp=max(length(fwidth(lm)),0.01), fine=1.0-smoothstep(1.2,6.0,mpp), mid=1.0-smoothstep(4.0,20.0,mpp);
   float nB=fbm(vec3(lm*0.0035,1.7)), nM=noise(vec3(lm*0.06,2.3)), nF=noise(vec3(lm*0.45,3.1)), nG=noise(vec3(lm*2.1,4.9));
   // hills: chaparral and oak woodland on the mapped older rock
@@ -917,7 +948,7 @@ vec3 siteSurface(vec3 col, float slope, inout float wet){
   float front=uSiteFront+(nB-0.5)*320.0, behind=front-o, fanOn=step(0.10,T);
   float gravelT=mix(0.5,nG,fine);
   vec3 gravel=mix(vec3(0.68,0.64,0.56),vec3(0.86,0.82,0.73),gravelT)*(1.0-0.35*step(0.82,nG)*fine);
-  float actv=smoothstep(-30.0,30.0,behind)*(1.0-smoothstep(350.0,1300.0,behind))*(1.0-smoothstep(0.56,0.62,T));
+  float actv=smoothstep(-30.0,30.0,behind)*(1.0-smoothstep(350.0,1300.0,behind))*(1.0-smoothstep(0.58,0.63,T));
   float wob=(noise(vec3(o*0.02,cr*0.02,5.0))-0.5)*0.06;
   float br=noise(vec3(o*0.0035,cr*0.016,T*5.0)), braid=1.0-smoothstep(0.012,0.03,abs(br-0.5+wob));
   float br2=noise(vec3(o*0.007+3.0,cr*0.03,T*8.0)); braid=max(braid,(1.0-smoothstep(0.008,0.02,abs(br2-0.5+wob)))*0.75);
@@ -932,7 +963,7 @@ vec3 siteSurface(vec3 col, float slope, inout float wet){
   float wFan=braid*actv*young;
   yc=mix(yc,water,wFan*0.9);
   // creeks off the hills while the fan builds (the close-up's own drainage)
-  float cW=smoothstep(0.6,0.78,vFlow)*smoothstep(0.08,0.14,T)*(1.0-smoothstep(0.55,0.62,T));
+  float cW=smoothstep(0.6,0.78,vFlow)*smoothstep(0.08,0.16,T)*(1.0-smoothstep(0.58,0.63,T));
   // two floods: water rises over ground within a few metres of a channel, then leaves loam behind
   float p1=smoothstep(0.585,0.605,T)*(1.0-smoothstep(0.635,0.66,T)), p2=smoothstep(0.675,0.695,T)*(1.0-smoothstep(0.725,0.75,T));
   float lvl=4.5*max(p1,p2*1.15), lowg=1.0-smoothstep(3.5,5.5,hand);
@@ -960,7 +991,7 @@ vec3 siteSurface(vec3 col, float slope, inout float wet){
   c=mix(c,mix(vec3(0.16,0.22,0.11),vec3(0.27,0.33,0.16),nG),crown*mix(0.25,1.0,mid));
   // vineyards: rows 2.4 m apart in blocks planted one after another, where CDL maps grapes today
   vec2 blk=floor((lm+vec2(37.0,11.0))/140.0); float bh=h21(blk+5.5), ang=h21(floor((lm+vec2(201.0,77.0))/430.0))>0.45?0.70:2.27;
-  float on=vineM*step(bh*0.9,kVine-0.05);
+  float on=vineM*smoothstep(bh*0.85,bh*0.85+0.1,kVine);   // blocks fade in one after another
   vec2 rd=vec2(cos(ang),sin(ang)); float rp=dot(lm,rd)/2.4, fw=fwidth(rp);
   float row=1.0-smoothstep(0.18-fw,0.18+fw,abs(fract(rp)-0.5)); row=mix(row,0.36,smoothstep(0.2,0.5,fw));   // rows fade to their average when too fine to draw
   vec3 vineC=mix(vec3(0.55,0.47,0.35),vec3(0.24,0.36,0.15)*(0.85+0.3*nG*fine),row);
@@ -1896,9 +1927,26 @@ function wrapText(g,t,x,y,mw,lh){ const ws=t.split(" "); let line="";
    valley through the site, and ground elevation from the site's 10 m close-up. The panel lays the layers down in
    the order they formed. Measured: horizons and their depths, map units, channels, ground. Illustrated, and
    labelled so: how thick the young deposits are and when each step happened. */
-const SITE={cur:null, q:null, on:false, t0:0, sx:0, sz:0, mode:false, tau:null};   // tau: pin the animation (debug and tests)
-const SITE_DUR=22;   // seconds for the layers story, in the section and on the map
-function siteTau(){ return SITE.tau!=null?SITE.tau:reduce?1:clamp((performance.now()-SITE.t0)/1000/SITE_DUR,0,1); }
+const SITE={cur:null, q:null, on:false, t0:0, sx:0, sz:0, mode:false, tau:null, ph:0, shown:-1};   // tau: pin the animation (debug and tests)
+/* The story runs in steps and stops at the end of each one, so a step can be read before the next starts.
+   Each step plays its own stretch of the shared clock (tau 0..1, used by the section and the map shader alike) with
+   an ease in and out; Next plays the following step, a step button replays that step, Start over goes back to 1. */
+const SITE_PH=[
+  {id:"hills", name:"Hills",     title:"The older rock",                           t0:0,    t1:0.10, dur:3.5},
+  {id:"fan",   name:"Gravel fan", title:"Creeks build a gravel fan",               t0:0.10, t1:0.58, dur:9},
+  {id:"flood", name:"Floods",    title:"Floods lay loam and bury two topsoils",    t0:0.58, t1:0.76, dur:8},
+  {id:"soil",  name:"Soil",      title:"Soil forms in the top loam",               t0:0.76, t1:0.88, dur:6},
+  {id:"vines", name:"Vineyard",  title:"Vineyard blocks go in",                    t0:0.88, t1:0.96, dur:5},
+  {id:"today", name:"Today",     title:"Today",                                    t0:0.96, t1:1,    dur:3}];
+const siteEase=u=>0.5-0.5*Math.cos(Math.PI*u);   // gentle in and out, no sudden speed-up mid-step
+function siteTau(){
+  if(SITE.tau!=null) return SITE.tau;
+  const P=SITE_PH[SITE.ph]; if(reduce) return P.t1;
+  return P.t0+(P.t1-P.t0)*siteEase(clamp((performance.now()-SITE.t0)/1000/P.dur,0,1));
+}
+function sitePhaseAt(tau){ if(SITE.tau==null) return SITE.ph; for(let i=0;i<SITE_PH.length;i++) if(tau<=SITE_PH[i].t1+1e-6) return i; return SITE_PH.length-1; }
+function sitePlaying(){ return SITE.tau==null&&!reduce&&(performance.now()-SITE.t0)/1000<SITE_PH[SITE.ph].dur; }
+function siteGo(i){ SITE.ph=clamp(i,0,SITE_PH.length-1); SITE.t0=performance.now(); }
 function siteSelect(q){
   SITE.q=q;
   if(!q){ if(SITE.cur){ SITE.cur=null; SITE.on=false; lastCh=-1; $("spin").hidden=true; xsSet(0,0); } return; }
@@ -1909,8 +1957,11 @@ function siteSelect(q){
     setTimeout(siteCard, reduce?0:450);
   }).catch(()=>{ SITE.cur=null; SITE.on=false; });
 }
-function siteReplay(){ SITE.t0=performance.now(); }
+function siteReplay(){ siteGo(0); }
 $("xsPlay").onclick=siteReplay;
+$("xsNext").onclick=()=>{ if(SITE.ph<SITE_PH.length-1) siteGo(SITE.ph+1); else siteGo(0); };
+$("xsPrev").onclick=()=>siteGo(SITE.ph-1);
+SITE_PH.forEach((P,i)=>{ const li=document.createElement("li"), b=document.createElement("button"); b.textContent=P.name; b.title=P.title; b.onclick=()=>siteGo(i); li.appendChild(b); $("xsDots").appendChild(li); });
 const siteKm=m=>(Math.abs(m)/1000).toFixed(1).replace(/\.0$/,"")+" km";
 function siteCard(){
   const d=SITE.cur; if(!d||ageOf(p)>0.06) return; SITE.card=true; AVAP.cur=null; $("cProf").hidden=true;
@@ -2014,6 +2065,85 @@ function siteGloss(h){
   return "";
 }
 function siteRand(i){ const x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); }
+/* Step text and color key for the site story. Facts come from the site file (soil series description, map units,
+   mapped channels, claims with their sources, climate); each step says what is measured and what is illustrated. */
+const siteHzPh=h=>h.buried?2:/^[A-Z]*C\d*$/.test(h.name.replace(/^I+/,""))||h.gravel_pct?1:3;   // which step laid each layer down
+const siteYoung=u=>/^Q/.test(u)&&u!=="Qls";
+const SITE_MAPKEY=[   // colours as drawn on the close-up surface (SITE_GLSL), and the steps they show in
+  {c:"#4a4c2c", t:"hills: chaparral and oak woodland", on:[0,1,2,3,4]},
+  {c:"#66663f", t:"older valley floor", on:[0,1]},
+  {c:"#c4baa5", t:"new gravel", on:[1]},
+  {c:"#4d616b", t:"creeks and braided channels", on:[1]},
+  {c:"#636963", t:"floodwater", on:[2]},
+  {c:"#968b73", t:"flood loam", on:[2]},
+  {c:"#3c352d", t:"dark topsoil, then buried", on:[2]},
+  {c:"#9e8c57", t:"grassland", on:[3]},
+  {c:"#33461f", t:"oaks", on:[0,1,2,3]},
+  {c:"repeating-linear-gradient(90deg,#3d5c26 0 2px,#8c7859 2px 4px)", t:"vine rows", on:[4,5]},
+  {c:"linear-gradient(135deg,#6f7d55,#a49a7c)", t:"satellite photo", on:[5]},
+  {c:"#3484c8", t:"rivers and creeks today (NHD)", on:[3,4,5]}];
+function siteSentence(text,re){ const m=((text||"").replace(/\s+/g," ").match(/[^.]+\./g)||[]).find(x=>re.test(x)); return m?m.trim():""; }
+function siteHzText(h){ return `<b>${esc(h.name)}</b> ${h.top_cm}–${h.bottom_cm} cm, ${esc(h.texture)}`+(h.gravel_pct?` with about ${h.gravel_pct} % gravel`:"")+(h.moist?`, ${esc(h.moist)} moist`:""); }
+function siteStepText(i){
+  const d=SITE.cur, sec=d.section, hz=d.soil.horizons, src=k=>` <em>(${k})</em>`;
+  const units=[...new Set(sec.units.map(r=>r.ptype).filter(u=>u&&u!=="water"))];
+  const ys=units.filter(siteYoung), os=units.filter(u=>!siteYoung(u));
+  const near=f=>sec.streams.filter(f).sort((a,b)=>Math.abs(a.offset_m)-Math.abs(b.offset_m))[0];
+  const cr=near(c=>!c.name), nr=near(c=>c.name), dir=o=>o<0?"southwest":"northeast";
+  const claim=re=>d.claims.find(c=>re.test(c.text));
+  const list=p=>hz.filter(h=>siteHzPh(h)===p).reverse().map(siteHzText).join("; ");
+  const tx=d.soil.taxonomic_class||"";
+  switch(SITE_PH[i].id){
+  case "hills": return `Along this ${siteKm(2*sec.half_m)} line the hills on either side are mapped as ${os.join(", ")}, and below the map they are drawn as older rock. The valley floor between them is mapped as young deposits (${ys.join(", ")}); the vineyard is on ${esc(d.geology.at_site)}, alluvial fan deposits.${src("S5")} `
+    +`<em>Measured: the map units along the line. Illustrated: the vegetation, and the bare floor before the fan.</em>`;
+  case "fan": return `Creeks coming out of the western hills slow down on the flat valley floor and drop their gravel, sand and silt. Layer on layer, that builds a fan. On the map, braided channels sweep across it as it grows. `
+    +`The deepest layers in this soil are that stream gravel and sand: ${list(1)}.${src("S4")} `
+    +(siteSentence(d.soil.range,/rounded pebbles/)?`The soil survey: “${esc(siteSentence(d.soil.range,/rounded pebbles/))}” Rounded pebbles are worn by running water. `:"")
+    +`<em>Illustrated: how fast the fan grew and where the channels ran; the deposit is drawn ${30} m thick, which is not measured.</em>`;
+  case "flood": return `Between floods the ground stayed put long enough for dark topsoils to form. Then floods spread loam over them and buried them. Two buried topsoils are in this soil: ${list(2)}.${src("S4")} `
+    +`On the map, floodwater rises over the low ground nearest the channels, twice, and leaves pale loam behind. `
+    +(cr||nr?`Channels on this line today: ${cr?`a creek ${siteKm(cr.offset_m)} ${dir(cr.offset_m)}`:""}${cr&&nr?" and ":""}${nr?`the ${esc(nr.name)} ${siteKm(nr.offset_m)} ${dir(nr.offset_m)}`:""}.${src("S6")} `:"")
+    +`<em>Measured: the buried layers and their depths; which ground is low, from the 10 m terrain. Illustrated: the number and height of the floods on the map, and when they happened.</em>`;
+  case "soil": return `With the floods over, roots, rain and soil life turn the top loam into soil: ${list(3)}.${src("S4")} `
+    +(/clay films/.test(hz.map(h=>h.narrative).join(" "))?`The subsoil has thin clay coatings, washed down from above. `:"")
+    +(/Cumulic/.test(tx)&&/olls$/.test(tx)?`Its class, ${esc(tx.split(", ").pop())}, means a dark, rich topsoil (a Mollisol) in a dry-summer climate, thickened as new sediment kept arriving (cumulic). `:"")
+    +(siteSentence(d.soil.use,/Native vegetation/)?`${esc(siteSentence(d.soil.use,/Native vegetation/))}${src("S4")} `:"")
+    +`<em>Illustrated: the grassland and scattered oaks on the map, and when this happened.</em>`;
+  case "vines": { const p=claim(/1971/), b=claim(/1995/), ap=hz.find(h=>/^Ap/.test(h.name)), cl=d.climate;
+    return (p?`${esc(p.text)}${src(p.source)} `:"")+(b?`${esc(b.text)}${src(b.source)} `:"")
+    +(ap?`Plowing mixed the top ${ap.bottom_cm} cm into the Ap layer: ${esc(ap.texture)}, ${esc(ap.moist)} moist, pH ${ap.pH}.${src("S4")} `:"")
+    +(cl?`Climate here: ${Math.round(cl.ppt_mm)} mm of rain a year, mean ${cl.tmean_c} °C, Winkler ${esc(cl.winkler)} (${cl.gdd_f} degree-days, 1991–2020 averages).${src(cl.source)} `:"")
+    +`<em>Measured: where USDA CDL maps grapes in 2024. Illustrated: the order the blocks are planted.</em>`; }
+  default: { const r=claim(/river/i);
+    return `Today's satellite image comes back under the rows. ${esc(siteSentence(d.soil.drainage,/^Somewhat|drained;/))} ${esc(siteSentence(d.soil.drainage,/artificially drained/))}${src("S4")} `
+    +(r?`${esc(r.text)}${src(r.source)} `:"")
+    +`The buried gravel is an old stream bed; exactly where that channel ran under the vineyard is not mapped yet.`; }
+  }
+}
+function siteKeySection(){
+  const d=SITE.cur, sec=d.section, seen=new Set(), sw=(c,t)=>`<span><i style="--c:${c}"></i>${t}</span>`;
+  const us=sec.units.filter(r=>r.ptype&&r.color&&r.ptype!=="water"&&!seen.has(r.ptype)&&seen.add(r.ptype));
+  const yo=us.filter(r=>siteYoung(r.ptype)), ol=us.filter(r=>!siteYoung(r.ptype));
+  return `<b>Section</b>`+sw("repeating-linear-gradient(45deg,#4d5548 0 4px,#3a4036 4px 6px)","rock and fill below, not mapped")
+    +(yo.length?`<span>young deposits:</span>`+yo.map(r=>sw(r.color,esc(r.ptype))).join(""):"")
+    +(ol.length?`<span>hill units:</span>`+ol.map(r=>sw(r.color,esc(r.ptype))).join(""):"")
+    +sw((d.soil.horizons[0]||{}).rgb||"#352f29","soil")+sw("#3484c8","water")+`<span><i style="--c:none;box-shadow:none;color:#6fb6e8;width:auto">▼</i>channel today</span>`
+    +`<span><em>unit names: SIM 2956 pamphlet, not loaded yet</em></span>`;
+}
+function siteInfo(tau){
+  const i=sitePhaseAt(tau), P=SITE_PH[i], play=sitePlaying();
+  if(SITE.shown!==i||SITE.shownCur!==SITE.cur){
+    if(SITE.shownCur!==SITE.cur) $("xsKeySec").innerHTML=siteKeySection();
+    SITE.shown=i; SITE.shownCur=SITE.cur;
+    $("xsT").innerHTML=`<span>${i+1}/${SITE_PH.length}</span>${esc(P.title)}`;
+    $("xsD").innerHTML=siteStepText(i); $("xsD").scrollTop=0;
+    $("xsKeyMap").innerHTML=`<b>Map</b>`+SITE_MAPKEY.map(k=>`<span class="${k.on.includes(i)?"":"off"}"><i style="--c:${k.c}"></i>${k.t}</span>`).join("");
+    [...$("xsDots").children].forEach((li,j)=>{ const b=li.firstChild; b.classList.toggle("done",j<i); if(j===i) b.setAttribute("aria-current","step"); else b.removeAttribute("aria-current"); });
+    $("xsPrev").disabled=i===0;
+    $("xsNext").textContent=i<SITE_PH.length-1?`Next: ${SITE_PH[i+1].name} ▸`:"Start over ↺";
+  }
+  $("xsNext").classList.toggle("wait",!play);
+}
 function drawSiteSection(){
   const d=SITE.cur, sec=d.section, g=xs.ctx, W=xs.w, Hh=xs.h; if(!W) return;
   const now=performance.now(), tau=siteTau(), font=getComputedStyle(document.body).fontFamily;
@@ -2023,7 +2153,7 @@ function drawSiteSection(){
   const X=o=>6+(o+half)/(2*half)*(SW-6), Y=z=>8+(top-z)/(top-bot)*(ph-8);
   const ve=((ph-8)/(top-bot))/((SW-6)/(2*half));
   const off=i=>-half+2*half*i/(n-1), gAt=o=>{ const f=clamp((o+half)/(2*half)*(n-1),0,n-1), i=Math.min(n-2,Math.floor(f)), u=f-i; return G[i]*(1-u)+G[i+1]*u; };
-  const kFan=sm(0.10,0.58,tau), kRiv=sm(0.58,0.72,tau), kSoil=sm(0.76,0.92,tau), front=-half+(2*half+300)*kFan;
+  const kFan=sm(0.10,0.58,tau), kRiv=sm(0.58,0.72,tau), kSoil=sm(0.76,0.88,tau), front=-half+(2*half+300)*kFan;
   // the section line on the map: a low curtain along the cut through the site
   { const pa=xsLine.geometry.attributes.position, ht=Math.max(0.004,lCam.position.distanceTo(lCtl.target)*0.008);
     for(let i=0;i<XS_M;i++){ const o=-half+2*half*i/(XS_M-1), x=SITE.sx+0.766*o/1000, z=SITE.sz-0.643*o/1000, y=gAt(o)/1000*VE; pa.setXYZ(i*2,x,y,z); pa.setXYZ(i*2+1,x,y+ht,z); } pa.needsUpdate=true; }
@@ -2070,8 +2200,11 @@ function drawSiteSection(){
   const cx=SW+16, cw=colW-16, ct=22, cb=Hh-16, hz=d.soil.horizons, depth=hz.length?hz[hz.length-1].bottom_cm:150, Yc=cm=>ct+cm/depth*(cb-ct);
   g.fillStyle=XC.ink; g.font="600 10.5px "+font; g.textAlign="left"; g.fillText(`${(d.soil.series_name||"").replace(/^./,c=>c)[0]}${(d.soil.series_name||"").slice(1).toLowerCase()} soil · layers`,cx,ct-8);
   g.font="9.5px "+font; g.fillStyle=XC.mut; g.textAlign="right"; g.fillText("0",cx-3,Yc(0)+4); g.textAlign="left"; g.fillText(depth+" cm",cx,cb+11);
-  hz.forEach((h,i)=>{ const k=(hz.length-1-i)/Math.max(1,hz.length-1), t0=0.14+0.66*k, al=reduce?1:sm(t0,t0+0.06,tau); if(al<=0) return;
-    const y0=Yc(h.top_cm), y1=Yc(h.bottom_cm), sw=20, grow=reduce?1:sm(t0,t0+0.1,tau);
+  const cur=sitePhaseAt(tau), hl=SITE_PH[cur].id==="vines"?[0]:[];   // layers this step lays down (or, for the vineyard, plows) are outlined
+  hz.forEach((h,i)=>{ const ph=siteHzPh(h), grp=hz.map((x,j)=>j).filter(j=>siteHzPh(hz[j])===ph).reverse(), k=grp.indexOf(i), P=SITE_PH[ph];
+    const w=(P.t1-P.t0)/(grp.length+0.6), t0=P.t0+w*(k+0.3), al=reduce?(tau>=P.t1-1e-6?1:0):sm(t0,t0+w*0.6,tau); if(al<=0) return;
+    const y0=Yc(h.top_cm), y1=Yc(h.bottom_cm), sw=20, grow=reduce?1:sm(t0,t0+w,tau);
+    if(ph===cur||hl.includes(i)){ g.strokeStyle="#ff7a2f"; g.lineWidth=1.5; g.strokeRect(cx-1,y1-(y1-y0)*grow-1,sw+2,(y1-y0)*grow+1); }
     g.globalAlpha=al; g.fillStyle=h.rgb||"#5a4a38"; g.fillRect(cx,y1-(y1-y0)*grow,sw,(y1-y0)*grow-1);
     if(h.gravel_pct){ g.fillStyle="rgba(222,208,178,.95)"; const nG=Math.round(h.gravel_pct*(y1-y0)/12); for(let j=0;j<nG;j++){ g.beginPath(); g.arc(cx+2+siteRand(j+i*50)*(sw-4), y0+2+siteRand(j+i*50+17)*(y1-y0-4), 0.9+siteRand(j+i*9)*1.4,0,6.283); g.fill(); } }
     else if(/sand/.test(h.texture)){ g.fillStyle="rgba(222,208,178,.55)"; for(let j=0;j<40;j++) g.fillRect(cx+1+siteRand(j+i*70)*(sw-2), y0+1+siteRand(j+i*70+5)*(y1-y0-2), 1,1); }
@@ -2081,13 +2214,9 @@ function drawSiteSection(){
     g.fillText(fit(`${h.name} · ${h.texture}`),cx+sw+6,y0+10);
     if(two){ g.font="9.5px "+font; g.fillStyle=XC.mut; g.fillText(fit(`${h.top_cm}–${h.bottom_cm} cm · ${siteGloss(h)}`),cx+sw+6,y0+20.5); }
     g.globalAlpha=1; });
-  // caption for the step being shown
-  const cr=sec.streams.filter(c=>!c.name).sort((a,b)=>Math.abs(a.offset_m)-Math.abs(b.offset_m))[0], nr=sec.streams.filter(c=>c.name).sort((a,b)=>Math.abs(a.offset_m)-Math.abs(b.offset_m))[0];
-  const tail=` Map: fan and floods drawn on the mapped young deposits (SIM 2956) and today's terrain, spread and timing illustrated; vineyards where USDA CDL maps grapes in 2024. Layers: USDA series description, typical pedon (not a pit at this vineyard). Units: ${d.geology.label}. Deposit thickness and timing illustrated. Vertical ×${ve.toFixed(0)}.`;
-  const note = tau<0.10 ? "First the hills: older rock on the flanks of the valley (USGS map units)."
-    : tau<0.58 ? "Creeks from the western hills spread gravel, sand and silt over the valley floor and build the fan (Qf); on the map, braided channels sweep across it. The lowest soil layers are that stream sand and gravel."
-    : tau<0.76 ? `Floods lay loam over old ground surfaces and bury two older topsoils. Channels today: ${cr?"a creek "+siteKm(cr.offset_m)+(cr.offset_m<0?" SW":" NE"):""}${cr&&nr?", ":""}${nr?"the "+nr.name+" "+siteKm(nr.offset_m)+(nr.offset_m<0?" SW":" NE"):""} (USGS NHD).`
-    : "Soil forms in the top loam under grassland and scattered oaks (illustrated); then vineyard blocks go in. Today's vineyard soil. The buried gravel is an old stream bed; exactly where that channel ran under the vineyard is not mapped yet."+tail;
+  // sources for the whole story; the step text and color key sit above
+  const note=`Layers: USDA series description, typical pedon (not a pit at this vineyard). Units: ${d.geology.label}. Map: fan and floods drawn on the mapped young deposits (SIM 2956) and today's terrain, vineyards where USDA CDL maps grapes in 2024. Deposit thickness, spread and timing illustrated. Vertical ×${ve.toFixed(0)}.`;
+  siteInfo(tau);
   if($("xsNote").textContent!==note) $("xsNote").textContent=note;
 }
 
@@ -2293,7 +2422,7 @@ function frame(now){
     { const on=sm_&&SEVO.ok&&LOC.cur&&SEVO.id===LOC.cur.id, u=lUni; u.uSiteOn.value+=((on?1:0)-u.uSiteOn.value)*Math.min(1,dt*3);
       if(on){ const tau=siteTau(), half=SITE.cur.section.half_m; u.uSiteT.value=tau; u.uSiteFront.value=-half+(2*half+300)*sm(0.10,0.58,tau);
         u.uSiteP.value.set(SITE.sx,SITE.sz); const hz=SITE.cur.soil.horizons[0]; if(hz&&hz.rgb) u.uSoilC.value.set(hz.rgb); } }
-    if(sm_!==SITE.mode){ SITE.mode=sm_; xs.el.classList.toggle("site",sm_); $("xsPlay").hidden=!sm_; if(xs.open) xsSize(); if(sm_) siteReplay(); }
+    if(sm_!==SITE.mode){ SITE.mode=sm_; xs.el.classList.toggle("site",sm_); $("xsPlay").hidden=!sm_; $("xsSteps").hidden=!sm_; SITE.shownCur=null; if(xs.open) xsSize(); if(sm_) siteReplay(); }
     if(xs.open){ if(sm_){ $("xsHead").textContent="SW to NE through "+SITE.cur.name; drawSiteSection(); } else drawSection(a,w6); xsPlace(); } }
   updateSub3d(a,T);                        // subduction now plays on the globe itself; the panel opens only from the Plates chip
   if(sd.open){ sdDraw(a,T); xsPlace(); }
