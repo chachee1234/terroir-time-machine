@@ -270,6 +270,42 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Checked: unit tests and validate pass; Playwright screenshots (swiftshader) at 250, 150, 66, 30, 24, 21, 19, 16, 12, 8 Ma and today, no page errors.
 - Next smallest action: owner looks at the new share copy and PR #19.
 
+## Autopilot R4.1: Petaluma Gap region data (branch `autopilot`) — 2026-09-28
+- Daily routine run; `Autopilot: ON`; `autopilot` branch created from main (did not exist).
+- Added `data/regions/petaluma_gap.json`: Petaluma Gap AVA box plus 2 km (≈61 × 34 km), `utm_zone` 10, `anchor` = computed box centre (labelled as such).
+- `scripts/ava_extract.py` now writes a non-Napa region's viewer outlines to the region file's `ava_viewer` path and keys the manifest entry by region id; Napa's `prototype/assets/ava.json` is byte-identical. New test in `scripts/test_ava.py`.
+- Built terrain (436 × 242 mesh, 1024 × 568 shading, Sonoma Mountain close-up; 228 z13 tiles) and a 40 m Sentinel-2 texture (27 July 2026). SOURCES G24; manifest updated by the scripts.
+- Repairs: one. The first terrain fetch hit a transient empty reply (curl exit 52) on one tile; retried with the tile cache reused from the main worktree and it completed.
+- Commands: `curl -sSf -o data/raw/ava/avas.geojson <UC Davis avas.geojson>`; `python3 scripts/ava_extract.py --region data/regions/petaluma_gap.json --from-file data/raw/ava/avas.geojson`; `python3 scripts/fetch_tiles.py --region data/regions/petaluma_gap.json --frame-grid`; `python3 scripts/make_imagery_texture.py --region data/regions/petaluma_gap.json`; `python3 -m unittest discover -s scripts -p 'test_*.py'` (OK, 1 skipped); `python3 scripts/validate.py` (PASS).
+- Headless check: not run, because no page changed; the viewer does not load this region until step 3.
+- Next smallest action: R4.2, faults, towns and generic chapters for Petaluma Gap as region data.
+
+## Autopilot R4.2: Petaluma Gap faults, towns, chapters (branch `autopilot`) — 2026-09-29
+- Daily routine run; `Autopilot: ON`; main unchanged since yesterday, merged into `autopilot`; 1 step was awaiting review.
+- New `scripts/region_faults.py` (stdlib) clips the GEM active-faults file (G17) to a region frame into `<assets_dir>/faults.json`; tests in `scripts/test_region_faults.py`. Petaluma Gap: San Andreas (North Coast), Rodgers Creek–Healdsburg, Hayward (north), Bennett Valley.
+- Towns: gap, recorded in `prototype/assets/regions/petaluma_gap/places.json` (Natural Earth has none in the frame; GNIS/Census blocked). Needs an owner decision on another source (for example OpenStreetMap) if labels are wanted.
+- Chapters: `data/regions/petaluma_gap/scenes.json`, six shared planet-scale chapters by id, four gaps, two not applicable, one sourced "Today" card (AVA date and counties from UC Davis, terrain maximum from the G24 grid, fault names from G17).
+- Repairs: none.
+- Commands: `python3 scripts/region_faults.py --region data/regions/petaluma_gap.json --from-file <cached GEM geojson, SHA-256 37babb51…>`; `curl -sSf -o data/raw/ne/ne_10m_populated_places_simple.geojson <Natural Earth GitHub raw>` (SHA-256 matches G22); `python3 -m unittest discover -s scripts -p 'test_*.py'` (OK, 1 skipped); `python3 scripts/validate.py` (PASS).
+- Headless check: not run, because no page changed.
+- Next smallest action: R4.3, live marker, Places list, headless check and GeoLibre export for Petaluma Gap.
+
+## Autopilot R4.3: Petaluma Gap in the viewer (branch `autopilot`) — 2026-09-30
+- Daily routine run; `Autopilot: ON`; main unchanged, `autopilot` already current; 2 steps were awaiting review.
+- prototype/timemachine.html: for a region other than Napa or the 30 km block (`OWN`), loads `assets/regions/<id>/ava.json`, replaces the fault table with `faults.json`, and builds chapters from the shared ids plus `data/regions/<id>/scenes.json`. When Mount St. Helena lies outside the frame (`SUMMIT_IN` false) the camera stays on the frame centre and the summit pin is hidden. The subtitle shows the region name. The geology drape is only requested when the region index lists it.
+- New `prototype/assets/regions/index.json` (regions with a page, their parents and layers). The globe's regions layer labels every indexed region; clicking a mapped region that has another page opens `?region=<id>`.
+- `region_order.py --mapped` re-run with Petaluma Gap: next is Northern Sonoma. `geolibre_export.py` uses a region's own `faults.json` when present; `petaluma_gap.geolibre.json` added (Napa and Sonoma projects byte-identical). `build_share.py` bundles `data/regions/*/scenes.json`.
+- Places: the Places panel lists the region's close-up (Sonoma Mountain) from `detail/index.json`. The approximate town labels already in the viewer (G22: Petaluma, Rohnert Park, Glen Ellen, Sonoma) show where they fall in the frame; the Petaluma Gap `places.json` gap stands.
+- Checks: unit tests OK (1 skipped); validate PASS; headless Chromium (swiftshader) with no console errors and no failed requests: `?region=petaluma_gap` at 250 Ma, 20 Ma and today, default page at today, `?view=regions`, and the Petaluma Gap globe label opening `?region=petaluma_gap`.
+- Repairs: one. The first headless run logged a 404 for the absent geology legend; fixed by the index `layers` check.
+- Commands: `python3 scripts/region_order.py --mapped <28 Napa-frame AVA ids>,petaluma_gap`; `python3 scripts/geolibre_export.py --regions napa_valley,sonoma_valley,petaluma_gap`; `python3 -m unittest discover -s scripts -p 'test_*.py'`; `python3 scripts/validate.py`; Playwright scripts in the session scratchpad.
+- Next smallest action: owner review of PR 20 (3 steps); next region R4 Northern Sonoma step 1.
+
+## Autopilot branch: main merged after PR #19 (branch `autopilot`) — 2026-10-01
+- PR #19 merged into main; merged main into `autopilot` (merge commit, no rebase). STATUS.md conflict resolved by keeping both sides.
+- The merged viewer asks every region for `detail/imagery.json` (10 m close-up drape); Petaluma Gap had none, which logged a 404. Built it with `python3 scripts/make_imagery_texture.py --region data/regions/petaluma_gap.json --closeups-only` (Sonoma Mountain, 10 m) and listed `closeup_imagery` in `prototype/assets/regions/index.json`.
+- Checks: unit tests OK (1 skipped); validate PASS; headless Chromium with no console errors or failed requests on `?region=petaluma_gap` (20 Ma, today), the default page and `?view=regions`.
+- Next smallest action: owner review of PR 20.
 ## Deep terroir: Corison site, rivers, close-up geology, share links, sources page (branch `deep-terroir`, stacked on `viewer-edits`) — 2026-09-30
 - Owner: focus TTM on extreme detail in soil composition, historic rivers, climate, erosion and vineyard acreage, shown with animated cross-sections, starting at Corison (Bale gravelly loam, "an ancient river crossing the property"); also approved the mapped.earth ideas (timeline captions, share links, sources page).
 - Sources check from the sandbox: reachable are AWS S3 (USGS National Map staged products, NOAA nClimGrid, Terrain Tiles, Sentinel-2) and GitHub raw. Blocked by the network policy: USDA Soil Data Access (SSURGO), USGS NGMDB and pubs, PRISM, CropScape, California DWR crop mapping, SFEI. The owner will allow them from a computer later.
@@ -308,3 +344,16 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Not done: finer terrain or imagery. USGS 1 m lidar and 60 cm NAIP need hosts this environment blocks (s3.amazonaws.com, prd-tnm.s3.amazonaws.com, Planetary Computer); the surface is still the 10 m grid.
 - Checked: `python3 -m unittest discover -s scripts -p 'test_*.py'` → 128 OK, 1 skipped; `python3 scripts/validate.py` PASS; headless Chromium (swiftshader, three r128 from a git checkout of the r128 tag) at story moments 0.05–1.0 from 0.15, 0.95, 1.6 and 2.2 km, no page errors. Not tested: real-hardware frame rate, phones, Safari.
 - Next smallest action: owner review of the animation; optional 1 m lidar and NAIP once the hosts are allowed.
+## 2026-10-05 — Sunday audit fix
+- Cause of every failed audit/intake run: the `CLAUDE_CODE_OAUTH_TOKEN` secret was invalid, then re-saved with a line break (Charlie re-saved it on one line 2026-10-05). With a working token the audit then hit its 3-turn cap reading the diff from disk.
+- `sunday-audit.yml` now puts the past week's diff in the prompt (as GOVERNANCE.md §3 Tier 2 specifies): file list for every change, patch body without generated JSON, capped at 60 KB. Max turns stays 3.
+- Checks: `python3 scripts/test_workflows.py` OK; YAML parses; diff step dry-run locally (80 KB prompt diff); workflow_dispatch run on branch `fix-audit-turns` (see PR).
+
+## 2026-10-05 — Audit #34 hosts approved
+- Owner approved all five new download hosts flagged by the first working weekly audit (#34), plus the viewer's CDN loads; listed under AUTOPILOT.md "Allowed sources" with their SOURCES.md entries. GPL bundling of SFEI G31 into the share HTML recorded there as an open owner decision.
+- Next: owner decides the GPL bundling question; next Sunday's audit should no longer flag these hosts.
+
+## 2026-10-05 — SFEI data removed (owner decision)
+- Owner: do not use SFEI (GPL v3). Removed `historical_ecology.json`, `make_historical_ecology.py` and its test, the Corison site's `historical` block and S9, the manifest entry and the sources-page row. SOURCES.md G31 marked withdrawn; AUTOPILOT.md lists SFEI as not allowed and other GPL sources as needing an owner instruction. The pre-farming landscape is now a labelled gap.
+- Checks: all 18 `scripts/test_*.py` pass; `python3 scripts/validate.py` PASS; headless load of `sources.html` and `timemachine.html` shows no new errors (one remote 404 on sources.html also happens on main).
+- Open PRs #24 and #25 (and #28's branch) still carry SFEI in their viewer and data; they need the same removal before merging. Share HTML files rebuilt without SFEI.

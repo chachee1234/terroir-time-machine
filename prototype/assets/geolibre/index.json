@@ -3,7 +3,8 @@
  "ref": "main",
  "regions": [
   "napa_valley",
-  "sonoma_valley"
+  "sonoma_valley",
+  "petaluma_gap"
  ],
  "open": "https://web.geolibre.app/?url=https://raw.githubusercontent.com/{repo}/{ref}/prototype/assets/geolibre/{id}.geolibre.json"
 }

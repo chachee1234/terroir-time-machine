@@ -9,6 +9,7 @@ Outputs:
   <region boundary>                   full-resolution boundaries, trimmed properties (WGS84);
                                       data/ava/napa_valley_avas.geojson for the default region
   prototype/assets/ava.json           simplified outlines in UTM zone 10N kilometres for the viewer
+                                      (the region file's "ava_viewer" path instead, for regions other than Napa)
   data/manifest.json                  source URL and SHA-256 of both files
 
 Usage: ava_extract.py [--region data/regions/napa_valley.json] [--from-file PATH] [--tolerance-m 25]
@@ -118,7 +119,9 @@ def main():
     full = ROOT / region["boundary"]
     full.parent.mkdir(parents=True, exist_ok=True)
     full.write_text(json.dumps({"type": "FeatureCollection", "features": feats}, separators=(",", ":")) + "\n")
-    viewer = ROOT / "prototype" / "assets" / "ava.json"
+    viewer = ROOT / region.get("ava_viewer", "prototype/assets/ava.json")
+    viewer.parent.mkdir(parents=True, exist_ok=True)
+    mid = "ava-" + region["id"].replace("_", "-")   # ava-napa-valley for the default region
     meta = {"source": "UC Davis Library & DataLab, American Viticultural Areas (AVA) Project", "url": URL,
             "rights": "CC0 1.0", "source_sha256": src_sha,
             "crs": "EPSG:26910 (NAD83 / UTM zone 10N) kilometres; WGS84 input treated as NAD83 (sub-metre difference ignored)",
@@ -128,8 +131,8 @@ def main():
 
     manifest_path = ROOT / "data" / "manifest.json"
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {"datasets": []}
-    manifest["datasets"] = [d for d in manifest["datasets"] if d.get("id") != "ava-napa-valley"]
-    manifest["datasets"].append({"id": "ava-napa-valley", "source": meta["source"], "url": URL, "rights": "CC0 1.0",
+    manifest["datasets"] = [d for d in manifest["datasets"] if d.get("id") != mid]
+    manifest["datasets"].append({"id": mid, "source": meta["source"], "url": URL, "rights": "CC0 1.0",
                                  "source_sha256": src_sha,
                                  "derived": [{"file": str(p.relative_to(ROOT)), "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
                                              for p in (full, viewer)]})

@@ -87,6 +87,30 @@ def viewer_faults(html=None):
     return out
 
 
+REGION_FAULT_RIGHTS = ("USGS UCERF3 fault model traces via the GEM Global Active Faults Database (Styron & Pagani "
+                      "2020), CC BY-SA 4.0; credit GEM and USGS. Clipped to this region by scripts/region_faults.py.")
+
+
+def region_file_faults(rid):
+    """The region's own faults.json (scripts/region_faults.py) as lon/lat lines, or None when it has none."""
+    reg = ROOT / "data" / "regions" / f"{rid}.json"
+    if not reg.exists():
+        return None
+    path = ROOT / json.loads(reg.read_text())["assets_dir"] / "faults.json"
+    if not path.exists():
+        return None
+    out = []
+    for q in json.loads(path.read_text())["faults"]:
+        rate = q.get("net_slip_mm_yr") or [None]
+        line = [rnd(geographic_from_utm(e * 1000, n * 1000)[::-1]) for e, n in q["pts_km"]]
+        out.append({"type": "Feature", "properties": {"name": q.get("label") or q["name"], "catalog_id": q["id"],
+                                                      "slip_rate": None if rate[0] is None else f"{rate[0]} mm/yr",
+                                                      "kind": "thrust" if "reverse" in (q.get("slip_type") or "").lower() else "strike-slip",
+                                                      "source": "USGS UCERF3 via GEM GAF-DB"},
+                    "geometry": {"type": "LineString", "coordinates": line}})
+    return out
+
+
 def bbox_of(features):
     xs, ys = [], []
 
@@ -163,7 +187,8 @@ def project(rid, faults):
     if subs:
         layers.append(layer(f"ttm-{rid}-subavas", "AVAs inside it" if status == "planned" else "Smaller AVAs in the frame", subs, fillColor="#7fd1a8", fillOpacity=0.12,
                             strokeColor="#2f9e6e", strokeWidth=1.5))
-    near_f = [f for f in faults if near(f, bb)]
+    own = region_file_faults(rid)
+    near_f = own if own is not None else [f for f in faults if near(f, bb)]
     if near_f:
         layers.append(layer(f"ttm-{rid}-faults", "Mapped active faults (UCERF3)", near_f,
                             strokeColor="#ff5a3c", strokeWidth=2.5, fillOpacity=0))
@@ -174,7 +199,7 @@ def project(rid, faults):
                 "region": rid, "status": status,
                 "note": "Present-day evidence layers from the Terroir Time Machine viewer. Nothing here is a "
                         "reconstruction of the past.",
-                "sources": [AVA_RIGHTS] + ([FAULT_RIGHTS] if near_f else [])}}
+                "sources": [AVA_RIGHTS] + ([REGION_FAULT_RIGHTS if own is not None else FAULT_RIGHTS] if near_f else [])}}
 
 
 def link(rid, ref):
