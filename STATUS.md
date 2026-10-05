@@ -341,3 +341,7 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Cause of every failed audit/intake run: the `CLAUDE_CODE_OAUTH_TOKEN` secret was invalid, then re-saved with a line break (Charlie re-saved it on one line 2026-10-05). With a working token the audit then hit its 3-turn cap reading the diff from disk.
 - `sunday-audit.yml` now puts the past week's diff in the prompt (as GOVERNANCE.md §3 Tier 2 specifies): file list for every change, patch body without generated JSON, capped at 60 KB. Max turns stays 3.
 - Checks: `python3 scripts/test_workflows.py` OK; YAML parses; diff step dry-run locally (80 KB prompt diff); workflow_dispatch run on branch `fix-audit-turns` (see PR).
+
+## 2026-10-05 — Audit #34 hosts approved
+- Owner approved all five new download hosts flagged by the first working weekly audit (#34), plus the viewer's CDN loads; listed under AUTOPILOT.md "Allowed sources" with their SOURCES.md entries. GPL bundling of SFEI G31 into the share HTML recorded there as an open owner decision.
+- Next: owner decides the GPL bundling question; next Sunday's audit should no longer flag these hosts.
