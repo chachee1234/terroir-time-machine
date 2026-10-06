@@ -60,6 +60,26 @@
     "ava",
     "faults"
    ]
+  },
+  {
+   "id": "west_sonoma_coast",
+   "name": "West Sonoma Coast",
+   "parents": [
+    "west_sonoma_coast"
+   ],
+   "bbox_utm": [
+    451600.0,
+    4241000.0,
+    516600.0,
+    4294400.0
+   ],
+   "status": "mapped",
+   "layers": [
+    "imagery",
+    "closeup_imagery",
+    "ava",
+    "faults"
+   ]
   }
  ]
 }
