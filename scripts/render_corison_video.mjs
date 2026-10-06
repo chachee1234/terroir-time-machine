@@ -1,5 +1,6 @@
 // Render prototype/corison-100ka.html to an MP4, frame by frame (deterministic, any speed of machine).
-// Usage: node scripts/render_corison_video.mjs [out.mp4] [fps] [width] [height]
+// Usage: node scripts/render_corison_video.mjs [out.mp4] [fps] [width] [height] [comma-separated stills, or ""]
+// PAGE=mayacamas-8ma.html (or any page exposing window.C100.frame/DUR) renders another page; default corison-100ka.html.
 // Needs Playwright (Chromium) and ffmpeg. Serves prototype/ on a local port.
 import { createRequire } from "node:module";
 import http from "node:http"; import fs from "node:fs"; import path from "node:path"; import { execFileSync } from "node:child_process";
@@ -16,7 +17,7 @@ const port = srv.address().port, dir = fs.mkdtempSync(path.join(os.tmpdir(), "c1
 const browser = await chromium.launch({ args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"] });
 const page = await browser.newPage({ viewport: { width: +W, height: +H } });
 const errs = []; page.on("pageerror", e => errs.push(String(e))); page.on("console", m => m.type() === "error" && errs.push(m.text()));
-await page.goto(`http://localhost:${port}/corison-100ka.html?play=0`);
+await page.goto(`http://localhost:${port}/${process.env.PAGE || "corison-100ka.html"}?play=0`);
 await page.waitForFunction(() => window.C100 && window.C100.ready, null, { timeout: 120000 });
 const dur = await page.evaluate(() => window.C100.DUR);
 const times = only ? only.split(",").map(Number) : Array.from({ length: Math.round(dur * fps) }, (_, k) => k / fps);

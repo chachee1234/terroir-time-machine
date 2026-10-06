@@ -395,3 +395,9 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - `scripts/make_corison_100ka.py` → `sites/corison_100ka.{u8,json}` (uint8 fields; `.u8` so the share build, which packs `.bin` as Int16, skips it). `scripts/render_corison_video.mjs` renders the MP4 (Playwright + ffmpeg, about 0.6 s a frame with SwiftShader).
 - Checks: `python3 -m unittest discover -s scripts -p 'test_*.py'` OK (2 skipped); `python3 scripts/validate.py` PASS; headless render with no page errors.
 - Not linked from timemachine.html yet (PR #38 is changing the Corison story there). Next: owner review of the modelled thicknesses and the channel route.
+
+## 2026-10-06 — Deep-time model animations (owner: "constantly in motion", model acceptable)
+- `prototype/mayacamas-8ma.html` (92 s): Sonoma Volcanics erupting south to north 8–2.5 Ma, the Mayacamas and Vaca ranges rising, valleys cut, ice-age sea-level swings, faults sliding at today's rates for the last 0.5 Ma, ending on today's satellite image.
+- `prototype/san-andreas-30ma.html` (96 s): Farallon subduction, the ridge meeting the trench ~28 Ma, the Mendocino triple junction moving north, the transform lengthening, Pinnacles carried ~300 km from Neenach, the Gulf of California opening, moving sea-floor stripes, arc and slab-window volcanoes.
+- `scripts/make_deep_time_fields.py`, `scripts/test_deep_time_fields.py`; renderer takes `PAGE=`. SOURCES G37.
+- Checks: all `scripts/test_*.py` pass; `python3 scripts/validate.py` PASS; headless renders with no page errors.
