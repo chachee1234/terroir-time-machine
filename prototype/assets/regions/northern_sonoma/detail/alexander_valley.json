@@ -1,0 +1,35 @@
+{
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 13,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "fetched": "2026-10-01",
+ "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+ "encoding": "Int16 little-endian, row 0 = north",
+ "scale": 0.1,
+ "resampling": "bilinear from the tile mosaic at each UTM cell centre",
+ "product": "sub-AVA close-up",
+ "region": "northern_sonoma",
+ "ava_id": "alexander_valley",
+ "name": "Alexander Valley",
+ "bbox_utm": [
+  491451.7,
+  4268582.5,
+  525524.6,
+  4302400.0
+ ],
+ "ava_bbox_utm": [
+  492951.7,
+  4270799.5,
+  524024.6,
+  4300438.4
+ ],
+ "cols": 512,
+ "rows": 508,
+ "cell_m": 66.679,
+ "range_m": [
+  18.69,
+  1437.91
+ ],
+ "sha256": "2dc4557c2d850a130d7e6a120bd23a679443a7d45149982a553625f65c64bbcb"
+}

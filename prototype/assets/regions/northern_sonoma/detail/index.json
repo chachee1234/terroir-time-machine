@@ -1,0 +1,175 @@
+{
+ "region": "northern_sonoma",
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "locations": [
+  {
+   "id": "alexander_valley",
+   "name": "Alexander Valley",
+   "kind": "ava",
+   "file": "detail/alexander_valley",
+   "bbox_utm": [
+    491451.7,
+    4268582.5,
+    525524.6,
+    4302400.0
+   ],
+   "ava_bbox_utm": [
+    492951.7,
+    4270799.5,
+    524024.6,
+    4300438.4
+   ],
+   "cols": 512,
+   "rows": 508,
+   "cell_m": 66.679
+  },
+  {
+   "id": "pine_mountain_cloverdale_peak",
+   "name": "Pine Mountain-Cloverdale Peak",
+   "kind": "ava",
+   "file": "detail/pine_mountain_cloverdale_peak",
+   "bbox_utm": [
+    497920.7,
+    4296472.9,
+    506714.9,
+    4302400.0
+   ],
+   "ava_bbox_utm": [
+    499420.7,
+    4298401.8,
+    505214.9,
+    4303338.1
+   ],
+   "cols": 512,
+   "rows": 345,
+   "cell_m": 17.21
+  },
+  {
+   "id": "rockpile",
+   "name": "Rockpile",
+   "kind": "ava",
+   "file": "detail/rockpile",
+   "bbox_utm": [
+    486400.0,
+    4280256.5,
+    496677.7,
+    4299833.2
+   ],
+   "ava_bbox_utm": [
+    478601.0,
+    4284471.0,
+    495177.7,
+    4295618.6
+   ],
+   "cols": 269,
+   "rows": 512,
+   "cell_m": 38.35
+  },
+  {
+   "id": "dry_creek_valley",
+   "name": "Dry Creek Valley",
+   "kind": "ava",
+   "file": "detail/dry_creek_valley",
+   "bbox_utm": [
+    488414.6,
+    4264788.9,
+    514160.2,
+    4290534.5
+   ],
+   "ava_bbox_utm": [
+    490108.5,
+    4266288.9,
+    512466.3,
+    4289034.5
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 50.383
+  },
+  {
+   "id": "knights_valley",
+   "name": "Knights Valley",
+   "kind": "ava",
+   "file": "detail/knights_valley",
+   "bbox_utm": [
+    515603.1,
+    4266646.1,
+    534800.0,
+    4289018.3
+   ],
+   "ava_bbox_utm": [
+    520784.1,
+    4268146.1,
+    532794.4,
+    4287518.3
+   ],
+   "cols": 439,
+   "rows": 512,
+   "cell_m": 43.829
+  },
+  {
+   "id": "russian_river_valley",
+   "name": "Russian River Valley",
+   "kind": "ava",
+   "file": "detail/russian_river_valley",
+   "bbox_utm": [
+    491853.8,
+    4237695.8,
+    533864.7,
+    4279706.6
+   ],
+   "ava_bbox_utm": [
+    497297.1,
+    4239195.8,
+    528421.4,
+    4278206.6
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 82.213
+  },
+  {
+   "id": "chalk_hill",
+   "name": "Chalk Hill",
+   "kind": "ava",
+   "file": "detail/chalk_hill",
+   "bbox_utm": [
+    511930.9,
+    4259152.9,
+    529921.4,
+    4277143.4
+   ],
+   "ava_bbox_utm": [
+    513430.9,
+    4262209.4,
+    528421.4,
+    4274086.8
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 35.206
+  },
+  {
+   "id": "green_valley_of_russian_river_valley",
+   "name": "Green Valley of Russian River Valley",
+   "kind": "ava",
+   "file": "detail/green_valley_of_russian_river_valley",
+   "bbox_utm": [
+    501629.6,
+    4246267.8,
+    518499.9,
+    4263138.1
+   ],
+   "ava_bbox_utm": [
+    504775.6,
+    4247767.8,
+    515353.9,
+    4261638.1
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 33.014
+  }
+ ]
+}

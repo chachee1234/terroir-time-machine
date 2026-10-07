@@ -1,0 +1,59 @@
+{
+  "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+  "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+  "zoom": 13,
+  "fetched": "2026-10-04",
+  "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+  "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+  "vertical": "metres; 3DEP 1/3 arc-second in the United States, ETOPO1 offshore, as mosaicked by Terrain Tiles",
+  "note": "Replaces the 3DEP ImageServer request (blocked from the cloud sandbox). Samples are bilinear from the z13 tile mosaic (~15 m pixels) at each raw cell centre.",
+  "aoi": {
+    "description": "West Sonoma Coast AVA bounding box (UC Davis AVA Project, CC0) padded by 2 km; ~65 x 53 km. Frame for the viewer, not a geological boundary.",
+    "region": "west_sonoma_coast",
+    "name": "West Sonoma Coast",
+    "parents": [
+      "west_sonoma_coast"
+    ],
+    "bbox_utm": [
+      451600.0,
+      4241000.0,
+      516600.0,
+      4294400.0
+    ],
+    "center_utm": [
+      484100.0,
+      4267700.0
+    ]
+  },
+  "raw": {
+    "width": 2167,
+    "height": 1780,
+    "cell_m": 30.0,
+    "nodata_cells": 0,
+    "note": "sampled on the fly from cached tiles in data/raw/tiles/, not stored"
+  },
+  "stats_raw_m": {
+    "min": -112.79,
+    "max": 1055.07,
+    "max_cell_utm": [
+      513435.5,
+      4290665.0
+    ]
+  },
+  "browser_grid": {
+    "file": "assets/regions/west_sonoma_coast/terrain.bin",
+    "sha256": "3c7598ccd5fc3ef065a0eefdceaa4e51f21656603a1fee78163d85e434a8b7e4",
+    "encoding": "int16 little-endian, meters, row 0 = north",
+    "cols": 467,
+    "rows": 384,
+    "cell_m": 139.186,
+    "resampling": "block mean from raw samples",
+    "nodata": -32768,
+    "vertical_exaggeration_default": 1
+  },
+  "pit_floor": {
+    "m": -200,
+    "note": "Along this shoreline the terrain tiles have narrow pits, down to about -16,000 m, where land and sea data meet. The real seafloor in the frame (ETOPO1 in the tiles, south-west corner) is no deeper than about 115 m, and no land lies below sea level, so tile pixels below -200 m are treated as pits and set to 0 m, the tiles' sea surface along the coast. The count is recorded in data/manifest.json.",
+    "rule": "tile pixels below this height are set to 0 m before sampling"
+  }
+}

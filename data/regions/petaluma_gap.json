@@ -1,0 +1,17 @@
+{
+  "id": "petaluma_gap",
+  "name": "Petaluma Gap",
+  "description": "Petaluma Gap AVA bounding box (UC Davis AVA Project, CC0) padded by 2 km; ~61 x 34 km. Frame for the viewer, not a geological boundary.",
+  "epsg": 26910,
+  "utm_zone": 10,
+  "bbox_utm": [491100.0, 4215600.0, 551700.0, 4249200.0],
+  "anchor": {"utm": [521421.0, 4232410.3], "kind": "computed", "note": "centre of the Petaluma Gap AVA bounding box (UC Davis outline); a frame reference, not a named feature"},
+  "cell_m": 30,
+  "browser_cells": 436,
+  "assets_dir": "prototype/assets/regions/petaluma_gap",
+  "boundary": "data/ava/petaluma_gap_avas.geojson",
+  "ava_viewer": "prototype/assets/regions/petaluma_gap/ava.json",
+  "parents": ["petaluma_gap"],
+  "ava_rule": "the parent AVA plus every current AVA whose bounding box lies inside the frame",
+  "close_ups": []
+}

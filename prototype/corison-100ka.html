@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Corison, 100,000 years</title>
+<!--
+  Corison, the last 100,000 years: a smooth, labelled reconstruction of the ground at Corison winery (St. Helena)
+  on the site's 10 m close-up, 5 x 5 km. Plays in the browser; scripts/render_corison_video.mjs captures it to MP4.
+
+  Measured: today's ground (Terrain Tiles z15, S7), which surfaces the USGS map calls Holocene or older (SIM 2956),
+  today's channels (NHD), 2024 grape blocks (CDL), the West Napa Fault trace and slip rate (UCERF3), the buried
+  topsoils and stream gravel in the Bale soil (USDA OSD), global sea level (approximate values read from
+  Spratt & Lisiecki 2016), the oak/pine swings (Clear Lake pollen, Adam et al. 1981).
+  Modelled: how thick each young deposit is and how fast it grew, the river's ice-age cut, where the old creek ran,
+  the vegetation colours. Fields come from scripts/make_corison_100ka.py.
+  ?play=0 waits for window.C100.frame(sec) (the video renderer); ?debug shows fps.
+-->
+<style>
+  :root { --ink:#f3efe6; --dim:#c9c2b2; --meas:#7fc8a0; --mod:#e8b45a; --bg:#11140f; }
+  html,body { margin:0; height:100%; background:linear-gradient(#6f8799 0%, #a9b8c0 55%, #20261d 100%); color:var(--ink); font-family:Inter, "Helvetica Neue", Arial, sans-serif; overflow:hidden; }
+  canvas#gl { position:fixed; inset:0; width:100%; height:100%; display:block; }
+  .hud { position:fixed; pointer-events:none; text-shadow:0 1px 3px rgba(0,0,0,.85); }
+  #title { left:28px; top:22px; }
+  #title b { font-size:22px; font-weight:650; letter-spacing:.2px; display:block; }
+  #title span { font-size:14px; color:var(--dim); }
+  #age { right:28px; top:18px; text-align:right; }
+  #age b { font-size:44px; font-weight:700; font-variant-numeric:tabular-nums; display:block; line-height:1.05; }
+  #age span { font-size:14px; color:var(--dim); }
+  #cap { left:24px; bottom:100px; width:410px; background:rgba(14,16,12,.62); border-radius:10px; padding:12px 16px 13px; backdrop-filter:blur(2px); transition:opacity .4s; }
+  #cap h2 { margin:0 0 5px; font-size:19px; font-weight:650; }
+  #cap p { margin:0; font-size:13.5px; line-height:1.42; color:#ebe5d8; }
+  #cap .tags { margin-top:8px; font-size:12.5px; line-height:1.5; }
+  .tag { display:inline-block; border-radius:4px; padding:0 6px; margin-right:6px; font-weight:650; color:#121410; }
+  .tag.m { background:var(--meas); } .tag.o { background:var(--mod); }
+  #cap .tags div { color:var(--dim); margin-top:2px; }
+  #inset { right:24px; bottom:100px; width:206px; background:rgba(14,16,12,.62); border-radius:10px; padding:8px 8px 7px; }
+  #inset canvas { width:190px; height:191px; display:block; border-radius:5px; }
+  #inset div { font-size:12px; color:var(--dim); margin-top:5px; line-height:1.35; }
+  #bar { left:24px; right:24px; bottom:16px; height:76px; }
+  #sec { left:448px; right:244px; bottom:100px; background:rgba(14,16,12,.62); border-radius:10px; padding:8px 10px 6px; }
+  #sec svg { width:100%; height:150px; display:block; overflow:visible; }
+  #sec .k { font-size:11.5px; color:var(--dim); margin-top:3px; } #sec .k i { display:inline-block; width:10px; height:10px; border-radius:2px; margin:0 4px -1px 9px; }
+  #bar svg { width:100%; height:100%; overflow:visible; }
+  .lbl { position:fixed; pointer-events:none; font-size:13px; font-weight:650; white-space:nowrap; transform:translate(-50%,-100%); text-shadow:0 1px 3px #000, 0 0 2px #000; }
+  #pin { color:#fff; } #pin::after { content:""; display:block; width:2px; height:34px; background:#fff; margin:2px auto 0; box-shadow:0 0 3px #000; }
+  #flt { color:#ff8a7a; } #riv { color:#9fd0ff; } #chn { color:#e0d2ac; font-weight:600; font-size:12px; }
+  #foot { left:50%; transform:translateX(-50%); bottom:2px; font-size:11px; color:#a9a291; white-space:nowrap; }
+  #end { inset:0; display:flex; align-items:center; justify-content:center; opacity:0; background:rgba(10,12,9,.95); }
+  #end div { max-width:860px; font-size:14px; line-height:1.5; color:#e4ddcf; }
+  #end h2 { font-size:24px; margin:0 0 10px; color:#fff; }
+  #end li { margin:2px 0; }
+  #fps { left:8px; bottom:4px; font:11px monospace; }
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="hud" id="title"><b>Corison · St. Helena, Napa Valley</b><span>The last 100,000 years, a reconstruction · 5 × 5 km around the winery</span></div>
+<div class="hud" id="age"><b id="ageN">100,000</b><span id="ageU">years ago</span></div>
+<div class="hud" id="cap"><h2 id="capH"></h2><p id="capP"></p><div class="tags" id="capT"></div></div>
+<div class="hud" id="inset"><canvas id="map" width="190" height="191"></canvas><div id="mapT"></div></div>
+<div class="hud" id="sec"><svg id="xs"></svg><div class="k">Section SW → NE, height ×15<i style="background:#4d5548"></i>older rock<i style="background:#b49764"></i>ice-age fill<i style="background:#8f8a80"></i>late fan gravel<i style="background:#d6c49a"></i>Holocene loam<b style="color:#fff;margin-left:8px">╌╌</b> today's ground</div></div>
+<div class="hud" id="bar"><svg id="sl"></svg></div>
+<div class="lbl" id="pin">Corison</div><div class="lbl" id="flt">West Napa Fault</div><div class="lbl" id="riv">Napa River</div><div class="lbl" id="chn">old creek channel</div>
+<div class="hud" id="foot">Height ×2. Ground today: measured. Deposit thickness, river cut, channel paths and colours before today: modelled. See sources at the end.</div>
+<div class="hud" id="end"><div>
+  <h2>What is measured and what is modelled</h2>
+  <ul>
+    <li><b style="color:var(--meas)">Measured:</b> today's ground (USGS 3DEP via AWS Terrain Tiles, 10 m); which surfaces are Holocene (under ~11,700 years) or older (USGS SIM 2956, Graymer et al. 2007); today's streams (USGS NHD); grape blocks (USDA CDL 2024); the West Napa Fault trace and ~1.3 mm/yr slip (USGS UCERF3); two buried topsoils and rounded stream gravel in the Bale soil (USDA Official Series Description); global sea level (approximate values read from Spratt &amp; Lisiecki 2016, Climate of the Past); oak versus pine swings (Clear Lake pollen core, Adam, Sims &amp; Throckmorton 1981, Geology); the sea entering the Golden Gate ~11,000–10,000 years ago (Atwater et al. 1977, USGS PP 1014); planting 1971 and purchase 1995 (Corison Winery; Vinography 2024).</li>
+    <li><b style="color:var(--mod)">Modelled:</b> how thick each young deposit is (8 m ice-age fill, 3 m late fan, 5 m Holocene, all tapered to zero at the hill front) and when it grew; the Napa River's 6 m ice-age cut; where the old creek channel ran across the property; vegetation colours; the bay drawn from today's depths (ignores the mud laid down since).</li>
+    <li><b>Not shown:</b> uplift or erosion of the hills (not constrained here), floods year by year, the 1800s farms before the vineyard.</li>
+  </ul>
+</div></div>
+<div class="hud" id="fps"></div>
+
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as THREE from "three";
+const Q = new URLSearchParams(location.search);
+const AUTOPLAY = Q.get("play") !== "0", DEBUG = Q.has("debug");
+const BASE = "assets/regions/napa_valley/";
+const VX = 2;                         // vertical exaggeration, said on screen
+const DUR = 84;                       // seconds
+const $ = id => document.getElementById(id);
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const lerp = (a, b, t) => a + (b - a) * t;
+
+/* ---------- time: video seconds -> age in thousands of years (ka) */
+const KEYS = [[0,100],[4,100],[16,71],[24,57],[34,30],[44,15],[52,8],[60,0.2],[65,0.055],[70,0],[DUR,0]];
+function ageAt(s) {
+  for (let i = 1; i < KEYS.length; i++) if (s <= KEYS[i][0]) {
+    const [s0,a0] = KEYS[i-1], [s1,a1] = KEYS[i]; if (a0 === a1) return a0;
+    const u = sstep(0, 1, (s - s0) / (s1 - s0)) * 0.35 + 0.65 * (s - s0) / (s1 - s0);   // soften the corners
+    const L = a => Math.log(a + 0.01); return Math.exp(lerp(L(a0), L(a1), u)) - 0.01;
+  }
+  return 0;
+}
+
+/* ---------- global sea level, m relative to today. Approximate values read from Spratt & Lisiecki 2016 (stack),
+   good to about ±10 m; the shape (MIS 5 highs, MIS 4 low, MIS 3, the LGM low ~-125 m at ~20 ka, the fast
+   deglacial rise) is the measured part. */
+const SL = [[0,0],[6,-2],[8,-12],[10,-40],[11.5,-58],[13,-72],[14.3,-78],[14.7,-96],[16,-110],[19,-125],[21,-128],[24,-122],
+  [27,-110],[30,-88],[35,-82],[40,-78],[45,-70],[50,-66],[55,-72],[60,-82],[65,-88],[70,-74],[75,-58],[80,-25],[85,-35],
+  [90,-48],[95,-36],[100,-22]];
+function sea(a) { for (let i = 1; i < SL.length; i++) if (a <= SL[i][0]) { const [a0,v0] = SL[i-1], [a1,v1] = SL[i]; return lerp(v0, v1, (a - a0) / (a1 - a0)); } return SL[SL.length-1][1]; }
+const cold = a => clamp((-sea(a) - 15) / 100, 0, 1);       // 0 interglacial ... 1 glacial maximum (vegetation proxy)
+
+/* ---------- how much of each modelled deposit exists at age a (0..1). Ice-age fill grows faster when it is cold. */
+const NB = 1001, PB = new Float32Array(NB);              // table over 0..100 ka, 0.1 ka steps
+(() => { let acc = 0; const w = new Float32Array(NB);
+  for (let i = NB - 1; i >= 0; i--) { const a = i / 10; w[i] = (a <= 71 && a >= 14) ? 0.35 + cold(a) : 0; }
+  const tot = w.reduce((x, y) => x + y, 0);
+  for (let i = NB - 1; i >= 0; i--) { acc += w[i]; PB[i] = acc / tot; } })();
+const fracP = a => PB[clamp(Math.round(a * 10), 0, NB - 1)];
+const fracF = a => 1 - sstep(6, 14, a);
+const fracH = a => { const base = 1 - clamp((a - 0.2) / 11.5, 0, 1);              // steady Holocene build ...
+  return clamp(base * 0.6 + 0.2 * (1 - sstep(3.9, 4.1, a)) + 0.2 * (1 - sstep(1.75, 1.95, a)), 0, 1); };  // ... plus two flood sheets
+const fracI = a => sstep(30, 20, a) * (1 - sstep(15, 9, a));                     // the river's ice-age cut, then refilled
+const flood = a => Math.max(1 - Math.abs(a - 4.0) / 0.35, 1 - Math.abs(a - 1.85) / 0.35, 0);   // pale loam after each flood sheet
+const chanOn = a => sstep(32, 26, a) * (1 - sstep(7, 5.5, a));                   // old creek channel active
+const chanGravel = a => sstep(32, 26, a) * (1 - sstep(5.5, 2.5, a));             // its gravel until buried
+const MMYR = 1.3;                                                                // West Napa Fault, mm/yr = m/ka
+
+/* ---------- chapters */
+const CH = [
+  { a:[100,71], h:"A warm spell before the last ice age",
+    p:"Sea level is about 20 to 50 m below today, so there is no bay yet: San Pablo Bay is a dry valley. Oaks cover the hills. The valley floor here sits roughly 10 m lower than today, before the fans Corison now stands on were built.",
+    m:"global sea level; which surfaces the USGS maps as younger", o:"how much lower the valley floor was" },
+  { a:[71,57], h:"The ice age sets in",
+    p:"Sea level falls to about 85 m below today. Pollen from the Clear Lake core, 60 km north, shows pine and fir spreading as oaks retreat. Creeks carry more gravel out of the hills and the fans start to grow.",
+    m:"sea level; pine and oak swings at Clear Lake", o:"fan growth rate; hillside colours" },
+  { a:[57,30], h:"Cold, with warmer swings",
+    p:"Sea level stays 65 to 90 m down. The West Napa Fault, about 1.9 km west of the winery, slides about 1.3 mm a year: the hills west of the red line creep north, about 130 m over the whole film.",
+    m:"fault trace and slip rate (USGS UCERF3)", o:"the exact trace inside this frame" },
+  { a:[30,15], h:"The last glacial maximum",
+    p:"Around 20,000 years ago the sea is about 125 m below today and the coast lies out past the Farallon Islands. The Napa River cuts down toward the lower sea. A creek channel swings across the Corison property, laying the rounded gravel now found deep in its soil.",
+    m:"sea level; rounded stream gravel deep in the Bale soil", o:"how deep the river cut; where the channel ran" },
+  { a:[15,8], h:"The ice melts and the sea comes back",
+    p:"Sea level rises fast. The sea passes the Golden Gate about 11,000 to 10,000 years ago and then floods San Pablo Bay. With its outlet rising, the Napa River fills its trench back in, and the fan under Corison keeps growing.",
+    m:"sea level; timing of the bay flooding", o:"refill of the river trench; fan thickness" },
+  { a:[8,0.2], h:"Floods, then soil",
+    p:"The creek moves away and its channel is buried. Floods spread loam over the fan twice, burying two dark topsoils that are still in the Bale soil profile. Between floods, the Bale soil forms under grass and valley oaks.",
+    m:"the two buried topsoils (USDA soil description); Holocene surfaces (USGS)", o:"when the floods came and how far they spread" },
+  { a:[0.2,0.06], h:"The last two centuries",
+    p:"From the mid-1800s the valley floor is plowed for wheat, orchards and early vineyards, and the town of St. Helena grows to the north. None of that is mapped here yet, so the ground stays as the floods left it until the 1971 planting.",
+    m:"", o:"", n:"1800s farms, roads and the town" },
+  { a:[0.06,0.0001], h:"The vineyard",
+    p:"Kronos Vineyard is planted in 1971 on St. George rootstock, and Cathy Corison buys the property in 1995, looking for Bale gravelly loam. The green blocks are vineyards mapped from satellite in 2024, followed by today's satellite image.",
+    m:"planting and purchase dates; 2024 grape blocks (USDA CDL); today's image", o:"the order the blocks are filled in" },
+  { a:[0.0001,-1], h:"Today",
+    p:"The ground under the vines is the top of 100,000 years of fans, floods and soil, shifted a little by the fault every few centuries.",
+    m:"today's ground and image", o:"" } ];
+const chapterAt = a => CH.find(c => a <= c.a[0] && a > c.a[1]) || CH[0];
+
+/* ---------- data */
+const fetchBin = async u => (await fetch(u)).arrayBuffer();
+const [meta, z0raw, fbin, regMeta, regRaw] = await Promise.all([
+  fetch(BASE + "sites/corison_100ka.json").then(r => r.json()),
+  fetchBin(BASE + "detail/corison.bin"), fetchBin(BASE + "sites/corison_100ka.u8"),
+  fetch(BASE + "terrain.json").then(r => r.json()), fetchBin(BASE + "terrain.bin")]);
+const W = meta.grid.cols, H = meta.grid.rows, N = W * H, CELL = meta.grid.cell_m, SPAN = (W - 1) * CELL;
+const z0 = new Float32Array(N); { const v = new Int16Array(z0raw); for (let i = 0; i < N; i++) z0[i] = v[i] * 0.1; }
+const F = {}; meta.fields.forEach((k, j) => { const v = new Uint8Array(fbin, j * N, N), s = meta.scale[k], o = new Float32Array(N); for (let i = 0; i < N; i++) o[i] = v[i] * s; F[k] = o; });
+const T = meta.thickness_m;
+// local metres from the frame's SW corner -> scene x (east) / z (south), centred on the frame
+const toX = lx => lx - SPAN / 2, toZ = ly => -(ly - SPAN / 2);
+const colOf = x => (x + SPAN / 2) / CELL, rowOf = z => (z + SPAN / 2) / CELL;
+
+/* per-cell constants: hillside tree cover (north-facing and steep = more trees), a little noise */
+const tree = new Float32Array(N), speck = new Float32Array(N), blockN = new Float32Array(N);
+{ const hash = (x, y) => { const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return s - Math.floor(s); };
+  const vnoise = (x, y) => { const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+    const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+    return lerp(lerp(hash(xi, yi), hash(xi + 1, yi), u), lerp(hash(xi, yi + 1), hash(xi + 1, yi + 1), u), v); };
+  for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) {
+    const i = r * W + c, dzdn = (z0[Math.max(r - 1, 0) * W + c] - z0[Math.min(r + 1, H - 1) * W + c]) / (2 * CELL);
+    const dzde = (z0[r * W + Math.min(c + 1, W - 1)] - z0[r * W + Math.max(c - 1, 0)]) / (2 * CELL);
+    const slope = Math.hypot(dzdn, dzde), north = dzdn / (slope + 1e-6);   // ground rising to the north = faces south
+    const n = vnoise(c / 9, r / 9) * 0.6 + vnoise(c / 3.1, r / 3.1) * 0.4;
+    tree[i] = clamp(0.25 + slope * 1.1 - north * slope * 1.4 + (n - 0.5) * 0.9, 0, 1);
+    speck[i] = vnoise(c / 1.7 + 50, r / 1.7); blockN[i] = vnoise(c / 22 + 90, r / 22 + 7); } }
+
+/* fault: side and weight per cell (west block moves north-west relative to the east block) */
+const fl = meta.fault.local_m.map(([x, y]) => [toX(x), toZ(y)]);
+const [fa, fb] = [fl[0], fl[1]];                                  // the segment that crosses this frame
+const fdx = fa[0] - fb[0], fdz = fa[1] - fb[1], fL = Math.hypot(fdx, fdz), ux = fdx / fL, uz = fdz / fL;   // unit vector toward the north tip
+const fw = new Float32Array(N), fdist = new Float32Array(N);
+const westSign = Math.sign(((fa[0] - 2000) - fa[0]) * uz - ((fa[1] + 300) - fa[1]) * ux) || 1;   // side() sign of a point well west
+for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) {
+  const x = c * CELL - SPAN / 2, z = r * CELL - SPAN / 2, px = x - fa[0], pz = z - fa[1];
+  const along = px * ux + pz * uz;                                 // > 0 beyond the north tip
+  const side = px * uz - pz * ux;                                  // sign picks west / east
+  fw[r * W + c] = sstep(-25, 25, side * westSign) * (1 - sstep(-500, 0, along)); fdist[r * W + c] = along > 0 ? 1e9 : Math.abs(side); }
+
+/* old creek channel (illustrated) */
+const route = meta.old_channel_local_m.map(([x, y]) => [toX(x), toZ(y)]);
+
+/* ---------- three.js scene */
+const canvas = $("gl");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(34, 16 / 9, 50, 40000);
+const geo = new THREE.PlaneGeometry(SPAN, SPAN, W - 1, H - 1); geo.rotateX(-Math.PI / 2);
+const pos = geo.attributes.position, col = new THREE.BufferAttribute(new Float32Array(N * 3), 3); geo.setAttribute("color", col);
+const img = await new THREE.TextureLoader().loadAsync(BASE + "detail/corison.imagery.jpg"); img.colorSpace = THREE.SRGBColorSpace;
+const mat = new THREE.ShaderMaterial({
+  uniforms: { map: { value: img }, imgMix: { value: 0 }, sun: { value: new THREE.Vector3(-0.45, 0.62, -0.35).normalize() }, haze: { value: new THREE.Color(0x9fb0b8) } },
+  vertexShader: `attribute vec3 color; varying vec3 vC; varying vec3 vN; varying vec2 vUv; varying float vD;
+    void main(){ vC=color; vN=normalize(normal); vUv=uv; vec4 mv=modelViewMatrix*vec4(position,1.0); vD=-mv.z; gl_Position=projectionMatrix*mv; }`,
+  fragmentShader: `uniform sampler2D map; uniform float imgMix; uniform vec3 sun; uniform vec3 haze; varying vec3 vC; varying vec3 vN; varying vec2 vUv; varying float vD;
+    void main(){ vec3 n=normalize(vN); float l=0.42+0.78*max(dot(n,sun),0.0);
+      vec3 im=texture2D(map,vUv).rgb; vec3 c=mix(vC,pow(im,vec3(1.0/2.2))*0.92,imgMix)*l;
+      c=mix(c,haze,clamp((vD-2500.0)/14000.0,0.0,0.45)); gl_FragColor=vec4(c,1.0); }` });
+const mesh = new THREE.Mesh(geo, mat); scene.add(mesh);
+renderer.setClearColor(0x000000, 0);
+// skirt: a dark base so the block reads as a slab
+const fault3 = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineDashedMaterial({ color: 0xff5a46, dashSize: 60, gapSize: 40, depthTest: false }));
+fault3.renderOrder = 2; scene.add(fault3);
+
+/* ---------- per-frame terrain and colour */
+const S0 = new Float32Array(N), CR = new Float32Array(N), CG = new Float32Array(N), CB = new Float32Array(N);
+const C = { grass:[0.72,0.63,0.38], oak:[0.35,0.39,0.21], conifer:[0.15,0.25,0.20], coolgrass:[0.55,0.58,0.40],
+  savanna:[0.70,0.63,0.41], gravel:[0.64,0.62,0.58], loam:[0.82,0.74,0.56], water:[0.22,0.40,0.55], vine:[0.30,0.43,0.17], soil:[0.42,0.34,0.26] };
+let chanPts = [], fmid = [0, 0];
+function chanDist(x, z) { let best = 1e9; for (let k = 1; k < chanPts.length; k++) { const [ax, az] = chanPts[k-1], [bx, bz] = chanPts[k];
+  const dx = bx - ax, dz = bz - az, t = clamp(((x - ax) * dx + (z - az) * dz) / (dx * dx + dz * dz), 0, 1);
+  const d = Math.hypot(x - ax - t * dx, z - az - t * dz); if (d < best) best = d; } return best; }
+
+function build(a) {
+  const p = fracP(a), f = fracF(a), h = fracH(a), inc = fracI(a), cd = cold(a), fl = flood(a), con = chanOn(a), cg = chanGravel(a);
+  const rate = clamp((fracP(Math.max(a - 2, 0)) - p) * T.pleistocene_fill * 6 + (fracF(Math.max(a - 1, 0)) - f) * T.late_fan * 3, 0, 1);
+  const yearsAD = 2026 - a * 1000, vineOn = a < 0.06 ? sstep(1971, 2024, yearsAD) : 0;
+  // the creek channel wanders sideways while it is active
+  const sw = Math.sin(a * 0.55) * 140 + Math.sin(a * 1.7 + 1) * 60;
+  chanPts = route.map(([x, z], k) => { const [x0, z0_] = route[Math.max(k-1,0)], [x1, z1] = route[Math.min(k+1, route.length-1)];
+    const dx = x1 - x0, dz = z1 - z0_, L = Math.hypot(dx, dz) || 1, taper = Math.sin(Math.PI * k / (route.length - 1)) ** 0.7;
+    return [x - dz / L * sw * taper, z + dx / L * sw * taper]; });
+  const hillA = [lerp(C.grass[0], C.coolgrass[0], cd), lerp(C.grass[1], C.coolgrass[1], cd), lerp(C.grass[2], C.coolgrass[2], cd)];
+  const treeC = [lerp(C.oak[0], C.conifer[0], cd), lerp(C.oak[1], C.conifer[1], cd), lerp(C.oak[2], C.conifer[2], cd)];
+  const floorC = [lerp(C.savanna[0], C.coolgrass[0], cd), lerp(C.savanna[1], C.coolgrass[1], cd), lerp(C.savanna[2], C.coolgrass[2], cd)];
+  const treeBoost = cd * 0.22;
+  for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) {
+    const i = r * W + c, y = F.young[i];
+    let s = z0[i] - (1 - p) * F.pleist[i] - (1 - f) * F.fan[i] - (1 - h) * F.hol[i] - inc * T.lgm_incision * F.incise[i];
+    // colour: hills, then valley floor
+    const tw = clamp(tree[i] + treeBoost, 0, 1), tt = sstep(0.45, 0.75, tw);
+    let R = lerp(hillA[0], treeC[0], tt), G = lerp(hillA[1], treeC[1], tt), B = lerp(hillA[2], treeC[2], tt);
+    const oakDot = speck[i] > 0.86 ? 0.6 : 0, fr = lerp(floorC[0], treeC[0], oakDot), fg = lerp(floorC[1], treeC[1], oakDot), fb2 = lerp(floorC[2], treeC[2], oakDot);
+    R = lerp(R, fr, y); G = lerp(G, fg, y); B = lerp(B, fb2, y);
+    const young = y * (F.pleist[i] > 0 ? 1 : 0);
+    if (rate > 0) { const k = rate * young * 0.55; R = lerp(R, C.gravel[0], k); G = lerp(G, C.gravel[1], k); B = lerp(B, C.gravel[2], k); }
+    if (fl > 0) { const k = fl * (F.hol[i] / T.holocene) * 0.75; R = lerp(R, C.loam[0], k); G = lerp(G, C.loam[1], k); B = lerp(B, C.loam[2], k); }
+    if (cg > 0 && y > 0.3) { const x = c * CELL - SPAN / 2, z = r * CELL - SPAN / 2, d = chanDist(x, z);
+      if (d < 110) { const k = cg * (1 - sstep(35, 110, d)) * y; R = lerp(R, C.gravel[0], k); G = lerp(G, C.gravel[1], k); B = lerp(B, C.gravel[2], k);
+        if (con > 0.05 && d < 16) { const w = con * (1 - sstep(8, 16, d)); R = lerp(R, C.water[0], w); G = lerp(G, C.water[1], w); B = lerp(B, C.water[2], w); s -= 1.2 * w; } } }
+    if (fdist[i] < 22) { const k = 0.55 * (1 - fdist[i] / 22); R = lerp(R, 0.85, k); G = lerp(G, 0.30, k); B = lerp(B, 0.25, k); }
+    const wr = sstep(0.62, 0.85, F.incise[i]) + sstep(0.35, 0.7, F.creeks[i]) * (0.55 + 0.45 * cd);
+    if (wr > 0) { const k = clamp(wr, 0, 1); R = lerp(R, C.water[0], k); G = lerp(G, C.water[1], k); B = lerp(B, C.water[2], k); }
+    if (vineOn > 0 && F.vines[i] > 0.5) { const k = sstep(blockN[i] * 0.9 - 0.04, blockN[i] * 0.9 + 0.04, vineOn); const row = (c + r) % 3 === 0 ? 0.82 : 1;
+      R = lerp(R, C.vine[0] * row, k); G = lerp(G, C.vine[1] * row, k); B = lerp(B, C.vine[2] * row, k); }
+    S0[i] = s; CR[i] = R; CG[i] = G; CB[i] = B; }
+  // fault: sample the west block from where it was relative to the east block
+  const d = MMYR * a;                                    // metres the west block has moved since age a
+  const ox = ux * d / CELL, oz = uz * d / CELL;
+  const P = pos.array, CA = col.array;
+  for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) {
+    const i = r * W + c; let s = S0[i], R = CR[i], G = CG[i], B = CB[i];
+    if (fw[i] > 0 && d > 0) { const sc = clamp(c + ox * fw[i], 0, W - 1.001), sr = clamp(r + oz * fw[i], 0, H - 1.001);
+      const c0 = Math.floor(sc), r0 = Math.floor(sr), tx = sc - c0, ty = sr - r0, j = r0 * W + c0;
+      const bl = A => lerp(lerp(A[j], A[j + 1], tx), lerp(A[j + W], A[j + W + 1], tx), ty);
+      s = bl(S0); R = bl(CR); G = bl(CG); B = bl(CB); }
+    P[i * 3 + 1] = s * VX; CA[i * 3] = R; CA[i * 3 + 1] = G; CA[i * 3 + 2] = B; }
+  pos.needsUpdate = true; col.needsUpdate = true; geo.computeVertexNormals();
+  mat.uniforms.imgMix.value = a < 0.012 ? sstep(0.012, 0.0, a) * 0.9 : 0;
+  // fault line draped on the ground
+  const fp = []; for (let t = 0; t <= 1; t += 0.004) { const x = lerp(fa[0], fb[0], t), z = lerp(fa[1], fb[1], t), c = colOf(x), r = rowOf(z);
+    if (c < 0 || r < 0 || c > W - 1 || r > H - 1) continue; fp.push(x, P[(Math.round(r) * W + Math.round(c)) * 3 + 1] + 8, z); }
+  if (fp.length) { const k = Math.floor(fp.length / 3 * 0.3) * 3; fmid = [fp[k], fp[k + 2]]; }
+  fault3.geometry.dispose(); fault3.geometry = new THREE.BufferGeometry(); fault3.geometry.setAttribute("position", new THREE.Float32BufferAttribute(fp, 3)); fault3.computeLineDistances();
+}
+const heightAt = (x, z) => { const c = clamp(Math.round(colOf(x)), 0, W - 1), r = clamp(Math.round(rowOf(z)), 0, H - 1); return pos.array[(r * W + c) * 3 + 1]; };
+
+/* ---------- inset: the region (76 km frame) with water drawn where today's ground is below the sea level of the day */
+const RW = regMeta.browser_grid.cols, RH = regMeta.browser_grid.rows, rz = new Int16Array(regRaw);
+const RB = regMeta.aoi.bbox_utm, map = $("map"), mctx = map.getContext("2d"), MW = map.width, MH = map.height;
+const shade = new Float32Array(MW * MH), mz = new Float32Array(MW * MH);
+for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) { const c = Math.floor(x / MW * RW), r = Math.floor(y / MH * RH); mz[y * MW + x] = rz[r * RW + c]; }
+for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) { const i = y * MW + x, zx = mz[i + (x < MW - 1 ? 1 : 0)] - mz[i - (x > 0 ? 1 : 0)], zy = mz[i + (y < MH - 1 ? MW : 0)] - mz[i - (y > 0 ? MW : 0)];
+  shade[i] = clamp(0.62 + (-zx + zy) / 1400, 0.25, 1); }
+const mimg = mctx.createImageData(MW, MH);
+const sitePx = [(meta.grid.bbox_utm[0] + 2500 - RB[0]) / (RB[2] - RB[0]) * MW, (RB[3] - meta.grid.bbox_utm[1] - 2500) / (RB[3] - RB[1]) * MH];
+const boxPx = 5000 / (RB[2] - RB[0]) * MW;
+function drawMap(a) {
+  const sl = sea(a), cd = cold(a);
+  for (let i = 0; i < MW * MH; i++) { const z = mz[i], s = shade[i]; let R, G, B;
+    if (z < Math.min(sl, 0) + (a < 0.3 ? 0.4 : 0)) { R = 46; G = 92; B = 128; }
+    else { const e = clamp(z / 900, 0, 1); R = lerp(lerp(178, 150, cd), 120, e) * s; G = lerp(lerp(160, 152, cd), 118, e) * s; B = lerp(lerp(104, 118, cd), 92, e) * s; }
+    mimg.data[i * 4] = R; mimg.data[i * 4 + 1] = G; mimg.data[i * 4 + 2] = B; mimg.data[i * 4 + 3] = 255; }
+  mctx.putImageData(mimg, 0, 0);
+  mctx.strokeStyle = "#fff"; mctx.lineWidth = 1.5; mctx.strokeRect(sitePx[0] - boxPx / 2, sitePx[1] - boxPx / 2, boxPx, boxPx);
+  mctx.font = "600 11px Inter, Arial"; mctx.fillStyle = "#fff"; mctx.shadowColor = "#000"; mctx.shadowBlur = 3;
+  mctx.fillText("this view", sitePx[0] + boxPx / 2 + 3, sitePx[1] + 3); mctx.fillText("San Pablo Bay", 112, MH - 10); mctx.shadowBlur = 0;
+  $("mapT").innerHTML = `Sea level <b style="color:#fff">${sl > -0.5 ? "today's" : Math.round(sl) + " m"}</b>. ` +
+    (sl < -15 ? `San Pablo Bay is dry land${sl < -100 ? "; the coast is out past the Farallon Islands" : sl < -60 ? "; the coast is far west of the Golden Gate" : ""}.` : "The sea fills San Pablo Bay.") +
+    ` <span style="opacity:.8">Bay drawn from today's depths.</span>`;
+}
+
+/* ---------- sea-level strip */
+const svg = $("sl"); let svgW = 0;
+function drawStrip() {
+  const w = svg.clientWidth, h = svg.clientHeight; svgW = w; const X = a => (1 - a / 100) * w, Y = v => 10 + (-v / 130) * (h - 30);
+  const pts = []; for (let a = 100; a >= 0; a -= 0.5) pts.push(`${X(a).toFixed(1)},${Y(sea(a)).toFixed(1)}`);
+  const mis = [[100,71,"MIS 5 · warmer"],[71,57,"MIS 4 · cold"],[57,29,"MIS 3"],[29,14,"MIS 2 · ice-age peak"],[14,0,"Holocene"]];
+  svg.innerHTML = `<rect x="0" y="0" width="${w}" height="${h - 18}" rx="6" fill="rgba(14,16,12,.55)"/>` +
+    mis.map(([a0, a1, t], k) => `<rect x="${X(a0)}" y="0" width="${X(a1) - X(a0)}" height="${h - 18}" fill="${k % 2 ? "rgba(255,255,255,.04)" : "none"}"/><text x="${X(a0) + 6}" y="${h - 4}" fill="#b9b2a2" font-size="11">${t}</text>`).join("") +
+    `<line x1="0" x2="${w}" y1="${Y(0)}" y2="${Y(0)}" stroke="rgba(255,255,255,.25)" stroke-dasharray="3 3"/>` +
+    `<text x="${w - 6}" y="${Y(0) - 3}" fill="#b9b2a2" font-size="11" text-anchor="end">sea level today</text>` +
+    `<text x="${w - 6}" y="${Y(-125) + 4}" fill="#b9b2a2" font-size="11" text-anchor="end">−125 m</text>` +
+    `<polyline points="${pts.join(" ")}" fill="none" stroke="#6fb6e8" stroke-width="2"/>` +
+    `<line id="cur" y1="0" y2="${h - 18}" stroke="#fff" stroke-width="1.5"/><circle id="dot" r="4.5" fill="#fff"/>`;
+  svg._X = X; svg._Y = Y;
+}
+function moveStrip(a) { if (svg.clientWidth !== svgW) drawStrip(); const x = svg._X(a), y = svg._Y(sea(a));
+  const cur = svg.querySelector("#cur"), dot = svg.querySelector("#dot"); cur.setAttribute("x1", x); cur.setAttribute("x2", x); dot.setAttribute("cx", x); dot.setAttribute("cy", y); }
+
+/* ---------- section: SW -> NE through the winery (the viewer's section line, bearing 50 deg) */
+const XS = { t0: -1500, t1: 2450, n: 240, z0: 40, z1: 115 }, xsv = $("xs");
+const BR = 50 * Math.PI / 180;
+function drawSection(a) {
+  const w = xsv.clientWidth, h = xsv.clientHeight, p = fracP(a), f = fracF(a), hh = fracH(a), inc = fracI(a);
+  const X = t => (t - XS.t0) / (XS.t1 - XS.t0) * w, Y = z => h - (z - XS.z0) / (XS.z1 - XS.z0) * h;
+  const rows = [];
+  for (let k = 0; k <= XS.n; k++) { const t = lerp(XS.t0, XS.t1, k / XS.n), x = t * Math.sin(BR), z = -t * Math.cos(BR);
+    const c = clamp(Math.round(colOf(x)), 0, W - 1), r = clamp(Math.round(rowOf(z)), 0, H - 1), i = r * W + c;
+    const base = z0[i] - F.pleist[i] - F.fan[i] - F.hol[i], cut = inc * T.lgm_incision * F.incise[i];
+    const l1 = base + p * F.pleist[i], l2 = l1 + f * F.fan[i], l3 = l2 + hh * F.hol[i];
+    rows.push({ t, base, l1: l1 - cut, l2: l2 - cut, l3: l3 - cut, now: z0[i], wet: F.incise[i] > 0.7 }); }
+  const poly = (top, bot, fill) => `<polygon fill="${fill}" points="${rows.map(q => X(q.t).toFixed(1) + "," + Y(Math.max(top(q), bot(q))).toFixed(1)).join(" ")} ${rows.slice().reverse().map(q => X(q.t).toFixed(1) + "," + Y(bot(q)).toFixed(1)).join(" ")}"/>`;
+  const bottom = () => XS.z0 - 20;
+  let o = `<defs><clipPath id="xc"><rect x="0" y="0" width="${w}" height="${h}"/></clipPath><pattern id="rk" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#4d5548"/><rect width="2" height="6" fill="#3a4036"/></pattern></defs><g clip-path="url(#xc)">`;
+  o += poly(q => Math.min(q.base, q.l1), bottom, "url(#rk)");
+  o += poly(q => q.l1, q => Math.min(q.base, q.l1), "#b49764");
+  o += poly(q => q.l2, q => q.l1, "#8f8a80");
+  o += poly(q => q.l3, q => q.l2, "#d6c49a");
+  // river water in the channel
+  o += rows.filter(q => q.wet).map(q => `<rect x="${X(q.t) - 1}" y="${Y(q.l3 + 1.5)}" width="3" height="${Math.max(0, Y(q.l3) - Y(q.l3 + 1.5))}" fill="#3484c8"/>`).join("");
+  o += `<polyline fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="5 4" points="${rows.map(q => X(q.t).toFixed(1) + "," + Y(q.now).toFixed(1)).join(" ")}"/>`;
+  o += `</g><line x1="${X(0)}" x2="${X(0)}" y1="${Y(q0(rows) + 4)}" y2="${Y(q0(rows) + 14)}" stroke="#fff" stroke-width="2"/><text x="${X(0)}" y="${Y(q0(rows) + 16)}" fill="#fff" font-size="11.5" font-weight="650" text-anchor="middle">Corison</text>`;
+  const rmax = rows.reduce((m, q) => q.wet && (!m || q.t > 1500) ? q : m, null);
+  if (rmax) o += `<text x="${X(rmax.t)}" y="${Y(rmax.now + 9)}" fill="#9fd0ff" font-size="11" text-anchor="middle">Napa River</text>`;
+  o += `<text x="4" y="12" fill="#c9c2b2" font-size="11">SW · hills</text><text x="${w - 4}" y="12" fill="#c9c2b2" font-size="11" text-anchor="end">NE</text>`;
+  const d = rows[Math.round((0 - XS.t0) / (XS.t1 - XS.t0) * XS.n)];
+  o += `<text x="${w - 4}" y="${h - 6}" fill="#e8b45a" font-size="11.5" text-anchor="end">ground at the winery: ${d.l3 - d.now > -0.3 ? "today's level" : (d.l3 - d.now).toFixed(1) + " m vs today (modelled)"}</text>`;
+  xsv.innerHTML = o;
+}
+const q0 = rows => rows[Math.round((0 - XS.t0) / (XS.t1 - XS.t0) * XS.n)].l3;
+
+/* ---------- camera and labels */
+const site = meta.site_local_m.map((v, k) => k ? toZ(v) : toX(v));
+function placeCamera(s) {
+  const u = clamp(s / DUR, 0, 1), ang = lerp(0.45, 0.0, sstep(0, 1, u)), dist = lerp(11500, 10000, sstep(0.5, 0.9, u));
+  const tx = lerp(-250, -100, u), tz = 0, el = 0.50;
+  camera.position.set(tx + Math.cos(ang) * dist * Math.cos(el), Math.sin(el) * dist, tz - Math.sin(ang) * dist * Math.cos(el));
+  camera.lookAt(tx, 120, tz);
+}
+const v3 = new THREE.Vector3();
+function label(el, x, z, dy, show) { v3.set(x, heightAt(x, z) + dy, z).project(camera);
+  const vis = show && v3.z < 1 && Math.abs(v3.x) < 0.97 && v3.y < 0.97 && v3.y > -0.12;
+  el.style.display = vis ? "block" : "none"; if (vis) { el.style.left = ((v3.x + 1) / 2 * innerWidth) + "px"; el.style.top = ((1 - v3.y) / 2 * innerHeight) + "px"; } }
+
+/* ---------- HUD */
+const fmt = n => n.toLocaleString("en-US");
+function hud(s, a) {
+  if (a <= 0.0005) { $("ageN").textContent = "Today"; $("ageU").textContent = "2026"; }
+  else if (a < 0.3) { $("ageN").textContent = "AD " + Math.round(2026 - a * 1000); $("ageU").textContent = Math.round(a * 1000) + " years ago"; }
+  else { const y = a * 1000, r = y > 20000 ? 500 : y > 2000 ? 100 : 10; $("ageN").textContent = fmt(Math.round(y / r) * r); $("ageU").textContent = "years ago"; }
+  const ch = chapterAt(a);
+  if ($("capH").textContent !== ch.h) { $("capH").textContent = ch.h; $("capP").textContent = ch.p;
+    $("capT").innerHTML = (ch.m ? `<div><span class="tag m">Measured</span>${ch.m}</div>` : "") + (ch.o ? `<div><span class="tag o">Modelled</span>${ch.o}</div>` : "") + (ch.n ? `<div><span class="tag" style="background:#b9b2a2">Not shown</span>${ch.n}</div>` : ""); }
+  $("end").style.opacity = sstep(DUR - 7.5, DUR - 6.5, s);
+  const capFade = 1 - sstep(DUR - 7.5, DUR - 6.8, s); $("cap").style.opacity = capFade;
+}
+
+let lastA = -1;
+function frame(s) {
+  const a = ageAt(s);
+  if (Math.abs(a - lastA) > 1e-6) { build(a); drawMap(a); drawSection(a); lastA = a; }
+  placeCamera(s); renderer.render(scene, camera);
+  label($("pin"), site[0], site[1], 6, true);
+  label($("flt"), fmid[0], fmid[1], 40, true);
+  const rv = meta.napa_river_local_m[0]; const rp = rv[Math.floor(rv.length * 0.45)];
+  label($("riv"), toX(rp[0]), toZ(rp[1]), 25, true);
+  const cp = chanPts[2] || [0, 0]; label($("chn"), cp[0], cp[1], 12, chanGravel(a) > 0.4);
+  moveStrip(a); hud(s, a);
+}
+function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.setViewOffset(w, h, 0, h * 0.17, w, h); camera.updateProjectionMatrix(); drawStrip(); }
+addEventListener("resize", resize); resize();
+window.C100 = { frame, DUR, ageAt, ready: true };
+if (AUTOPLAY) { const t0 = performance.now(); let n = 0, tf = performance.now();
+  const loop = () => { const s = ((performance.now() - t0) / 1000) % DUR; frame(s); n++;
+    if (DEBUG && performance.now() - tf > 1000) { $("fps").textContent = n + " fps"; n = 0; tf = performance.now(); } requestAnimationFrame(loop); };
+  loop(); }
+</script>
+</body>
+</html>

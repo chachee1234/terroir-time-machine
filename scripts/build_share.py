@@ -123,6 +123,7 @@ def collect(root=ROOT, lite=False):
              if p.is_file() and p.suffix in MIME and not p.name.endswith(SKIP_SUFFIXES)
              and not (lite and p.name.endswith(".imagery.jpg"))]
     files += [root / e for e in EXTRA if (root / e).exists()]
+    files += sorted((root / "data" / "regions").glob("*/scenes.json"))   # chapters of autopilot regions
     return files
 
 
