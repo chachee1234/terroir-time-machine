@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>San Andreas, 30 million years</title>
+<!--
+  How the San Andreas Fault was born, 30 million years ago to today: a MODEL animation on real relief of the US
+  West Coast (lon -132..-112, lat 30..44; plates/west_coast.i16 from scripts/make_deep_time_fields.py). It is built
+  to keep moving and to show the order of events; plate geometry is schematic.
+  Based on: Atwater 1970 and Atwater & Stock 1998 (ridge meets trench ~28 Ma, triple junctions migrate, transform
+  lengthens), Matthews 1976 (Pinnacles and Neenach volcanics, one 23 Ma field now ~315 km apart), Oskin & Stock 2003
+  (Gulf of California opening ~6 Ma), present plate rates (~50 mm/yr Pacific vs North America, ~35 mm/yr on the
+  San Andreas itself).
+  Modelled: the ridge's shape and distance, the triple junction's path (straight-line), stripe spacing and speed,
+  the offset history (35 km/Ma since 8 Ma, 2 km/Ma before), volcano placement, colours.
+  ?play=0 waits for window.C100.frame(sec) (scripts/render_corison_video.mjs).
+-->
+<style>
+  :root { --ink:#f3efe6; --dim:#c9c2b2; --meas:#7fc8a0; --mod:#e8b45a; }
+  html,body { margin:0; height:100%; background:radial-gradient(ellipse at 50% 30%, #1c2b3a 0%, #0b1118 75%); color:var(--ink); font-family:Inter, "Helvetica Neue", Arial, sans-serif; overflow:hidden; }
+  canvas#gl { position:fixed; inset:0; width:100%; height:100%; display:block; }
+  .hud { position:fixed; pointer-events:none; text-shadow:0 1px 3px rgba(0,0,0,.85); }
+  #title { left:24px; top:20px; } #title b { font-size:22px; font-weight:650; display:block; } #title span { font-size:14px; color:var(--dim); }
+  #age { right:24px; top:16px; text-align:right; } #age b { font-size:44px; font-weight:700; font-variant-numeric:tabular-nums; display:block; line-height:1.05; } #age span { font-size:14px; color:var(--dim); }
+  #cap { left:24px; bottom:108px; width:480px; background:rgba(10,14,18,.7); border-radius:10px; padding:12px 16px 13px; }
+  #cap h2 { margin:0 0 5px; font-size:19px; font-weight:650; } #cap p { margin:0; font-size:13.5px; line-height:1.42; color:#ebe5d8; }
+  #cap .tags { margin-top:8px; font-size:12.5px; line-height:1.5; } #cap .tags div { color:var(--dim); margin-top:2px; }
+  .tag { display:inline-block; border-radius:4px; padding:0 6px; margin-right:6px; font-weight:650; color:#121410; } .tag.m { background:var(--meas); } .tag.o { background:var(--mod); }
+  #gauge { right:24px; bottom:108px; width:250px; background:rgba(10,14,18,.7); border-radius:10px; padding:10px 14px; font-size:13px; color:var(--dim); line-height:1.55; }
+  #gauge b { color:#fff; font-size:15px; font-variant-numeric:tabular-nums; }
+  #key { right:24px; top:96px; background:rgba(10,14,18,.6); border-radius:8px; padding:7px 11px; font-size:12px; color:var(--dim); line-height:1.6; }
+  #key i { display:inline-block; width:18px; height:3px; margin:0 6px 3px 0; vertical-align:middle; }
+  #bar { left:24px; right:24px; bottom:16px; height:80px; } #bar svg { width:100%; height:100%; overflow:visible; }
+  .lbl { position:fixed; pointer-events:none; font-size:13px; font-weight:650; white-space:nowrap; transform:translate(-50%,-50%); text-shadow:0 1px 3px #000, 0 0 2px #000; color:#fff; }
+  .lbl.plate { font-size:17px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,.85); font-weight:700; }
+  .lbl.pin { transform:translate(-50%,-100%); } .lbl.pin::after { content:""; display:block; width:2px; height:16px; background:#fff; margin:2px auto 0; }
+  .lbl.saf { color:#ff7a66; } .lbl.tj { color:#ffd27a; font-size:12.5px; } .lbl.volc { color:#ffb070; font-size:12px; }
+  #foot { left:50%; transform:translateX(-50%); bottom:1px; font-size:11px; color:#9a9486; white-space:nowrap; }
+  #end { inset:0; display:flex; align-items:center; justify-content:center; opacity:0; background:rgba(8,10,12,.95); }
+  #end div { max-width:880px; font-size:14px; line-height:1.5; color:#e4ddcf; } #end h2 { font-size:24px; margin:0 0 10px; color:#fff; } #end li { margin:3px 0; }
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="hud" id="title"><b>How the San Andreas Fault was born</b><span>California, 30 million years ago to today · a model animation</span></div>
+<div class="hud" id="age"><b id="ageN">30</b><span id="ageU">million years ago</span></div>
+<div class="hud" id="key"><i style="background:#ff5a46"></i>transform fault (plates slide past)<br><i style="background:#ffd27a"></i>trench (a plate dives under)<br><i style="background:#9ff0ff"></i>spreading ridge (new sea floor)</div>
+<div class="hud" id="cap"><h2 id="capH"></h2><p id="capP"></p><div class="tags" id="capT"></div></div>
+<div class="hud" id="gauge"></div>
+<div class="hud" id="bar"><svg id="tl"></svg></div>
+<div class="hud" id="foot">Model animation: plate shapes and speeds are schematic, height ×12. North America is held still; everything else moves relative to it. Sources at the end.</div>
+<div class="hud" id="end"><div>
+  <h2>What is known and what is drawn</h2>
+  <ul>
+    <li><b style="color:var(--meas)">Known:</b> the Pacific–Farallon ridge reached the North American trench about 28 million years ago; the Mendocino triple junction then moved north and the transform boundary lengthened behind it (Atwater 1970, GSA Bulletin; Atwater &amp; Stock 1998, International Geology Review). The Pinnacles and Neenach volcanics are one field erupted about 23 million years ago, now about 315 km apart across the San Andreas (Matthews 1976, AAPG Bulletin). The Gulf of California began opening about 6 million years ago (Oskin &amp; Stock 2003). Today the Pacific plate moves about 50 mm a year past North America, about 35 mm of it on the San Andreas. Relief: Terrain Tiles and ETOPO via AWS Open Data.</li>
+    <li><b style="color:var(--mod)">Drawn as a model:</b> the ridge's shape and distance offshore, the triple junction moving at a steady speed, the sea-floor stripes (real magnetic stripes exist, these are spaced for clarity), the offset history (35 km per million years since 8 million years ago, 2 km before), where the volcanoes glow, the plate boundary drawn along today's San Andreas line for the whole film, colours.</li>
+  </ul>
+</div></div>
+
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as THREE from "three";
+const Q = new URLSearchParams(location.search), AUTOPLAY = Q.get("play") !== "0";
+const DUR = 96, VX = 12;
+const $ = id => document.getElementById(id);
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x)), lerp = (a, b, t) => a + (b - a) * t;
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+
+const KEYS = [[0,30],[2,30],[22,20],[46,10],[68,5],[87,0],[DUR,0]];
+function ageAt(s) { for (let i = 1; i < KEYS.length; i++) if (s <= KEYS[i][0]) { const [s0,a0] = KEYS[i-1], [s1,a1] = KEYS[i];
+  if (a0 === a1) return a0; const u = (s - s0) / (s1 - s0); return lerp(a0, a1, 0.75 * u + 0.25 * sstep(0, 1, u)); } return 0; }
+
+/* model (t in Ma) */
+const phiM = t => t <= 28 ? 40.3 - 7.3 * t / 28 : 33 - (t - 28) * 2;               // Mendocino triple junction latitude
+const offsetKm = t => 35 * Math.min(t, 8) + 2 * clamp(t - 8, 0, 22);                // Pacific side, how far SE it sat
+const pacKm = t => 50 * t;                                                           // Pacific plate travel (stripes)
+const AZ = -40 * Math.PI / 180;                                                      // motion N40W
+
+const CH = [
+  { a:[30.01,28], h:"One plate dives under another",
+    p:"Thirty million years ago the Farallon plate is diving under North America along a deep trench off California, and a line of volcanoes stands inland above it. Offshore, the ridge where the Pacific and Farallon plates are spreading apart is drawing closer.",
+    m:"subduction of the Farallon plate; the ridge's approach", o:"the ridge's exact shape and distance" },
+  { a:[28,20], h:"The ridge reaches the trench",
+    p:"About 28 million years ago the ridge touches the trench near southern California. Where it does, the Pacific plate meets North America directly and slides past it instead of diving under: a transform fault, the start of the San Andreas system. Two triple junctions form and move apart, and the one in the north (Mendocino) starts travelling up the coast.",
+    m:"timing of first contact; northward migration (Atwater 1970)", o:"the junction's path, drawn as a steady march" },
+  { a:[20,10], h:"The fault grows as the junction moves north",
+    p:"Behind the moving junction there is no longer a diving plate, just a gap that lets hot mantle rise. Short-lived volcanoes erupt there. One field, erupted about 23 million years ago, is cut in two by the fault: the Pinnacles half rides north-west with the Pacific plate, and the Neenach half stays put.",
+    m:"Pinnacles and Neenach are one 23 million-year-old field (Matthews 1976)", o:"where the other volcanoes glow" },
+  { a:[10,5], h:"The boundary passes Napa and jumps inland",
+    p:"Around 10 to 8 million years ago the junction passes the latitude of Napa, and the Sonoma Volcanics begin to erupt. About 6 million years ago the boundary steps inland: the Gulf of California opens, and Baja California and the coast west of today's San Andreas start riding north-west with the Pacific plate.",
+    m:"Sonoma Volcanics 8 to 2.5 Ma; the Gulf opening ~6 Ma", o:"the boundary drawn along today's San Andreas line throughout" },
+  { a:[5,0.0005], h:"Today's San Andreas",
+    p:"The Pacific plate now slides past at about 50 mm a year, 35 mm of it on the San Andreas. The slight squeeze across the fault system pushes up the Coast Ranges, the Mayacamas among them. North of Cape Mendocino the Juan de Fuca and Gorda plates still dive under the coast, feeding Mount Shasta and Lassen.",
+    m:"today's plate rates; Pinnacles about 315 km from Neenach", o:"the offset history before today" },
+  { a:[0.0005,-1], h:"Today", p:"The San Andreas runs about 1,200 km from the Gulf of California to Cape Mendocino and keeps growing as the triple junction moves north.", m:"today's fault and relief", o:"" } ];
+const chapterAt = a => CH.find(c => a <= c.a[0] && a > c.a[1]) || CH[0];
+
+/* data */
+const meta = await fetch("assets/plates/west_coast.json").then(r => r.json());
+const zraw = new Int16Array(await (await fetch("assets/plates/west_coast.i16")).arrayBuffer());
+const W = meta.cols, H = meta.rows, N = W * H, D = meta.cell_deg, LON0 = meta.lon[0], LAT1 = meta.lat[1];
+const LATC = 37, LONC = (meta.lon[0] + meta.lon[1]) / 2, KX = 111.32 * Math.cos(LATC * Math.PI / 180), KY = 111.32;
+const toX = lon => (lon - LONC) * KX, toZ = lat => -(lat - LATC) * KY;
+const colOf = lon => (lon - LON0) / D, rowOf = lat => (LAT1 - lat) / D;
+const z0 = Float32Array.from(zraw);
+const lonAt = c => LON0 + c * D, latAt = r => LAT1 - r * D;
+
+// polylines
+const saf = meta.saf.map(([la, lo]) => [lo, la]), tr = meta.trench.map(([la, lo]) => [lo, la]).sort((a, b) => a[1] - b[1]);
+const trenchLon = lat => { if (lat <= tr[0][1]) return tr[0][0]; for (let i = 1; i < tr.length; i++) if (lat <= tr[i][1]) return lerp(tr[i-1][0], tr[i][0], (lat - tr[i-1][1]) / (tr[i][1] - tr[i-1][1])); return tr[tr.length-1][0]; };
+// west of the San Andreas (and its Gulf continuation), south of Cape Mendocino: weight 0..1
+const westW = new Float32Array(N);
+{ const safLonAt = lat => { const s = saf.slice().sort((a, b) => a[1] - b[1]); if (lat <= s[0][1]) return s[0][0]; for (let i = 1; i < s.length; i++) if (lat <= s[i][1]) return lerp(s[i-1][0], s[i][0], (lat - s[i-1][1]) / (s[i][1] - s[i-1][1])); return s[s.length-1][0]; };
+  for (let r = 0; r < H; r++) { const la = latAt(r), sl = safLonAt(la), cap = 1 - sstep(40.2, 40.6, la);
+    for (let c = 0; c < W; c++) westW[r * W + c] = sstep(0.06, -0.06, (lonAt(c) - sl) * Math.cos(la * Math.PI / 180)) * cap; } }
+const ux = Math.sin(AZ), uy = Math.cos(AZ);   // east, north components of N40W (ux<0)
+
+/* scene */
+const canvas = $("gl"), renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setClearColor(0, 0);
+const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(32, 16 / 9, 10, 20000);
+const SXk = (W - 1) * D * KX, SZk = (H - 1) * D * KY;
+const geo = new THREE.PlaneGeometry(SXk, SZk, W - 1, H - 1); geo.rotateX(-Math.PI / 2);
+geo.translate(toX(LON0) + SXk / 2, 0, toZ(LAT1) + SZk / 2);
+const pos = geo.attributes.position, col = new THREE.BufferAttribute(new Float32Array(N * 3), 3), glow = new THREE.BufferAttribute(new Float32Array(N), 1);
+geo.setAttribute("color", col); geo.setAttribute("glow", glow);
+const mat = new THREE.ShaderMaterial({ uniforms: { sun: { value: new THREE.Vector3(-0.4, 0.75, -0.5).normalize() } },
+  vertexShader: `attribute vec3 color; attribute float glow; varying vec3 vC; varying vec3 vN; varying float vG;
+    void main(){ vC=color; vG=glow; vN=normalize(normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+  fragmentShader: `uniform vec3 sun; varying vec3 vC; varying vec3 vN; varying float vG;
+    void main(){ float l=0.45+0.75*max(dot(normalize(vN),sun),0.0); vec3 c=vC*l; c=mix(c,vec3(1.0,0.45,0.1),vG*0.8)+vec3(1.0,0.4,0.05)*vG*0.7; gl_FragColor=vec4(c,1.0); }` });
+scene.add(new THREE.Mesh(geo, mat));
+const mkLine = (color, w = 1) => { const l = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color, transparent: true, depthTest: false })); l.renderOrder = 3; scene.add(l); return l; };
+const safLine = mkLine(0xff5a46), offLine = mkLine(0xff5a46), trenchLine = mkLine(0xffd27a), ridgeLine = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0x9ff0ff, depthTest: false })); ridgeLine.renderOrder = 3; scene.add(ridgeLine);
+const teeth = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0xffd27a, depthTest: false })); teeth.renderOrder = 3; scene.add(teeth);
+const arrows = { pac: new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(), 260, 0xbfe9ff, 70, 45), far: new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(), 220, 0xe0c2ff, 60, 40) };
+Object.values(arrows).forEach(a => { a.line.material.depthTest = a.cone.material.depthTest = false; a.renderOrder = 4; scene.add(a); });
+
+/* random volcano sites on land: arc (north of the junction) and slab-window (just south of it) */
+const vsites = []; { let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  while (vsites.length < 260) { const la = 31 + rnd() * 13, lo = -124 + rnd() * 8; const c = Math.round(colOf(lo)), r = Math.round(rowOf(la)); if (z0[r * W + c] < 200) continue;
+    const dCoast = (lo - trenchLon(la)) * KX * Math.cos(0); vsites.push({ la, lo, c, r, d: dCoast, ph: rnd() * 6.28 }); } }
+
+const S0 = new Float32Array(N), CR = new Float32Array(N), CG = new Float32Array(N), CB = new Float32Array(N);
+function build(t) {
+  const pm = phiM(t), off = offsetKm(t), pk = pacKm(t);
+  const P = pos.array, CA = col.array, GA = glow.array;
+  const dc = off * ux / (KX * D), dr = -off * uy / (KY * D);        // grid cells toward the NW where the past west side now is... (sampling)
+  for (let r = 0; r < H; r++) { const la = latAt(r);
+    const tl = trenchLon(la), farOn = la > pm;
+    const gap = Math.min(3.2, Math.max(0, 0.55 * (la - pm))) + Math.max(0, t - 28) * 0.5;
+    const seg = Math.floor((la - pm) / 1.1), rl = tl - gap + (seg % 2 ? 0.3 : -0.1);
+    for (let c = 0; c < W; c++) { const i = r * W + c, w = westW[i];
+      let z = z0[i];
+      if (w > 0) { const sc = c + dc * w, sr = r + dr * w;               // sample where this ground sat, carried back SE
+        if (sc < 0 || sr < 0 || sc > W - 1.001 || sr > H - 1.001) z = -3800;
+        else { const c0 = Math.floor(sc), r0 = Math.floor(sr), tx = sc - c0, ty = sr - r0, j = r0 * W + c0; z = lerp(lerp(z0[j], z0[j + 1], tx), lerp(z0[j + W], z0[j + W + 1], tx), ty); } }
+      const lo = lonAt(c);
+      let R, G, B;
+      if (z > 0) { const h = clamp(z / 3000, 0, 1); R = lerp(0.62, 0.55, h); G = lerp(0.58, 0.47, h); B = lerp(0.40, 0.38, h); if (z > 2500) { R = G = B = lerp(0.6, 0.85, clamp((z - 2500) / 1200, 0, 1)); } }
+      else if (z > -1200) { R = 0.20; G = 0.36; B = 0.48; }
+      else { // ocean plates with moving stripes
+        const xk = (lo - LONC) * KX, yk = (la - LATC) * KY;
+        let stripe, tint;
+        if (farOn && lo > rl && lo < tl + 0.2) { stripe = ((lo - rl) * KX * Math.cos(la * Math.PI / 180) + 30 * t) / 45; tint = [0.42, 0.34, 0.62]; }
+        else if (farOn && lo <= rl) { stripe = ((rl - lo) * KX * Math.cos(la * Math.PI / 180) + 30 * t) / 45; tint = [0.18, 0.40, 0.60]; }
+        else { stripe = (xk * ux + yk * uy + pk) / 60; tint = [0.18, 0.40, 0.60]; }
+        const s = 0.5 + 0.5 * Math.sign(Math.sin(stripe * Math.PI * 2) + 0.15 * Math.sin(stripe * 9.1)), d = clamp(-z / 5000, 0, 1);
+        R = tint[0] * (0.78 + 0.22 * s) * (1.05 - 0.3 * d); G = tint[1] * (0.78 + 0.22 * s) * (1.05 - 0.3 * d); B = tint[2] * (0.80 + 0.2 * s) * (1.05 - 0.25 * d); }
+      S0[i] = z; CR[i] = R; CG[i] = G; CB[i] = B; GA[i] = 0;
+      P[i * 3 + 1] = Math.max(z, -4500) * VX / 1000; CA[i * 3] = R; CA[i * 3 + 1] = G; CA[i * 3 + 2] = B; } }
+  // volcanoes: an arc inland of the trench north of the junction; short-lived vents just behind it to the south
+  for (const v of vsites) { let g = 0;
+    if (v.la > pm + 0.4 && v.d > 180 && v.d < 330) g = 0.55 + 0.45 * Math.sin(v.ph + t * 9);
+    else if (v.la < pm - 0.2 && v.la > pm - 1.6 && v.d > 40 && v.d < 200) g = (0.6 + 0.4 * Math.sin(v.ph + t * 13)) * sstep(pm - 1.6, pm - 1.1, v.la);
+    if (g <= 0.05) continue;
+    for (let dr2 = -2; dr2 <= 2; dr2++) for (let dc2 = -2; dc2 <= 2; dc2++) { const rr = v.r + dr2, cc = v.c + dc2; if (rr < 0 || cc < 0 || rr >= H || cc >= W) continue;
+      const k = rr * W + cc, f = g * (1 - Math.hypot(dr2, dc2) / 3.2); if (f > GA[k]) GA[k] = f; } }
+  pos.needsUpdate = col.needsUpdate = glow.needsUpdate = true; geo.computeVertexNormals();
+  // lines
+  const Y = 1.2 * VX;
+  const yAt = (lo, la) => { const c = clamp(Math.round(colOf(lo)), 0, W - 1), r = clamp(Math.round(rowOf(la)), 0, H - 1); return Math.max(P[(r * W + c) * 3 + 1], 0) + Y; };
+  const sfp = []; for (const [lo, la] of saf) if (la < pm + 0.05) sfp.push(toX(lo), yAt(lo, la), toZ(la));
+  safLine.geometry.dispose(); safLine.geometry = new THREE.BufferGeometry(); safLine.geometry.setAttribute("position", new THREE.Float32BufferAttribute(sfp, 3));
+  safLine.material.opacity = sstep(9, 6, t) * (sfp.length > 3 ? 1 : 0);
+  const ofp = []; for (let la = 30; la < Math.min(pm, 44); la += 0.1) { const lo = trenchLon(la) + 0.05; ofp.push(toX(lo), 2, toZ(la)); }
+  offLine.geometry.dispose(); offLine.geometry = new THREE.BufferGeometry(); offLine.geometry.setAttribute("position", new THREE.Float32BufferAttribute(ofp, 3));
+  offLine.material.opacity = sstep(4, 8, t);
+  const tp = [], th = []; for (let la = Math.max(pm, 30); la < 44; la += 0.1) { const lo = trenchLon(la); tp.push(toX(lo), 2, toZ(la));
+    if (Math.round(la * 10) % 4 === 0) { th.push(toX(lo), 2, toZ(la), toX(lo) + 22, 2, toZ(la) - 6); } }
+  trenchLine.geometry.dispose(); trenchLine.geometry = new THREE.BufferGeometry(); trenchLine.geometry.setAttribute("position", new THREE.Float32BufferAttribute(tp, 3));
+  teeth.geometry.dispose(); teeth.geometry = new THREE.BufferGeometry(); teeth.geometry.setAttribute("position", new THREE.Float32BufferAttribute(th, 3));
+  const rp = []; let prev = null;
+  for (let la = Math.max(pm, 30); la < 44; la += 0.05) { const gap = Math.min(3.2, Math.max(0, 0.55 * (la - pm))) + Math.max(0, t - 28) * 0.5, seg = Math.floor((la - pm) / 1.1);
+    const lo = trenchLon(la) - gap + (seg % 2 ? 0.3 : -0.1), p = [toX(lo), 2, toZ(la)]; if (prev) rp.push(...prev, ...p); prev = p; }
+  ridgeLine.geometry.dispose(); ridgeLine.geometry = new THREE.BufferGeometry(); ridgeLine.geometry.setAttribute("position", new THREE.Float32BufferAttribute(rp, 3));
+  // arrows
+  arrows.pac.position.set(toX(-129.5), 30, toZ(33.2)); arrows.pac.setDirection(new THREE.Vector3(ux, 0, -uy).normalize());
+  arrows.far.visible = pm < 42.5; arrows.far.position.set(toX(trenchLon(Math.min(43.2, Math.max(pm + 1.5, 41))) - 1.6), 30, toZ(Math.min(43.2, Math.max(pm + 1.5, 41)))); arrows.far.setDirection(new THREE.Vector3(0.94, 0, 0.34).normalize());
+}
+
+/* camera: always moving */
+function placeCamera(s) { const u = s / DUR, ang = lerp(-1.25, -1.75, u) + 0.05 * Math.sin(u * 9), dist = lerp(3050, 2250, sstep(0.05, 0.95, u)), el = lerp(0.92, 0.72, u);
+  const tx = toX(lerp(-119.8, -121.3, u)), tz = toZ(lerp(35.6, 37.0, u));
+  camera.position.set(tx + Math.cos(ang) * dist * Math.cos(el), Math.sin(el) * dist, tz - Math.sin(ang) * dist * Math.cos(el)); camera.lookAt(tx, 0, tz); }
+
+/* labels */
+const L = (cls, text) => { const d = document.createElement("div"); d.className = "lbl " + cls; d.textContent = text; document.body.appendChild(d); return d; };
+const lb = { pac: L("plate", "Pacific Plate"), na: L("plate", "North American Plate"), far: L("plate", "Farallon Plate"), saf: L("saf", "San Andreas Fault"), mtj: L("tj", "Mendocino triple junction"),
+  pin: L("pin volc", "Pinnacles"), nee: L("pin volc", "Neenach"), napa: L("pin", "Napa Valley"), gulf: L("", "Gulf of California"), sf: L("pin", "San Francisco"), la: L("pin", "Los Angeles"), clear: L("pin volc", "Clear Lake volcanoes"), sonv: L("volc", "Sonoma Volcanics") };
+const v3 = new THREE.Vector3(); let hideAll = false;
+function place(el, x, y, z, show) { v3.set(x, y, z).project(camera); const vis = show && !hideAll && v3.z < 1 && Math.abs(v3.x) < 0.95 && v3.y < 0.88 && v3.y > -0.2;
+  el.style.display = vis ? "block" : "none"; if (vis) { el.style.left = ((v3.x + 1) / 2 * innerWidth) + "px"; el.style.top = ((1 - v3.y) / 2 * innerHeight) + "px"; } }
+const at = (lo, la, dy = 40) => [toX(lo), dy, toZ(la)];
+function labels(t) { const pm = phiM(t), off = offsetKm(t), dLo = -off * ux / (KX), dLa = -off * uy / KY;   // carried back SE
+  place(lb.pac, ...at(-128.6, 35.5), true); place(lb.na, ...at(-116.5, 40.5), true);
+  lb.far.textContent = t < 10 ? "Juan de Fuca / Gorda Plate" : "Farallon Plate"; place(lb.far, ...at(trenchLon(Math.min(43.3, Math.max(pm + 1.2, 40.8))) - 1.2, Math.min(43.3, Math.max(pm + 1.2, 40.8))), pm < 43);
+  place(lb.saf, ...at(-119.6 + 0, 35.1), t < 26); place(lb.mtj, ...at(trenchLon(pm) + 0.2, pm + 0.25, 60), pm > 30.3 && t <= 28.3);
+  const [pl, pa] = POINTS.Pinnacles; place(lb.pin, ...at(pa + dLo, pl + dLa, 70), t <= 23.5); place(lb.nee, ...at(POINTS.Neenach[1], POINTS.Neenach[0], 70), t <= 23.5);
+  place(lb.napa, ...at(POINTS["Napa Valley"][1], POINTS["Napa Valley"][0], 60), true); place(lb.sf, ...at(-122.42, 37.77, 50), t < 1); place(lb.la, ...at(-118.25, 34.05, 50), t < 1);
+  place(lb.gulf, ...at(-113.6, 30.6), t < 5.5); place(lb.clear, ...at(-122.75, 38.95, 60), t < 2.1 && t > 0.0005); place(lb.sonv, ...at(-122.45, 38.3, 20), t < 8 && t > 2.5); }
+const POINTS = meta.points;
+
+/* timeline */
+const svg = $("tl"); let svgW = 0;
+function drawStrip() { const w = svg.clientWidth, h = svg.clientHeight; svgW = w; const X = t => (1 - t / 30) * w, bot = h - 18;
+  const ev = [[28,"ridge meets trench"],[23,"Pinnacles erupts"],[9,"junction passes Napa"],[6,"Gulf opens"],[2.5,"last Sonoma eruptions"]];
+  const off = []; for (let t = 30; t >= 0; t -= 0.1) off.push(`${X(t).toFixed(1)},${(bot - 4 - (315 - offsetKm(t)) / 315 * (bot - 26)).toFixed(1)}`);
+  svg.innerHTML = `<rect width="${w}" height="${bot}" rx="6" fill="rgba(10,14,18,.6)"/>` + `<polyline points="${off.join(" ")}" fill="none" stroke="#ff7a66" stroke-width="2"/>` +
+    `<text x="${X(3)}" y="${bot - 4 - (315 - offsetKm(3)) / 315 * (bot - 26) - 7}" fill="#ff9a8a" font-size="11" text-anchor="end">San Andreas offset so far (model)</text>` +
+    ev.map(([t, s]) => `<line x1="${X(t)}" x2="${X(t)}" y1="4" y2="${bot}" stroke="rgba(255,255,255,.18)"/><text x="${X(t) + 4}" y="15" fill="#d9d2c2" font-size="11">${s}</text>`).join("") +
+    [30,25,20,15,10,5,0].map(t => `<text x="${X(t)}" y="${h - 4}" fill="#b9b2a2" font-size="11" text-anchor="${t === 30 ? "start" : t === 0 ? "end" : "middle"}">${t ? t + " Ma" : "today"}</text>`).join("") +
+    `<line id="cur" y1="0" y2="${bot}" stroke="#fff" stroke-width="1.5"/>`; svg._X = X; }
+function moveStrip(t) { if (svg.clientWidth !== svgW) drawStrip(); const x = svg._X(t), c = svg.querySelector("#cur"); c.setAttribute("x1", x); c.setAttribute("x2", x); }
+
+function hud(s, t) {
+  if (t <= 0.0005) { $("ageN").textContent = "Today"; $("ageU").textContent = ""; } else { $("ageN").textContent = t >= 1 ? t.toFixed(1) : t.toFixed(2); $("ageU").textContent = "million years ago"; }
+  const ch = chapterAt(t);
+  if ($("capH").textContent !== ch.h) { $("capH").textContent = ch.h; $("capP").textContent = ch.p;
+    $("capT").innerHTML = (ch.m ? `<div><span class="tag m">Known</span>${ch.m}</div>` : "") + (ch.o ? `<div><span class="tag o">Modelled</span>${ch.o}</div>` : ""); }
+  const pm = phiM(t), sLen = t > 28 ? 0 : Math.max(0, (pm - 31) * 111 + 250 * clamp((28 - t) / 28, 0, 1));
+  $("gauge").innerHTML = `Pacific side moved so far: <b>${Math.round(offsetKm(30) - offsetKm(t))} km</b><br>Triple junction at: <b>${pm.toFixed(1)}° N</b><br>` +
+    `<span style="opacity:.85">Napa is at 38.3° N</span>`;
+  $("end").style.opacity = sstep(DUR - 7, DUR - 6, s); for (const id of ["cap", "gauge", "key"]) $(id).style.opacity = 1 - sstep(DUR - 7, DUR - 6.5, s);
+}
+
+let lastT = -1;
+function frame(s) { const t = ageAt(s); hideAll = s > DUR - 7;
+  if (Math.abs(t - lastT) > 1e-7) { build(t); lastT = t; }
+  placeCamera(s); renderer.render(scene, camera); labels(t); moveStrip(t); hud(s, t); }
+function resize() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.setViewOffset(innerWidth, innerHeight, 0, innerHeight * 0.13, innerWidth, innerHeight); camera.updateProjectionMatrix(); drawStrip(); }
+addEventListener("resize", resize); resize();
+window.C100 = { frame, DUR, ageAt, ready: true };
+if (AUTOPLAY) { const t0 = performance.now(); const loop = () => { frame(((performance.now() - t0) / 1000) % DUR); requestAnimationFrame(loop); }; loop(); }
+</script>
+</body>
+</html>
