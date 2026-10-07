@@ -405,3 +405,11 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 ## 2026-10-07 — Links to the three animation pages
 - The time machine's footer (next to Sources) now links the Corison 100,000-year, Mayacamas 8 Myr and San Andreas 30 Myr pages merged in PR #40; each opens in a new tab.
 - Checks: `python3 -m unittest discover -s scripts -p 'test_*.py'`; `python3 scripts/validate.py`; headless load of timemachine.html.
+
+## L1 hand-off queue, Workflow H (branch `freellmapi-handoff`) — 2026-10-01
+- Owner asked how FreeLLMAPI can keep going when Claude reaches its usage limit, and chose the GitHub Actions version. Design: /mnt/project-files/governance/freellmapi-handoff-proposal.md (project files).
+- New `queue/` (README.md, card.schema.json, cards/): task cards marked L1 or L2. New `scripts/l1_runner.py` drafts ready L1 cards through FreeLLMAPI into `data/drafts/l1/` (untrusted, with a `.meta.json`), checks JSON/schema/length, refuses hidden files, `data/raw/`, uploads and paths outside the repo. New `.github/workflows/l1-runner.yml` runs on pushes that touch `queue/cards/` (never the default branch), starts FreeLLMAPI from pinned commit dbf3a84 on 127.0.0.1 with Groq/Cerebras/Mistral keys from Actions secrets, and commits drafts back to the same branch.
+- Tests: `scripts/test_l1_runner.py` (11). `python3 -m unittest discover -s scripts -p 'test_*.py'` → 139 pass, 1 skipped; `python3 scripts/validate.py` PASS.
+- Not tested: the workflow itself and FreeLLMAPI in Docker (this sandbox can't reach Docker Hub or GHCR; no provider keys). First real run is the test.
+- Not done here: the GOVERNANCE.md §2a / AGENTS.md / AUTOPILOT.md wording for Workflow H; those instruction files need the owner's explicit OK (text proposed in the PR).
+- Owner setup: three repo secrets `FREELLMAPI_GROQ_KEY`, `FREELLMAPI_CEREBRAS_KEY`, `FREELLMAPI_MISTRAL_KEY`; repo variable `FREELLMAPI_ENABLED=true`; GOVERNANCE.md switch to `FreeLLMAPI: ON`.
