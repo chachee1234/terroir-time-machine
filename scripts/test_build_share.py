@@ -57,6 +57,23 @@ class ShareBuildTest(unittest.TestCase):
         self.assertNotIn("__COMMIT__", html)
         self.assertIn("(review copy)</title>", html)
 
+    def test_location_pages_get_their_own_file(self):
+        napa = {p.relative_to(bs.ROOT).as_posix() for p in bs.collect()}
+        self.assertFalse([p for p in napa if p.startswith("prototype/assets/locations/")])
+        gib = {p.relative_to(bs.ROOT).as_posix() for p in bs.collect(page="gibraltar")}
+        self.assertIn("prototype/assets/locations/gibraltar/terrain.json", gib)
+        self.assertTrue(all(p.startswith("prototype/assets/locations/gibraltar/") for p in gib))
+        with tempfile.TemporaryDirectory() as d:
+            out, listing, _ = bs.build(out=Path(d) / "g.html", built="2026-01-01", page="gibraltar")
+            html = out.read_text(encoding="utf-8")
+            napa_out, _, _ = bs.build(out=Path(d) / "n.html", built="2026-01-01")
+            napa_html = napa_out.read_text(encoding="utf-8")
+        self.assertEqual(len(listing), len(gib))
+        self.assertIn('https://ttm.local/prototype/gibraltar.html', html)
+        self.assertIn('href="terroir-time-machine.html"', html)          # the Napa link points at the other review copy
+        self.assertIn('href="terroir-time-machine-gibraltar.html"', napa_html)
+        self.assertIn("(review copy)</title>", html)
+
 
 if __name__ == "__main__":
     unittest.main()
