@@ -401,3 +401,7 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - `prototype/san-andreas-30ma.html` (96 s): Farallon subduction, the ridge meeting the trench ~28 Ma, the Mendocino triple junction moving north, the transform lengthening, Pinnacles carried ~300 km from Neenach, the Gulf of California opening, moving sea-floor stripes, arc and slab-window volcanoes.
 - `scripts/make_deep_time_fields.py`, `scripts/test_deep_time_fields.py`; renderer takes `PAGE=`. SOURCES G37.
 - Checks: all `scripts/test_*.py` pass; `python3 scripts/validate.py` PASS; headless renders with no page errors.
+
+## 2026-10-07 — Links to the three animation pages
+- The time machine's footer (next to Sources) now links the Corison 100,000-year, Mayacamas 8 Myr and San Andreas 30 Myr pages merged in PR #40; each opens in a new tab.
+- Checks: `python3 -m unittest discover -s scripts -p 'test_*.py'`; `python3 scripts/validate.py`; headless load of timemachine.html.
