@@ -350,31 +350,8 @@ def frame_of(region):
     return [float(v) for v in bbox], assets
 
 
-def build(region, cell=40.0, years=None, months=range(6, 10), max_cloud=20.0, scene=None, quality=85, log=print):
-    bbox, assets = frame_of(region)
-    zone = int(region.get("utm_zone", 10))
-    squares = squares_for(bbox, zone)
-    if years is None:
-        y = datetime.date.today().year
-        years = [y, y - 1]
-    if scene:
-        m = re.fullmatch(r"(S2[ABC])_(\d{2})([A-Z])([A-Z]{2})_(\d{4})(\d{2})(\d{2})_(\d)_L2A", scene)
-        if not m:
-            raise SystemExit(f"not a Sentinel-2 L2A scene id: {scene}")
-        z, lat, sq, yy, mm = m.group(2), m.group(3), m.group(4), m.group(5), int(m.group(6))
-        items = {sq: [json.loads(http(f"{BUCKET}/{PREFIX}/{int(z)}/{lat}/{sq}/{yy}/{mm}/{scene}/{scene}.json"))]}
-        if [s for s, _ in squares] != [sq]:
-            raise SystemExit(f"{scene} does not cover the whole frame; squares needed: {[s for s, _ in squares]}")
-        chosen = {sq: items[sq][0]}
-        cloud, date = chosen[sq]["properties"]["eo:cloud_cover"], chosen[sq]["properties"]["datetime"][:10]
-    else:
-        items = {}
-        for sq, _ in squares:
-            items[sq] = scene_items(zone, sq, years, list(months))
-            log(f"  square {zone}S{sq}: {len(items[sq])} scenes in {years} months {list(months)}")
-        cloud, date, chosen = pick_scene(items, max_cloud)
-    log(f"  scene date {date}, cloud cover {cloud:.2f}%: " + ", ".join(i["id"] for i in chosen.values()))
-
+def crop(chosen, squares, bbox, cell, log=print, files=None):
+    """Nearest-overview crop of the chosen scene(s) onto a grid of `cell` metres covering bbox (row 0 north)."""
     e0, n0, e1, n1 = bbox
     cols, rows = int(round((e1 - e0) / cell)), int(round((n1 - n0) / cell))
     rgb = bytearray(cols * rows * 3)
@@ -382,8 +359,13 @@ def build(region, cell=40.0, years=None, months=range(6, 10), max_cloud=20.0, sc
     for sq, ext in squares:
         it = chosen[sq]
         url = it["assets"]["visual"]["href"]
-        f = RangeFile(url)
-        bo, ifds = read_ifds(f)
+        if files is not None and url in files:
+            f, bo, ifds = files[url]
+        else:
+            f = RangeFile(url)
+            bo, ifds = read_ifds(f)
+            if files is not None:
+                files[url] = (f, bo, ifds)
         full = ifds[0][256][0]
         # the overview whose pixel is closest to the requested cell (10, 20, 40, 80, 160 m)
         lvl = min(range(len(ifds)), key=lambda k: abs(math.log((10.0 * full / ifds[k][256][0]) / cell)))
@@ -414,6 +396,36 @@ def build(region, cell=40.0, years=None, months=range(6, 10), max_cloud=20.0, sc
                         rgb[base + c * 3:base + c * 3 + 3] = win[s:s + 3]
         sources.append({"scene": it["id"], "href": url, "overview": lvl, "pixel_m": px,
                         "cloud_cover": it["properties"]["eo:cloud_cover"], "datetime": it["properties"]["datetime"]})
+    return rgb, cols, rows, sources
+
+
+def build(region, cell=40.0, years=None, months=range(6, 10), max_cloud=20.0, scene=None, quality=85, log=print):
+    bbox, assets = frame_of(region)
+    zone = int(region.get("utm_zone", 10))
+    squares = squares_for(bbox, zone)
+    if years is None:
+        y = datetime.date.today().year
+        years = [y, y - 1]
+    if scene:
+        m = re.fullmatch(r"(S2[ABC])_(\d{2})([A-Z])([A-Z]{2})_(\d{4})(\d{2})(\d{2})_(\d)_L2A", scene)
+        if not m:
+            raise SystemExit(f"not a Sentinel-2 L2A scene id: {scene}")
+        z, lat, sq, yy, mm = m.group(2), m.group(3), m.group(4), m.group(5), int(m.group(6))
+        items = {sq: [json.loads(http(f"{BUCKET}/{PREFIX}/{int(z)}/{lat}/{sq}/{yy}/{mm}/{scene}/{scene}.json"))]}
+        if [s for s, _ in squares] != [sq]:
+            raise SystemExit(f"{scene} does not cover the whole frame; squares needed: {[s for s, _ in squares]}")
+        chosen = {sq: items[sq][0]}
+        cloud, date = chosen[sq]["properties"]["eo:cloud_cover"], chosen[sq]["properties"]["datetime"][:10]
+    else:
+        items = {}
+        for sq, _ in squares:
+            items[sq] = scene_items(zone, sq, years, list(months))
+            log(f"  square {zone}S{sq}: {len(items[sq])} scenes in {years} months {list(months)}")
+        cloud, date, chosen = pick_scene(items, max_cloud)
+    log(f"  scene date {date}, cloud cover {cloud:.2f}%: " + ", ".join(i["id"] for i in chosen.values()))
+
+    rgb, cols, rows, sources = crop(chosen, squares, bbox, cell, log)
+    e0, n0, e1, n1 = bbox
     missing = sum(1 for k in range(0, len(rgb), 3) if not (rgb[k] or rgb[k + 1] or rgb[k + 2]))
     jpg = encode_jpeg(rgb, cols, rows, quality)
     out = assets / "imagery.jpg"
@@ -436,6 +448,52 @@ def build(region, cell=40.0, years=None, months=range(6, 10), max_cloud=20.0, sc
     return meta
 
 
+def build_closeups(region, cell=10.0, quality=80, only=None, log=print):
+    """Full-resolution crops for the region's close-ups, from the same scene as the frame texture.
+
+    Reads <assets>/detail/index.json and the frame's imagery.json (run the frame build first), writes
+    <assets>/detail/<id>.imagery.jpg and <assets>/detail/imagery.json."""
+    _, assets = frame_of(region)
+    frame = json.loads((assets / "imagery.json").read_text())
+    index = json.loads((assets / "detail" / "index.json").read_text())
+    zone = int(region.get("utm_zone", 10))
+    files, out = {}, {}
+    chosen_by_scene = {}
+    for sc in frame["scenes"]:
+        it = json.loads(http(sc["href"].rsplit("/", 1)[0] + "/" + sc["scene"] + ".json"))
+        chosen_by_scene[sc["scene"]] = it
+    for q in index["locations"]:
+        if only and q["id"] not in only:
+            continue
+        bbox = q["bbox_utm"]
+        squares = squares_for(bbox, zone)
+        chosen = {}
+        for sq, _ in squares:
+            hit = [it for it in chosen_by_scene.values() if re.search(rf"_{zone:02d}[C-X]{sq}_", it["id"])]
+            if not hit:
+                raise SystemExit(f"{q['id']}: the frame scene does not cover square {sq}")
+            chosen[sq] = hit[0]
+        rgb, cols, rows, _ = crop(chosen, squares, bbox, cell, log=lambda *a: None, files=files)
+        jpg = encode_jpeg(rgb, cols, rows, quality)
+        name = f"{q['id']}.imagery.jpg"
+        (assets / "detail" / name).write_bytes(jpg)
+        missing = sum(1 for k in range(0, len(rgb), 3) if not (rgb[k] or rgb[k + 1] or rgb[k + 2]))
+        out[q["id"]] = {"file": name, "width": cols, "height": rows, "bbox_utm": bbox, "missing_cells": missing,
+                        "cell_m": [round((bbox[2] - bbox[0]) / cols, 3), round((bbox[3] - bbox[1]) / rows, 3)],
+                        "sha256": hashlib.sha256(jpg).hexdigest()}
+        log(f"  {q['id']}: {cols}x{rows} at {cell:g} m ({len(jpg) / 1e6:.2f} MB)")
+    path = assets / "detail" / "imagery.json"
+    old = json.loads(path.read_text())["locations"] if path.exists() and only else {}
+    old.update(out)
+    meta = {"label": frame["label"], "credit": frame["credit"], "rights": frame["rights"], "class": frame["class"],
+            "source": frame["source"], "scenes": [s["scene"] for s in frame["scenes"]], "date": frame["date"],
+            "encoding": f"baseline JPEG, quality {quality}, row 0 = north",
+            "resampling": "nearest full-resolution (10 m) pixel at each cell centre", "limits": frame["limits"],
+            "locations": dict(sorted(old.items()))}
+    path.write_text(json.dumps(meta, indent=1) + "\n")
+    return meta
+
+
 def register(region, meta):
     mp = ROOT / "data" / "manifest.json"
     man = json.loads(mp.read_text()) if mp.exists() else {"datasets": []}
@@ -449,6 +507,21 @@ def register(region, meta):
     mp.write_text(json.dumps(man, indent=2) + "\n")
 
 
+def register_closeups(region, meta):
+    """Add the close-up crops to the region's Sentinel-2 entry in data/manifest.json."""
+    mp = ROOT / "data" / "manifest.json"
+    man = json.loads(mp.read_text())
+    mid = f"{region['id']}-sentinel2-imagery"
+    _, assets = frame_of(region)
+    entry = next((d for d in man["datasets"] if d.get("id") == mid), None)
+    if entry is None:
+        raise SystemExit(f"{mid} is not in data/manifest.json; build the frame texture first")
+    keep = [d for d in entry.get("derived", []) if "/detail/" not in d["file"]]
+    entry["derived"] = keep + [{"file": str((assets / "detail" / q["file"]).relative_to(ROOT)), "sha256": q["sha256"]}
+                               for q in meta["locations"].values()]
+    mp.write_text(json.dumps(man, indent=2) + "\n")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--region", required=True, help="region file in data/regions/")
@@ -458,13 +531,20 @@ def main():
     ap.add_argument("--max-cloud", type=float, default=20.0, help="largest scene cloud cover accepted (%%)")
     ap.add_argument("--scene", help="use this scene id instead of searching (pins the result)")
     ap.add_argument("--quality", type=int, default=85, help="JPEG quality")
+    ap.add_argument("--closeups", action="store_true",
+                    help="also write 10 m crops for every close-up in detail/index.json, from the frame's scene")
+    ap.add_argument("--closeups-only", action="store_true", help="only the close-up crops (the frame texture must exist)")
     a = ap.parse_args()
     region = json.loads((ROOT / a.region).read_text())
     m0, m1 = (int(v) for v in a.months.split("-"))
     years = [int(y) for y in a.years.split(",")] if a.years else None
-    print(f"{region['id']}: Sentinel-2 texture at {a.cell:g} m")
-    meta = build(region, a.cell, years, range(m0, m1 + 1), a.max_cloud, a.scene, a.quality)
-    register(region, meta)
+    if not a.closeups_only:
+        print(f"{region['id']}: Sentinel-2 texture at {a.cell:g} m")
+        meta = build(region, a.cell, years, range(m0, m1 + 1), a.max_cloud, a.scene, a.quality)
+        register(region, meta)
+    if a.closeups or a.closeups_only:
+        print(f"{region['id']}: close-up textures at 10 m")
+        register_closeups(region, build_closeups(region))
 
 
 if __name__ == "__main__":

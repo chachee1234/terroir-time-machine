@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mayacamas, 8 million years</title>
+<!--
+  How the Mayacamas and the Napa and Sonoma valleys took shape, 8 million years ago to today: a MODEL animation on
+  the Napa-Sonoma frame (76 x 77 km, terrain.bin), built to keep moving and to show the order of events, not to be
+  read as a measured reconstruction. Fields: scripts/make_deep_time_fields.py.
+  Measured: today's ground (Terrain Tiles), where the Sonoma Volcanics are (USGS SIM 2956, units Ts*), their
+  ~8-2.5 Ma span and northward younging (Mankinen 1972, SOURCES G01), fault traces and slip rates (UCERF3),
+  today's satellite image (Sentinel-2), the 41,000- then 100,000-year ice-age rhythm of sea level.
+  Modelled: when each patch erupted, how big the volcanoes were, the uplift and erosion curves, fault slip drawn
+  only for the last 500,000 years at today's rates, sea-level swing sizes, colours.
+  ?play=0 waits for window.C100.frame(sec) (scripts/render_corison_video.mjs).
+-->
+<style>
+  :root { --ink:#f3efe6; --dim:#c9c2b2; --meas:#7fc8a0; --mod:#e8b45a; }
+  html,body { margin:0; height:100%; background:linear-gradient(#5d7487 0%, #a7b5bd 52%, #1d231b 100%); color:var(--ink); font-family:Inter, "Helvetica Neue", Arial, sans-serif; overflow:hidden; }
+  canvas#gl { position:fixed; inset:0; width:100%; height:100%; display:block; }
+  .hud { position:fixed; pointer-events:none; text-shadow:0 1px 3px rgba(0,0,0,.85); }
+  #title { left:24px; top:20px; } #title b { font-size:22px; font-weight:650; display:block; } #title span { font-size:14px; color:var(--dim); }
+  #age { right:24px; top:16px; text-align:right; } #age b { font-size:44px; font-weight:700; font-variant-numeric:tabular-nums; display:block; line-height:1.05; } #age span { font-size:14px; color:var(--dim); }
+  #cap { left:24px; bottom:108px; width:470px; background:rgba(14,16,12,.62); border-radius:10px; padding:12px 16px 13px; }
+  #cap h2 { margin:0 0 5px; font-size:19px; font-weight:650; } #cap p { margin:0; font-size:13.5px; line-height:1.42; color:#ebe5d8; }
+  #cap .tags { margin-top:8px; font-size:12.5px; line-height:1.5; } #cap .tags div { color:var(--dim); margin-top:2px; }
+  .tag { display:inline-block; border-radius:4px; padding:0 6px; margin-right:6px; font-weight:650; color:#121410; } .tag.m { background:var(--meas); } .tag.o { background:var(--mod); }
+  #gauge { right:24px; bottom:108px; width:250px; background:rgba(14,16,12,.62); border-radius:10px; padding:10px 14px; font-size:13px; color:var(--dim); line-height:1.5; }
+  #gauge b { color:#fff; font-size:15px; font-variant-numeric:tabular-nums; }
+  #bar { left:24px; right:24px; bottom:16px; height:80px; } #bar svg { width:100%; height:100%; overflow:visible; }
+  .lbl { position:fixed; pointer-events:none; font-size:13px; font-weight:650; white-space:nowrap; transform:translate(-50%,-100%); text-shadow:0 1px 3px #000, 0 0 2px #000; color:#fff; }
+  .lbl.pin::after { content:""; display:block; width:2px; height:22px; background:#fff; margin:2px auto 0; box-shadow:0 0 3px #000; }
+  .lbl.flt { color:#ff9a8a; font-size:12px; } .lbl.big { font-size:15px; color:#f6e7c4; letter-spacing:.3px; }
+  #foot { left:50%; transform:translateX(-50%); bottom:1px; font-size:11px; color:#a9a291; white-space:nowrap; }
+  #end { inset:0; display:flex; align-items:center; justify-content:center; opacity:0; background:rgba(10,12,9,.95); }
+  #end div { max-width:860px; font-size:14px; line-height:1.5; color:#e4ddcf; } #end h2 { font-size:24px; margin:0 0 10px; color:#fff; } #end li { margin:3px 0; }
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="hud" id="title"><b>How the Mayacamas rose</b><span>Napa and Sonoma valleys, 8 million years ago to today · a model animation</span></div>
+<div class="hud" id="age"><b id="ageN">8.0</b><span id="ageU">million years ago</span></div>
+<div class="hud" id="cap"><h2 id="capH"></h2><p id="capP"></p><div class="tags" id="capT"></div></div>
+<div class="hud" id="gauge"></div>
+<div class="hud" id="bar"><svg id="tl"></svg></div>
+<div class="hud" id="foot">Model animation: height ×2.5; volcano sizes, uplift, erosion and timing are illustrative. Fault slip shown only for the last 500,000 years. Sources at the end.</div>
+<div class="hud" id="end"><div>
+  <h2>What is measured and what is modelled</h2>
+  <ul>
+    <li><b style="color:var(--meas)">Measured:</b> today's ground (USGS 3DEP via AWS Terrain Tiles); where the Sonoma Volcanics are (USGS SIM 2956, Graymer et al. 2007, units Ts*); that they erupted between about 8 and 2.5 million years ago, older to the south (Mankinen 1972, GSA Bulletin); fault traces and slip rates (USGS UCERF3 via the GEM active-faults database); today's satellite image (Copernicus Sentinel-2, 2026); the change from 41,000-year to 100,000-year ice-age cycles about a million years ago.</li>
+    <li><b style="color:var(--mod)">Modelled:</b> when each patch of volcanic rock erupted (a smooth south-to-north ramp), how tall the volcanoes stood, how fast the ranges rose (slowly at first, faster after about 3.5 million years ago) and how valleys deepened, fault motion (today's rates, last 500,000 years only), the size of sea-level swings, all colours.</li>
+    <li><b>Why the ranges rose:</b> the San Andreas plate boundary moved past this latitude about 10 to 8 million years ago, opening a gap under the plate that fed the volcanoes. Since about 5 to 3.5 million years ago the Pacific plate has pushed slightly toward North America as it slides past, squeezing the Coast Ranges up between strike-slip faults (Atwater 1970; Page et al. 1998, USGS).</li>
+  </ul>
+</div></div>
+
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as THREE from "three";
+const Q = new URLSearchParams(location.search), AUTOPLAY = Q.get("play") !== "0";
+const BASE = "assets/regions/napa_valley/", VX = 2.5, DUR = 92;
+const $ = id => document.getElementById(id);
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x)), lerp = (a, b, t) => a + (b - a) * t;
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+
+/* video seconds -> age, Ma */
+const KEYS = [[0,8],[2,8],[24,5],[46,2.6],[72,0.5],[85,0],[DUR,0]];
+function ageAt(s) { for (let i = 1; i < KEYS.length; i++) if (s <= KEYS[i][0]) { const [s0,a0] = KEYS[i-1], [s1,a1] = KEYS[i];
+  if (a0 === a1) return a0; const u = (s - s0) / (s1 - s0); return lerp(a0, a1, 0.75 * u + 0.25 * sstep(0, 1, u)); } return 0; }
+
+/* model curves (t in Ma) */
+const uplift = t => t >= 5 ? 0.10 : 0.10 + 0.90 * Math.pow(1 - t / 5, 1.6);          // share of today's range height
+const relief = t => 0.30 + 0.70 * Math.pow(1 - t / 8, 1.2);                           // share of today's valley-cutting
+function sea(t) {                                                                    // metres, illustrative swings
+  if (t > 2.7) return 12 + 8 * Math.sin(2 * Math.PI * t / 0.4);
+  if (t > 1.0) return lerp(-20, -30, (2.7 - t) / 1.7) + 30 * Math.sin(2 * Math.PI * t / 0.041) * sstep(2.8, 2.5, t);
+  return (-55 + 60 * Math.cos(2 * Math.PI * t / 0.1)) * sstep(0, 0.012, t);
+}
+const FAULT_SINCE = 0.5;                                                             // Ma
+
+/* chapters */
+const CH = [
+  { a:[8.01,5], h:"Volcanoes on a low landscape",
+    p:"Eight million years ago this is low, rolling country near the coast. The Pacific plate has started sliding past North America just offshore, and the gap it leaves under the plate lets magma rise. The Sonoma Volcanics begin: lava and ash bury the land, starting in the south.",
+    m:"where the Sonoma Volcanics are today; their ~8 to 2.5 million-year span", o:"which patch erupted when; how tall the volcanoes stood" },
+  { a:[5,2.6], h:"Eruptions march north and the squeeze begins",
+    p:"The eruptions move north, following the edge of the plate boundary as it moves up the coast. About 5 to 3.5 million years ago the Pacific plate starts pushing slightly toward North America as it slides by. The crust buckles and the Mayacamas begin to rise, while the Napa and Sonoma valleys stay low between them.",
+    m:"northward younging of the volcanics; the change in plate motion", o:"how fast the uplift started" },
+  { a:[2.6,0.5], h:"The ranges climb and the ice ages begin",
+    p:"The last eruptions here, around Mount St. Helena, end about 2.5 million years ago. Uplift speeds up and creeks cut deep valleys into the old volcanic cover. Ice ages now come and go every 41,000 years, then every 100,000 years, and the sea rises and falls over the low ground to the south.",
+    m:"the ice-age rhythm of sea level", o:"uplift and erosion rates; how far the sea reached each time" },
+  { a:[0.5,0.0005], h:"Faults keep sliding",
+    p:"The Rodgers Creek, West Napa, Green Valley and Maacama faults carry slices of the land north-west, a few millimetres a year each. San Pablo Bay floods in each warm spell. The valley floors fill with the gravel fans the vineyards grow on today.",
+    m:"fault traces and today's slip rates (USGS UCERF3)", o:"fault motion drawn only for the last 500,000 years" },
+  { a:[0.0005,-1], h:"Today",
+    p:"The Mayacamas stand about 1,300 m at Mount St. Helena. Under the vines on the valley floors lie fans washed down from those young mountains, and the volcanic rock they were cut from still caps many of the ridges.",
+    m:"today's ground and satellite image", o:"" } ];
+const chapterAt = a => CH.find(c => a <= c.a[0] && a > c.a[1]) || CH[0];
+
+/* data */
+const bin = async u => (await fetch(u)).arrayBuffer();
+const [tm, meta, zraw, fraw] = await Promise.all([fetch(BASE + "terrain.json").then(r => r.json()), fetch(BASE + "mayacamas_8ma.json").then(r => r.json()),
+  bin(BASE + "terrain.bin"), bin(BASE + "mayacamas_8ma.u8")]);
+const W = meta.grid.cols, H = meta.grid.rows, N = W * H, CELL = meta.grid.cell_m, SX = (W - 1) * CELL, SZ = (H - 1) * CELL;
+const z0 = new Float32Array(N); { const v = new Int16Array(zraw); for (let i = 0; i < N; i++) z0[i] = v[i] === -32768 ? 0 : v[i]; }
+const volc = new Float32Array(N), te = new Float32Array(N);
+{ const a = new Uint8Array(fraw, 0, N), b = new Uint8Array(fraw, N, N); for (let i = 0; i < N; i++) { volc[i] = a[i] / 255; te[i] = b[i] / 30; } }
+// long-wavelength shape (the ranges) and short-wavelength relief (valleys cut into them)
+function blur(src, r) { let a = Float32Array.from(src), b = new Float32Array(N);
+  for (let pass = 0; pass < 3; pass++) {
+    for (let y = 0; y < H; y++) { let acc = 0, n = 0; for (let x = -r; x < W + r; x++) { if (x + r < W) { acc += a[y * W + Math.min(x + r, W - 1)]; n++; } if (x - r - 1 >= 0) { acc -= a[y * W + x - r - 1]; n--; } if (x >= 0 && x < W) b[y * W + x] = acc / n; } }
+    for (let x = 0; x < W; x++) { let acc = 0, n = 0; for (let y = -r; y < H + r; y++) { if (y + r < H) { acc += b[Math.min(y + r, H - 1) * W + x]; n++; } if (y - r - 1 >= 0) { acc -= b[(y - r - 1) * W + x]; n--; } if (y >= 0 && y < H) a[y * W + x] = acc / n; } } }
+  return a; }
+const zs = blur(z0, 14), zd = new Float32Array(N); for (let i = 0; i < N; i++) zd[i] = z0[i] - zs[i];
+const BASEZ = 60;
+const noise = new Float32Array(N); { for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) { const s = Math.sin(c * 12.9898 + r * 78.233) * 43758.5453; noise[r * W + c] = s - Math.floor(s); } }
+const noiseS = blur(noise, 2);
+
+// local km (from SW corner) -> grid
+const kmToCol = x => x * 1000 / CELL, kmToRow = y => (SZ - y * 1000) / CELL;
+const toScene = (c, r) => [c * CELL - SX / 2, r * CELL - SZ / 2];
+
+/* faults: per-cell drift vector (cells per Ma), right-lateral, east side held still */
+const drift = new Float32Array(N * 2);
+for (const f of meta.faults) {
+  const pts = f.km.map(([x, y]) => [kmToCol(x), kmToRow(y)]);
+  const n0 = pts[0], n1 = pts[pts.length - 1]; let ux = n0[0] - n1[0], uy = n0[1] - n1[1];   // toward the north end
+  const L = Math.hypot(ux, uy); ux /= L; uy /= L; if (uy > 0) { ux = -ux; uy = -uy; }        // rows grow south: north = -y
+  const rate = f.mm_yr * 1000 / CELL;                                                         // km/Ma -> cells/Ma
+  for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) {
+    let best = 1e9, side = 0, along = 0;
+    for (let k = 1; k < pts.length; k++) { const [ax, ay] = pts[k-1], [bx, by] = pts[k], dx = bx - ax, dy = by - ay, l2 = dx * dx + dy * dy;
+      const t = clamp(((c - ax) * dx + (r - ay) * dy) / l2, 0, 1), d = Math.hypot(c - ax - t * dx, r - ay - t * dy);
+      if (d < best) { best = d; side = (c - ax) * dy - (r - ay) * dx; along = (k === 1 && t === 0) || (k === pts.length - 1 && t === 1) ? d : 0; } }
+    // west side: point to the left of the line when walking north... decided by sign relative to ux,uy
+    const west = ((c - n1[0]) * uy - (r - n1[1]) * ux) < 0 ? 1 : 0;
+    const w = sstep(-8, 8, (west ? 1 : -1) * best) * (1 - sstep(10, 45, along));
+    drift[(r * W + c) * 2] += w * ux * rate; drift[(r * W + c) * 2 + 1] += w * uy * rate; } }
+
+/* three.js */
+const canvas = $("gl"), renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setClearColor(0, 0);
+const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(34, 16 / 9, 500, 600000);
+const geo = new THREE.PlaneGeometry(SX, SZ, W - 1, H - 1); geo.rotateX(-Math.PI / 2);
+const pos = geo.attributes.position, col = new THREE.BufferAttribute(new Float32Array(N * 3), 3), glow = new THREE.BufferAttribute(new Float32Array(N), 1);
+geo.setAttribute("color", col); geo.setAttribute("glow", glow);
+const img = await new THREE.TextureLoader().loadAsync(BASE + "imagery.jpg"); img.colorSpace = THREE.SRGBColorSpace;
+const mat = new THREE.ShaderMaterial({ uniforms: { map: { value: img }, imgMix: { value: 0 }, sun: { value: new THREE.Vector3(-0.5, 0.6, -0.3).normalize() }, haze: { value: new THREE.Color(0xa6b4bc) } },
+  vertexShader: `attribute vec3 color; attribute float glow; varying vec3 vC; varying vec3 vN; varying vec2 vUv; varying float vD; varying float vG;
+    void main(){ vC=color; vG=glow; vN=normalize(normal); vUv=uv; vec4 mv=modelViewMatrix*vec4(position,1.0); vD=-mv.z; gl_Position=projectionMatrix*mv; }`,
+  fragmentShader: `uniform sampler2D map; uniform float imgMix; uniform vec3 sun; uniform vec3 haze; varying vec3 vC; varying vec3 vN; varying vec2 vUv; varying float vD; varying float vG;
+    void main(){ vec3 n=normalize(vN); float l=0.40+0.80*max(dot(n,sun),0.0); vec3 im=pow(texture2D(map,vUv).rgb,vec3(1.0/2.2))*0.95;
+      vec3 c=mix(vC,im,imgMix)*l; c=mix(c,vec3(1.0,0.42,0.08),vG*0.85)+vec3(1.0,0.35,0.05)*vG*0.6;
+      c=mix(c,haze,clamp((vD-60000.0)/160000.0,0.0,0.4)); gl_FragColor=vec4(c,1.0); }` });
+scene.add(new THREE.Mesh(geo, mat));
+// thin sides so the block reads as a slab
+const faultLines = meta.faults.map(f => { const l = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0xff6a55, transparent: true, opacity: 0.85, depthTest: false })); l.renderOrder = 2; scene.add(l); return { f, l }; });
+
+const S0 = new Float32Array(N), CR = new Float32Array(N), CG = new Float32Array(N), CB = new Float32Array(N), GL = new Float32Array(N);
+function build(t) {
+  const u = uplift(t), e = relief(t), sl = sea(t);
+  for (let i = 0; i < N; i++) {
+    // volcano: builds over 0.35 Ma after its eruption age, then wears away until today (today's remnant is in z0)
+    const v = volc[i], tE = te[i];
+    let V = 0, g = 0, fresh = 0;
+    if (v > 0.02 && t <= tE) { const build = sstep(tE, tE - 0.35, t), wear = clamp(t / Math.max(tE - 0.35, 0.01), 0, 1);
+      V = 380 * v * build * Math.pow(wear, 0.8) * (0.6 + 0.8 * noiseS[i]);
+      g = v * (1 - sstep(0.0, 0.18, Math.abs(t - (tE - 0.12)))) * (0.5 + noise[i]);
+      fresh = v * (1 - sstep(tE - 0.3, tE - 1.6, t)); }
+    let z = BASEZ + u * (zs[i] - BASEZ) + e * zd[i] * (0.4 + 0.6 * u) + V;
+    // colour by height and age: lowland grass/oak, higher chaparral and forest; fresh volcanic rock dark
+    const h = clamp(z / 900, 0, 1), nn = noiseS[i] - 0.5;
+    let R = lerp(0.70, 0.30, h) + nn * 0.08, G = lerp(0.63, 0.40, h) + nn * 0.08, B = lerp(0.40, 0.24, h) + nn * 0.05;
+    if (fresh > 0) { R = lerp(R, 0.26, fresh); G = lerp(G, 0.25, fresh); B = lerp(B, 0.26, fresh); }
+    if (z < sl) { const d = clamp((sl - z) / 30, 0, 1); R = lerp(0.30, 0.13, d); G = lerp(0.50, 0.30, d); B = lerp(0.60, 0.48, d); z = sl; }
+    S0[i] = z; CR[i] = R; CG[i] = G; CB[i] = B; GL[i] = clamp(g, 0, 1); }
+  const P = pos.array, CA = col.array, GA = glow.array, k = Math.min(t, FAULT_SINCE);
+  for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) { const i = r * W + c; let s = S0[i], R = CR[i], G = CG[i], B = CB[i], g = GL[i];
+    const dx = drift[i * 2] * k, dy = drift[i * 2 + 1] * k;
+    if (dx || dy) { const sc = clamp(c + dx, 0, W - 1.001), sr = clamp(r + dy, 0, H - 1.001), c0 = Math.floor(sc), r0 = Math.floor(sr), tx = sc - c0, ty = sr - r0, j = r0 * W + c0;
+      const bl = A => lerp(lerp(A[j], A[j + 1], tx), lerp(A[j + W], A[j + W + 1], tx), ty); s = bl(S0); R = bl(CR); G = bl(CG); B = bl(CB); g = bl(GL); }
+    P[i * 3 + 1] = s * VX; CA[i * 3] = R; CA[i * 3 + 1] = G; CA[i * 3 + 2] = B; GA[i] = g; }
+  pos.needsUpdate = col.needsUpdate = glow.needsUpdate = true; geo.computeVertexNormals();
+  mat.uniforms.imgMix.value = sstep(0.03, 0.0, t) * 0.92;
+  for (const { f, l } of faultLines) { const fp = [];
+    for (let k2 = 1; k2 < f.km.length; k2++) for (let s2 = 0; s2 <= 1; s2 += 0.02) { const x = lerp(f.km[k2-1][0], f.km[k2][0], s2), y = lerp(f.km[k2-1][1], f.km[k2][1], s2), c = kmToCol(x), r = kmToRow(y);
+      if (c < 1 || r < 1 || c > W - 2 || r > H - 2) continue; const [sx, sz] = toScene(c, r); fp.push(sx, P[(Math.round(r) * W + Math.round(c)) * 3 + 1] + 120, sz); }
+    l.geometry.dispose(); l.geometry = new THREE.BufferGeometry(); l.geometry.setAttribute("position", new THREE.Float32BufferAttribute(fp, 3));
+    l.material.opacity = 0.85 * sstep(FAULT_SINCE + 0.4, FAULT_SINCE, t); f._mid = fp.length ? [fp[Math.floor(fp.length / 6) * 3], fp[Math.floor(fp.length / 6) * 3 + 1], fp[Math.floor(fp.length / 6) * 3 + 2]] : null; }
+}
+const heightAt = (km) => { const c = clamp(Math.round(kmToCol(km[0])), 0, W - 1), r = clamp(Math.round(kmToRow(km[1])), 0, H - 1); return pos.array[(r * W + c) * 3 + 1]; };
+
+/* camera: always moving, a slow arc from the south-east round to the south-west, easing in and out */
+function placeCamera(s) {
+  const u = s / DUR, ang = lerp(-0.95, -2.05, u) + 0.06 * Math.sin(u * 7), dist = lerp(150000, 128000, sstep(0.2, 0.9, u)), el = lerp(0.52, 0.44, u);
+  camera.position.set(Math.cos(ang) * dist * Math.cos(el), Math.sin(el) * dist, -Math.sin(ang) * dist * Math.cos(el));
+  camera.lookAt(0, 0, 0);
+}
+
+/* labels */
+const lab = {};
+for (const [n, km] of Object.entries(meta.places_km)) { const d = document.createElement("div"); d.className = "lbl " + (n === "Mayacamas Mountains" ? "big" : "pin"); d.textContent = n; document.body.appendChild(d); lab[n] = { d, km }; }
+const flab = meta.faults.filter(f => /Rodgers|West Napa|Green Valley|Maacama/.test(f.name)).map(f => { const d = document.createElement("div"); d.className = "lbl flt"; d.textContent = f.name.replace(/–.*? Fault| Fault/, "").replace(/–Healdsburg/, "") + " Fault"; document.body.appendChild(d); return { f, d }; });
+const v3 = new THREE.Vector3();
+let hideLabels = false;
+function place(el, x, y, z, show) { show = show && !hideLabels; v3.set(x, y, z).project(camera); const vis = show && v3.z < 1 && Math.abs(v3.x) < 0.95 && v3.y < 0.9 && v3.y > -0.15;
+  el.style.display = vis ? "block" : "none"; if (vis) { el.style.left = ((v3.x + 1) / 2 * innerWidth) + "px"; el.style.top = ((1 - v3.y) / 2 * innerHeight) + "px"; } }
+
+/* timeline strip: eruptions band, uplift curve, sea-level swings */
+const svg = $("tl"); let svgW = 0;
+function drawStrip() { const w = svg.clientWidth, h = svg.clientHeight; svgW = w; const X = t => (1 - t / 8) * w, top = 6, bot = h - 18;
+  const up = [], sl = []; for (let t = 8; t >= 0; t -= 0.004) { up.push(`${X(t).toFixed(1)},${(bot - uplift(t) * (bot - top - 8)).toFixed(1)}`); sl.push(`${X(t).toFixed(1)},${(top + 18 - sea(t) / 6).toFixed(1)}`); }
+  svg.innerHTML = `<rect width="${w}" height="${bot}" rx="6" fill="rgba(14,16,12,.55)"/>` +
+    `<rect x="${X(8)}" y="${bot - 12}" width="${X(2.5) - X(8)}" height="8" rx="3" fill="#e2702a" opacity=".8"/><text x="${X(8) + 6}" y="${bot - 15}" fill="#f0a070" font-size="11">Sonoma Volcanics erupt</text>` +
+    `<polyline points="${up.join(" ")}" fill="none" stroke="#e8d7a6" stroke-width="2"/><text x="${X(1.2)}" y="${bot - uplift(1.2) * (bot - top - 8) - 6}" fill="#e8d7a6" font-size="11" text-anchor="end">range height (model)</text>` +
+    `<polyline points="${sl.join(" ")}" fill="none" stroke="#6fb6e8" stroke-width="1.3" opacity=".9"/><text x="${X(8) + 6}" y="${top + 11}" fill="#9fd0ff" font-size="11">sea level swings</text>` +
+    [8,7,6,5,4,3,2,1,0].map(t => `<text x="${X(t)}" y="${h - 4}" fill="#b9b2a2" font-size="11" text-anchor="${t === 8 ? "start" : t === 0 ? "end" : "middle"}">${t === 0 ? "today" : t + " Ma"}</text>`).join("") +
+    `<line id="cur" y1="0" y2="${bot}" stroke="#fff" stroke-width="1.5"/>`; svg._X = X; }
+function moveStrip(t) { if (svg.clientWidth !== svgW) drawStrip(); const x = svg._X(t), c = svg.querySelector("#cur"); c.setAttribute("x1", x); c.setAttribute("x2", x); }
+
+function hud(s, t) {
+  if (t <= 0.0005) { $("ageN").textContent = "Today"; $("ageU").textContent = ""; }
+  else if (t >= 1) { $("ageN").textContent = t.toFixed(1); $("ageU").textContent = "million years ago"; }
+  else { $("ageN").textContent = (Math.round(t * 1000 / 5) * 5).toLocaleString("en-US"); $("ageU").textContent = "thousand years ago"; }
+  const ch = chapterAt(t);
+  if ($("capH").textContent !== ch.h) { $("capH").textContent = ch.h; $("capP").textContent = ch.p;
+    $("capT").innerHTML = (ch.m ? `<div><span class="tag m">Measured</span>${ch.m}</div>` : "") + (ch.o ? `<div><span class="tag o">Modelled</span>${ch.o}</div>` : ""); }
+  const sh = meta.places_km["Mt. St. Helena"], hh = heightAt(sh) / VX, sl = sea(t);
+  $("gauge").innerHTML = `Mount St. Helena area: <b>${Math.round(Math.max(hh, 0)).toLocaleString("en-US")} m</b><br>Sea level: <b>${sl >= 0 ? "+" : "−"}${Math.abs(Math.round(sl))} m</b> vs today<br>` +
+    (t <= FAULT_SINCE ? `Rodgers Creek offset so far: <b>${((FAULT_SINCE - t) * 6).toFixed(1)} km</b>` : `<span style="opacity:.8">heights are modelled</span>`);
+  $("end").style.opacity = sstep(DUR - 6.5, DUR - 5.5, s); $("cap").style.opacity = $("gauge").style.opacity = 1 - sstep(DUR - 6.5, DUR - 6, s);
+}
+
+let lastT = -1;
+function frame(s) { const t = ageAt(s); hideLabels = s > DUR - 6.6;
+  if (Math.abs(t - lastT) > 1e-7) { build(t); lastT = t; }
+  placeCamera(s); renderer.render(scene, camera);
+  for (const [n, { d, km }] of Object.entries(lab)) { const [x, z] = toScene(kmToCol(km[0]), kmToRow(km[1])); place(d, x, heightAt(km) + (n === "Mayacamas Mountains" ? 2500 : 300), z, true); }
+  for (const { f, d } of flab) place(d, f._mid ? f._mid[0] : 0, f._mid ? f._mid[1] + 600 : 0, f._mid ? f._mid[2] : 0, !!f._mid && t <= FAULT_SINCE + 0.2);
+  moveStrip(t); hud(s, t); }
+function resize() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.setViewOffset(innerWidth, innerHeight, 0, innerHeight * 0.17, innerWidth, innerHeight); camera.updateProjectionMatrix(); drawStrip(); }
+addEventListener("resize", resize); resize();
+window.C100 = { frame, DUR, ageAt, ready: true };
+if (AUTOPLAY) { const t0 = performance.now(); const loop = () => { frame(((performance.now() - t0) / 1000) % DUR); requestAnimationFrame(loop); }; loop(); }
+</script>
+</body>
+</html>

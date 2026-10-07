@@ -1,0 +1,4291 @@
+{
+ "label": "USGS SIM 2956, 1:100,000",
+ "source": "Graymer, R.W., et al., 2007, Geologic Map and Map Database of Eastern Sonoma and Western Napa Counties, California: USGS Scientific Investigations Map 2956, DOI 10.3133/sim2956",
+ "rights": "USGS-produced, public domain in the U.S.; credit U.S. Geological Survey (SOURCES.md G07)",
+ "input": {
+  "file": "eswn-geol.e00",
+  "sha256": "ccab4021858cef659d7a3d3c1b26d02ed127811171477fbead074d557c881df3",
+  "arcs": 10323,
+  "polygons": 4003
+ },
+ "grid": "each close-up's own grid (detail/index.json), NAD83 / UTM 10N, row 0 = north, grid points sampled",
+ "limits": "Published at 1:100,000: a finer grid draws the map's contacts smoothly, it does not make them more precise (a line on the map is roughly 50 m wide on the ground). Transparent cells are outside the mapped area.",
+ "closeups": [
+  {
+   "id": "guenoc_valley",
+   "file": "guenoc_valley.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    18.32,
+    18.32
+   ],
+   "mapped_fraction": 0.425,
+   "units": [
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 36132
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 20541
+    },
+    {
+     "ptype": "QTob",
+     "color": "#acac53",
+     "cells": 18379
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 17013
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 5852
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 4828
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 4049
+    },
+    {
+     "ptype": "Jgvm?",
+     "color": "#733b9b",
+     "cells": 1878
+    },
+    {
+     "ptype": "Jk",
+     "color": "#ccb933",
+     "cells": 1810
+    },
+    {
+     "ptype": "sc",
+     "color": "#7c92c0",
+     "cells": 486
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 434
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 71
+    },
+    {
+     "ptype": "QTt",
+     "color": "#7cacc0",
+     "cells": 63
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 6
+    }
+   ]
+  },
+  {
+   "id": "knights_valley",
+   "file": "knights_valley.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    43.781,
+    43.781
+   ],
+   "mapped_fraction": 0.624,
+   "units": [
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 22983
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 20765
+    },
+    {
+     "ptype": "fsr",
+     "color": "#64d8c1",
+     "cells": 17969
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 16438
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 12535
+    },
+    {
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 10558
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 10532
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 8321
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 5228
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 4855
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 4437
+    },
+    {
+     "ptype": "KJfgs",
+     "color": "#915f46",
+     "cells": 4394
+    },
+    {
+     "ptype": "gs",
+     "color": "#ab2b9f",
+     "cells": 2910
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 2765
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 2628
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 2590
+    },
+    {
+     "ptype": "Qlsr",
+     "color": "#2b30ab",
+     "cells": 1877
+    },
+    {
+     "ptype": "Tswt",
+     "color": "#2bab67",
+     "cells": 1762
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 1731
+    },
+    {
+     "ptype": "Jmi",
+     "color": "#64c5d8",
+     "cells": 1076
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 953
+    },
+    {
+     "ptype": "sc",
+     "color": "#7c92c0",
+     "cells": 948
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 834
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 800
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 672
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 598
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 449
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 415
+    },
+    {
+     "ptype": "Tr",
+     "color": "#2b90ab",
+     "cells": 411
+    },
+    {
+     "ptype": "Jk",
+     "color": "#ccb933",
+     "cells": 285
+    },
+    {
+     "ptype": "m",
+     "color": "#8aac53",
+     "cells": 164
+    },
+    {
+     "ptype": "KJfc",
+     "color": "#69ac53",
+     "cells": 140
+    },
+    {
+     "ptype": "ch",
+     "color": "#79ca72",
+     "cells": 121
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 112
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 89
+    },
+    {
+     "ptype": "Kfss",
+     "color": "#46918e",
+     "cells": 84
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 42
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 32
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 16
+    }
+   ]
+  },
+  {
+   "id": "mount_st_helena",
+   "file": "mount_st_helena.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    17.613,
+    17.613
+   ],
+   "mapped_fraction": 0.936,
+   "units": [
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 67046
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 47238
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 33898
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 14754
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 12736
+    },
+    {
+     "ptype": "fsr",
+     "color": "#64d8c1",
+     "cells": 12725
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 12706
+    },
+    {
+     "ptype": "Qlsr",
+     "color": "#2b30ab",
+     "cells": 11576
+    },
+    {
+     "ptype": "Tswt",
+     "color": "#2bab67",
+     "cells": 5974
+    },
+    {
+     "ptype": "Jmi",
+     "color": "#64c5d8",
+     "cells": 5947
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 5229
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 4699
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 3299
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 1656
+    },
+    {
+     "ptype": "sc",
+     "color": "#7c92c0",
+     "cells": 1319
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 1290
+    },
+    {
+     "ptype": "Jk",
+     "color": "#ccb933",
+     "cells": 756
+    },
+    {
+     "ptype": "gs",
+     "color": "#ab2b9f",
+     "cells": 665
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 515
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 439
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 384
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 226
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 199
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 96
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 36
+    },
+    {
+     "ptype": "m",
+     "color": "#8aac53",
+     "cells": 35
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 2
+    }
+   ]
+  },
+  {
+   "id": "calistoga",
+   "file": "calistoga.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    31.337,
+    31.337
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 71981
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 47753
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 24102
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 23257
+    },
+    {
+     "ptype": "Tsft",
+     "color": "#983b9b",
+     "cells": 11298
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 11176
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 10231
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 8085
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 7180
+    },
+    {
+     "ptype": "Tswt",
+     "color": "#2bab67",
+     "cells": 6692
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 4824
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 4645
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 4477
+    },
+    {
+     "ptype": "KJfgs",
+     "color": "#915f46",
+     "cells": 4377
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 3408
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 3154
+    },
+    {
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 2764
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 2604
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 1860
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 1613
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 1355
+    },
+    {
+     "ptype": "fsr",
+     "color": "#64d8c1",
+     "cells": 1184
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 1039
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 883
+    },
+    {
+     "ptype": "sc",
+     "color": "#7c92c0",
+     "cells": 583
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 421
+    },
+    {
+     "ptype": "QTob",
+     "color": "#acac53",
+     "cells": 393
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 299
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 224
+    },
+    {
+     "ptype": "gs",
+     "color": "#ab2b9f",
+     "cells": 195
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 35
+    },
+    {
+     "ptype": "Qpt",
+     "color": "#72a5ca",
+     "cells": 18
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 14
+    },
+    {
+     "ptype": "KJfc",
+     "color": "#69ac53",
+     "cells": 11
+    },
+    {
+     "ptype": "Jk",
+     "color": "#ccb933",
+     "cells": 9
+    }
+   ]
+  },
+  {
+   "id": "howell_mountain",
+   "file": "howell_mountain.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    30.302,
+    30.303
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 51144
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 46666
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 35000
+    },
+    {
+     "ptype": "Tsft",
+     "color": "#983b9b",
+     "cells": 17052
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 13459
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 13283
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 11910
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 9391
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 8271
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 7183
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 7112
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 6721
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 6284
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 3920
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 3919
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 3135
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 2787
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 2516
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 2366
+    },
+    {
+     "ptype": "Tswt",
+     "color": "#2bab67",
+     "cells": 2181
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 1691
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 1373
+    },
+    {
+     "ptype": "Qoa?",
+     "color": "#7cc0a1",
+     "cells": 1097
+    },
+    {
+     "ptype": "Kfmg",
+     "color": "#c0aa7c",
+     "cells": 954
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 710
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 532
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 516
+    },
+    {
+     "ptype": "QTob",
+     "color": "#acac53",
+     "cells": 372
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 180
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 135
+    },
+    {
+     "ptype": "Kfmc",
+     "color": "#7553ac",
+     "cells": 134
+    },
+    {
+     "ptype": "Tsrp",
+     "color": "#997cc0",
+     "cells": 130
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 20
+    }
+   ]
+  },
+  {
+   "id": "chalk_hill",
+   "file": "chalk_hill.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    35.206,
+    35.206
+   ],
+   "mapped_fraction": 0.458,
+   "units": [
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 31485
+    },
+    {
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 28835
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 21667
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 12898
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 4814
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 3765
+    },
+    {
+     "ptype": "KJfgs",
+     "color": "#915f46",
+     "cells": 3447
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 2094
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 1434
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 1260
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 1152
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 1133
+    },
+    {
+     "ptype": "Tp",
+     "color": "#9433cc",
+     "cells": 1097
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 1033
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 693
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 494
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 483
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 419
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 363
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 328
+    },
+    {
+     "ptype": "sc",
+     "color": "#7c92c0",
+     "cells": 258
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 254
+    },
+    {
+     "ptype": "KJfc",
+     "color": "#69ac53",
+     "cells": 218
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 133
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 127
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 94
+    },
+    {
+     "ptype": "Qpt",
+     "color": "#72a5ca",
+     "cells": 25
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 13
+    }
+   ]
+  },
+  {
+   "id": "chiles_valley",
+   "file": "chiles_valley.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    29.47,
+    29.47
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 70622
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 40559
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 35413
+    },
+    {
+     "ptype": "Jgvm",
+     "color": "#72ca8c",
+     "cells": 16940
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 13400
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 10137
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 9466
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 9320
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 6979
+    },
+    {
+     "ptype": "spm",
+     "color": "#a372ca",
+     "cells": 6441
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 5815
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 5179
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 4958
+    },
+    {
+     "ptype": "Kfmc",
+     "color": "#7553ac",
+     "cells": 4848
+    },
+    {
+     "ptype": "Jk",
+     "color": "#ccb933",
+     "cells": 4588
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 3379
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 3155
+    },
+    {
+     "ptype": "Jv",
+     "color": "#ab2b70",
+     "cells": 2080
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 1870
+    },
+    {
+     "ptype": "Kfmg",
+     "color": "#c0aa7c",
+     "cells": 1722
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 1138
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 959
+    },
+    {
+     "ptype": "Jgvm?",
+     "color": "#733b9b",
+     "cells": 554
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 442
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 441
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 342
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 322
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 316
+    },
+    {
+     "ptype": "fsr",
+     "color": "#64d8c1",
+     "cells": 264
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 204
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 139
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 117
+    },
+    {
+     "ptype": "QTc",
+     "color": "#3b4b9b",
+     "cells": 21
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 14
+    }
+   ]
+  },
+  {
+   "id": "diamond_mountain_district",
+   "file": "diamond_mountain_district.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    23.67,
+    23.67
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 112214
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 41921
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 28912
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 18618
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 15803
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 11327
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 8305
+    },
+    {
+     "ptype": "KJfgs",
+     "color": "#915f46",
+     "cells": 5196
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 4500
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 3907
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 3879
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 2500
+    },
+    {
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 1720
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 1210
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 750
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 523
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 307
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 170
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 141
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 118
+    },
+    {
+     "ptype": "Tsft",
+     "color": "#983b9b",
+     "cells": 56
+    },
+    {
+     "ptype": "fsr",
+     "color": "#64d8c1",
+     "cells": 38
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 29
+    }
+   ]
+  },
+  {
+   "id": "crystal_springs_of_napa_valley",
+   "file": "crystal_springs_of_napa_valley.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    23.368,
+    23.367
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 88156
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 49382
+    },
+    {
+     "ptype": "Tsft",
+     "color": "#983b9b",
+     "cells": 21994
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 18687
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 16567
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 15431
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 12309
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 9517
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 4744
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 4595
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 4316
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 3086
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 2632
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 2383
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 1776
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 1739
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 1516
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 1355
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 1204
+    },
+    {
+     "ptype": "Tsrp",
+     "color": "#997cc0",
+     "cells": 217
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 197
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 164
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 146
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 31
+    }
+   ]
+  },
+  {
+   "id": "fountaingrove_district",
+   "file": "fountaingrove_district.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    39.427,
+    39.427
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 55724
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 53235
+    },
+    {
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 25573
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 23418
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 22906
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 10400
+    },
+    {
+     "ptype": "fsr",
+     "color": "#64d8c1",
+     "cells": 10040
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 8444
+    },
+    {
+     "ptype": "KJfgs",
+     "color": "#915f46",
+     "cells": 5747
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 5189
+    },
+    {
+     "ptype": "Tsrs",
+     "color": "#917b46",
+     "cells": 4790
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 4554
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 4463
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 4071
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 3645
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 2794
+    },
+    {
+     "ptype": "Tp",
+     "color": "#9433cc",
+     "cells": 2429
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 2288
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 2111
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 1587
+    },
+    {
+     "ptype": "Tsft",
+     "color": "#983b9b",
+     "cells": 1560
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 1522
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 881
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 814
+    },
+    {
+     "ptype": "Tsrp",
+     "color": "#997cc0",
+     "cells": 748
+    },
+    {
+     "ptype": "QTge",
+     "color": "#64d895",
+     "cells": 687
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 410
+    },
+    {
+     "ptype": "KJfgs?",
+     "color": "#46b98e",
+     "cells": 397
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 386
+    },
+    {
+     "ptype": "Tswt",
+     "color": "#2bab67",
+     "cells": 265
+    },
+    {
+     "ptype": "sc",
+     "color": "#7c92c0",
+     "cells": 207
+    },
+    {
+     "ptype": "KJfc",
+     "color": "#69ac53",
+     "cells": 167
+    },
+    {
+     "ptype": "Tsv",
+     "color": "#d87864",
+     "cells": 144
+    },
+    {
+     "ptype": "Qhl",
+     "color": "#469156",
+     "cells": 96
+    },
+    {
+     "ptype": "fgc",
+     "color": "#503b9b",
+     "cells": 94
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 91
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 50
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 44
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 39
+    },
+    {
+     "ptype": "Qpt",
+     "color": "#72a5ca",
+     "cells": 31
+    },
+    {
+     "ptype": "fs",
+     "color": "#cc8133",
+     "cells": 31
+    },
+    {
+     "ptype": "gs",
+     "color": "#ab2b9f",
+     "cells": 29
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 27
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 16
+    }
+   ]
+  },
+  {
+   "id": "st__helena",
+   "file": "st__helena.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    25.536,
+    25.536
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 67094
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 28323
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 22381
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 21831
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 16318
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 13949
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 13223
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 9896
+    },
+    {
+     "ptype": "Tsft",
+     "color": "#983b9b",
+     "cells": 7826
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 6823
+    },
+    {
+     "ptype": "fsr",
+     "color": "#64d8c1",
+     "cells": 6770
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 5603
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 5386
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 4421
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 4395
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 4180
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 4139
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 4017
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 3875
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 2873
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 2776
+    },
+    {
+     "ptype": "KJfgs",
+     "color": "#915f46",
+     "cells": 1823
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 1299
+    },
+    {
+     "ptype": "KJfgs?",
+     "color": "#46b98e",
+     "cells": 949
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 843
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 703
+    },
+    {
+     "ptype": "Tsrp",
+     "color": "#997cc0",
+     "cells": 179
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 90
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 68
+    },
+    {
+     "ptype": "Kfmg",
+     "color": "#c0aa7c",
+     "cells": 62
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 29
+    }
+   ]
+  },
+  {
+   "id": "spring_mountain_district",
+   "file": "spring_mountain_district.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    24.049,
+    24.049
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 84352
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 68094
+    },
+    {
+     "ptype": "fsr",
+     "color": "#64d8c1",
+     "cells": 21716
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 16721
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 14287
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 8798
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 8269
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 6012
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 5442
+    },
+    {
+     "ptype": "Tsrs",
+     "color": "#917b46",
+     "cells": 4250
+    },
+    {
+     "ptype": "KJfgs",
+     "color": "#915f46",
+     "cells": 4172
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 3941
+    },
+    {
+     "ptype": "Tsft",
+     "color": "#983b9b",
+     "cells": 2851
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 2569
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 2431
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 2084
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 1441
+    },
+    {
+     "ptype": "KJfgs?",
+     "color": "#46b98e",
+     "cells": 1064
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 973
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 884
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 795
+    },
+    {
+     "ptype": "fgc",
+     "color": "#503b9b",
+     "cells": 258
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 229
+    },
+    {
+     "ptype": "Tsrp",
+     "color": "#997cc0",
+     "cells": 209
+    },
+    {
+     "ptype": "Tswt",
+     "color": "#2bab67",
+     "cells": 122
+    },
+    {
+     "ptype": "fs",
+     "color": "#cc8133",
+     "cells": 86
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 40
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 35
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 19
+    }
+   ]
+  },
+  {
+   "id": "rutherford",
+   "file": "rutherford.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    22.185,
+    22.185
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 48733
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 29935
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 22989
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 20234
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 19756
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 17777
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 16339
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 12775
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 11680
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 9736
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 7668
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 6756
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 6664
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 6571
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 5331
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 4261
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 4077
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 3291
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 1828
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 1765
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 1385
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 1111
+    },
+    {
+     "ptype": "fsr",
+     "color": "#64d8c1",
+     "cells": 471
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 302
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 291
+    },
+    {
+     "ptype": "Kfmg",
+     "color": "#c0aa7c",
+     "cells": 191
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 102
+    },
+    {
+     "ptype": "sp?",
+     "color": "#46b964",
+     "cells": 86
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 39
+    }
+   ]
+  },
+  {
+   "id": "corison",
+   "file": "corison.geology.png",
+   "cols": 501,
+   "rows": 501,
+   "cell_m": [
+    10.0,
+    10.0
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 65191
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 55475
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 26976
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 19961
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 12288
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 12270
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 10121
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 9142
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 8335
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 7690
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 5401
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 4536
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 4505
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 3711
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 3343
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 983
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 353
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 283
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 190
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 167
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 41
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 39
+    }
+   ]
+  },
+  {
+   "id": "oakville",
+   "file": "oakville.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    24.233,
+    24.233
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 65443
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 38978
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 34043
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 24010
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 22943
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 9393
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 7185
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 6911
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 6610
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 6544
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 5268
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 4325
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 3923
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 3738
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 3601
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 3496
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 2746
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 2338
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 2143
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 2086
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 1870
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 1097
+    },
+    {
+     "ptype": "Qpt",
+     "color": "#72a5ca",
+     "cells": 943
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 830
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 523
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 454
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 359
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 157
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 122
+    },
+    {
+     "ptype": "sp?",
+     "color": "#46b964",
+     "cells": 65
+    }
+   ]
+  },
+  {
+   "id": "atlas_peak",
+   "file": "atlas_peak.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    25.855,
+    25.855
+   ],
+   "mapped_fraction": 0.58,
+   "units": [
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 91834
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 9307
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 8043
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 7270
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 6027
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 5840
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 5057
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 4363
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 3152
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 2465
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 1785
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 1725
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 1402
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 799
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 745
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 695
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 546
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 471
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 393
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 85
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 49
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 29
+    }
+   ]
+  },
+  {
+   "id": "yountville",
+   "file": "yountville.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    26.273,
+    26.273
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 78058
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 39453
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 30124
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 24287
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 22198
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 11959
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 10921
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 7913
+    },
+    {
+     "ptype": "Kgvu",
+     "color": "#b9469c",
+     "cells": 5662
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 4305
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 3460
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 3158
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 3123
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 2579
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 1968
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 1948
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 1768
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 1665
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 1581
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 1286
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 1015
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 883
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 856
+    },
+    {
+     "ptype": "Qpt",
+     "color": "#72a5ca",
+     "cells": 804
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 332
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 269
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 218
+    },
+    {
+     "ptype": "Td",
+     "color": "#c07cb4",
+     "cells": 201
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 100
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 50
+    }
+   ]
+  },
+  {
+   "id": "mt__veeder",
+   "file": "mt__veeder.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    40.77,
+    40.77
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 66798
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 21472
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 21268
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 20595
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 20215
+    },
+    {
+     "ptype": "Kgvu",
+     "color": "#b9469c",
+     "cells": 15328
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 13932
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 12821
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 7406
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 7039
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 6617
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 6258
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 5318
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 4303
+    },
+    {
+     "ptype": "Tsft",
+     "color": "#983b9b",
+     "cells": 3762
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 3562
+    },
+    {
+     "ptype": "Td",
+     "color": "#c07cb4",
+     "cells": 3388
+    },
+    {
+     "ptype": "QTge",
+     "color": "#64d895",
+     "cells": 2876
+    },
+    {
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 2671
+    },
+    {
+     "ptype": "Tp?",
+     "color": "#d8cf64",
+     "cells": 1572
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 1569
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 1252
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 1026
+    },
+    {
+     "ptype": "Tn",
+     "color": "#3b9b5c",
+     "cells": 1021
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 926
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 822
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 812
+    },
+    {
+     "ptype": "Tsrs",
+     "color": "#917b46",
+     "cells": 767
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 741
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 739
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 730
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 713
+    },
+    {
+     "ptype": "Tms",
+     "color": "#ca7772",
+     "cells": 614
+    },
+    {
+     "ptype": "Tssd",
+     "color": "#ca72af",
+     "cells": 511
+    },
+    {
+     "ptype": "KJfgs",
+     "color": "#915f46",
+     "cells": 453
+    },
+    {
+     "ptype": "Tci",
+     "color": "#53aca2",
+     "cells": 358
+    },
+    {
+     "ptype": "Qpt",
+     "color": "#72a5ca",
+     "cells": 334
+    },
+    {
+     "ptype": "Tsv",
+     "color": "#d87864",
+     "cells": 278
+    },
+    {
+     "ptype": "fsr",
+     "color": "#64d8c1",
+     "cells": 254
+    },
+    {
+     "ptype": "KJfgc",
+     "color": "#7f7cc0",
+     "cells": 194
+    },
+    {
+     "ptype": "Tsb",
+     "color": "#72caad",
+     "cells": 159
+    },
+    {
+     "ptype": "Tkt",
+     "color": "#4662b9",
+     "cells": 146
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 135
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 131
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 129
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 66
+    },
+    {
+     "ptype": "Tp",
+     "color": "#9433cc",
+     "cells": 53
+    },
+    {
+     "ptype": "sp?",
+     "color": "#46b964",
+     "cells": 10
+    }
+   ]
+  },
+  {
+   "id": "stags_leap_district",
+   "file": "stags_leap_district.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    17.275,
+    17.275
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 118176
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 31697
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 23909
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 23434
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 14128
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 9286
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 6335
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 5290
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 4550
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 4367
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 4082
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 3377
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 3154
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 3106
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 2365
+    },
+    {
+     "ptype": "Qpt",
+     "color": "#72a5ca",
+     "cells": 1859
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 1343
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 695
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 393
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 231
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 187
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 97
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 83
+    }
+   ]
+  },
+  {
+   "id": "bennett_valley",
+   "file": "bennett_valley.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    22.363,
+    22.363
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 106513
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 24016
+    },
+    {
+     "ptype": "Tc",
+     "color": "#ab772b",
+     "cells": 21518
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 16225
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 15578
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 13407
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 9996
+    },
+    {
+     "ptype": "Tp",
+     "color": "#9433cc",
+     "cells": 8149
+    },
+    {
+     "ptype": "QTge",
+     "color": "#64d895",
+     "cells": 6436
+    },
+    {
+     "ptype": "Qlsa",
+     "color": "#cc3392",
+     "cells": 5761
+    },
+    {
+     "ptype": "Tsrp",
+     "color": "#997cc0",
+     "cells": 4383
+    },
+    {
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 3763
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 3567
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 3524
+    },
+    {
+     "ptype": "Qlso",
+     "color": "#8ad864",
+     "cells": 3445
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 3355
+    },
+    {
+     "ptype": "Tsrb",
+     "color": "#ab2b3f",
+     "cells": 3117
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 2398
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 2121
+    },
+    {
+     "ptype": "Qoa?",
+     "color": "#7cc0a1",
+     "cells": 1835
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 1129
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 964
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 429
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 260
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 103
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 85
+    },
+    {
+     "ptype": "Tsrs",
+     "color": "#917b46",
+     "cells": 40
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 27
+    }
+   ]
+  },
+  {
+   "id": "moon_mountain_district_sonoma_county",
+   "file": "moon_mountain_district_sonoma_county.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    36.266,
+    36.266
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 84509
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 26016
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 25030
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 17801
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 13634
+    },
+    {
+     "ptype": "Kgvu",
+     "color": "#b9469c",
+     "cells": 11141
+    },
+    {
+     "ptype": "QTge",
+     "color": "#64d895",
+     "cells": 9776
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 9520
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 8743
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 7349
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 6770
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 6736
+    },
+    {
+     "ptype": "Tsft",
+     "color": "#983b9b",
+     "cells": 4569
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 4359
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 4327
+    },
+    {
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 2518
+    },
+    {
+     "ptype": "Qlso",
+     "color": "#8ad864",
+     "cells": 2017
+    },
+    {
+     "ptype": "Tp?",
+     "color": "#d8cf64",
+     "cells": 1988
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 1812
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 1741
+    },
+    {
+     "ptype": "Tsrs",
+     "color": "#917b46",
+     "cells": 1436
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 1179
+    },
+    {
+     "ptype": "Tn",
+     "color": "#3b9b5c",
+     "cells": 1104
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 1026
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 943
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 899
+    },
+    {
+     "ptype": "Tms",
+     "color": "#ca7772",
+     "cells": 774
+    },
+    {
+     "ptype": "Tssd",
+     "color": "#ca72af",
+     "cells": 751
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 510
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 455
+    },
+    {
+     "ptype": "Tci",
+     "color": "#53aca2",
+     "cells": 421
+    },
+    {
+     "ptype": "Tsb",
+     "color": "#72caad",
+     "cells": 402
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 377
+    },
+    {
+     "ptype": "Qpt",
+     "color": "#72a5ca",
+     "cells": 350
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 327
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 294
+    },
+    {
+     "ptype": "Tsv",
+     "color": "#d87864",
+     "cells": 196
+    },
+    {
+     "ptype": "Tsrp",
+     "color": "#997cc0",
+     "cells": 97
+    },
+    {
+     "ptype": "Tp",
+     "color": "#9433cc",
+     "cells": 83
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 61
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 51
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 18
+    },
+    {
+     "ptype": "Tkt",
+     "color": "#4662b9",
+     "cells": 13
+    },
+    {
+     "ptype": "Td",
+     "color": "#c07cb4",
+     "cells": 11
+    },
+    {
+     "ptype": "Qlsa",
+     "color": "#cc3392",
+     "cells": 10
+    }
+   ]
+  },
+  {
+   "id": "sonoma_mountain",
+   "file": "sonoma_mountain.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    22.682,
+    22.682
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 121041
+    },
+    {
+     "ptype": "QTge",
+     "color": "#64d895",
+     "cells": 22749
+    },
+    {
+     "ptype": "Qlsa",
+     "color": "#cc3392",
+     "cells": 20855
+    },
+    {
+     "ptype": "Tc",
+     "color": "#ab772b",
+     "cells": 19145
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 15149
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 12366
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 6852
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 6509
+    },
+    {
+     "ptype": "Qlso",
+     "color": "#8ad864",
+     "cells": 5738
+    },
+    {
+     "ptype": "Tp",
+     "color": "#9433cc",
+     "cells": 5735
+    },
+    {
+     "ptype": "Tp?",
+     "color": "#d8cf64",
+     "cells": 5093
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 4292
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 3025
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 2853
+    },
+    {
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 2842
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 2053
+    },
+    {
+     "ptype": "Qlsr",
+     "color": "#2b30ab",
+     "cells": 1263
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 1133
+    },
+    {
+     "ptype": "Tsb",
+     "color": "#72caad",
+     "cells": 1023
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 837
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 565
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 387
+    },
+    {
+     "ptype": "Tssd",
+     "color": "#ca72af",
+     "cells": 273
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 149
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 123
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 53
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 41
+    }
+   ]
+  },
+  {
+   "id": "oak_knoll_district_of_napa_valley",
+   "file": "oak_knoll_district_of_napa_valley.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    22.223,
+    22.223
+   ],
+   "mapped_fraction": 1.0,
+   "units": [
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 49842
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 43621
+    },
+    {
+     "ptype": "Kgvu",
+     "color": "#b9469c",
+     "cells": 30958
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 30836
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 20845
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 15222
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 11163
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 9807
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 8709
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 8461
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 6930
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 4932
+    },
+    {
+     "ptype": "Td",
+     "color": "#c07cb4",
+     "cells": 4545
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 4429
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 2227
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 1975
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 1815
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 1319
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 1294
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 1139
+    },
+    {
+     "ptype": "Tms",
+     "color": "#ca7772",
+     "cells": 581
+    },
+    {
+     "ptype": "Tsrb",
+     "color": "#ab2b3f",
+     "cells": 409
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 364
+    },
+    {
+     "ptype": "Tstx",
+     "color": "#3345cc",
+     "cells": 299
+    },
+    {
+     "ptype": "Tci",
+     "color": "#53aca2",
+     "cells": 216
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 133
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 39
+    },
+    {
+     "ptype": "Qpt",
+     "color": "#72a5ca",
+     "cells": 26
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 8
+    }
+   ]
+  },
+  {
+   "id": "coombsville",
+   "file": "coombsville.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    23.541,
+    23.541
+   ],
+   "mapped_fraction": 0.45,
+   "units": [
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 30796
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 17914
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 14163
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 11946
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 8009
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 6196
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 5648
+    },
+    {
+     "ptype": "Qhbm",
+     "color": "#d864d3",
+     "cells": 5274
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 4397
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 2356
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 2148
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 2092
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 2027
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 1149
+    },
+    {
+     "ptype": "afbm",
+     "color": "#467791",
+     "cells": 1050
+    },
+    {
+     "ptype": "Tssd",
+     "color": "#ca72af",
+     "cells": 628
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 510
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 479
+    },
+    {
+     "ptype": "Tsrb",
+     "color": "#ab2b3f",
+     "cells": 365
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 345
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 323
+    },
+    {
+     "ptype": "Tstx",
+     "color": "#3345cc",
+     "cells": 267
+    },
+    {
+     "ptype": "Td",
+     "color": "#c07cb4",
+     "cells": 3
+    }
+   ]
+  },
+  {
+   "id": "wild_horse_valley",
+   "file": "wild_horse_valley.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    22.515,
+    22.515
+   ],
+   "mapped_fraction": 0.098,
+   "units": [
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 5238
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 5205
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 4038
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 3420
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 2016
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 1978
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 1100
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 921
+    },
+    {
+     "ptype": "Tssd",
+     "color": "#ca72af",
+     "cells": 679
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 430
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 355
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 158
+    },
+    {
+     "ptype": "Tsrb",
+     "color": "#ab2b3f",
+     "cells": 83
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 7
+    },
+    {
+     "ptype": "Tstx",
+     "color": "#3345cc",
+     "cells": 2
+    }
+   ]
+  },
+  {
+   "id": "los_carneros",
+   "file": "los_carneros.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    50.824,
+    50.824
+   ],
+   "mapped_fraction": 0.403,
+   "units": [
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 22014
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 18961
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 9216
+    },
+    {
+     "ptype": "Kgvu",
+     "color": "#b9469c",
+     "cells": 9102
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 7247
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 6604
+    },
+    {
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 4007
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 3862
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 3853
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 2247
+    },
+    {
+     "ptype": "Td",
+     "color": "#c07cb4",
+     "cells": 2192
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 2029
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 2013
+    },
+    {
+     "ptype": "Tsft",
+     "color": "#983b9b",
+     "cells": 1760
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 1630
+    },
+    {
+     "ptype": "Qhbm",
+     "color": "#d864d3",
+     "cells": 1260
+    },
+    {
+     "ptype": "Tp",
+     "color": "#9433cc",
+     "cells": 931
+    },
+    {
+     "ptype": "Tp?",
+     "color": "#d8cf64",
+     "cells": 814
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 691
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 691
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 648
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 611
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 539
+    },
+    {
+     "ptype": "Tms",
+     "color": "#ca7772",
+     "cells": 390
+    },
+    {
+     "ptype": "Tssd",
+     "color": "#ca72af",
+     "cells": 384
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 358
+    },
+    {
+     "ptype": "afbm",
+     "color": "#467791",
+     "cells": 279
+    },
+    {
+     "ptype": "Tci",
+     "color": "#53aca2",
+     "cells": 231
+    },
+    {
+     "ptype": "Tsb",
+     "color": "#72caad",
+     "cells": 203
+    },
+    {
+     "ptype": "QTge",
+     "color": "#64d895",
+     "cells": 161
+    },
+    {
+     "ptype": "Tn",
+     "color": "#3b9b5c",
+     "cells": 113
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 110
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 98
+    },
+    {
+     "ptype": "Tsv",
+     "color": "#d87864",
+     "cells": 91
+    },
+    {
+     "ptype": "Tkt",
+     "color": "#4662b9",
+     "cells": 91
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 77
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 75
+    },
+    {
+     "ptype": "Tsrb",
+     "color": "#ab2b3f",
+     "cells": 63
+    },
+    {
+     "ptype": "Tstx",
+     "color": "#3345cc",
+     "cells": 60
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 2
+    }
+   ]
+  },
+  {
+   "id": "solano_county_green_valley",
+   "file": "solano_county_green_valley.geology.png",
+   "cols": 512,
+   "rows": 512,
+   "cell_m": [
+    29.727,
+    29.727
+   ],
+   "mapped_fraction": 0.039,
+   "units": [
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 2291
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 2112
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 1317
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 1259
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 1086
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 1042
+    },
+    {
+     "ptype": "Tssd",
+     "color": "#ca72af",
+     "cells": 367
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 168
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 164
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 154
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 70
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 60
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 3
+    }
+   ]
+  }
+ ]
+}

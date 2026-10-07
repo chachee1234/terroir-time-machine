@@ -116,7 +116,7 @@ const sm=(a,b,x)=>{const t=clamp((x-a)/(b-a),0,1);return t*t*(3-2*t);};
 const ASSETS="assets/locations/gibraltar/";
 
 /* =================================================================== STORY
-   Ages and numbers are from SOURCES.md G25: Roveri, Lugli & Manzi 2025 (Annu. Rev. Mar. Sci. 17:485-509)
+   Ages and numbers are from SOURCES.md G39: Roveri, Lugli & Manzi 2025 (Annu. Rev. Mar. Sci. 17:485-509)
    for the stage ages, the corridor closures and the debate; Garcia-Castellanos et al. 2009 (Nature 462:778-781)
    for the flood. Every chapter except Today is an illustration on present-day relief (SCIENCE_RULES §1). */
 const ILLUS={name:"Illustrative process · geometry and timing are schematic",c:"var(--illus)"};
@@ -145,7 +145,7 @@ const CH=[
   cls:ILLUS,src:"Garcia-Castellanos et al. 2009, p. 778"},
  {id:"today",view:"strait",dur:9,age:[5.33,0],tag:"Today",title:"The Strait of Gibraltar today",
   body:"Atlantic water still pours in at the surface to replace what the Mediterranean evaporates. The strait's shallowest point, the Camarinal Sill, lies 284 m down. The 2009 flood study traced an eroded channel about 200 km long across the strait, buried under younger sediment.",
-  cls:MEAS,src:"Relief: AWS Terrain Tiles (G24). Sill and channel: Garcia-Castellanos et al. 2009, p. 778"}
+  cls:MEAS,src:"Relief: AWS Terrain Tiles (G38). Sill and channel: Garcia-Castellanos et al. 2009, p. 778"}
 ];
 let T=0; CH.forEach(c=>{c.t0=T; T+=c.dur; c.t1=T;}); const TOTAL=T;
 

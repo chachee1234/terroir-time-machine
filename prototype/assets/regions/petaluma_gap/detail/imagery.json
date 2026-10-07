@@ -1,0 +1,34 @@
+{
+ "label": "Sentinel-2 true colour, 2026-07-27",
+ "credit": "Contains modified Copernicus Sentinel data 2026, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+ "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+ "class": "measured-approx",
+ "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+ "scenes": [
+  "S2A_10SDH_20260727_1_L2A",
+  "S2B_10SEH_20260727_0_L2A"
+ ],
+ "date": "2026-07-27",
+ "encoding": "baseline JPEG, quality 80, row 0 = north",
+ "resampling": "nearest full-resolution (10 m) pixel at each cell centre",
+ "limits": "One summer acquisition: shadows and colours are that day's; 8-bit TCI stretch as delivered by ESA; clouds in the scene (see cloud_cover_percent) are not masked.",
+ "locations": {
+  "sonoma_mountain": {
+   "file": "sonoma_mountain.imagery.jpg",
+   "width": 1159,
+   "height": 1009,
+   "bbox_utm": [
+    532102.2,
+    4239111.7,
+    543692.6,
+    4249200.0
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.0,
+    9.998
+   ],
+   "sha256": "731fe90fed397db477c3ccc6efc266f5b36183b23a87618a8b37515ffde52c15"
+  }
+ }
+}

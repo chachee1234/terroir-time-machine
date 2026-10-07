@@ -1,0 +1,100 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terroir Time Machine sources</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --void:#0b0e10; --panel:#12171a; --line:rgba(232,226,214,.14);
+  --ink:#ece6d9; --muted:#a39d91; --magma:#ff7a2f;
+  --recon:#9fb7ff; --illus:#f0b95a; --approx:#7fd1a8;
+  --serif:"Young Serif",Georgia,"Times New Roman",serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+body{margin:0;background:var(--void);color:var(--ink);font:15px/1.55 var(--sans)}
+main{max-width:980px;margin:0 auto;padding:28px 16px 60px}
+h1{font:400 28px/1.15 var(--serif);margin:0 0 6px}
+h2{font:400 20px/1.2 var(--serif);margin:36px 0 10px}
+p{margin:6px 0 10px;color:var(--muted)}
+a{color:var(--magma)}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{font-weight:500;color:var(--muted);font-size:12px;letter-spacing:.06em;text-transform:uppercase;background:var(--panel)}
+tr:last-child td{border-bottom:0}
+td b{font-weight:600}
+code{font:12.5px var(--mono);color:var(--ink)}
+.cls{display:inline-block;font-size:11.5px;letter-spacing:.04em;white-space:nowrap}
+.cls::before{content:"■ ";color:var(--c)}
+.gap td{color:var(--muted)}
+ul{margin:6px 0 10px;padding-left:20px}
+li{margin:3px 0}
+.hz{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-1px;margin-right:6px;background:var(--c)}
+</style>
+<main>
+<h1>Where every layer comes from</h1>
+<p>Each layer in the <a href="timemachine.html">time machine</a>, its source, its license and how much to trust it. The ids (G07, G26…) point to the full records in <code>SOURCES.md</code> in the project repository. Nothing on this page is sent anywhere.</p>
+<p>Three kinds of picture: <span class="cls" style="--c:var(--approx)">measured or mapped</span> data drawn as it is; <span class="cls" style="--c:var(--recon)">reconstruction, stylized</span> for positions of plates and continents; <span class="cls" style="--c:var(--illus)">illustration</span> where a process is shown but its shape is drawn by hand.</p>
+
+<h2>Layers</h2>
+<div class="wrap"><table>
+<thead><tr><th>Layer</th><th>Source</th><th>License</th><th>Detail and limits</th><th>Kind</th></tr></thead>
+<tbody>
+<tr><td><b>Terrain</b></td><td>USGS 3D Elevation Program, via AWS Terrain Tiles (G16, G19)</td><td>Public domain (USGS); attribution per Tilezen</td><td>Frame about 140 m; close-ups 10 to 50 m; Corison 10 m from 10 m source data. Values in 0.1 m steps is storage, not accuracy.</td><td><span class="cls" style="--c:var(--approx)">measured</span></td></tr>
+<tr><td><b>Satellite</b></td><td>Copernicus Sentinel-2 L2A, 14 July 2026 (G23)</td><td>Free and open; "Contains modified Copernicus Sentinel data 2026"</td><td>40 m over the frame, 10 m in close-ups. One day's light and shadows.</td><td><span class="cls" style="--c:var(--approx)">measured</span></td></tr>
+<tr><td><b>Geology</b></td><td>Graymer et al. 2007, USGS SIM 2956, 1:100,000 (G07, G21, G27)</td><td>Public domain (USGS)</td><td>Drawn at 140 m over the frame and 10 to 50 m in close-ups. The finer grid draws the map's lines smoothly; it does not make a 1:100,000 map more precise (a line is about 50 m wide on the ground). Covers about 42 % of the frame; the rest is left blank.</td><td><span class="cls" style="--c:var(--approx)">mapped</span></td></tr>
+<tr><td><b>Rivers and creeks</b></td><td>USGS National Hydrography Dataset, high resolution, four watersheds (G26)</td><td>Public domain (USGS)</td><td>Today's channels, many straightened, leveed or piped. Width shows how much channel drains into each reach. Not where the rivers ran before farming.</td><td><span class="cls" style="--c:var(--approx)">mapped</span></td></tr>
+<tr><td><b>Faults</b></td><td>GEM Global Active Faults, California traces from USGS UCERF3 (G17)</td><td>CC BY-SA 4.0</td><td>Simplified model traces, not field-mapped ruptures. Old thrusts are schematic.</td><td><span class="cls" style="--c:var(--approx)">mapped</span></td></tr>
+<tr><td><b>AVA boundaries</b></td><td>UC Davis Library AVA Project (G18)</td><td>CC0</td><td>Digitized from the federal boundary descriptions; a legal and marketing line, not a geological one.</td><td><span class="cls" style="--c:var(--approx)">mapped</span></td></tr>
+<tr><td><b>Streams from terrain</b></td><td>Computed in the viewer from the terrain</td><td>n/a</td><td>Drainage traced across each era's ground; shows how erosion works, not mapped channels.</td><td><span class="cls" style="--c:var(--illus)">illustration</span></td></tr>
+<tr><td><b>Plates, continents</b></td><td>Hand-drawn keyframes, <code>data/plates/stylized.json</code> (G12, G20)</td><td>Project's own</td><td>A plate model is not used yet (its license is still being checked).</td><td><span class="cls" style="--c:var(--recon)">stylized</span></td></tr>
+<tr><td><b>Chapters</b></td><td><code>SCENES.json</code>, each chapter with its sources in <code>SOURCES.md</code></td><td>Project's own</td><td>Each card shows its own kind.</td><td>per chapter</td></tr>
+</tbody></table></div>
+
+<h2 id="corison">Corison winery, Kronos Vineyard</h2>
+<p id="siteIntro">Loading the site file…</p>
+<div class="wrap"><table>
+<thead><tr><th>What</th><th>Value</th><th>Source</th></tr></thead>
+<tbody id="siteRows"></tbody></table></div>
+<h2>Soil layers shown in the section</h2>
+<p>The series' typical pedon from the USDA Official Series Description, not a pit dug at this vineyard. Colours are approximate conversions of the Munsell colours (moist).</p>
+<div class="wrap"><table>
+<thead><tr><th>Layer</th><th>Depth</th><th>Texture</th><th>Colour (moist)</th><th>pH</th><th>Gravel</th></tr></thead>
+<tbody id="hzRows"></tbody></table></div>
+<h2>Sources for this site</h2>
+<ul id="siteSrc"></ul>
+
+<h2>Coming next, not yet reachable</h2>
+<p>These are blocked by the project's current network setting, so they are not in the time machine yet:</p>
+<div class="wrap"><table>
+<tbody>
+<tr class="gap"><td><b>USDA soil survey (SSURGO)</b></td><td>the mapped soil under every vineyard, with sand, silt, clay and gravel by layer</td><td><code>sdmdataaccess.sc.egov.usda.gov</code></td></tr>
+<tr class="gap"><td><b>USGS 1:24,000 Quaternary maps</b></td><td>old stream and fan deposits at vineyard scale</td><td><code>ngmdb.usgs.gov</code>, <code>pubs.usgs.gov</code></td></tr>
+<tr class="gap"><td><b>PRISM climate</b></td><td>rainfall and temperature at 800 m</td><td><code>services.nacse.org</code></td></tr>
+<tr class="gap"><td><b>Vineyard fields and acreage</b></td><td>USDA Cropland Data Layer and California crop mapping</td><td><code>nassgeodata.gmu.edu</code>, <code>data.cnra.ca.gov</code></td></tr>
+</tbody></table></div>
+</main>
+<script>
+const esc=t=>String(t==null?"":t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const link=s=>s.url?`<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a>`:esc(s.title);
+fetch("assets/regions/napa_valley/sites/corison.json").then(r=>{ if(!r.ok) throw 0; return r.json(); }).then(d=>{
+  const S=d.sources, src=k=>k&&S[k]?`${k}`:"";
+  document.getElementById("siteIntro").textContent=`${d.name}, ${d.vineyard}. AVAs: ${d.avas.map(a=>a.name).join(", ")}.`;
+  const sec=d.section, near=sec.streams.map(c=>`${c.name||"unnamed creek"} ${(Math.abs(c.offset_m)/1000).toFixed(1)} km ${c.offset_m<0?"SW":"NE"}`).join("; ");
+  const rows=[
+    ["Location",`${d.location.lat}, ${d.location.lon} (about ${d.location.accuracy_m} m). ${d.location.note}`,d.location.source],
+    ["Soil",`${d.soil.reported_as}, ${d.soil.status}. ${d.soil.note}`,d.soil.source],
+    ["Soil series",`${d.soil.taxonomic_class||""}. ${d.soil.overview||""}`,"S4"],
+    ["Drainage",d.soil.drainage,"S4"],
+    ["Geology at the site",`USGS map unit ${d.geology.at_site}. ${d.geology.limits}`,d.geology.source],
+    ["Across the valley (SW to NE)",`Units along the section: ${sec.units.filter(u=>u.ptype).map(u=>u.ptype).filter((v,i,a)=>a.indexOf(v)===i).join(", ")}. Channels crossing it: ${near||"none"}.`,"S5, S6"],
+    ...d.claims.map(c=>["Reported",c.text,c.source])];
+  document.getElementById("siteRows").innerHTML=rows.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("");
+  document.getElementById("hzRows").innerHTML=d.soil.horizons.map(h=>`<tr><td><b>${esc(h.name)}</b>${h.buried?" (buried)":""}</td><td>${h.top_cm}–${h.bottom_cm} cm</td><td>${esc(h.texture)}</td><td><span class="hz" style="--c:${esc(h.rgb||"transparent")}"></span>${esc(h.moist)}</td><td>${h.pH??""}</td><td>${h.gravel_pct?h.gravel_pct+" %":""}</td></tr>`).join("");
+  document.getElementById("siteSrc").innerHTML=Object.entries(S).map(([k,s])=>`<li><b>${esc(k)}</b> ${link(s)} <span style="color:var(--muted)">(${esc(s.kind)})</span></li>`).join("");
+}).catch(()=>{ document.getElementById("siteIntro").textContent="The site file could not be loaded (open this page from the viewer's folder)."; });
+</script>

@@ -1,0 +1,2407 @@
+{
+ "region": "napa_valley",
+ "built": "2026-10-01",
+ "sources": {
+  "elevation": "AWS Terrain Tiles (USGS 3DEP source), each AVA's close-up grid (SOURCES.md G19)",
+  "outline": "UC Davis AVA Project (G18), simplified to 25 m",
+  "geology": "USGS SIM 2956, 1:100,000 (G07); unit names from its FGDC metadata",
+  "soils": "USDA-NRCS SSURGO via Soil Data Access, map-unit area inside the outline (G33)",
+  "vineyards": "USDA NASS Cropland Data Layer 2024, grapes (G30)",
+  "producers": "data/ava_producers.json: unverified (search summaries); each AVA lists its source pages"
+ },
+ "limits": "Shares are of the whole AVA outline, not of its vineyards. Geology at 1:100,000; SSURGO at about 1:24,000; CDL is a satellite classification.",
+ "avas": {
+  "guenoc_valley": {
+   "name": "Guenoc Valley",
+   "established": "1981-12-21",
+   "cfr": "9.26",
+   "area_km2": 22.3,
+   "elevation_m": {
+    "min": 289,
+    "p10": 297,
+    "median": 322,
+    "p90": 417,
+    "max": 554,
+    "cell_m": 18.32
+   },
+   "geology": [
+    {
+     "ptype": "sp",
+     "name": "Coast Range ophiolite, serpentinite",
+     "pct": 38.6
+    },
+    {
+     "ptype": "Qa",
+     "name": "Alluvium (Holocene and late Pleistocene)",
+     "pct": 31.2
+    },
+    {
+     "ptype": "Kfm",
+     "name": "Franciscan Complex, metagraywacke",
+     "pct": 23.4
+    },
+    {
+     "ptype": "QTob",
+     "name": "Clear Lake Volcanics, olivine basalt (Pleistocene and Pliocene)",
+     "pct": 6.6
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Henneke-Montara-Rock outcrop complex",
+      "pct": 34.1
+     },
+     {
+      "name": "Maxwell clay loam",
+      "pct": 17.1
+     },
+     {
+      "name": "Sobrante-Guenoc-Hambright complex",
+      "pct": 16.2
+     },
+     {
+      "name": "Still loam",
+      "pct": 9.3
+     },
+     {
+      "name": "Water",
+      "pct": 6.6
+     },
+     {
+      "name": "Bressa-Millsholm loams",
+      "pct": 5.2
+     }
+    ],
+    "n_names": 16,
+    "share_by_name": {
+     "gravelly or cobbly": 0,
+     "clay": 19,
+     "rock outcrop": 34,
+     "water": 7
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 299
+   },
+   "producers": {
+    "producers": [
+     "Langtry Estate (formerly Guenoc Winery; the only winery)"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Guenoc_Valley_AVA",
+     "https://vinorandum.com/ava/guenoc-valley-ava"
+    ]
+   }
+  },
+  "knights_valley": {
+   "name": "Knights Valley",
+   "established": "1983-11-21",
+   "cfr": "9.76",
+   "area_km2": 150.2,
+   "elevation_m": {
+    "min": 58,
+    "p10": 132,
+    "median": 272,
+    "p90": 767,
+    "max": 1320,
+    "cell_m": 43.781
+   },
+   "geology": [
+    {
+     "ptype": "KJfs",
+     "name": "Franciscan Complex, sandstone and melange",
+     "pct": 18.7
+    },
+    {
+     "ptype": "fsr",
+     "name": "Franciscan Complex, melange",
+     "pct": 18.4
+    },
+    {
+     "ptype": "Tst",
+     "name": "Sonoma Volcanics, pumiceous ash-flow tuff",
+     "pct": 14.4
+    },
+    {
+     "ptype": "sp",
+     "name": "Coast Range ophiolite, serpentinite",
+     "pct": 6.2
+    },
+    {
+     "ptype": "Tsr",
+     "name": "Sonoma Volcanics, rhyolite flows",
+     "pct": 6.1
+    },
+    {
+     "ptype": "Tslt",
+     "name": "Sonoma Volcanics, tuff breccia",
+     "pct": 4.4
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Suther-Laughlin loams",
+      "pct": 9.6
+     },
+     {
+      "name": "Suther loam",
+      "pct": 8.3
+     },
+     {
+      "name": "Laughlin loam",
+      "pct": 8.0
+     },
+     {
+      "name": "Rock land",
+      "pct": 5.9
+     },
+     {
+      "name": "Hugo very gravelly loam",
+      "pct": 5.8
+     },
+     {
+      "name": "Laniger loam",
+      "pct": 5.0
+     }
+    ],
+    "n_names": 64,
+    "share_by_name": {
+     "gravelly or cobbly": 37,
+     "clay": 18,
+     "rock outcrop": 6,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 2275
+   },
+   "producers": {
+    "producers": [
+     "Peter Michael Winery",
+     "Knights Bridge",
+     "Bavarian Lion Vineyard (Ehret Family)",
+     "Beringer (Knights Valley bottlings)"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Knights_Valley_AVA",
+     "https://www.sonomacounty.com/wine/wine-areas-avas/knights-valley-wine-region-and-appellation/"
+    ]
+   }
+  },
+  "calistoga": {
+   "name": "Calistoga",
+   "established": "2010-01-07",
+   "cfr": "9.209",
+   "area_km2": 51.5,
+   "elevation_m": {
+    "min": 80,
+    "p10": 96,
+    "median": 142,
+    "p90": 246,
+    "max": 404,
+    "cell_m": 31.337
+   },
+   "geology": [
+    {
+     "ptype": "Tsr",
+     "name": "Sonoma Volcanics, rhyolite flows",
+     "pct": 21.9
+    },
+    {
+     "ptype": "Qha",
+     "name": "Alluvium (Holocene)",
+     "pct": 20.0
+    },
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 15.5
+    },
+    {
+     "ptype": "Qhf",
+     "name": "Alluvial fan deposits (Holocene)",
+     "pct": 10.6
+    },
+    {
+     "ptype": "Tst",
+     "name": "Sonoma Volcanics, pumiceous ash-flow tuff",
+     "pct": 10.0
+    },
+    {
+     "ptype": "Qf",
+     "name": "Alluvial fan deposits (Holocene and late Pleistocene)",
+     "pct": 4.5
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Bale loam",
+      "pct": 25.0
+     },
+     {
+      "name": "Hambright rock-Outcrop complex",
+      "pct": 12.7
+     },
+     {
+      "name": "Forward silt loam",
+      "pct": 12.0
+     },
+     {
+      "name": "Forward-Kidd complex",
+      "pct": 9.3
+     },
+     {
+      "name": "Boomer gravelly loam",
+      "pct": 8.2
+     },
+     {
+      "name": "Bale clay loam",
+      "pct": 6.5
+     }
+    ],
+    "n_names": 26,
+    "share_by_name": {
+     "gravelly or cobbly": 12,
+     "clay": 9,
+     "rock outcrop": 16,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 2898
+   },
+   "producers": {
+    "producers": [
+     "Chateau Montelena",
+     "Araujo (Eisele Vineyard)",
+     "Storybook Mountain",
+     "Tofanelli",
+     "Clos Pegase",
+     "Canard Vineyards"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Calistoga_AVA",
+     "https://napa.guides.winefolly.com/region/calistoga"
+    ]
+   }
+  },
+  "howell_mountain": {
+   "name": "Howell Mountain",
+   "established": "1984-01-30",
+   "cfr": "9.94",
+   "area_km2": 52.7,
+   "elevation_m": {
+    "min": 419,
+    "p10": 456,
+    "median": 538,
+    "p90": 677,
+    "max": 876,
+    "cell_m": 30.302
+   },
+   "geology": [
+    {
+     "ptype": "Tst",
+     "name": "Sonoma Volcanics, pumiceous ash-flow tuff",
+     "pct": 28.3
+    },
+    {
+     "ptype": "Tsft",
+     "name": "Sonoma Volcanics, tuff",
+     "pct": 21.7
+    },
+    {
+     "ptype": "Tsr",
+     "name": "Sonoma Volcanics, rhyolite flows",
+     "pct": 18.8
+    },
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 14.8
+    },
+    {
+     "ptype": "KJgvl",
+     "name": "Great Valley complex, Great Valley sequence, Early Cretaceous and Late Jurassic",
+     "pct": 4.9
+    },
+    {
+     "ptype": "Tsag",
+     "name": "Sonoma Volcanics, agglomerate",
+     "pct": 4.8
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Rock outcrop-Kidd complex",
+      "pct": 24.8
+     },
+     {
+      "name": "Aiken loam",
+      "pct": 19.6
+     },
+     {
+      "name": "Forward silt loam",
+      "pct": 19.2
+     },
+     {
+      "name": "Forward-Kidd complex",
+      "pct": 8.0
+     },
+     {
+      "name": "Kidd loam",
+      "pct": 6.9
+     },
+     {
+      "name": "Boomer-Forward-Felta complex",
+      "pct": 5.0
+     }
+    ],
+    "n_names": 21,
+    "share_by_name": {
+     "gravelly or cobbly": 4,
+     "clay": 0,
+     "rock outcrop": 27,
+     "water": 1
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 400
+   },
+   "producers": {
+    "producers": [
+     "Dunn Vineyards",
+     "La Jota Vineyard Co.",
+     "Arkenstone",
+     "Howell Mountain Vineyards",
+     "Clif Family Winery"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Howell_Mountain_AVA",
+     "https://www.decanter.com/premium/regional-profile-howell-mountain-409683"
+    ]
+   }
+  },
+  "chalk_hill": {
+   "name": "Chalk Hill",
+   "established": "1983-11-21",
+   "cfr": "9.52",
+   "area_km2": 91.7,
+   "elevation_m": {
+    "min": 24,
+    "p10": 43,
+    "median": 146,
+    "p90": 295,
+    "max": 477,
+    "cell_m": 35.206
+   },
+   "geology": [
+    {
+     "ptype": "QThg",
+     "name": "Huichica and Glen Ellen Formations, undivided",
+     "pct": 42.7
+    },
+    {
+     "ptype": "KJfs",
+     "name": "Franciscan Complex, sandstone and melange",
+     "pct": 21.3
+    },
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 15.8
+    },
+    {
+     "ptype": "Tst",
+     "name": "Sonoma Volcanics, pumiceous ash-flow tuff",
+     "pct": 6.7
+    },
+    {
+     "ptype": "KJfgs",
+     "name": "Franciscan Complex, greenstone",
+     "pct": 6.0
+    },
+    {
+     "ptype": "Tss",
+     "name": "Sonoma Volcanics, volcanic sand and gravel",
+     "pct": 3.9
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Felta very gravelly loam",
+      "pct": 25.5
+     },
+     {
+      "name": "Laniger loam",
+      "pct": 14.2
+     },
+     {
+      "name": "Spreckels loam",
+      "pct": 12.0
+     },
+     {
+      "name": "Huichica loam",
+      "pct": 11.5
+     },
+     {
+      "name": "Dibble clay loam",
+      "pct": 8.3
+     },
+     {
+      "name": "Laughlin loam",
+      "pct": 5.3
+     }
+    ],
+    "n_names": 38,
+    "share_by_name": {
+     "gravelly or cobbly": 33,
+     "clay": 20,
+     "rock outcrop": 1,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 1917
+   },
+   "producers": {
+    "producers": [
+     "Chalk Hill Estate",
+     "Rodney Strong (Chalk Hill bottlings)",
+     "Davis Bynum"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Chalk_Hill_AVA",
+     "https://www.fortross.org/local/ava/chalk-hill"
+    ]
+   }
+  },
+  "chiles_valley": {
+   "name": "Chiles Valley",
+   "established": "1999-04-19",
+   "cfr": "9.154",
+   "area_km2": 21.2,
+   "elevation_m": {
+    "min": 173,
+    "p10": 255,
+    "median": 296,
+    "p90": 359,
+    "max": 480,
+    "cell_m": 29.47
+   },
+   "geology": [
+    {
+     "ptype": "KJgvl",
+     "name": "Great Valley complex, Great Valley sequence, Early Cretaceous and Late Jurassic",
+     "pct": 38.3
+    },
+    {
+     "ptype": "Qf",
+     "name": "Alluvial fan deposits (Holocene and late Pleistocene)",
+     "pct": 18.3
+    },
+    {
+     "ptype": "sp",
+     "name": "Coast Range ophiolite, serpentinite",
+     "pct": 16.1
+    },
+    {
+     "ptype": "Qa",
+     "name": "Alluvium (Holocene and late Pleistocene)",
+     "pct": 7.1
+    },
+    {
+     "ptype": "Qha",
+     "name": "Alluvium (Holocene)",
+     "pct": 6.7
+    },
+    {
+     "ptype": "Jk",
+     "name": "Great Valley complex, Great Valley sequence, Knoxville Formation",
+     "pct": 6.4
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Bressa-Dibble complex",
+      "pct": 38.9
+     },
+     {
+      "name": "Henneke gravelly loam",
+      "pct": 17.8
+     },
+     {
+      "name": "Pleasanton loam",
+      "pct": 16.2
+     },
+     {
+      "name": "Sobrante loam",
+      "pct": 9.1
+     },
+     {
+      "name": "Tehama silt loam",
+      "pct": 6.8
+     },
+     {
+      "name": "Lodo-Maymen-Felton association",
+      "pct": 2.3
+     }
+    ],
+    "n_names": 16,
+    "share_by_name": {
+     "gravelly or cobbly": 21,
+     "clay": 1,
+     "rock outcrop": 0,
+     "water": 1
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 705
+   },
+   "producers": {
+    "producers": [
+     "Brown Estate",
+     "Green & Red Vineyard",
+     "Volker Eisele Family Estate",
+     "Nichelini",
+     "RustRidge"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Chiles_Valley_AVA",
+     "https://napa.guides.winefolly.com/region/chiles-valley"
+    ]
+   }
+  },
+  "diamond_mountain_district": {
+   "name": "Diamond Mountain District",
+   "established": "2001-07-31",
+   "cfr": "9.166",
+   "area_km2": 19.9,
+   "elevation_m": {
+    "min": 117,
+    "p10": 161,
+    "median": 278,
+    "p90": 483,
+    "max": 714,
+    "cell_m": 23.67
+   },
+   "geology": [
+    {
+     "ptype": "Tst",
+     "name": "Sonoma Volcanics, pumiceous ash-flow tuff",
+     "pct": 74.3
+    },
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 14.9
+    },
+    {
+     "ptype": "Tsr",
+     "name": "Sonoma Volcanics, rhyolite flows",
+     "pct": 8.0
+    },
+    {
+     "ptype": "Tss",
+     "name": "Sonoma Volcanics, volcanic sand and gravel",
+     "pct": 2.6
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Forward silt loam",
+      "pct": 36.7
+     },
+     {
+      "name": "Forward-Kidd complex",
+      "pct": 16.6
+     },
+     {
+      "name": "Boomer-Forward-Felta complex",
+      "pct": 14.6
+     },
+     {
+      "name": "Aiken loam",
+      "pct": 12.8
+     },
+     {
+      "name": "Kidd loam",
+      "pct": 5.3
+     },
+     {
+      "name": "Rock outcrop-Kidd complex",
+      "pct": 4.9
+     }
+    ],
+    "n_names": 15,
+    "share_by_name": {
+     "gravelly or cobbly": 1,
+     "clay": 1,
+     "rock outcrop": 13,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 249
+   },
+   "producers": {
+    "producers": [
+     "Diamond Creek Vineyards",
+     "Schramsberg Vineyards",
+     "Dyer Wine",
+     "Wallis Family Estate",
+     "Constant Diamond Mountain"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Diamond_Mountain_District_AVA",
+     "https://napavalleylife.com/?p=20808"
+    ]
+   }
+  },
+  "crystal_springs_of_napa_valley": {
+   "name": "Crystal Springs of Napa Valley",
+   "established": "2024-11-14",
+   "cfr": "9.296",
+   "area_km2": 16.2,
+   "elevation_m": {
+    "min": 118,
+    "p10": 160,
+    "median": 256,
+    "p90": 406,
+    "max": 496,
+    "cell_m": 23.368
+   },
+   "geology": [
+    {
+     "ptype": "Tst",
+     "name": "Sonoma Volcanics, pumiceous ash-flow tuff",
+     "pct": 60.0
+    },
+    {
+     "ptype": "Tsft",
+     "name": "Sonoma Volcanics, tuff",
+     "pct": 20.4
+    },
+    {
+     "ptype": "Tsr",
+     "name": "Sonoma Volcanics, rhyolite flows",
+     "pct": 8.3
+    },
+    {
+     "ptype": "Qls",
+     "name": "Landslide deposits",
+     "pct": 4.7
+    },
+    {
+     "ptype": "Tss",
+     "name": "Sonoma Volcanics, volcanic sand and gravel",
+     "pct": 2.9
+    },
+    {
+     "ptype": "Qpa",
+     "name": "Alluvium (late Pleistocene)",
+     "pct": 2.8
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Rock outcrop-Kidd complex",
+      "pct": 30.4
+     },
+     {
+      "name": "Boomer gravelly loam",
+      "pct": 22.1
+     },
+     {
+      "name": "Forward silt loam",
+      "pct": 12.0
+     },
+     {
+      "name": "Aiken loam",
+      "pct": 10.8
+     },
+     {
+      "name": "Hambright rock-Outcrop complex",
+      "pct": 8.7
+     },
+     {
+      "name": "Forward-Kidd complex",
+      "pct": 5.1
+     }
+    ],
+    "n_names": 14,
+    "share_by_name": {
+     "gravelly or cobbly": 23,
+     "clay": 0,
+     "rock outcrop": 42,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 98
+   },
+   "producers": {
+    "producers": [
+     "Burgess",
+     "Viader",
+     "Seven Stones",
+     "Somnium",
+     "Bremer"
+    ],
+    "sources": [
+     "https://www.ttb.gov/public-information/featured-stories/ttb-establishes-crystal-springs-napa-valley-american",
+     "https://www.decanter.com/wine-news/crystal-springs-of-napa-valley-aims-for-appellation-status-502127"
+    ]
+   }
+  },
+  "fountaingrove_district": {
+   "name": "Fountaingrove District",
+   "established": "2015-03-20",
+   "cfr": "9.250",
+   "area_km2": 149.0,
+   "elevation_m": {
+    "min": 48,
+    "p10": 146,
+    "median": 342,
+    "p90": 563,
+    "max": 831,
+    "cell_m": 39.427
+   },
+   "geology": [
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 28.5
+    },
+    {
+     "ptype": "Tst",
+     "name": "Sonoma Volcanics, pumiceous ash-flow tuff",
+     "pct": 21.4
+    },
+    {
+     "ptype": "KJfs",
+     "name": "Franciscan Complex, sandstone and melange",
+     "pct": 16.5
+    },
+    {
+     "ptype": "QThg",
+     "name": "Huichica and Glen Ellen Formations, undivided",
+     "pct": 9.3
+    },
+    {
+     "ptype": "fsr",
+     "name": "Franciscan Complex, melange",
+     "pct": 7.6
+    },
+    {
+     "ptype": "KJfgs",
+     "name": "Franciscan Complex, greenstone",
+     "pct": 3.3
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Goulding cobbly clay loam",
+      "pct": 23.8
+     },
+     {
+      "name": "Goulding clay loam",
+      "pct": 12.1
+     },
+     {
+      "name": "Henneke gravelly loam",
+      "pct": 10.5
+     },
+     {
+      "name": "Boomer loam",
+      "pct": 6.4
+     },
+     {
+      "name": "Felta very gravelly loam",
+      "pct": 5.8
+     },
+     {
+      "name": "Rock land",
+      "pct": 4.6
+     }
+    ],
+    "n_names": 51,
+    "share_by_name": {
+     "gravelly or cobbly": 52,
+     "clay": 44,
+     "rock outcrop": 5,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 895
+   },
+   "producers": {
+    "producers": [
+     "Fountaingrove Winery (historic, 1875)",
+     "Enkidu Wine",
+     "Lazzari Vineyards",
+     "Cornell Vineyards"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Fountaingrove_District_AVA",
+     "https://www.sonomacounty.com/articles/fountaingrove-district-wine-region-and-appellation"
+    ]
+   }
+  },
+  "st__helena": {
+   "name": "St. Helena",
+   "established": "1995-10-11",
+   "cfr": "9.149",
+   "area_km2": 37.3,
+   "elevation_m": {
+    "min": 53,
+    "p10": 63,
+    "median": 83,
+    "p90": 134,
+    "max": 249,
+    "cell_m": 25.536
+   },
+   "geology": [
+    {
+     "ptype": "Qhf",
+     "name": "Alluvial fan deposits (Holocene)",
+     "pct": 24.1
+    },
+    {
+     "ptype": "Tst",
+     "name": "Sonoma Volcanics, pumiceous ash-flow tuff",
+     "pct": 16.2
+    },
+    {
+     "ptype": "Qf",
+     "name": "Alluvial fan deposits (Holocene and late Pleistocene)",
+     "pct": 12.6
+    },
+    {
+     "ptype": "Qht",
+     "name": "Terrace deposits (Holocene)",
+     "pct": 11.4
+    },
+    {
+     "ptype": "Tss",
+     "name": "Sonoma Volcanics, volcanic sand and gravel",
+     "pct": 9.7
+    },
+    {
+     "ptype": "Tsr",
+     "name": "Sonoma Volcanics, rhyolite flows",
+     "pct": 4.9
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Bale clay loam",
+      "pct": 16.5
+     },
+     {
+      "name": "Pleasanton loam",
+      "pct": 16.4
+     },
+     {
+      "name": "Forward silt loam",
+      "pct": 12.6
+     },
+     {
+      "name": "Cortina very gravelly loam",
+      "pct": 10.0
+     },
+     {
+      "name": "Forward-Kidd complex",
+      "pct": 9.0
+     },
+     {
+      "name": "Perkins gravelly loam",
+      "pct": 5.8
+     }
+    ],
+    "n_names": 29,
+    "share_by_name": {
+     "gravelly or cobbly": 23,
+     "clay": 18,
+     "rock outcrop": 2,
+     "water": 1
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 2839
+   },
+   "producers": {
+    "producers": [
+     "Charles Krug",
+     "Beringer",
+     "Freemark Abbey",
+     "Spottswoode",
+     "Corison",
+     "Joseph Phelps",
+     "Turley Wine Cellars"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/St._Helena_AVA",
+     "https://napa.guides.winefolly.com/region/st-helena"
+    ]
+   }
+  },
+  "spring_mountain_district": {
+   "name": "Spring Mountain District",
+   "established": "1993-06-14",
+   "cfr": "9.143",
+   "area_km2": 34.3,
+   "elevation_m": {
+    "min": 117,
+    "p10": 168,
+    "median": 365,
+    "p90": 587,
+    "max": 792,
+    "cell_m": 24.049
+   },
+   "geology": [
+    {
+     "ptype": "Tst",
+     "name": "Sonoma Volcanics, pumiceous ash-flow tuff",
+     "pct": 54.9
+    },
+    {
+     "ptype": "KJfs",
+     "name": "Franciscan Complex, sandstone and melange",
+     "pct": 24.7
+    },
+    {
+     "ptype": "fsr",
+     "name": "Franciscan Complex, melange",
+     "pct": 7.3
+    },
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 7.0
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Forward silt loam",
+      "pct": 24.6
+     },
+     {
+      "name": "Boomer gravelly loam",
+      "pct": 15.0
+     },
+     {
+      "name": "Aiken loam",
+      "pct": 11.7
+     },
+     {
+      "name": "Boomer-Forward-Felta complex",
+      "pct": 9.1
+     },
+     {
+      "name": "Felton gravelly loam",
+      "pct": 9.1
+     },
+     {
+      "name": "Millsholm loam",
+      "pct": 5.6
+     }
+    ],
+    "n_names": 31,
+    "share_by_name": {
+     "gravelly or cobbly": 28,
+     "clay": 3,
+     "rock outcrop": 4,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 375
+   },
+   "producers": {
+    "producers": [
+     "Spring Mountain Vineyard",
+     "Smith-Madrone",
+     "Cain Vineyard & Winery",
+     "Philip Togni Vineyard",
+     "Robert Keenan Winery",
+     "Ritchie Creek",
+     "Barnett Vineyards",
+     "Behrens Family Winery"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Spring_Mountain_District_AVA",
+     "https://www.napavalley.com/blog/spring-mountain-wineries/"
+    ]
+   }
+  },
+  "rutherford": {
+   "name": "Rutherford",
+   "established": "1993-08-02",
+   "cfr": "9.133",
+   "area_km2": 30.4,
+   "elevation_m": {
+    "min": 38,
+    "p10": 45,
+    "median": 53,
+    "p90": 111,
+    "max": 210,
+    "cell_m": 22.185
+   },
+   "geology": [
+    {
+     "ptype": "Qhf",
+     "name": "Alluvial fan deposits (Holocene)",
+     "pct": 25.3
+    },
+    {
+     "ptype": "Qf",
+     "name": "Alluvial fan deposits (Holocene and late Pleistocene)",
+     "pct": 19.1
+    },
+    {
+     "ptype": "Qhay",
+     "name": "Younger alluvium (late Holocene)",
+     "pct": 12.9
+    },
+    {
+     "ptype": "Tss",
+     "name": "Sonoma Volcanics, volcanic sand and gravel",
+     "pct": 6.5
+    },
+    {
+     "ptype": "Qhff",
+     "name": "Fine-grained alluvial fan deposits (Holocene)",
+     "pct": 5.6
+    },
+    {
+     "ptype": "Qht",
+     "name": "Terrace deposits (Holocene)",
+     "pct": 5.0
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Pleasanton loam",
+      "pct": 19.7
+     },
+     {
+      "name": "Bale clay loam",
+      "pct": 19.1
+     },
+     {
+      "name": "Yolo loam",
+      "pct": 11.2
+     },
+     {
+      "name": "Forward silt loam",
+      "pct": 6.6
+     },
+     {
+      "name": "Cole silt loam",
+      "pct": 5.4
+     },
+     {
+      "name": "Maxwell clay",
+      "pct": 5.1
+     }
+    ],
+    "n_names": 27,
+    "share_by_name": {
+     "gravelly or cobbly": 10,
+     "clay": 30,
+     "rock outcrop": 3,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 3842
+   },
+   "producers": {
+    "producers": [
+     "Inglenook",
+     "Beaulieu Vineyard",
+     "Grgich Hills Estate",
+     "St. Supéry Estate Vineyards & Winery"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Rutherford_AVA",
+     "https://www.napavintners.com/napa_valley/rutherford-ava"
+    ]
+   }
+  },
+  "oakville": {
+   "name": "Oakville",
+   "established": "1993-08-02",
+   "cfr": "9.134",
+   "area_km2": 27.5,
+   "elevation_m": {
+    "min": 30,
+    "p10": 37,
+    "median": 50,
+    "p90": 141,
+    "max": 330,
+    "cell_m": 24.233
+   },
+   "geology": [
+    {
+     "ptype": "Qhf",
+     "name": "Alluvial fan deposits (Holocene)",
+     "pct": 36.2
+    },
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 25.0
+    },
+    {
+     "ptype": "Qhay",
+     "name": "Younger alluvium (late Holocene)",
+     "pct": 11.3
+    },
+    {
+     "ptype": "Qt",
+     "name": "Terrace deposits (Holocene and late Pleistocene)",
+     "pct": 7.3
+    },
+    {
+     "ptype": "Qf",
+     "name": "Alluvial fan deposits (Holocene and late Pleistocene)",
+     "pct": 6.9
+    },
+    {
+     "ptype": "Qhff",
+     "name": "Fine-grained alluvial fan deposits (Holocene)",
+     "pct": 3.9
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Bale clay loam",
+      "pct": 19.9
+     },
+     {
+      "name": "Pleasanton loam",
+      "pct": 10.7
+     },
+     {
+      "name": "Clear Lake clay",
+      "pct": 10.1
+     },
+     {
+      "name": "Hambright rock-Outcrop complex",
+      "pct": 5.7
+     },
+     {
+      "name": "Bale loam",
+      "pct": 5.5
+     },
+     {
+      "name": "Yolo loam",
+      "pct": 5.1
+     }
+    ],
+    "n_names": 27,
+    "share_by_name": {
+     "gravelly or cobbly": 19,
+     "clay": 30,
+     "rock outcrop": 14,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 3571
+   },
+   "producers": {
+    "producers": [
+     "Robert Mondavi Winery (To Kalon)",
+     "Opus One",
+     "Screaming Eagle",
+     "Harlan Estate",
+     "Far Niente",
+     "Groth",
+     "Dalla Valle",
+     "Heitz Cellar (Martha's Vineyard)"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Oakville_AVA",
+     "https://napa.guides.winefolly.com/region/oakville"
+    ]
+   }
+  },
+  "atlas_peak": {
+   "name": "Atlas Peak",
+   "established": "1992-02-24",
+   "cfr": "9.140",
+   "area_km2": 49.9,
+   "elevation_m": {
+    "min": 206,
+    "p10": 391,
+    "median": 474,
+    "p90": 633,
+    "max": 808,
+    "cell_m": 25.855
+   },
+   "geology": [
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 81.5
+    },
+    {
+     "ptype": "sp",
+     "name": "Coast Range ophiolite, serpentinite",
+     "pct": 3.8
+    },
+    {
+     "ptype": "Qf",
+     "name": "Alluvial fan deposits (Holocene and late Pleistocene)",
+     "pct": 3.5
+    },
+    {
+     "ptype": "Qa",
+     "name": "Alluvium (Holocene and late Pleistocene)",
+     "pct": 2.5
+    },
+    {
+     "ptype": "KJgv",
+     "name": "Great Valley complex, Great Valley sequence, undivided",
+     "pct": 2.1
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Aiken loam",
+      "pct": 24.6
+     },
+     {
+      "name": "Hambright rock-Outcrop complex",
+      "pct": 15.9
+     },
+     {
+      "name": "Rock outcrop-Hambright complex",
+      "pct": 14.0
+     },
+     {
+      "name": "Rock outcrop",
+      "pct": 9.9
+     },
+     {
+      "name": "Hambright-Rock outcrop complex",
+      "pct": 6.0
+     },
+     {
+      "name": "Forward silt loam",
+      "pct": 5.0
+     }
+    ],
+    "n_names": 17,
+    "share_by_name": {
+     "gravelly or cobbly": 9,
+     "clay": 4,
+     "rock outcrop": 50,
+     "water": 1
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 1051
+   },
+   "producers": {
+    "producers": [
+     "Antinori Napa Valley (Antica)",
+     "Atlas Peak Vineyards",
+     "Sill Family Vineyards"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Atlas_Peak_AVA",
+     "https://napavalleylife.com/atlas-peak-ava/"
+    ]
+   }
+  },
+  "yountville": {
+   "name": "Yountville",
+   "established": "1999-05-18",
+   "cfr": "9.160",
+   "area_km2": 33.8,
+   "elevation_m": {
+    "min": 11,
+    "p10": 24,
+    "median": 54,
+    "p90": 251,
+    "max": 452,
+    "cell_m": 26.273
+   },
+   "geology": [
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 29.3
+    },
+    {
+     "ptype": "Qhay",
+     "name": "Younger alluvium (late Holocene)",
+     "pct": 17.0
+    },
+    {
+     "ptype": "Qhf",
+     "name": "Alluvial fan deposits (Holocene)",
+     "pct": 13.6
+    },
+    {
+     "ptype": "KJgvl",
+     "name": "Great Valley complex, Great Valley sequence, Early Cretaceous and Late Jurassic",
+     "pct": 8.0
+    },
+    {
+     "ptype": "Qf",
+     "name": "Alluvial fan deposits (Holocene and late Pleistocene)",
+     "pct": 4.7
+    },
+    {
+     "ptype": "Kfm",
+     "name": "Franciscan Complex, metagraywacke",
+     "pct": 4.0
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Felton gravelly loam",
+      "pct": 17.2
+     },
+     {
+      "name": "Cole silt loam",
+      "pct": 13.3
+     },
+     {
+      "name": "Lodo-Maymen-Felton association",
+      "pct": 11.7
+     },
+     {
+      "name": "Bale clay loam",
+      "pct": 10.6
+     },
+     {
+      "name": "Clear Lake clay",
+      "pct": 8.9
+     },
+     {
+      "name": "Sobrante loam",
+      "pct": 7.7
+     }
+    ],
+    "n_names": 24,
+    "share_by_name": {
+     "gravelly or cobbly": 25,
+     "clay": 20,
+     "rock outcrop": 6,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 2714
+   },
+   "producers": {
+    "producers": [
+     "Dominus Estate (Napanook)",
+     "Domaine Chandon",
+     "Kapcsandy Family Winery"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Yountville_AVA",
+     "https://napa.guides.winefolly.com/region/yountville"
+    ]
+   }
+  },
+  "mt__veeder": {
+   "name": "Mt. Veeder",
+   "established": "1990-03-22",
+   "cfr": "9.123",
+   "area_km2": 68.3,
+   "elevation_m": {
+    "min": 77,
+    "p10": 157,
+    "median": 302,
+    "p90": 557,
+    "max": 816,
+    "cell_m": 40.77
+   },
+   "geology": [
+    {
+     "ptype": "KJgvl",
+     "name": "Great Valley complex, Great Valley sequence, Early Cretaceous and Late Jurassic",
+     "pct": 28.2
+    },
+    {
+     "ptype": "Kgvu",
+     "name": "Great Valley complex, Great Valley sequence, Late Cretaceous",
+     "pct": 27.1
+    },
+    {
+     "ptype": "Tsr",
+     "name": "Sonoma Volcanics, rhyolite flows",
+     "pct": 12.3
+    },
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 12.2
+    },
+    {
+     "ptype": "Qls",
+     "name": "Landslide deposits",
+     "pct": 8.2
+    },
+    {
+     "ptype": "Tst",
+     "name": "Sonoma Volcanics, pumiceous ash-flow tuff",
+     "pct": 8.1
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Felton gravelly loam",
+      "pct": 28.7
+     },
+     {
+      "name": "Forward silt loam",
+      "pct": 16.0
+     },
+     {
+      "name": "Fagan clay loam",
+      "pct": 11.4
+     },
+     {
+      "name": "Forward-Kidd complex",
+      "pct": 6.5
+     },
+     {
+      "name": "Aiken loam",
+      "pct": 5.4
+     },
+     {
+      "name": "Sobrante loam",
+      "pct": 5.2
+     }
+    ],
+    "n_names": 37,
+    "share_by_name": {
+     "gravelly or cobbly": 34,
+     "clay": 12,
+     "rock outcrop": 4,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 571
+   },
+   "producers": {
+    "producers": [
+     "Mayacamas Vineyards",
+     "Mount Veeder Winery",
+     "Hess"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Mount_Veeder_AVA",
+     "https://www.decanter.com/learn/guide-to-mount-veeder-ava-mayacamas-mountains-napa-valley-289246/"
+    ]
+   }
+  },
+  "stags_leap_district": {
+   "name": "Stags Leap District",
+   "established": "1989-02-27",
+   "cfr": "9.117",
+   "area_km2": 12.3,
+   "elevation_m": {
+    "min": 13,
+    "p10": 21,
+    "median": 41,
+    "p90": 103,
+    "max": 182,
+    "cell_m": 17.275
+   },
+   "geology": [
+    {
+     "ptype": "Qf",
+     "name": "Alluvial fan deposits (Holocene and late Pleistocene)",
+     "pct": 24.3
+    },
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 17.3
+    },
+    {
+     "ptype": "Qha",
+     "name": "Alluvium (Holocene)",
+     "pct": 12.0
+    },
+    {
+     "ptype": "KJgv",
+     "name": "Great Valley complex, Great Valley sequence, undivided",
+     "pct": 11.0
+    },
+    {
+     "ptype": "Tsai",
+     "name": "Sonoma Volcanics, andesite to dacite plugs",
+     "pct": 9.9
+    },
+    {
+     "ptype": "Qhay",
+     "name": "Younger alluvium (late Holocene)",
+     "pct": 7.8
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Bale clay loam",
+      "pct": 30.8
+     },
+     {
+      "name": "Rock outcrop-Hambright complex",
+      "pct": 10.8
+     },
+     {
+      "name": "Boomer gravelly loam",
+      "pct": 10.4
+     },
+     {
+      "name": "Haire loam",
+      "pct": 7.3
+     },
+     {
+      "name": "Perkins gravelly loam",
+      "pct": 6.7
+     },
+     {
+      "name": "Boomer-Forward-Felta complex",
+      "pct": 5.2
+     }
+    ],
+    "n_names": 19,
+    "share_by_name": {
+     "gravelly or cobbly": 17,
+     "clay": 33,
+     "rock outcrop": 12,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 1410
+   },
+   "producers": {
+    "producers": [
+     "Stag's Leap Wine Cellars",
+     "Shafer Vineyards",
+     "Clos du Val",
+     "Chimney Rock",
+     "Silverado Vineyards",
+     "Pine Ridge",
+     "Cliff Lede",
+     "Stags' Leap Winery"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Stags_Leap_District_AVA",
+     "https://www.decanter.com/features/regional-profile-stags-leap-district-245680/"
+    ]
+   }
+  },
+  "bennett_valley": {
+   "name": "Bennett Valley",
+   "established": "2003-12-29",
+   "cfr": "9.142",
+   "area_km2": 33.8,
+   "elevation_m": {
+    "min": 77,
+    "p10": 137,
+    "median": 225,
+    "p90": 344,
+    "max": 580,
+    "cell_m": 22.363
+   },
+   "geology": [
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 47.7
+    },
+    {
+     "ptype": "Tc",
+     "name": "Sand and gravel of Cotati",
+     "pct": 30.0
+    },
+    {
+     "ptype": "Tst",
+     "name": "Sonoma Volcanics, pumiceous ash-flow tuff",
+     "pct": 8.9
+    },
+    {
+     "ptype": "Qf",
+     "name": "Alluvial fan deposits (Holocene and late Pleistocene)",
+     "pct": 4.6
+    },
+    {
+     "ptype": "Qa",
+     "name": "Alluvium (Holocene and late Pleistocene)",
+     "pct": 2.6
+    },
+    {
+     "ptype": "Qoa",
+     "name": "Alluvium (late and early Pleistocene)",
+     "pct": 2.0
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Goulding clay loam",
+      "pct": 30.6
+     },
+     {
+      "name": "Spreckels loam",
+      "pct": 23.9
+     },
+     {
+      "name": "Goulding cobbly clay loam",
+      "pct": 19.2
+     },
+     {
+      "name": "Haire clay loam",
+      "pct": 6.8
+     },
+     {
+      "name": "Raynor clay",
+      "pct": 3.5
+     },
+     {
+      "name": "Los Robles gravelly clay loam",
+      "pct": 3.3
+     }
+    ],
+    "n_names": 23,
+    "share_by_name": {
+     "gravelly or cobbly": 24,
+     "clay": 65,
+     "rock outcrop": 0,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 742
+   },
+   "producers": {
+    "producers": [
+     "Matanzas Creek Winery",
+     "Coursey Graves",
+     "Bennett Valley Cellars"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Bennett_Valley_AVA",
+     "https://bvgg.org/about-the-ava"
+    ]
+   }
+  },
+  "moon_mountain_district_sonoma_county": {
+   "name": "Moon Mountain District Sonoma County",
+   "established": "2013-11-01",
+   "cfr": "9.231",
+   "area_km2": 71.5,
+   "elevation_m": {
+    "min": 44,
+    "p10": 152,
+    "median": 316,
+    "p90": 548,
+    "max": 816,
+    "cell_m": 36.266
+   },
+   "geology": [
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 52.5
+    },
+    {
+     "ptype": "Tsr",
+     "name": "Sonoma Volcanics, rhyolite flows",
+     "pct": 23.5
+    },
+    {
+     "ptype": "Tst",
+     "name": "Sonoma Volcanics, pumiceous ash-flow tuff",
+     "pct": 15.5
+    },
+    {
+     "ptype": "Tsft",
+     "name": "Sonoma Volcanics, tuff",
+     "pct": 4.6
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Goulding-Toomes complex",
+      "pct": 19.9
+     },
+     {
+      "name": "Rock land",
+      "pct": 19.9
+     },
+     {
+      "name": "Red Hill clay loam",
+      "pct": 16.5
+     },
+     {
+      "name": "Goulding cobbly clay loam",
+      "pct": 12.0
+     },
+     {
+      "name": "Spreckels loam",
+      "pct": 8.1
+     },
+     {
+      "name": "Forward silt loam",
+      "pct": 7.0
+     }
+    ],
+    "n_names": 30,
+    "share_by_name": {
+     "gravelly or cobbly": 14,
+     "clay": 31,
+     "rock outcrop": 20,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 803
+   },
+   "producers": {
+    "producers": [
+     "Monte Rosso Vineyard (Louis M. Martini / Gallo)",
+     "Kamen Estate",
+     "Coturri",
+     "Petroni Vineyards",
+     "B. Wise Vineyards"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Moon_Mountain_District_Sonoma_County",
+     "https://moonmountaindistrict.org/about"
+    ]
+   }
+  },
+  "sonoma_mountain": {
+   "name": "Sonoma Mountain",
+   "established": "1985-02-22",
+   "cfr": "9.102",
+   "area_km2": 22.6,
+   "elevation_m": {
+    "min": 115,
+    "p10": 150,
+    "median": 243,
+    "p90": 348,
+    "max": 493,
+    "cell_m": 22.682
+   },
+   "geology": [
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 49.8
+    },
+    {
+     "ptype": "Tst",
+     "name": "Sonoma Volcanics, pumiceous ash-flow tuff",
+     "pct": 14.0
+    },
+    {
+     "ptype": "Tc",
+     "name": "Sand and gravel of Cotati",
+     "pct": 12.8
+    },
+    {
+     "ptype": "Qlso",
+     "name": "Landslide deposits (late and early Pleistocene)",
+     "pct": 10.6
+    },
+    {
+     "ptype": "QTge",
+     "name": "Glen Ellen Formation",
+     "pct": 4.5
+    },
+    {
+     "ptype": "Qls",
+     "name": "Landslide deposits",
+     "pct": 4.4
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Goulding clay loam",
+      "pct": 47.3
+     },
+     {
+      "name": "Spreckels loam",
+      "pct": 27.0
+     },
+     {
+      "name": "Goulding cobbly clay loam",
+      "pct": 12.0
+     },
+     {
+      "name": "Red Hill clay loam",
+      "pct": 6.4
+     },
+     {
+      "name": "Goulding-Toomes complex",
+      "pct": 1.7
+     },
+     {
+      "name": "Toomes rocky loam",
+      "pct": 1.6
+     }
+    ],
+    "n_names": 14,
+    "share_by_name": {
+     "gravelly or cobbly": 13,
+     "clay": 67,
+     "rock outcrop": 0,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 443
+   },
+   "producers": {
+    "producers": [
+     "Benziger Family Winery",
+     "Laurel Glen Vineyard"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Sonoma_Mountain_AVA",
+     "https://sonomacounty.com/articles/sonoma-mountain-wine-region-and-appellation"
+    ]
+   }
+  },
+  "oak_knoll_district_of_napa_valley": {
+   "name": "Oak Knoll District of Napa Valley",
+   "established": "2004-04-26",
+   "cfr": "9.161",
+   "area_km2": 39.9,
+   "elevation_m": {
+    "min": 0,
+    "p10": 14,
+    "median": 26,
+    "p90": 66,
+    "max": 251,
+    "cell_m": 22.223
+   },
+   "geology": [
+    {
+     "ptype": "Qf",
+     "name": "Alluvial fan deposits (Holocene and late Pleistocene)",
+     "pct": 35.4
+    },
+    {
+     "ptype": "Qoa",
+     "name": "Alluvium (late and early Pleistocene)",
+     "pct": 27.3
+    },
+    {
+     "ptype": "Qhay",
+     "name": "Younger alluvium (late Holocene)",
+     "pct": 14.6
+    },
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 6.2
+    },
+    {
+     "ptype": "Qhf",
+     "name": "Alluvial fan deposits (Holocene)",
+     "pct": 4.6
+    },
+    {
+     "ptype": "Kgvu",
+     "name": "Great Valley complex, Great Valley sequence, Late Cretaceous",
+     "pct": 2.8
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Haire loam",
+      "pct": 23.5
+     },
+     {
+      "name": "Cole silt loam",
+      "pct": 15.6
+     },
+     {
+      "name": "Pleasanton loam",
+      "pct": 13.6
+     },
+     {
+      "name": "Yolo loam",
+      "pct": 11.5
+     },
+     {
+      "name": "Bale clay loam",
+      "pct": 6.8
+     },
+     {
+      "name": "Coombs gravelly loam",
+      "pct": 6.3
+     }
+    ],
+    "n_names": 20,
+    "share_by_name": {
+     "gravelly or cobbly": 10,
+     "clay": 16,
+     "rock outcrop": 3,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 4729
+   },
+   "producers": {
+    "producers": [
+     "Trefethen Family Vineyards",
+     "Monticello Vineyards",
+     "Black Stallion"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Oak_Knoll_District_of_Napa_Valley_AVA",
+     "https://napa.guides.winefolly.com/region/oak-knoll-district"
+    ]
+   }
+  },
+  "coombsville": {
+   "name": "Coombsville",
+   "established": "2002-01-13",
+   "cfr": "9.223",
+   "area_km2": 45.7,
+   "elevation_m": {
+    "min": 1,
+    "p10": 17,
+    "median": 68,
+    "p90": 369,
+    "max": 572,
+    "cell_m": 23.541
+   },
+   "geology": [
+    {
+     "ptype": "Tslt",
+     "name": "Sonoma Volcanics, tuff breccia",
+     "pct": 29.7
+    },
+    {
+     "ptype": "Qoa",
+     "name": "Alluvium (late and early Pleistocene)",
+     "pct": 20.8
+    },
+    {
+     "ptype": "Tss",
+     "name": "Sonoma Volcanics, volcanic sand and gravel",
+     "pct": 14.9
+    },
+    {
+     "ptype": "Qhay",
+     "name": "Younger alluvium (late Holocene)",
+     "pct": 7.0
+    },
+    {
+     "ptype": "Qa",
+     "name": "Alluvium (Holocene and late Pleistocene)",
+     "pct": 6.6
+    },
+    {
+     "ptype": "Qha",
+     "name": "Alluvium (Holocene)",
+     "pct": 5.7
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Hambright rock-Outcrop complex",
+      "pct": 22.2
+     },
+     {
+      "name": "Coombs gravelly loam",
+      "pct": 21.3
+     },
+     {
+      "name": "Sobrante loam",
+      "pct": 13.8
+     },
+     {
+      "name": "Rock outcrop",
+      "pct": 6.9
+     },
+     {
+      "name": "Forward silt loam",
+      "pct": 6.2
+     },
+     {
+      "name": "Hambright-Rock outcrop complex",
+      "pct": 5.9
+     }
+    ],
+    "n_names": 19,
+    "share_by_name": {
+     "gravelly or cobbly": 23,
+     "clay": 5,
+     "rock outcrop": 40,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 1393
+   },
+   "producers": {
+    "producers": [
+     "Farella Vineyards",
+     "Meteor Vineyard",
+     "Favia Wines",
+     "Porter Family Vineyards",
+     "Palmaz Vineyards",
+     "Sciandri Vineyards"
+    ],
+    "sources": [
+     "https://vinepair.com/articles/coombsville-napa/",
+     "https://www.beauwinetours.com/5-cant-miss-napa-valley-wineries-throughout-coombsville/"
+    ]
+   }
+  },
+  "wild_horse_valley": {
+   "name": "Wild Horse Valley",
+   "established": "1988-12-30",
+   "cfr": "9.124",
+   "area_km2": 15.9,
+   "elevation_m": {
+    "min": 166,
+    "p10": 318,
+    "median": 393,
+    "p90": 492,
+    "max": 645,
+    "cell_m": 22.515
+   },
+   "geology": [],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Toomes stony loam",
+      "pct": 38.7
+     },
+     {
+      "name": "Hambright-Toomes stony loams",
+      "pct": 14.0
+     },
+     {
+      "name": "Hambright rock-Outcrop complex",
+      "pct": 13.6
+     },
+     {
+      "name": "Sobrante loam",
+      "pct": 13.5
+     },
+     {
+      "name": "Hambright loam",
+      "pct": 5.2
+     },
+     {
+      "name": "Hambright-Rock outcrop complex",
+      "pct": 5.0
+     }
+    ],
+    "n_names": 13,
+    "share_by_name": {
+     "gravelly or cobbly": 55,
+     "clay": 0,
+     "rock outcrop": 20,
+     "water": 4
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 44
+   },
+   "producers": {
+    "producers": [
+     "Olivia Brion (only winery)",
+     "Heron Lake Vineyard (grower)"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Wild_Horse_Valley_AVA",
+     "https://napavalleylife.com/wild-horse-valley-ava/"
+    ]
+   }
+  },
+  "los_carneros": {
+   "name": "Los Carneros",
+   "established": "1983-09-19",
+   "cfr": "9.32",
+   "area_km2": 150.6,
+   "elevation_m": {
+    "min": -1,
+    "p10": 2,
+    "median": 23,
+    "p90": 114,
+    "max": 405,
+    "cell_m": 50.824
+   },
+   "geology": [
+    {
+     "ptype": "Qoa",
+     "name": "Alluvium (late and early Pleistocene)",
+     "pct": 31.3
+    },
+    {
+     "ptype": "Tsa",
+     "name": "Sonoma Volcanics, andesite to basalt lava flows",
+     "pct": 13.0
+    },
+    {
+     "ptype": "QThg",
+     "name": "Huichica and Glen Ellen Formations, undivided",
+     "pct": 11.2
+    },
+    {
+     "ptype": "Qt",
+     "name": "Terrace deposits (Holocene and late Pleistocene)",
+     "pct": 6.4
+    },
+    {
+     "ptype": "Kgvu",
+     "name": "Great Valley complex, Great Valley sequence, Late Cretaceous",
+     "pct": 5.6
+    },
+    {
+     "ptype": "Td",
+     "name": "Unnamed sandstone (Eocene and Paleocene)",
+     "pct": 5.3
+    }
+   ],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Haire clay loam",
+      "pct": 18.9
+     },
+     {
+      "name": "Haire loam",
+      "pct": 11.9
+     },
+     {
+      "name": "Diablo clay",
+      "pct": 7.8
+     },
+     {
+      "name": "Reyes clay",
+      "pct": 6.0
+     },
+     {
+      "name": "Goulding clay loam",
+      "pct": 5.7
+     },
+     {
+      "name": "Zamora silty clay loam",
+      "pct": 4.5
+     }
+    ],
+    "n_names": 46,
+    "share_by_name": {
+     "gravelly or cobbly": 7,
+     "clay": 57,
+     "rock outcrop": 0,
+     "water": 1
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 10049
+   },
+   "producers": {
+    "producers": [
+     "Domaine Carneros",
+     "Gloria Ferrer",
+     "Saintsbury",
+     "Acacia Winery",
+     "Bouchaine Vineyards"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Los_Carneros_AVA",
+     "https://sonomacounty.com/articles/carneros-sonoma-wine-region-and-appellation"
+    ]
+   }
+  },
+  "suisun_valley": {
+   "name": "Suisun Valley",
+   "established": "1982-12-27",
+   "cfr": "9.45",
+   "area_km2": 77.0,
+   "elevation_m": {
+    "min": 1,
+    "p10": 7,
+    "median": 29,
+    "p90": 115,
+    "max": 317,
+    "cell_m": 28.9
+   },
+   "soils": {
+    "map_units": [
+     {
+      "name": "Sycamore silty clay loam",
+      "pct": 30.7
+     },
+     {
+      "name": "Dibble-Los Osos clay loams",
+      "pct": 17.6
+     },
+     {
+      "name": "Yolo silty clay loam",
+      "pct": 11.0
+     },
+     {
+      "name": "Dibble-Los Osos loams",
+      "pct": 6.5
+     },
+     {
+      "name": "Hambright loam",
+      "pct": 6.0
+     },
+     {
+      "name": "Brentwood clay loam",
+      "pct": 5.6
+     }
+    ],
+    "n_names": 32,
+    "share_by_name": {
+     "gravelly or cobbly": 2,
+     "clay": 76,
+     "rock outcrop": 0,
+     "water": 0
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 3637
+   },
+   "producers": {
+    "producers": [
+     "Caymus-Suisun",
+     "Wooden Valley Winery",
+     "Bally Keal Estate",
+     "BackRoad Vines"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Suisun_Valley_AVA",
+     "https://svvga.com/wineries/"
+    ]
+   }
+  },
+  "solano_county_green_valley": {
+   "name": "Solano County Green Valley",
+   "established": "1983-01-28",
+   "cfr": "9.44",
+   "area_km2": 68.9,
+   "elevation_m": {
+    "min": 3,
+    "p10": 28,
+    "median": 189,
+    "p90": 430,
+    "max": 682,
+    "cell_m": 29.727
+   },
+   "geology": [],
+   "soils": {
+    "map_units": [
+     {
+      "name": "Hambright loam",
+      "pct": 38.3
+     },
+     {
+      "name": "Toomes stony loam",
+      "pct": 14.0
+     },
+     {
+      "name": "Dibble-Los Osos loams",
+      "pct": 13.0
+     },
+     {
+      "name": "Gilroy loam",
+      "pct": 6.4
+     },
+     {
+      "name": "Hambright-Toomes stony loams",
+      "pct": 5.4
+     },
+     {
+      "name": "Clear Lake clay",
+      "pct": 3.7
+     }
+    ],
+    "n_names": 25,
+    "share_by_name": {
+     "gravelly or cobbly": 20,
+     "clay": 9,
+     "rock outcrop": 3,
+     "water": 1
+    }
+   },
+   "vineyard_acres": {
+    "year": "2024",
+    "acres": 280
+   },
+   "producers": {
+    "producers": [
+     "Rock Creek Vineyards"
+    ],
+    "sources": [
+     "https://en.wikipedia.org/wiki/Solano_County_Green_Valley_AVA",
+     "https://visitfairfield.com/directory/rock-creek-vineyards/"
+    ]
+   }
+  }
+ }
+}

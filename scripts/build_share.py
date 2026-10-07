@@ -6,6 +6,7 @@ from a download, email attachment or shared drive, and adds a feedback panel (pr
 
     python3 scripts/build_share.py                      # writes dist/terroir-time-machine.html
     python3 scripts/build_share.py --page gibraltar     # writes dist/terroir-time-machine-gibraltar.html
+    python3 scripts/build_share.py --lite --out dist/terroir-time-machine-lite.html   # without 10 m close-up images
 
 Data files are embedded as base64 text blocks and served to the page by a small fetch() shim.
 Int16 grids (.bin) are delta-coded and byte-split before gzip (about a third smaller); JSON is
@@ -124,15 +125,19 @@ def pack(path):
     return "gz", gzip.compress(raw, 9, mtime=0)
 
 
-def collect(root=ROOT, page="timemachine"):
+def collect(root=ROOT, lite=False, page="timemachine"):
+    """Every data file the page can fetch. lite leaves out the 10 m close-up images (about 20 MB).
+    The main viewer skips prototype/assets/locations/; a location page embeds only its own folder."""
     assets = root / "prototype" / "assets"
     sub = PAGES[page]["assets"]
     base = assets / sub if sub else assets
     files = [p for p in sorted(base.rglob("*"))
              if p.is_file() and p.suffix in MIME and not p.name.endswith(SKIP_SUFFIXES)
-             and (sub or p.relative_to(assets).parts[0] != LOCATIONS)]
+             and (sub or p.relative_to(assets).parts[0] != LOCATIONS)
+             and not (lite and p.name.endswith(".imagery.jpg"))]
     if not sub:
         files += [root / e for e in EXTRA if (root / e).exists()]
+        files += sorted((root / "data" / "regions").glob("*/scenes.json"))   # chapters of autopilot regions
     return files
 
 
@@ -146,7 +151,7 @@ def commit_id(root=ROOT):
         return "unknown"
 
 
-def build(root=ROOT, out=OUT, built=None, page="timemachine"):
+def build(root=ROOT, out=OUT, built=None, lite=False, page="timemachine"):
     spec = PAGES[page]
     html = (root / "prototype" / spec["html"]).read_text(encoding="utf-8")
     if html.count(THREE_TAG) != 1:
@@ -156,7 +161,7 @@ def build(root=ROOT, out=OUT, built=None, page="timemachine"):
     feedback = (root / "prototype" / "share" / "feedback.html").read_text(encoding="utf-8")
     feedback = feedback.replace("__COMMIT__", commit).replace("__BUILT__", built)
     blocks, listing = [], []
-    for p in collect(root, page):
+    for p in collect(root, lite, page):
         enc, data = pack(p)
         rel = p.relative_to(root).as_posix()
         blocks.append(f'<script type="text/x-ttm" data-path="{rel}" data-enc="{enc}" data-mime="{MIME[p.suffix]}">'
@@ -180,8 +185,9 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--page", choices=sorted(PAGES), default="timemachine")
     ap.add_argument("--out", type=Path)
+    ap.add_argument("--lite", action="store_true", help="leave out the 10 m close-up images, for email-sized files")
     a = ap.parse_args(argv)
-    out, listing, commit = build(out=a.out or ROOT / "dist" / PAGES[a.page]["out"], page=a.page)
+    out, listing, commit = build(out=a.out or ROOT / "dist" / PAGES[a.page]["out"], lite=a.lite, page=a.page)
     raw = sum(r for _, r, _ in listing)
     size = out.stat().st_size
     print(f"{out.relative_to(ROOT) if out.is_relative_to(ROOT) else out}: {size / 1e6:.1f} MB, "

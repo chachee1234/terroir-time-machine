@@ -234,6 +234,118 @@
         {
           "file": "prototype/assets/regions/napa_valley/imagery.jpg",
           "sha256": "6ef43e445ee227ade46c7b8821769ed19602223ba0e849406a5ffc647a2a1dd9"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/atlas_peak.imagery.jpg",
+          "sha256": "5c6ddf079ce9c0fe6cffcf251e88932d1c1b7fa3a769a92d6fac810c27c933b5"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/bennett_valley.imagery.jpg",
+          "sha256": "6c4757029aebf8bbdf7e9c655fd77a2797735f1bc7f87cf8aff8c3ba2dbe1564"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/calistoga.imagery.jpg",
+          "sha256": "e1cb1a4b9ebf1e4558836d0a52a3e6623cfcf8750a06055000b0917135a954f9"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/chalk_hill.imagery.jpg",
+          "sha256": "f1c54a0782d2fedc8a99c6ded0c376f8fee80ab82cdacf0cec7f5654d9cb276c"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/chiles_valley.imagery.jpg",
+          "sha256": "b8c63fdf20288d83f378eaf26945c7176f0d21f11e07020dd0b281682b4f9967"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/coombsville.imagery.jpg",
+          "sha256": "161d08ebebfe77a7d809902e8a5131d8c24cf2723e54723ecd72318bb75184b4"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/corison.imagery.jpg",
+          "sha256": "bb9660d7079b91c8670f8dd61eade58c6767b5e9d8f7460c49945245c439e571"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/crystal_springs_of_napa_valley.imagery.jpg",
+          "sha256": "8357f581e0070cdeb99442fcf70da52e80be3bf57f7aa261107a3cd22fc11243"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/diamond_mountain_district.imagery.jpg",
+          "sha256": "1b4486f0179aae63dbdb75fee71c621dae89a1b7872413e587003f1c5ba6ecdc"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/fountaingrove_district.imagery.jpg",
+          "sha256": "ed484d08e008cb8008e09204678088e1b78e587603ab7a6a123719a65d3873ad"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/guenoc_valley.imagery.jpg",
+          "sha256": "fc077f900eee1efe29de56d2d78be6f93194fb39cb25e5d86733f2be132bfb34"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/howell_mountain.imagery.jpg",
+          "sha256": "1e84b454a2fbac9677e7ea94dfefc48b8682faa2d3cf7b613c5733a37cee44dd"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/knights_valley.imagery.jpg",
+          "sha256": "3d1e2b2ef3b2a030360dacd64e8913da823c049039ae4aab8d9046ad40ffcc88"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/los_carneros.imagery.jpg",
+          "sha256": "a0cc5777d86cbfc0725a7f813e47c9266649711b5371a5036e012fabaf899409"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/moon_mountain_district_sonoma_county.imagery.jpg",
+          "sha256": "3c684acdecff19d1932fc3bbe167cba01ef2de067cd35a8100c9d2e3d5044b2f"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/mount_st_helena.imagery.jpg",
+          "sha256": "2982d878c08f42d1fe505ed6125de3effba83e5ed3ea2980568e9d6b4b4f35a0"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/mt__veeder.imagery.jpg",
+          "sha256": "826ed37e51dab540c3b69f029033e2266fb9efbebaf1bdf1a36b7d3ab8defdbd"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/oak_knoll_district_of_napa_valley.imagery.jpg",
+          "sha256": "4837825d14fa8dfa6a52a90cf85a3bb10e933d6c20c2a0285f3c77cd83e76584"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/oakville.imagery.jpg",
+          "sha256": "c74a054197b744e6cbd09947c5b0df7d01875712f779e83b62cd2de717541ea5"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/rutherford.imagery.jpg",
+          "sha256": "58444724c9593a66265cf2a75ca47f05b6130235e741971c32454b10bc9e6874"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/solano_county_green_valley.imagery.jpg",
+          "sha256": "0e3bc38111a5ebbcb08b3fe5dcf6e65c3506a959d9a8e5389f48f07e5619ce8e"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/sonoma_mountain.imagery.jpg",
+          "sha256": "4d0f1af5abab0e63e2d5b8185a4f87fc5d7c728d8aaf36f467acf2407fcfb8e0"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/spring_mountain_district.imagery.jpg",
+          "sha256": "abc6e0a0a45ad65c766381322484a6c1166e50e95c173388a64144cd18e064ab"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/st__helena.imagery.jpg",
+          "sha256": "7fcbac8074a9439c2ab647a149903a3a2e7cc6e2a0053f4a95ffe51b13c51110"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/stags_leap_district.imagery.jpg",
+          "sha256": "e60b81ad47edf11d780d98555350df3c5cc70156bbe33bb9c63084a092333eb7"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/suisun_valley.imagery.jpg",
+          "sha256": "365ea2992afef35407f6d7c72cb8aa81a0009f33b8c05b4fed97f701ac5f93ee"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/wild_horse_valley.imagery.jpg",
+          "sha256": "a6f64e6979a1ec06c3d8aed5d6436ead86dfc5e6d404a9e782a73e373a61e98f"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/yountville.imagery.jpg",
+          "sha256": "88efd4445bcd336325c9fd2f5635ad7ccbee2bdfc3303d07319c09be4cd24670"
         }
       ]
     },
@@ -252,6 +364,476 @@
         {
           "file": "prototype/assets/imagery.jpg",
           "sha256": "bfde8ff53b1452c53a3790c73284a29fcdb51583a9fdd9b0c5cbda0861852de1"
+        }
+      ]
+    },
+    {
+      "id": "ava-petaluma-gap",
+      "source": "UC Davis Library & DataLab, American Viticultural Areas (AVA) Project",
+      "url": "https://raw.githubusercontent.com/UCDavisLibrary/ava/master/avas_aggregated_files/avas.geojson",
+      "rights": "CC0 1.0",
+      "source_sha256": "c90068f7154764519f0a7c6fb2788e597b7c56bf7581e8c0faa979554d984926",
+      "derived": [
+        {
+          "file": "data/ava/petaluma_gap_avas.geojson",
+          "sha256": "d149f9c7ef942eecc5bff310e3da378f5cb0340ba33c3a2b494a0910d777e525"
+        },
+        {
+          "file": "prototype/assets/regions/petaluma_gap/ava.json",
+          "sha256": "e1c47a62533d617c191d2902da683c979c3131da7a800855995da9c13c65ebfb"
+        }
+      ]
+    },
+    {
+      "id": "petaluma_gap-terrain-tiles-z13",
+      "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "zoom": 13,
+      "tiles": 228,
+      "tiles_sha256": "9a05c5686e08b582885c44d3312fac6e93f04329c3d28b08b84e4e21ad2dd6e8",
+      "fetched": "2026-09-28",
+      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/petaluma_gap/terrain.bin",
+          "sha256": "297db6aa49bc5f626bed07fe0ed8c3f7d744d92ffa2752450b0a2dc4ee668791"
+        },
+        {
+          "file": "prototype/assets/regions/petaluma_gap/dem_hi.bin",
+          "sha256": "acdd1e496b9d7d61c3387e795f9d0d4368bc5f9589bde8ecf4bd043150414632"
+        },
+        {
+          "file": "prototype/assets/regions/petaluma_gap/detail/sonoma_mountain.bin",
+          "sha256": "3ed2ea28447b8e8bf507cbd1a2c52eaa0421d8aa7918c31f1dbdfb4ffd48bece"
+        }
+      ]
+    },
+    {
+      "id": "petaluma_gap-sentinel2-imagery",
+      "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+      "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs",
+      "scenes": [
+        "S2A_10SDH_20260727_1_L2A",
+        "S2B_10SEH_20260727_0_L2A"
+      ],
+      "date": "2026-07-27",
+      "fetched": "2026-09-28",
+      "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+      "credit": "Contains modified Copernicus Sentinel data 2026, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/petaluma_gap/imagery.jpg",
+          "sha256": "cce7bca79f306f549340807c9aa301a72155e7a050b0ae5e77cc133442353b96"
+        },
+        {
+          "file": "prototype/assets/regions/petaluma_gap/detail/sonoma_mountain.imagery.jpg",
+          "sha256": "731fe90fed397db477c3ccc6efc266f5b36183b23a87618a8b37515ffde52c15"
+        }
+      ]
+    },
+    {
+      "id": "petaluma_gap-faults",
+      "source": "GEM Global Active Faults Database",
+      "url": "https://raw.githubusercontent.com/GEMScienceTools/gem-global-active-faults/master/geojson/gem_active_faults_harmonized.geojson",
+      "rights": "CC BY-SA 4.0 (GEM Global Active Faults Database, Styron & Pagani 2020); California traces from USGS UCERF3",
+      "source_sha256": "37babb516edfac22b5ae91744495d8546b3ae4676b4d4f68cc77da8222df20e1",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/petaluma_gap/faults.json",
+          "sha256": "06bd5efc37db6efdbd9aa07f9506a9c40de0d1271e3b66299811f9329afe9f57"
+        }
+      ]
+    },
+    {
+      "id": "napa_valley-nhd-rivers",
+      "source": "U.S. Geological Survey, National Hydrography Dataset (NHD) high resolution, HU8 staged products (NHDFlowline)",
+      "packages": [
+        {
+          "hu8": "18050002",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/HU8/Shape/NHD_H_18050002_HU8_Shape.zip",
+          "sha256": "4f16eaa32198f2ce2820ce2d3212114f071f759af6da80e2956b31c65e8ba2e7",
+          "bytes": 40069683
+        },
+        {
+          "hu8": "18010110",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/HU8/Shape/NHD_H_18010110_HU8_Shape.zip",
+          "sha256": "51e372a5fe9e3ebe20c7867cb9c30889abe2ba8b9ee3291b656241590803817c",
+          "bytes": 16316968
+        },
+        {
+          "hu8": "18020162",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/HU8/Shape/NHD_H_18020162_HU8_Shape.zip",
+          "sha256": "16a63268c7461466aa25ba5ac45170a0d1ae3c07bb5183f00af938fd23b38bce",
+          "bytes": 11841615
+        },
+        {
+          "hu8": "18050001",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/HU8/Shape/NHD_H_18050001_HU8_Shape.zip",
+          "sha256": "2e11f9007c45f97f997a92900161604cd3924ecec8ebef440a0710afa41cdca3",
+          "bytes": 12646716
+        }
+      ],
+      "fetched": "2026-09-30",
+      "rights": "USGS-produced, public domain in the U.S.; credit U.S. Geological Survey (SOURCES.md G26)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/rivers.json",
+          "sha256": "71e1db0ed8d63bce0daef269f6fd7f00f321696bb72769a1232a5f03e1836ea9"
+        }
+      ]
+    },
+    {
+      "id": "napa_valley-terrain-tiles-z15-corison",
+      "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "zoom": 15,
+      "tiles": 72,
+      "tiles_sha256": "23423be8a09f3773436e37c6c3a43c6143800442d555730d2da123469a22e313",
+      "fetched": "2026-09-30",
+      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/detail/corison.bin",
+          "sha256": "397fb93d9e79d0f99f0d8ac77ae181753020c1969dcf84fe5fb33eecc5a16a50"
+        }
+      ]
+    },
+    {
+      "id": "napa_valley-prism-normals",
+      "source": "PRISM Climate Group, Oregon State University, 800 m 1991-2020 normals (lower 48 GeoTIFFs)",
+      "packages": [
+        {
+          "name": "ppt_annual",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/ppt/annual",
+          "sha256": "763f97b677711112ff7b1082c794476e2d9b7abe1f6e55dd4f1166e32523ccd3",
+          "bytes": 62685097
+        },
+        {
+          "name": "tmean_annual",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/annual",
+          "sha256": "1282f0da54bf2fdf107ab444b2877f46551c864dfd49e8d9c344ca517bebac51",
+          "bytes": 37244201
+        },
+        {
+          "name": "tmin_annual",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmin/annual",
+          "sha256": "c541da8764ca4a1b186da7c4f5a1909aad247db87ee5a67cb55bfd2ae9d1cc9a",
+          "bytes": 39724178
+        },
+        {
+          "name": "tmax_annual",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmax/annual",
+          "sha256": "08f22e4eec65494639c2a9d84c71475e065084500e5999a3a8ef6f843b3ec156",
+          "bytes": 29783365
+        },
+        {
+          "name": "tmean_04",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/04",
+          "sha256": "5c4edee1e95f53613fb149e46974d9079c90bab7a89afcd48d5810af81c80c7d",
+          "bytes": 58489252
+        },
+        {
+          "name": "tmean_05",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/05",
+          "sha256": "a0a7f5c785fa56b4d387bb39aaa5371735f411898c36e4794144e5db488b6239",
+          "bytes": 57962373
+        },
+        {
+          "name": "tmean_06",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/06",
+          "sha256": "740fe4a1263fe93c5c3a7c5f8a0494c62de627b5ab6db4fe6ebda74f165e9398",
+          "bytes": 58421874
+        },
+        {
+          "name": "tmean_07",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/07",
+          "sha256": "4a5dc11da05bdc6f1a925d3dd65f36b63ecd8a13ca6fbbb27fe2ba0483082535",
+          "bytes": 58539297
+        },
+        {
+          "name": "tmean_08",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/08",
+          "sha256": "9258ef129795abcd8e2926a72f423fbc319222cf14b475fcded70ad087c818da",
+          "bytes": 58469707
+        },
+        {
+          "name": "tmean_09",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/09",
+          "sha256": "4df867e90beef6dc9807e3fa06b7da848f677ad582aea07221300e8d3f9c5358",
+          "bytes": 58038384
+        },
+        {
+          "name": "tmean_10",
+          "url": "https://services.nacse.org/prism/data/get/normals/us/800m/tmean/10",
+          "sha256": "2d3cdf7cfb56b84e15bcb039e8298cced3606a816378bd7149e7c4746d9d25bc",
+          "bytes": 57852127
+        }
+      ],
+      "fetched": "2026-10-01",
+      "rights": "Free with credit to the PRISM Climate Group, Oregon State University (SOURCES.md G29)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/climate.json",
+          "sha256": "6ace5a61f1f9011bc27d295324ebcb45bafa640c60b6c76f4dbfd208ab25dc57"
+        }
+      ]
+    },
+    {
+      "id": "napa_valley-cdl-grapes",
+      "source": "USDA NASS Cropland Data Layer via CropScape GetCDLFile, clipped to the frame's Albers envelope",
+      "packages": [
+        {
+          "year": 2012,
+          "file": "cdl_napa_valley_2012.tif",
+          "sha256": "629b8b175925ad9f452225aa36abb765281997028f974458c1db9d4dda36de56",
+          "bytes": 10019141
+        },
+        {
+          "year": 2016,
+          "file": "cdl_napa_valley_2016.tif",
+          "sha256": "21184840dd0a50e4d300d2b3b161411ff7df8b8216ae85d51a07b1b1ebafcae6",
+          "bytes": 10019229
+        },
+        {
+          "year": 2020,
+          "file": "cdl_napa_valley_2020.tif",
+          "sha256": "ebfd6b16fb935877ccf2c73b2681ed133a68542975afb175d5ba98ab5ce3ee93",
+          "bytes": 10019184
+        },
+        {
+          "year": 2024,
+          "file": "cdl_napa_valley_2024.tif",
+          "sha256": "e464f10fa964b0204ee2b4e58a05db25af53b95a63bf5da41f2a3c1239327f60",
+          "bytes": 10019130
+        }
+      ],
+      "fetched": "2026-10-01",
+      "rights": "Public domain (USDA); credit USDA NASS Cropland Data Layer (SOURCES.md G30)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/vineyards.json",
+          "sha256": "031d524f235aa14f84ce164e363a30449d46badb42c8fd574147dda7568231cb"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/vineyards.png",
+          "sha256": "ecea373238c900900ea8d1656d54b8a16d1faa0174a3b116dae2b27263b9f2ae"
+        }
+      ]
+    },
+    {
+      "id": "northern_sonoma-sentinel2-imagery",
+      "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+      "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs",
+      "scenes": [
+        "S2A_10SDH_20260727_1_L2A",
+        "S2A_10SDJ_20260727_1_L2A",
+        "S2B_10SEH_20260727_0_L2A",
+        "S2B_10SEJ_20260727_0_L2A"
+      ],
+      "date": "2026-07-27",
+      "fetched": "2026-10-01",
+      "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+      "credit": "Contains modified Copernicus Sentinel data 2026, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/northern_sonoma/imagery.jpg",
+          "sha256": "31b1605ecf10138eb742e99187de804f08aac3ec9ca2f117b1d795f14e70b6ce"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/alexander_valley.imagery.jpg",
+          "sha256": "e11ba6a3e3dda7ddf8d489d7ac4d2b4d3243b8daa1b93d2946ab5d799a15b1b4"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/chalk_hill.imagery.jpg",
+          "sha256": "b6eb0fc915ec39f7995e711d335e4ce2d9a850ef4336dead8b5b9e3e820384cf"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/dry_creek_valley.imagery.jpg",
+          "sha256": "8db2c954cad4bb0a7bb574e8d86db14dcee68428be09faf785d5f5e381f747df"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/green_valley_of_russian_river_valley.imagery.jpg",
+          "sha256": "d2f4e818fda61a6ea3d456a3b16804256d7649f7667b2dfcc495978aabf37f8e"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/knights_valley.imagery.jpg",
+          "sha256": "81ac75f5c784cc1373f0d42f90cc32290d886a3624f6bbb03fe382f7753c22a5"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/pine_mountain_cloverdale_peak.imagery.jpg",
+          "sha256": "8b450826df4888cb9ed4b28ea2419aec5e2ba57fc463cfa429abeeed6d580379"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/rockpile.imagery.jpg",
+          "sha256": "9844b2d0423b1d9c42318f3b4bbf31950a7442aae268fd07e375bb0a6c4a61ac"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/russian_river_valley.imagery.jpg",
+          "sha256": "6431101f39c2ff59cee3a8ed46039ef84d95db37c3e1c141dcd410e76009d197"
+        }
+      ]
+    },
+    {
+      "id": "ava-northern-sonoma",
+      "source": "UC Davis Library & DataLab, American Viticultural Areas (AVA) Project",
+      "url": "https://raw.githubusercontent.com/UCDavisLibrary/ava/master/avas_aggregated_files/avas.geojson",
+      "rights": "CC0 1.0",
+      "source_sha256": "c90068f7154764519f0a7c6fb2788e597b7c56bf7581e8c0faa979554d984926",
+      "derived": [
+        {
+          "file": "data/ava/northern_sonoma_avas.geojson",
+          "sha256": "189949134dde6e0035b8521bd9daf510fd0e32c902dee45a43eeda30de1338d4"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/ava.json",
+          "sha256": "213645e2aeb3c930f3170fb2d488729a33946ab83484caae7ac162429e84339f"
+        }
+      ]
+    },
+    {
+      "id": "northern_sonoma-terrain-tiles-z13",
+      "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "zoom": 13,
+      "tiles": 320,
+      "tiles_sha256": "ad029aa8fde1efd08136fd81c826d07991510f641cd7c6d400f11e3388ed0494",
+      "fetched": "2026-10-01",
+      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/northern_sonoma/terrain.bin",
+          "sha256": "2e83e65038b2c16b66b37750d9f6472efeef04530b9ee4d324ec3939e00649b4"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/dem_hi.bin",
+          "sha256": "bf0ff33b8c9cd2f96b5c862adcd2f5e8c6806f8ed815bd0fce3064d858de15ae"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/alexander_valley.bin",
+          "sha256": "2dc4557c2d850a130d7e6a120bd23a679443a7d45149982a553625f65c64bbcb"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/chalk_hill.bin",
+          "sha256": "30b796df22f6032eef52eb5df340456d31d2980b22fe19b0833dc8b86dc8bb2d"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/dry_creek_valley.bin",
+          "sha256": "e02c20e52bfc9554b59eb607668026d94ed889e0abdb68146158858765349689"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/green_valley_of_russian_river_valley.bin",
+          "sha256": "62047c8c59071dcd4d59236d80c5f027eb68e77d45f194458ecafaaa0eb6d7ee"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/knights_valley.bin",
+          "sha256": "8343e95ffc8ef1d1c0d7ce144c522e5e4f6ebb0385d28bb64b3e15aef227d5f8"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/pine_mountain_cloverdale_peak.bin",
+          "sha256": "8df333b86507bac506d29f3bbb96301ca769552ef321213204d65a19918140af"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/rockpile.bin",
+          "sha256": "eebac0b61c7643a64c9eed668771fd8d10b5ed7761136d2d7f2a00b9ea0aa439"
+        },
+        {
+          "file": "prototype/assets/regions/northern_sonoma/detail/russian_river_valley.bin",
+          "sha256": "436dc0792459563ec8ac4ee482efdc33630dfcee79171fa3e111f1ce84f0f8ce"
+        }
+      ]
+    },
+    {
+      "id": "northern_sonoma-faults",
+      "source": "GEM Global Active Faults Database",
+      "url": "https://raw.githubusercontent.com/GEMScienceTools/gem-global-active-faults/master/geojson/gem_active_faults_harmonized.geojson",
+      "rights": "CC BY-SA 4.0 (GEM Global Active Faults Database, Styron & Pagani 2020); California traces from USGS UCERF3",
+      "source_sha256": "37babb516edfac22b5ae91744495d8546b3ae4676b4d4f68cc77da8222df20e1",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/northern_sonoma/faults.json",
+          "sha256": "649e791320fec503117be787e3fb323c3391583b8859102cf3e853f64e3ce6a8"
+        }
+      ]
+    },
+    {
+      "id": "ava-west-sonoma-coast",
+      "source": "UC Davis Library & DataLab, American Viticultural Areas (AVA) Project",
+      "url": "https://raw.githubusercontent.com/UCDavisLibrary/ava/master/avas_aggregated_files/avas.geojson",
+      "rights": "CC0 1.0",
+      "source_sha256": "c90068f7154764519f0a7c6fb2788e597b7c56bf7581e8c0faa979554d984926",
+      "derived": [
+        {
+          "file": "data/ava/west_sonoma_coast_avas.geojson",
+          "sha256": "decc894461a001dab69b6d52d378cb8c57f3026dc933a21ef3ff2c3442388de3"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/ava.json",
+          "sha256": "c6e374eff87cad4e351ba79025b521c8aefd5ae71fbcdea9d4ba2c57720e4fd2"
+        }
+      ]
+    },
+    {
+      "id": "west_sonoma_coast-terrain-tiles-z13",
+      "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "zoom": 13,
+      "tiles": 340,
+      "tiles_sha256": "80ca5dcd49674e3df6ad192f9b382ee908a06387d352d4923a7c85c126a82415",
+      "fetched": "2026-10-04",
+      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/terrain.bin",
+          "sha256": "3c7598ccd5fc3ef065a0eefdceaa4e51f21656603a1fee78163d85e434a8b7e4"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/dem_hi.bin",
+          "sha256": "e16d659bdcfb7997c6584da7d8663da7c60015d1b47d2e5a6ee9bb398e6cd42f"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/detail/dry_creek_valley.bin",
+          "sha256": "e02c20e52bfc9554b59eb607668026d94ed889e0abdb68146158858765349689"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/detail/fort_ross_seaview.bin",
+          "sha256": "c5fca73d212eb901c23a27ca5553371d392cfb15bf1da655573adff1069dcd9f"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/detail/green_valley_of_russian_river_valley.bin",
+          "sha256": "94c1e7f156dd483843140e6cf435cb7f31bfdbe87b2efac9b9791d058339fbfc"
+        }
+      ],
+      "pit_floor_m": -200,
+      "pit_pixels_set_to_0m": 2824
+    },
+    {
+      "id": "west_sonoma_coast-sentinel2-imagery",
+      "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+      "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs",
+      "scenes": [
+        "S2A_10SDH_20260727_1_L2A",
+        "S2B_10SEH_20260727_0_L2A"
+      ],
+      "date": "2026-07-27",
+      "fetched": "2026-10-04",
+      "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+      "credit": "Contains modified Copernicus Sentinel data 2026, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/imagery.jpg",
+          "sha256": "7a284199551fe6af531103ab78acc96d1ae2e24bc54182e08a474e0f92d8d489"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/detail/dry_creek_valley.imagery.jpg",
+          "sha256": "8db2c954cad4bb0a7bb574e8d86db14dcee68428be09faf785d5f5e381f747df"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/detail/fort_ross_seaview.imagery.jpg",
+          "sha256": "dee16305b4a6d189c87e453f72b9a010d3b6f91642fb74f6dc446643c0b06de3"
+        },
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/detail/green_valley_of_russian_river_valley.imagery.jpg",
+          "sha256": "4be244d1698a5c4f916e855ec366901363b5d05399ffb4b58abd7e7f53423815"
         }
       ]
     }

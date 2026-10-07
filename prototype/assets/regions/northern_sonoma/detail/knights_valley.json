@@ -1,0 +1,35 @@
+{
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 13,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "fetched": "2026-10-01",
+ "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+ "encoding": "Int16 little-endian, row 0 = north",
+ "scale": 0.1,
+ "resampling": "bilinear from the tile mosaic at each UTM cell centre",
+ "product": "sub-AVA close-up",
+ "region": "northern_sonoma",
+ "ava_id": "knights_valley",
+ "name": "Knights Valley",
+ "bbox_utm": [
+  515603.1,
+  4266646.1,
+  534800.0,
+  4289018.3
+ ],
+ "ava_bbox_utm": [
+  520784.1,
+  4268146.1,
+  532794.4,
+  4287518.3
+ ],
+ "cols": 439,
+ "rows": 512,
+ "cell_m": 43.829,
+ "range_m": [
+  32.88,
+  1319.31
+ ],
+ "sha256": "8343e95ffc8ef1d1c0d7ce144c522e5e4f6ebb0385d28bb64b3e15aef227d5f8"
+}

@@ -137,8 +137,9 @@ def fetch(z, x, y, offline=False):
 class Mosaic:
     """Lazily decoded tiles with bilinear sampling across tile edges."""
 
-    def __init__(self, z, offline=False):
+    def __init__(self, z, offline=False, pit_floor=None):
         self.z, self.offline, self.tiles, self.files = z, offline, {}, {}
+        self.pit_floor, self.pits = pit_floor, 0   # see the region file's "pit_floor_m"
 
     def prefetch(self, tiles):
         todo = [t for t in tiles if t not in self.files]
@@ -151,7 +152,13 @@ class Mosaic:
         if key not in self.tiles:
             if key not in self.files:
                 self.files[key] = fetch(self.z, tx, ty, self.offline)
-            self.tiles[key] = terrarium_heights(self.files[key].read_bytes())
+            hs = terrarium_heights(self.files[key].read_bytes())
+            if self.pit_floor is not None:   # coastline pits: pixels far below the tiles' 0 m sea surface
+                bad = [i for i, v in enumerate(hs) if v < self.pit_floor]
+                for i in bad:
+                    hs[i] = 0.0
+                self.pits += len(bad)
+            self.tiles[key] = hs
         return self.tiles[key]
 
     def px(self, gx, gy):
@@ -260,6 +267,9 @@ def write_frame_grid(region, mos, common, assets):
                              "encoding": "int16 little-endian, meters, row 0 = north", "cols": nx, "rows": ny,
                              "cell_m": round((bbox[2] - bbox[0]) / nx, 3), "resampling": "block mean from raw samples",
                              "nodata": -32768, "vertical_exaggeration_default": 1}}
+    if region.get("pit_floor_m") is not None:
+        meta["pit_floor"] = {"m": region["pit_floor_m"], "note": region.get("pit_note", ""),
+                             "rule": "tile pixels below this height are set to 0 m before sampling"}
     (assets / "terrain.json").write_text(json.dumps(meta, indent=2) + "\n")
     print(f"  {nx}x{ny} @ {meta['browser_grid']['cell_m']} m, raw {lo:.1f}..{hi:.1f} m, max at {at}", flush=True)
     return {"product": "region mesh grid", "sha256": sha, "file": "terrain"}
@@ -283,10 +293,14 @@ def ava_features(region):
 
 
 def close_up_features(region):
-    """Extra close-ups named in the region file: {"id", "name", "center_utm", "half_m"}."""
+    """Extra close-ups named in the region file: {"id", "name", "center_utm", "half_m"}, optionally "cell_m"
+    (finer than --detail-cell, e.g. a single vineyard) and "kind" (default "place")."""
     for q in region.get("close_ups", []):
         cx, cy, h = q["center_utm"][0], q["center_utm"][1], q["half_m"]
-        yield {"ava_id": q["id"], "name": q["name"], "kind": "place"}, [cx - h, cy - h, cx + h, cy + h]
+        props = {"ava_id": q["id"], "name": q["name"], "kind": q.get("kind", "place")}
+        if q.get("cell_m"):
+            props["cell_m"] = q["cell_m"]
+        yield props, [cx - h, cy - h, cx + h, cy + h]
 
 
 def clip(b, frame):
@@ -303,28 +317,34 @@ def main():
     ap.add_argument("--detail-pad", type=float, default=1500.0, help="padding around each sub-AVA (m)")
     ap.add_argument("--offline", action="store_true", help="use cached tiles only")
     ap.add_argument("--frame-grid", action="store_true", help="also write the region mesh grid terrain.{bin,json}")
+    ap.add_argument("--only", nargs="+", metavar="ID", help="(re)build just these close-ups, keep the rest of "
+                    "detail/index.json, and skip the frame-wide grids (e.g. a new site at a finer zoom)")
     a = ap.parse_args()
 
     region = json.loads((ROOT / a.region).read_text())
     rid, frame, assets = region["id"], region["bbox_utm"], ROOT / region["assets_dir"]
     today = datetime.date.today().isoformat()
-    mos = Mosaic(a.zoom, a.offline)
-    mos.prefetch(tiles_for_bbox(frame, a.zoom))
+    mos = Mosaic(a.zoom, a.offline, region.get("pit_floor_m"))
+    if not a.only:
+        mos.prefetch(tiles_for_bbox(frame, a.zoom))
     common = {"source": "AWS Open Data Terrain Tiles, Terrarium encoding", "tile_template": TEMPLATE,
               "zoom": a.zoom, "rights": RIGHTS, "fetched": today,
               "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
               "encoding": "Int16 little-endian, row 0 = north", "scale": SCALE,
               "resampling": "bilinear from the tile mosaic at each UTM cell centre"}
 
-    products = [write_frame_grid(region, mos, common, assets)] if a.frame_grid else []
-    cols, rows = grid_shape(frame, long_cells=a.hi_cells)
-    print(f"{rid}: shading grid {cols}x{rows} from {len(mos.files)} z{a.zoom} tiles", flush=True)
-    grid, lo, hi = sample_grid(mos, frame, cols, rows)
-    products += [write_grid(assets / "dem_hi", grid, dict(common, product="region shading grid", region=rid,
-                bbox_utm=frame, cols=cols, rows=rows, cell_m=round((frame[2] - frame[0]) / (cols - 1), 3),
-                range_m=[round(lo, 2), round(hi, 2)]))]
+    products = [write_frame_grid(region, mos, common, assets)] if a.frame_grid and not a.only else []
+    if not a.only:
+        cols, rows = grid_shape(frame, long_cells=a.hi_cells)
+        print(f"{rid}: shading grid {cols}x{rows} from {len(mos.files)} z{a.zoom} tiles", flush=True)
+        grid, lo, hi = sample_grid(mos, frame, cols, rows)
+        products += [write_grid(assets / "dem_hi", grid, dict(common, product="region shading grid", region=rid,
+                    bbox_utm=frame, cols=cols, rows=rows, cell_m=round((frame[2] - frame[0]) / (cols - 1), 3),
+                    range_m=[round(lo, 2), round(hi, 2)]))]
 
-    index = []
+    index_path = assets / "detail" / "index.json"
+    index = ([q for q in json.loads(index_path.read_text())["locations"] if q["id"] not in a.only]
+             if a.only and index_path.exists() else [])
     feats = []
     parents = set(region.get("parents") or [rid])
     for props, coords in ava_features(region):
@@ -333,14 +353,18 @@ def main():
             feats.append((dict(props, kind="ava"), [min(u[0] for u in us), min(u[1] for u in us),
                                                     max(u[0] for u in us), max(u[1] for u in us)], a.detail_pad))
     feats += [(p, b, 0.0) for p, b in close_up_features(region)]
+    if a.only:
+        feats = [f for f in feats if f[0]["ava_id"] in a.only]
+        if len(feats) != len(set(a.only)):
+            raise SystemExit("--only: unknown close-up id(s)")
     for props, b, pad in feats:
         aid = props["ava_id"]
         cx, cy = (b[0] + b[2]) / 2, (b[1] + b[3]) / 2
         half = max(b[2] - b[0], b[3] - b[1]) / 2 + pad
-        half = max(half, 3000.0)
+        half = max(half, 3000.0 if "cell_m" not in props else 0.0)   # a site with its own cell size keeps its box
         box = clip([cx - half, cy - half, cx + half, cy + half], frame)
         box = [round(v, 1) for v in box]
-        cols, rows = grid_shape(box, cell=a.detail_cell, max_cells=a.detail_max)
+        cols, rows = grid_shape(box, cell=props.get("cell_m", a.detail_cell), max_cells=a.detail_max)
         mos.prefetch(tiles_for_bbox(box, a.zoom))
         grid, lo, hi = sample_grid(mos, box, cols, rows)
         cell = round((box[2] - box[0]) / (cols - 1), 3)
@@ -357,7 +381,7 @@ def main():
     man_path = ROOT / "data" / "manifest.json"
     man = json.loads(man_path.read_text()) if man_path.exists() else {}
     entries = man.setdefault("datasets", [])
-    mid = f"{rid}-terrain-tiles-z{a.zoom}"
+    mid = f"{rid}-terrain-tiles-z{a.zoom}" + ("-" + "-".join(sorted(a.only)) if a.only else "")
     entries[:] = [e for e in entries if e.get("id") != mid]
     entries.append({"id": mid, "source": common["source"], "url_template": TEMPLATE, "zoom": a.zoom,
                     "tiles": len(mos.files), "tiles_sha256": mos.digest(), "fetched": today, "rights": RIGHTS,
@@ -365,6 +389,11 @@ def main():
                                   "detail/" + p["ava_id"]))).relative_to(ROOT)) + ".bin", "sha256": p["sha256"]}
                                  for p in products]})
     man_path.write_text(json.dumps(man, indent=2) + "\n")
+    if mos.pit_floor is not None:
+        entries[-1]["pit_floor_m"] = mos.pit_floor
+        entries[-1]["pit_pixels_set_to_0m"] = mos.pits
+        man_path.write_text(json.dumps(man, indent=2) + "\n")
+        print(f"tile pixels below {mos.pit_floor} m set to 0 m: {mos.pits}")
     print(f"{len(products)} grids written, {len(mos.files)} tiles, manifest id {mid}")
 
 

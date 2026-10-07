@@ -9,8 +9,11 @@
   "assets_dir": "prototype/assets/regions/napa_valley",
   "boundary": "data/ava/napa_valley_avas.geojson",
   "parents": ["napa_valley", "sonoma_valley"],
+  "nhd_hu8": ["18050002", "18010110", "18020162", "18050001"],
   "ava_rule": "the parent AVAs plus every current AVA whose bounding box lies inside the frame",
   "close_ups": [
-    {"id": "mount_st_helena", "name": "Mount St. Helena", "center_utm": [531892.63, 4280129.75], "half_m": 4500}
+    {"id": "mount_st_helena", "name": "Mount St. Helena", "center_utm": [531892.63, 4280129.75], "half_m": 4500},
+    {"id": "corison", "name": "Corison winery", "kind": "site", "center_utm": [548199.21, 4259771.78], "half_m": 2500, "cell_m": 10,
+     "note": "Winery at 38.484983, -122.44736 (published EV-charger listing for 987 St. Helena Hwy; about 100 m). Evidence: data/sites/corison.json."}
   ]
 }
