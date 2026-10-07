@@ -5,6 +5,7 @@ serves the repo. This bundles those files into the page itself, so the result op
 from a download, email attachment or shared drive, and adds a feedback panel (prototype/share/).
 
     python3 scripts/build_share.py                      # writes dist/terroir-time-machine.html
+    python3 scripts/build_share.py --page gibraltar     # writes dist/terroir-time-machine-gibraltar.html
     python3 scripts/build_share.py --lite --out dist/terroir-time-machine-lite.html   # without 10 m close-up images
 
 Data files are embedded as base64 text blocks and served to the page by a small fetch() shim.
@@ -25,6 +26,13 @@ ROOT = Path(__file__).resolve().parent.parent
 PAGE = ROOT / "prototype" / "timemachine.html"
 FEEDBACK = ROOT / "prototype" / "share" / "feedback.html"
 OUT = ROOT / "dist" / "terroir-time-machine.html"
+# Each shareable page: its source, its output name, and the data it embeds. Locations outside
+# California (prototype/assets/locations/<id>/) get their own file so the Napa file stays the same size.
+PAGES = {
+    "timemachine": {"html": "timemachine.html", "out": "terroir-time-machine.html", "assets": None},
+    "gibraltar": {"html": "gibraltar.html", "out": "terroir-time-machine-gibraltar.html", "assets": "locations/gibraltar"},
+}
+LOCATIONS = "locations"
 # Files the viewer fetches from outside prototype/assets/ (relative to the repo root).
 EXTRA = ["SCENES.json", "data/plates/stylized.json"]
 # GeoLibre project files are only opened by web.geolibre.app from GitHub, never by the viewer.
@@ -36,7 +44,7 @@ SHIM = r"""<script>
 /* Shareable build: data files are embedded below and served to the viewer's fetch() calls. */
 (function(){
   "use strict";
-  const BASE = "https://ttm.local/prototype/timemachine.html";
+  const BASE = "https://ttm.local/prototype/__PAGE__";
   const blocks = {};
   document.querySelectorAll('script[type="text/x-ttm"]').forEach(s => { blocks[s.dataset.path] = s; });
   function key(u){
@@ -117,13 +125,19 @@ def pack(path):
     return "gz", gzip.compress(raw, 9, mtime=0)
 
 
-def collect(root=ROOT, lite=False):
-    """Every data file the viewer can fetch. lite leaves out the 10 m close-up images (about 20 MB)."""
-    files = [p for p in sorted((root / "prototype" / "assets").rglob("*"))
+def collect(root=ROOT, lite=False, page="timemachine"):
+    """Every data file the page can fetch. lite leaves out the 10 m close-up images (about 20 MB).
+    The main viewer skips prototype/assets/locations/; a location page embeds only its own folder."""
+    assets = root / "prototype" / "assets"
+    sub = PAGES[page]["assets"]
+    base = assets / sub if sub else assets
+    files = [p for p in sorted(base.rglob("*"))
              if p.is_file() and p.suffix in MIME and not p.name.endswith(SKIP_SUFFIXES)
+             and (sub or p.relative_to(assets).parts[0] != LOCATIONS)
              and not (lite and p.name.endswith(".imagery.jpg"))]
-    files += [root / e for e in EXTRA if (root / e).exists()]
-    files += sorted((root / "data" / "regions").glob("*/scenes.json"))   # chapters of autopilot regions
+    if not sub:
+        files += [root / e for e in EXTRA if (root / e).exists()]
+        files += sorted((root / "data" / "regions").glob("*/scenes.json"))   # chapters of autopilot regions
     return files
 
 
@@ -137,16 +151,17 @@ def commit_id(root=ROOT):
         return "unknown"
 
 
-def build(root=ROOT, out=OUT, built=None, lite=False):
-    html = (root / "prototype" / "timemachine.html").read_text(encoding="utf-8")
+def build(root=ROOT, out=OUT, built=None, lite=False, page="timemachine"):
+    spec = PAGES[page]
+    html = (root / "prototype" / spec["html"]).read_text(encoding="utf-8")
     if html.count(THREE_TAG) != 1:
-        raise SystemExit("build_share: OrbitControls script tag not found once in timemachine.html")
+        raise SystemExit(f"build_share: OrbitControls script tag not found once in {spec['html']}")
     commit = commit_id(root)
     built = built or datetime.date.today().isoformat()
     feedback = (root / "prototype" / "share" / "feedback.html").read_text(encoding="utf-8")
     feedback = feedback.replace("__COMMIT__", commit).replace("__BUILT__", built)
     blocks, listing = [], []
-    for p in collect(root, lite):
+    for p in collect(root, lite, page):
         enc, data = pack(p)
         rel = p.relative_to(root).as_posix()
         blocks.append(f'<script type="text/x-ttm" data-path="{rel}" data-enc="{enc}" data-mime="{MIME[p.suffix]}">'
@@ -154,21 +169,25 @@ def build(root=ROOT, out=OUT, built=None, lite=False):
         listing.append((rel, p.stat().st_size, len(data)))
     # The page is kept exactly as served (no doctype or viewport added) so it renders as the live viewer does.
     first_script = html.index("<script")
-    page = html[:first_script] + "\n".join(blocks) + "\n" + SHIM + "\n" + html[first_script:]
-    page = page.replace(THREE_TAG, THREE_TAG + "\n" + TEXTURE_PATCH, 1)
-    page = page.replace("<title>Terroir Time Machine</title>", "<title>Terroir Time Machine (review copy)</title>", 1)
-    page = page.rstrip() + "\n" + feedback
+    doc = html[:first_script] + "\n".join(blocks) + "\n" + SHIM.replace("__PAGE__", spec["html"]) + "\n" + html[first_script:]
+    doc = doc.replace(THREE_TAG, THREE_TAG + "\n" + TEXTURE_PATCH, 1)
+    doc = doc.replace("</title>", " (review copy)</title>", 1)
+    # links between pages point at the other review copies, so files shared side by side still link up
+    for other in PAGES.values():
+        doc = doc.replace(f'href="{other["html"]}"', f'href="{other["out"]}"')
+    doc = doc.rstrip() + "\n" + feedback
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(page, encoding="utf-8")
+    out.write_text(doc, encoding="utf-8")
     return out, listing, commit
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--out", type=Path, default=OUT)
+    ap.add_argument("--page", choices=sorted(PAGES), default="timemachine")
+    ap.add_argument("--out", type=Path)
     ap.add_argument("--lite", action="store_true", help="leave out the 10 m close-up images, for email-sized files")
     a = ap.parse_args(argv)
-    out, listing, commit = build(out=a.out, lite=a.lite)
+    out, listing, commit = build(out=a.out or ROOT / "dist" / PAGES[a.page]["out"], lite=a.lite, page=a.page)
     raw = sum(r for _, r, _ in listing)
     size = out.stat().st_size
     print(f"{out.relative_to(ROOT) if out.is_relative_to(ROOT) else out}: {size / 1e6:.1f} MB, "
