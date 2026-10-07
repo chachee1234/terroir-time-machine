@@ -1,0 +1,21 @@
+{
+ "region": "northern_sonoma",
+ "source": "Natural Earth 1:10m populated places (public domain), ne_10m_populated_places_simple.geojson, SHA-256 fd3fa867a320cbd5\u2026",
+ "crs": "EPSG:26910 (NAD83 / UTM zone 10N) metres; WGS84 input treated as NAD83",
+ "places": [
+  {
+   "name": "Santa Rosa",
+   "kind": "town",
+   "lonlat": [
+    -122.69999,
+    38.4504
+   ],
+   "utm": [
+    526178.3,
+    4255832.8
+   ],
+   "source": "Natural Earth 1:10m populated places"
+  }
+ ],
+ "gap": "Only Santa Rosa is labelled: it is the one Natural Earth 1:10m populated place inside this frame. Healdsburg, Windsor, Cloverdale, Geyserville, Sebastopol and other towns are not in that file, and GNIS and Census gazetteers are blocked from the cloud sandbox. Adding them needs a reachable open gazetteer listed in SOURCES.md, or an owner instruction to use another source (for example OpenStreetMap, ODbL)."
+}

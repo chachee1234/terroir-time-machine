@@ -17,8 +17,7 @@ Output: <assets_dir>/rivers.json
   x, y are whole metres east and north (UTM 10N); after the first vertex, the rest are differences.
 
 These are today's channels, mapped from imagery and surveys, many of them straightened, leveed or piped.
-Where the rivers ran before farming (the historical ecology) is a different source (SFEI's Napa Valley
-Historical Ecology Atlas), not this one.
+They are not a reconstruction of where the rivers ran before farming.
 
 Usage: make_rivers.py --region data/regions/napa_valley.json [--tolerance 12] [--offline]
 """

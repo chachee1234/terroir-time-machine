@@ -1,0 +1,70 @@
+{
+ "region": "west_sonoma_coast",
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "locations": [
+  {
+   "id": "dry_creek_valley",
+   "name": "Dry Creek Valley",
+   "kind": "ava",
+   "file": "detail/dry_creek_valley",
+   "bbox_utm": [
+    488414.6,
+    4264788.9,
+    514160.2,
+    4290534.5
+   ],
+   "ava_bbox_utm": [
+    490108.5,
+    4266288.9,
+    512466.3,
+    4289034.5
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 50.383
+  },
+  {
+   "id": "fort_ross_seaview",
+   "name": "Fort Ross-Seaview",
+   "kind": "ava",
+   "file": "detail/fort_ross_seaview",
+   "bbox_utm": [
+    467685.4,
+    4258469.5,
+    488459.5,
+    4279243.6
+   ],
+   "ava_bbox_utm": [
+    469626.5,
+    4259969.5,
+    486518.4,
+    4277743.6
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 40.654
+  },
+  {
+   "id": "green_valley_of_russian_river_valley",
+   "name": "Green Valley of Russian River Valley",
+   "kind": "ava",
+   "file": "detail/green_valley_of_russian_river_valley",
+   "bbox_utm": [
+    501629.6,
+    4246267.8,
+    516600.0,
+    4263138.1
+   ],
+   "ava_bbox_utm": [
+    504775.6,
+    4247767.8,
+    515353.9,
+    4261638.1
+   ],
+   "cols": 454,
+   "rows": 512,
+   "cell_m": 33.047
+  }
+ ]
+}

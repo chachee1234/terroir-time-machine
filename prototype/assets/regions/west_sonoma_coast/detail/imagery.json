@@ -1,0 +1,68 @@
+{
+ "label": "Sentinel-2 true colour, 2026-07-27",
+ "credit": "Contains modified Copernicus Sentinel data 2026, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+ "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+ "class": "measured-approx",
+ "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+ "scenes": [
+  "S2A_10SDH_20260727_1_L2A",
+  "S2B_10SEH_20260727_0_L2A"
+ ],
+ "date": "2026-07-27",
+ "encoding": "baseline JPEG, quality 80, row 0 = north",
+ "resampling": "nearest full-resolution (10 m) pixel at each cell centre",
+ "limits": "One summer acquisition: shadows and colours are that day's; 8-bit TCI stretch as delivered by ESA; clouds in the scene (see cloud_cover_percent) are not masked.",
+ "locations": {
+  "dry_creek_valley": {
+   "file": "dry_creek_valley.imagery.jpg",
+   "width": 2575,
+   "height": 2575,
+   "bbox_utm": [
+    488414.6,
+    4264788.9,
+    514160.2,
+    4290534.5
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.998,
+    9.998
+   ],
+   "sha256": "8db2c954cad4bb0a7bb574e8d86db14dcee68428be09faf785d5f5e381f747df"
+  },
+  "fort_ross_seaview": {
+   "file": "fort_ross_seaview.imagery.jpg",
+   "width": 2077,
+   "height": 2077,
+   "bbox_utm": [
+    467685.4,
+    4258469.5,
+    488459.5,
+    4279243.6
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.002,
+    10.002
+   ],
+   "sha256": "dee16305b4a6d189c87e453f72b9a010d3b6f91642fb74f6dc446643c0b06de3"
+  },
+  "green_valley_of_russian_river_valley": {
+   "file": "green_valley_of_russian_river_valley.imagery.jpg",
+   "width": 1497,
+   "height": 1687,
+   "bbox_utm": [
+    501629.6,
+    4246267.8,
+    516600.0,
+    4263138.1
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.0,
+    10.0
+   ],
+   "sha256": "4be244d1698a5c4f916e855ec366901363b5d05399ffb4b58abd7e7f53423815"
+  }
+ }
+}

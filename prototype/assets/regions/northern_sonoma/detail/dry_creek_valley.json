@@ -1,0 +1,35 @@
+{
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 13,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "fetched": "2026-10-01",
+ "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+ "encoding": "Int16 little-endian, row 0 = north",
+ "scale": 0.1,
+ "resampling": "bilinear from the tile mosaic at each UTM cell centre",
+ "product": "sub-AVA close-up",
+ "region": "northern_sonoma",
+ "ava_id": "dry_creek_valley",
+ "name": "Dry Creek Valley",
+ "bbox_utm": [
+  488414.6,
+  4264788.9,
+  514160.2,
+  4290534.5
+ ],
+ "ava_bbox_utm": [
+  490108.5,
+  4266288.9,
+  512466.3,
+  4289034.5
+ ],
+ "cols": 512,
+ "rows": 512,
+ "cell_m": 50.383,
+ "range_m": [
+  14.35,
+  1023.8
+ ],
+ "sha256": "e02c20e52bfc9554b59eb607668026d94ed889e0abdb68146158858765349689"
+}
