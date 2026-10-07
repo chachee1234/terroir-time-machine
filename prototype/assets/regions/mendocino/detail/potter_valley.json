@@ -1,0 +1,35 @@
+{
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 13,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "fetched": "2026-10-07",
+ "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+ "encoding": "Int16 little-endian, row 0 = north",
+ "scale": 0.1,
+ "resampling": "bilinear from the tile mosaic at each UTM cell centre",
+ "product": "sub-AVA close-up",
+ "region": "mendocino",
+ "ava_id": "potter_valley",
+ "name": "Potter Valley",
+ "bbox_utm": [
+  483566.8,
+  4340761.2,
+  501600.0,
+  4358846.6
+ ],
+ "ava_bbox_utm": [
+  486949.8,
+  4342261.2,
+  498269.2,
+  4357346.6
+ ],
+ "cols": 511,
+ "rows": 512,
+ "cell_m": 35.359,
+ "range_m": [
+  223.17,
+  1308.48
+ ],
+ "sha256": "030e894a4d5d7143ae086452c4271d2c409731a657c3f1a3bf06b4edd9a0aa33"
+}

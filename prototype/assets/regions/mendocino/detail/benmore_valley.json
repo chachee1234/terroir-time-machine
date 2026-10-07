@@ -1,0 +1,35 @@
+{
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 13,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "fetched": "2026-10-07",
+ "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+ "encoding": "Int16 little-endian, row 0 = north",
+ "scale": 0.1,
+ "resampling": "bilinear from the tile mosaic at each UTM cell centre",
+ "product": "sub-AVA close-up",
+ "region": "mendocino",
+ "ava_id": "benmore_valley",
+ "name": "Benmore Valley",
+ "bbox_utm": [
+  494949.2,
+  4314726.6,
+  501321.0,
+  4321098.4
+ ],
+ "ava_bbox_utm": [
+  496449.2,
+  4316404.6,
+  499821.0,
+  4319420.4
+ ],
+ "cols": 426,
+ "rows": 426,
+ "cell_m": 14.992,
+ "range_m": [
+  207.14,
+  978.44
+ ],
+ "sha256": "8d2204d6aa01c26f4499af5465b598340ccfbc683078218689e8be32fd69ff74"
+}

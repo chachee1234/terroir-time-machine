@@ -1,0 +1,59 @@
+{
+  "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+  "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+  "zoom": 13,
+  "fetched": "2026-10-07",
+  "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+  "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+  "vertical": "metres; 3DEP 1/3 arc-second in the United States, ETOPO1 offshore, as mosaicked by Terrain Tiles",
+  "note": "Replaces the 3DEP ImageServer request (blocked from the cloud sandbox). Samples are bilinear from the z13 tile mosaic (~15 m pixels) at each raw cell centre.",
+  "aoi": {
+    "description": "Mendocino AVA bounding box (UC Davis AVA Project, CC0) padded by 2 km; ~58 x 63 km. Frame for the viewer, not a geological boundary.",
+    "region": "mendocino",
+    "name": "Mendocino",
+    "parents": [
+      "mendocino"
+    ],
+    "bbox_utm": [
+      443100.0,
+      4296800.0,
+      501600.0,
+      4359400.0
+    ],
+    "center_utm": [
+      472350.0,
+      4328100.0
+    ]
+  },
+  "raw": {
+    "width": 1950,
+    "height": 2087,
+    "cell_m": 30.0,
+    "nodata_cells": 0,
+    "note": "sampled on the fly from cached tiles in data/raw/tiles/, not stored"
+  },
+  "stats_raw_m": {
+    "min": -26.19,
+    "max": 1302.39,
+    "max_cell_utm": [
+      501585.0,
+      4350776.4
+    ]
+  },
+  "browser_grid": {
+    "file": "assets/regions/mendocino/terrain.bin",
+    "sha256": "49a22cb9619fce6aa884f9e0d49442fbf679c36159cd5508823f4322e6d302d1",
+    "encoding": "int16 little-endian, meters, row 0 = north",
+    "cols": 420,
+    "rows": 449,
+    "cell_m": 139.286,
+    "resampling": "block mean from raw samples",
+    "nodata": -32768,
+    "vertical_exaggeration_default": 1
+  },
+  "pit_floor": {
+    "m": -100,
+    "note": "Along the shoreline at the frame's west edge the terrain tiles have narrow pits, down to about -4,800 m, where land and sea data meet. In this frame the tiles put the whole sea at 0 m (no bathymetry), and no land lies below sea level, so tile pixels below -100 m are treated as pits and set to 0 m. The count is recorded in data/manifest.json.",
+    "rule": "tile pixels below this height are set to 0 m before sampling"
+  }
+}

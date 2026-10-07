@@ -1,0 +1,186 @@
+{
+ "label": "Sentinel-2 true colour, 2025-09-23",
+ "credit": "Contains modified Copernicus Sentinel data 2025, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+ "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+ "class": "measured-approx",
+ "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+ "scenes": [
+  "S2B_10SDJ_20250923_0_L2A"
+ ],
+ "date": "2025-09-23",
+ "encoding": "baseline JPEG, quality 80, row 0 = north",
+ "resampling": "nearest full-resolution (10 m) pixel at each cell centre",
+ "limits": "One summer acquisition: shadows and colours are that day's; 8-bit TCI stretch as delivered by ESA; clouds in the scene (see cloud_cover_percent) are not masked.",
+ "locations": {
+  "anderson_valley": {
+   "file": "anderson_valley.imagery.jpg",
+   "width": 3277,
+   "height": 3277,
+   "bbox_utm": [
+    443608.0,
+    4307554.1,
+    476376.8,
+    4340322.9
+   ],
+   "missing_cells": 2,
+   "cell_m": [
+    10.0,
+    10.0
+   ],
+   "sha256": "99ae102a91ec9747e3e2dd2cf22ca2130d1c25bbe869abbcae30f2a4be3e0753"
+  },
+  "benmore_valley": {
+   "file": "benmore_valley.imagery.jpg",
+   "width": 637,
+   "height": 637,
+   "bbox_utm": [
+    494949.2,
+    4314726.6,
+    501321.0,
+    4321098.4
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.003,
+    10.003
+   ],
+   "sha256": "475f95267f4326be2061c4aa9ebb8248ba8a7c8e2870ed8fa7ad085a2add8907"
+  },
+  "cole_ranch": {
+   "file": "cole_ranch.imagery.jpg",
+   "width": 600,
+   "height": 600,
+   "bbox_utm": [
+    477586.6,
+    4320523.8,
+    483586.6,
+    4326523.8
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.0,
+    10.0
+   ],
+   "sha256": "166d36a235b7eecf47a52d63f708104a7b4628af12f341da94a36534b7d042eb"
+  },
+  "comptche": {
+   "file": "comptche.imagery.jpg",
+   "width": 731,
+   "height": 731,
+   "bbox_utm": [
+    446385.5,
+    4343577.8,
+    453692.4,
+    4350884.7
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.996,
+    9.996
+   ],
+   "sha256": "9edd5eab0a13c614fe4db5f8f0c1146063cfc35dbe24a57198cdc3a9b3d14775"
+  },
+  "eagle_peak_mendocino_county": {
+   "file": "eagle_peak_mendocino_county.imagery.jpg",
+   "width": 1828,
+   "height": 1828,
+   "bbox_utm": [
+    463686.4,
+    4340055.5,
+    481963.0,
+    4358332.2
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.998,
+    9.998
+   ],
+   "sha256": "3bb8fb2615a4679b77f909d39279eaa643dd4765b1ea35303cf180d080e930fe"
+  },
+  "mcdowell_valley": {
+   "file": "mcdowell_valley.imagery.jpg",
+   "width": 805,
+   "height": 805,
+   "bbox_utm": [
+    492251.0,
+    4309303.5,
+    500303.3,
+    4317355.8
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.003,
+    10.003
+   ],
+   "sha256": "4550cb715a93c0b34f5af410d0168cf116ff57713e4e79bb9f4e0ff405c2750b"
+  },
+  "mendocino_ridge": {
+   "file": "mendocino_ridge.imagery.jpg",
+   "width": 3530,
+   "height": 3895,
+   "bbox_utm": [
+    443100.0,
+    4296800.0,
+    478399.1,
+    4335746.4
+   ],
+   "missing_cells": 2,
+   "cell_m": [
+    10.0,
+    9.999
+   ],
+   "sha256": "e7d5450718d9a784f91e786df45bb78787f865816a12c293c4ab7bfa0d414dd7"
+  },
+  "potter_valley": {
+   "file": "potter_valley.imagery.jpg",
+   "width": 1803,
+   "height": 1809,
+   "bbox_utm": [
+    483566.8,
+    4340761.2,
+    501600.0,
+    4358846.6
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.002,
+    9.997
+   ],
+   "sha256": "e7a41f1b86949a0518036a45a8ab7fa49af48d8b16e4cbd5082e1b59d450e005"
+  },
+  "redwood_valley": {
+   "file": "redwood_valley.imagery.jpg",
+   "width": 1737,
+   "height": 1737,
+   "bbox_utm": [
+    474339.5,
+    4341476.9,
+    491708.1,
+    4358845.5
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    9.999,
+    9.999
+   ],
+   "sha256": "8d1dfb600aca7ca9449c18c6a7393571ebf7e6178dea71daa2fa62ee7b548822"
+  },
+  "yorkville_highlands": {
+   "file": "yorkville_highlands.imagery.jpg",
+   "width": 2703,
+   "height": 2304,
+   "bbox_utm": [
+    469068.0,
+    4296800.0,
+    496098.9,
+    4319837.3
+   ],
+   "missing_cells": 0,
+   "cell_m": [
+    10.0,
+    9.999
+   ],
+   "sha256": "51d4af847155a8c0d3c1361c65eabd86dcecc21255065cc9d24afebd690f99f1"
+  }
+ }
+}
