@@ -1,5 +1,7 @@
 # Status
 
+> Since 2026-10-07 each change records its progress note as its own file in [`status/`](status/README.md) instead of appending here, so open pull requests no longer conflict over this file. The entries below are the earlier log.
+
 Updated: 2026-09-24
 Mode: GOVERNED_AUTOMATION (see AGENTS.md, GOVERNANCE.md)
 Current milestone: M1 — Evidence feasibility
