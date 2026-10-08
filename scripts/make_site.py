@@ -24,7 +24,6 @@ import json
 import math
 import re
 import sys
-import urllib.request
 from array import array
 from pathlib import Path
 
@@ -33,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_terrain import utm_from_geographic  # noqa: E402
 import make_geology_texture as mg  # noqa: E402
 import make_climate  # noqa: E402
+from net import open_url  # noqa: E402
 
 OSD_URL = "https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/{c}/{s}.json"
 OSD_CACHE = ROOT / "data" / "raw" / "osd"
@@ -67,7 +67,7 @@ def osd(series, offline=False):
         if offline:
             raise SystemExit(f"{path} missing (offline)")
         OSD_CACHE.mkdir(parents=True, exist_ok=True)
-        with urllib.request.urlopen(OSD_URL.format(c=s[0], s=s), timeout=60) as r:
+        with open_url(OSD_URL.format(c=s[0], s=s), timeout=60) as r:
             path.write_bytes(r.read())
     return json.loads(path.read_text()), OSD_URL.format(c=s[0], s=s)
 

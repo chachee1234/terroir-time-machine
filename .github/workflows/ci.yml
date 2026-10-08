@@ -24,7 +24,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - run: python3 -m pip install --disable-pip-version-check -r requirements.txt
+      - run: python3 -m pip install --disable-pip-version-check -r requirements.txt -r requirements-dev.txt
       - run: python3 scripts/validate.py
       - run: python3 -m unittest discover -s scripts -p 'test_*.py'
 
@@ -55,7 +55,7 @@ jobs:
       - name: Bandit (Python static analysis, medium severity and up)
         run: python3 -m bandit -q -r scripts -x 'scripts/test_*.py' --severity-level medium --confidence-level medium
       - name: Known vulnerabilities in Python dependencies
-        run: python3 -m pip_audit -r requirements.txt --progress-spinner off
+        run: python3 -m pip_audit -r requirements.txt -r requirements-dev.txt --progress-spinner off
 
   browser:
     name: Browser tests (functional, integration, security)

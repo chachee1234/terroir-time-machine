@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import net  # noqa: E402
 import security_check as sc  # noqa: E402
 
 
@@ -74,15 +75,24 @@ class Seeded(unittest.TestCase):
         self.assertEqual(len(found), 5, found)   # unlisted host, 2 x no SRI, no noopener, eval
 
     def test_scripts(self):
-        py = "import subprocess\nsubprocess.run('x', shell=True)\nz.extractall(d)\nyaml.load(f)\nok = 1  # eval( in a comment\n"
+        py = ("import subprocess\nsubprocess.run('x', shell=True)\nz.extractall(d)\nyaml.load(f)\n"
+              "urllib.request.urlopen(u)\nok = 1  # eval( in a comment\n")
         d, root = tree({"scripts/x.py": py, "scripts/test_x.py": py})
         with d:
             found = sc.check_scripts(root)
-        self.assertEqual(len(found), 3, found)
+        self.assertEqual(len(found), 4, found)
 
     def test_sri_digest(self):
         self.assertTrue(sc.sri_matches(b"alert(1)", "sha384", "HT2E9NfWiuQ/w1PRai+hTyqW16NIoCGA/m8VQDUopfAtcz6YQjtsMmQd5uRbVDpW"))
         self.assertFalse(sc.sri_matches(b"alert(2)", "sha384", "HT2E9NfWiuQ/w1PRai+hTyqW16NIoCGA/m8VQDUopfAtcz6YQjtsMmQd5uRbVDpW"))
+
+
+class OpenUrl(unittest.TestCase):
+    def test_only_http_schemes(self):
+        import urllib.request
+        for bad in ("file:///etc/passwd", "ftp://example.com/x", urllib.request.Request("file:///etc/hosts")):
+            with self.subTest(url=bad), self.assertRaises(ValueError):
+                net.open_url(bad, timeout=1)
 
 
 if __name__ == "__main__":

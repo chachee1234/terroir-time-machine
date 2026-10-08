@@ -4,9 +4,9 @@ Every pull request runs `.github/workflows/ci.yml`. All four gates must be green
 
 | Gate | What it checks | Run it yourself |
 |---|---|---|
-| Unit | Content validation (`scripts/validate.py`) and the Python unit tests in `scripts/test_*.py` | `python3 scripts/validate.py` then `python3 -m unittest discover -s scripts -p 'test_*.py'` |
+| Unit | Content validation (`scripts/validate.py`) and the Python unit tests in `scripts/test_*.py` | `pip install -r requirements.txt -r requirements-dev.txt`, `python3 scripts/validate.py`, then `python3 -m unittest discover -s scripts -p 'test_*.py'` |
 | Lint | Python compiles and passes pyflakes; every inline `<script>` in `prototype/` and every `.mjs` parses | `python3 -m compileall -q scripts` and `node tests/lint_js.mjs` |
-| Security | No secrets in tracked files; workflows have least-privilege tokens, SHA-pinned actions and no untrusted `${{ }}` in scripts; pages load scripts only from the allowed CDNs with integrity hashes; no risky Python patterns; Bandit; pip-audit | `python3 scripts/security_check.py` (add `--online` to check the CDN hashes) |
+| Security | No secrets in tracked files; workflows have least-privilege tokens, SHA-pinned actions and no untrusted `${{ }}` in scripts; pages load scripts only from the allowed CDNs with integrity hashes; no risky Python patterns (network access only through `scripts/net.py`, which refuses non-http(s) URLs); Bandit; pip-audit | `python3 scripts/security_check.py` (add `--online` to check the CDN hashes) |
 | Browser | Chromium headless, `node --test`. **Functional**: every page loads with no errors, missing files or requests to unlisted hosts; timeline, play, keyboard, deep links, mobile layout, reduced motion, no-WebGL message (ACCEPTANCE_TESTS U01-U05). **Integration**: `build_share.py` output runs from a bare `file://` path with the feedback panel working. **Security**: script-injection and junk values in every URL parameter a page reads | see below |
 
 ## Browser tests on your Mac

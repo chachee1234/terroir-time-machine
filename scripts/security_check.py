@@ -9,8 +9,8 @@ Checks, each a function returning a list of findings:
              pull_request_target, no ${{ github.event.* }} or head_ref pasted into a run: script
   pages      prototype/*.html: third-party scripts only from allowed CDNs and with Subresource
              Integrity, target=_blank links carry rel=noopener, no eval/new Function/document.write
-  scripts    scripts/*.py: no shell=True, eval/exec, pickle, yaml.load, disabled TLS checks or
-             zip/tar extractall (path traversal)
+  scripts    scripts/*.py: no shell=True, eval/exec, pickle, yaml.load, disabled TLS checks,
+             zip/tar extractall (path traversal) or urlopen outside net.open_url
 """
 import base64
 import hashlib
@@ -136,13 +136,14 @@ PY_RULES = [
     (r"\byaml\.load\((?![^)]*SafeLoader)", "yaml.load without SafeLoader"),
     (r"verify\s*=\s*False|_create_unverified_context|CERT_NONE", "TLS verification disabled"),
     (r"\.extractall\(", "archive extractall (path traversal); extract members by name"),
+    (r"\burlopen\(", "direct urlopen (also opens file://); use net.open_url"),
 ]
 
 
 def check_scripts(root=ROOT):
     found = []
     for py in sorted((root / "scripts").glob("*.py")):
-        if py.name.startswith("test_") or py.name == Path(__file__).name:
+        if py.name.startswith("test_") or py.name in (Path(__file__).name, "net.py"):
             continue
         for n, line in enumerate(py.read_text(encoding="utf-8").split("\n"), 1):
             code = line.split("#", 1)[0]
@@ -166,11 +167,11 @@ def sri_matches(data, alg, digest):
 
 
 def check_sri_online(root=ROOT):
-    import urllib.request
+    from net import open_url
     found, seen = [], {}
     for page, src, alg, digest in sri_tags(root):
         if src not in seen:
-            with urllib.request.urlopen(src, timeout=60) as r:  # src is an allow-listed https CDN URL (check_pages)
+            with open_url(src, timeout=60) as r:
                 seen[src] = r.read()
         if not sri_matches(seen[src], alg, digest):
             found.append(f"{page}: integrity hash does not match what {src} serves")

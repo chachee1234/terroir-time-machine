@@ -36,6 +36,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from make_climate import Tiff, frame_window, clip  # noqa: E402
 from fetch_tiles import geographic_from_utm  # noqa: E402
+from net import open_url  # noqa: E402
 
 URL = "https://services.nacse.org/prism/data/get/us/4km/{var}/{day}"
 VARS = ("tmax", "tmin", "ppt")
@@ -55,7 +56,7 @@ def download(var, day, tries=4):
     req = urllib.request.Request(url, headers={"User-Agent": "terroir-time-machine"})
     for k in range(tries):
         try:
-            with urllib.request.urlopen(req, timeout=120) as r:
+            with open_url(req, timeout=120) as r:
                 data = r.read()
             if data.startswith(b"PK"):
                 return data

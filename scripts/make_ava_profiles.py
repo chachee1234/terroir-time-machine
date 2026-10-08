@@ -29,6 +29,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_tiles import decode_png_rgb  # noqa: E402
 from make_geology_texture import GRS80, utm_inverse  # noqa: E402
+from net import open_url  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SDA = "https://sdmdataaccess.sc.egov.usda.gov/Tabular/post.rest"
@@ -84,7 +85,7 @@ def sda(query, tries=3):
     for k in range(tries):
         try:
             req = urllib.request.Request(SDA, data=body, headers={"Content-Type": "application/json"})
-            return json.loads(urllib.request.urlopen(req, timeout=180).read() or b"{}").get("Table", [])
+            return json.loads(open_url(req, timeout=180).read() or b"{}").get("Table", [])
         except Exception as e:  # noqa: BLE001 - network: retry, then give up on this AVA
             err = e
             time.sleep(2 * (k + 1))

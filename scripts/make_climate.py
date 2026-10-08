@@ -25,7 +25,6 @@ import argparse
 import calendar
 import datetime
 import hashlib
-import io
 import json
 import struct
 import sys
@@ -37,6 +36,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_tiles import geographic_from_utm  # noqa: E402
+from net import open_url  # noqa: E402
 
 URL = "https://services.nacse.org/prism/data/get/normals/us/800m/{var}/{period}"
 CACHE = ROOT / "data" / "raw" / "prism"
@@ -56,7 +56,7 @@ def fetch(var, period, offline=False):
         url = URL.format(var=var, period=period)
         print(f"downloading {url}", file=sys.stderr)
         req = urllib.request.Request(url, headers={"User-Agent": "terroir-time-machine"})
-        with urllib.request.urlopen(req, timeout=600) as r:
+        with open_url(req, timeout=600) as r:
             data = r.read()
         if not data.startswith(b"PK"):
             raise SystemExit(f"{url} did not return a zip: {data[:200]!r}")

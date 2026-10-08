@@ -4,7 +4,6 @@ import json
 import struct
 import sys
 import unittest
-import zlib
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))

@@ -24,18 +24,17 @@ Usage: make_rivers.py --region data/regions/napa_valley.json [--tolerance 12] [-
 import argparse
 import datetime
 import hashlib
-import io
 import json
 import math
 import struct
 import sys
-import urllib.request
 import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_terrain import utm_from_geographic  # noqa: E402
+from net import open_url  # noqa: E402
 
 URL = "https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/HU8/Shape/NHD_H_{hu8}_HU8_Shape.zip"
 CACHE = ROOT / "data" / "raw" / "nhd"
@@ -145,7 +144,7 @@ def package(hu8, offline=False):
         if offline:
             raise SystemExit(f"{path} missing (offline)")
         CACHE.mkdir(parents=True, exist_ok=True)
-        with urllib.request.urlopen(URL.format(hu8=hu8), timeout=300) as r:
+        with open_url(URL.format(hu8=hu8), timeout=300) as r:
             path.write_bytes(r.read())
     return path
 

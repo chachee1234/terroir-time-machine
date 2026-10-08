@@ -30,7 +30,6 @@ import re
 import struct
 import sys
 import urllib.parse
-import urllib.request
 import zlib
 from pathlib import Path
 
@@ -38,6 +37,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_terrain import utm_from_geographic  # noqa: E402
 from fetch_tiles import geographic_from_utm  # noqa: E402
+from net import open_url  # noqa: E402
 
 API = "https://nassgeodata.gmu.edu/axis2/services/CDLService/GetCDLFile?year={year}&bbox={bbox}"
 CACHE = ROOT / "data" / "raw" / "cdl"
@@ -90,13 +90,13 @@ def fetch(region, year, offline=False):
         if offline:
             raise SystemExit(f"{path} missing and --offline set")
         bbox = ",".join(str(v) for v in envelope(region))
-        with urllib.request.urlopen(API.format(year=year, bbox=bbox), timeout=300) as r:
+        with open_url(API.format(year=year, bbox=bbox), timeout=300) as r:
             m = re.search(rb"<returnURL>([^<]+)</returnURL>", r.read())
         if not m:
             raise SystemExit(f"CropScape gave no file for {year}")
         url = cdl_file_url(m.group(1).decode())
         print(f"downloading {url}", file=sys.stderr)
-        with urllib.request.urlopen(url, timeout=600) as r:
+        with open_url(url, timeout=600) as r:
             path.write_bytes(r.read())
     return path
 
