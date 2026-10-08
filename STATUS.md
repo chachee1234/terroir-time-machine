@@ -415,3 +415,9 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Headless Chromium (repo root served, CDN three.js served locally): every chapter at 1280 × 800, the flood at 390 × 844, the Gibraltar review copy from file://, and the chip from the Napa viewer: no console errors apart from the blocked font requests. Not tested: real-hardware frame rate (the strait mesh has 350,000 vertices), touch devices, Safari/Firefox.
 - Commands: `python3 scripts/build_location.py data/locations/gibraltar.json`; `python3 scripts/build_share.py --page gibraltar`; then open `http://localhost:8000/prototype/gibraltar.html` with `python3 -m http.server 8000` run at the repo root.
 - Next smallest action: owner review; then a globe marker for Gibraltar at 5.33 Ma in the main viewer (touches code PR #19 is changing, so after it merges).
+
+## Project skills from ECC (branch `ecc-skills`) — 2026-10-01
+- Owner asked to analyse ECC (affaan-m/ECC) for TTM and approved the recommendation: copy four ECC skills (MIT) into `.claude/skills/` instead of installing the plugin, whose ~24 always-on hooks would cost budget in every autopilot run and overlap GOVERNANCE/AUTOPILOT.
+- Added: verification-loop, browser-qa, search-first, scientific-thinking-literature-review, each with a "Terroir Time Machine notes" section mapping it to this repo (unittest + validate.py, static viewer in headless Chromium, SOURCES.md/SCIENCE_RULES.md). Attribution in `.claude/skills/README.md` and `LICENSE-ECC`.
+- No code or data changes. `python3 -m unittest discover -s scripts -p 'test_*.py'` → 132 pass, 1 skipped.
+- Next smallest action: owner review and merge.
