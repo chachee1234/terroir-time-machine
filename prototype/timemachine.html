@@ -133,6 +133,23 @@ a.chip.tog{text-decoration:none}
 .places header b{color:var(--ink);font-weight:500}
 .places header button{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;min-width:32px;min-height:28px;cursor:pointer;border-radius:4px}
 .places[hidden]{display:none}
+.wx{position:absolute;z-index:3;right:16px;top:calc(92px + env(safe-area-inset-top,0px));width:min(380px,calc(100% - 32px));background:var(--panel);border:1px solid var(--line);border-radius:6px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.wx[hidden]{display:none}
+.wx header{display:flex;justify-content:space-between;align-items:center;padding:7px 8px 2px 12px;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.wx header b{color:var(--ink);font-weight:500}
+.wx header button{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;min-width:32px;min-height:28px;cursor:pointer;border-radius:4px}
+.wx .wxdate{display:flex;flex-direction:column;padding:0 12px;gap:1px}
+.wx .wxdate b{font-weight:500;font-size:17px;color:var(--ink)}
+.wx .wxdate span{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.wx input[type=range]{width:calc(100% - 24px);margin:6px 12px 2px;accent-color:var(--magma)}
+.wx .wxrow{display:flex;gap:4px;padding:2px 12px;align-items:center;flex-wrap:wrap}
+.wx .wxsp{flex:1}
+.wx .wxb{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:4px;color:var(--ink);font:inherit;font-size:12px;padding:3px 8px;min-height:28px;cursor:pointer}
+.wx .wxb[aria-pressed="true"]{border-color:var(--magma);color:var(--magma)}
+.wx .wxramp{display:flex;align-items:center;gap:6px;padding:6px 12px 0;font-size:11px;color:var(--muted);font-family:var(--mono)}
+.wx .wxramp i{flex:1;height:8px;border-radius:2px}
+.wx .wxgdd{padding:4px 12px 0;font-size:12px;color:var(--ink);line-height:1.35}
+.wx .foot{padding:4px 12px 8px;font-size:11px;color:var(--muted);line-height:1.35}
 .places .plist{overflow:auto;padding:2px 6px 6px}
 .places .plist button{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;background:none;border:0;border-radius:4px;color:var(--ink);font:inherit;font-size:13px;padding:7px 8px;min-height:32px;cursor:pointer}
 .places .plist button small{color:var(--muted);font:11px var(--mono)}
@@ -175,6 +192,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
     <button class="chip tog" id="avaBtn" aria-pressed="true">AVAs</button>
     <button class="chip tog" id="geoBtn" aria-pressed="false" title="Mapped geologic units on today's terrain (USGS SIM 2956)" hidden>Geology</button>
     <button class="chip tog" id="satBtn" aria-pressed="false" title="Sentinel-2 true-colour image on today's terrain" hidden>Satellite</button>
+    <button class="chip tog" id="wxBtn" aria-pressed="false" aria-controls="wx" title="Daily weather, 1981 to recent days (PRISM 4 km)" hidden>Weather</button>
     <button class="chip tog" id="rivBtn" aria-pressed="true" title="Rivers and creeks as mapped today (USGS National Hydrography Dataset)" hidden>Rivers</button>
     <button class="chip tog" id="sdBtn" aria-pressed="false" aria-controls="sub">Plates</button>
     <button class="chip tog" id="xsBtn" aria-pressed="false" aria-controls="xsec">Section</button>
@@ -222,6 +240,24 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   <header><span><b>Cross-section</b> · <span id="xsHead">SW to NE through the site</span></span><span><button class="xsp" id="xsPlay" hidden aria-label="Play the layers again">Replay</button><button id="xsX" aria-label="Close cross-section">×</button></span></header>
   <canvas id="xsCv"></canvas>
   <div class="foot" id="xsNote"></div>
+</aside>
+<aside class="wx" id="wx" hidden aria-label="Weather by day">
+  <header><span><b>Weather by day</b> · PRISM 4 km</span><button id="wxX" aria-label="Close weather">×</button></header>
+  <div class="wxdate"><b id="wxDate">–</b><span id="wxSum"></span></div>
+  <input type="range" id="wxDay" min="0" max="1" step="1" value="0" aria-label="Day">
+  <div class="wxrow">
+    <button class="wxb" id="wxPrev" aria-label="Previous day">◀</button>
+    <button class="wxb" id="wxPlay" aria-pressed="false">Play</button>
+    <button class="wxb" id="wxNext" aria-label="Next day">▶</button>
+    <button class="wxb" id="wxStep" title="How far each step of Play moves">1 day</button>
+    <span class="wxsp"></span>
+    <button class="wxb" data-l="tmax" aria-pressed="true">High</button>
+    <button class="wxb" data-l="tmin" aria-pressed="false">Low</button>
+    <button class="wxb" data-l="ppt" aria-pressed="false">Rain</button>
+  </div>
+  <div class="wxramp"><span id="wxR0"></span><i id="wxRamp"></i><span id="wxR1"></span></div>
+  <div class="wxgdd" id="wxGdd"></div>
+  <div class="foot">Daily maximum, minimum and rain from PRISM Climate Group, Oregon State University: station readings spread over a 4 km grid, so a hillside and the valley floor beside it share one value. Recent months are provisional. Rain falling in the view is drawn on days the frame averages 1 mm or more; the drops themselves are illustrated.</div>
 </aside>
 <aside class="places" id="places" hidden aria-label="Go to a place in the frame">
   <header><span><b>Go to</b> · <span id="plT">Napa Valley</span></span><button id="plX" aria-label="Close places">×</button></header>
@@ -820,7 +856,7 @@ const lUni = {
   uSun:{value:new THREE.Vector3(-0.5,0.75,-0.4).normalize()}, uSunCol:{value:new THREE.Color(1,.96,.9)},
   uFog:{value:new THREE.Color(.6,.7,.8)}, uVolc:{value:0}, uLava:{value:0}, uAsh:{value:0}, uVines:{value:0}, uGold:{value:0}, uBase:{value:BASE},
   uThr:{value:0}, uThrAct:{value:0}, uThrOff:{value:0}, uSS:{value:0}, uSSAct:{value:0}, uErode:{value:0}, uTopo:{value:0},
-  uDem:demTex, uDemOn:{value:0}, uDemTexel:{value:new THREE.Vector2(1,1)}, uDemCell:{value:new THREE.Vector2(1,1)}, uAva:{value:null}, uAvaOn:{value:0}, uGeo:{value:null}, uGeoOn:{value:0}, uSat:{value:null}, uSatOn:{value:0}, uRiv:{value:null}, uRivOn:{value:0}, uSatExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uGeoExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)},
+  uDem:demTex, uDemOn:{value:0}, uDemTexel:{value:new THREE.Vector2(1,1)}, uDemCell:{value:new THREE.Vector2(1,1)}, uAva:{value:null}, uAvaOn:{value:0}, uGeo:{value:null}, uGeoOn:{value:0}, uSat:{value:null}, uSatOn:{value:0}, uRiv:{value:null}, uRivOn:{value:0}, uWx:{value:null}, uWxOn:{value:0}, uWxExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uSatExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uGeoExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)},
   uExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uDemExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uHole:{value:new THREE.Vector4()}, uFogN:{value:LEXT*1.5}, uFogF:{value:LEXT*4.7},
   // vineyard site story on the close-up surface (SEVO below); uSiteHere is 1 only on that close-up's own mesh
   uSiteOn:{value:0}, uSiteHere:{value:0}, uSiteT:{value:1}, uSiteFront:{value:0}, uSiteP:{value:new THREE.Vector2()}, uSiteExt:{value:new THREE.Vector4(0,0,1,1)},
@@ -979,7 +1015,7 @@ const terrainMat = new THREE.ShaderMaterial({
   vertexShader:TERRAIN_VS.replace("attribute float aTop;","attribute float aFlow,aDist; varying float vFlow; varying float vDist;").replace("aTop>0.5","true").replace("vS=aTop;","vS=1.0; vFlow=aFlow; vDist=aDist;"),
   fragmentShader:GLSL_NOISE+FAULT_GLSL+`
   uniform vec3 uSun,uSunCol,uFog,uWb; uniform float uVE,uVolc,uLava,uAsh,uVines,uGold,uTime,uErode,uTopo;
-  uniform sampler2D uDem,uAva,uGeo,uSat,uRiv; uniform float uDemOn,uAvaOn,uGeoOn,uSatOn,uRivOn; uniform vec4 uGeoExt,uSatExt; uniform vec2 uDemTexel,uDemCell; uniform vec4 uExt,uDemExt,uHole;
+  uniform sampler2D uDem,uAva,uGeo,uSat,uRiv,uWx; uniform float uDemOn,uAvaOn,uGeoOn,uSatOn,uRivOn,uWxOn; uniform vec4 uGeoExt,uSatExt,uWxExt; uniform vec2 uDemTexel,uDemCell; uniform vec4 uExt,uDemExt,uHole;
   uniform float uSiteOn,uSiteHere,uSiteT,uSiteFront; uniform vec2 uSiteP; uniform vec4 uSiteExt; uniform sampler2D uSiteA; uniform vec3 uSoilC;
   varying vec3 vW; varying float vH; varying float vS; varying float vR; varying float vFlow; varying float vDist;
   float h21(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
@@ -1037,6 +1073,8 @@ const terrainMat = new THREE.ShaderMaterial({
       if(su.x>0.0&&su.x<1.0&&su.y>0.0&&su.y<1.0){ vec3 sc=texture2D(uSat,su).rgb; col=mix(col,min(sc*1.2,vec3(1.0)),uSatOn); } }
     if(uGeoOn>0.0){ vec2 gu=(vW.xz-uGeoExt.xy)/uGeoExt.zw;       // mapped geologic units (SIM 2956), shaded like the ground
       if(gu.x>0.0&&gu.x<1.0&&gu.y>0.0&&gu.y<1.0){ vec4 gc=texture2D(uGeo,gu); col=mix(col,gc.rgb*0.92,gc.a*uGeoOn*0.9); } }
+    if(uWxOn>0.0){ vec2 wu=(vW.xz-uWxExt.xy)/uWxExt.zw;           // daily weather (PRISM 4 km), one colour per cell
+      if(wu.x>0.0&&wu.x<1.0&&wu.y>0.0&&wu.y<1.0){ vec4 wc=texture2D(uWx,wu); col=mix(col,wc.rgb*0.9,wc.a*uWxOn*0.8); } }
     float sWet=0.0, sOn=uSiteOn*uSiteHere;
     if(sOn>0.0) col=siteSurface(col,slope,sWet);
     if(uRivOn>0.0){ vec4 rv=texture2D(uRiv,(vW.xz-uExt.xy)/uExt.zw); col=mix(col,rv.rgb,rv.a*uRivOn*(1.0-sOn*(1.0-smoothstep(0.58,0.66,uSiteT)))); }   // USGS NHD channels, today (in a site story, from the floods on)
@@ -1276,6 +1314,99 @@ function loadPatchImagery(q){
   });
 }
 $("satBtn").onclick=()=>{ SAT.on=!SAT.on; $("satBtn").setAttribute("aria-pressed",SAT.on); if(SAT.on&&ageOf(p)>0.06) goTo(CH.length-1); };
+// Weather by day: PRISM 4 km daily maximum, minimum and rain, 1981 to recent days (scripts/fetch_prism_daily.py).
+// One int16 file per year; the day's cell values are painted into a 1 km texture through index.json's texel-to-cell map.
+const WX={on:false, ok:false, m:null, years:{}, layer:"tmax", day:0, rain:0, timer:0, step:1};
+const WX_SITE={name:"Corison (St. Helena)", lat:38.484983, lon:-122.44736};   // data/regions/napa_valley.json close-up
+const WX_RAMP={
+  tmax:{lo:-5, hi:40, unit:"°C", stops:[[0,[48,18,59]],[0.15,[70,107,227]],[0.3,[40,188,235]],[0.45,[50,241,152]],[0.6,[164,252,59]],[0.72,[237,208,58]],[0.85,[251,128,34]],[1,[122,4,3]]]},
+  tmin:{lo:-10, hi:25, unit:"°C", stops:[[0,[48,18,59]],[0.15,[70,107,227]],[0.3,[40,188,235]],[0.45,[50,241,152]],[0.6,[164,252,59]],[0.72,[237,208,58]],[0.85,[251,128,34]],[1,[122,4,3]]]},
+  ppt:{lo:0, hi:50, unit:"mm", stops:[[0,[120,200,255]],[0.3,[40,130,240]],[0.6,[30,60,200]],[1,[90,20,160]]]}
+};
+function wxColor(l,v){
+  const R=WX_RAMP[l], t=clamp((v-R.lo)/(R.hi-R.lo),0,1); let k=1; while(k<R.stops.length-1&&R.stops[k][0]<t) k++;
+  const [t0,c0]=R.stops[k-1], [t1,c1]=R.stops[k], f=clamp((t-t0)/(t1-t0),0,1);
+  return [lerp(c0[0],c1[0],f), lerp(c0[1],c1[1],f), lerp(c0[2],c1[2],f)];
+}
+const wxDate = d => new Date(WX.t0 + d*864e5);
+function wxYear(y){
+  if(!WX.years[y]) WX.years[y]=fetch(`assets/regions/napa_valley/daily/${y}.bin`).then(r=>{ if(!r.ok) throw 0; return r.arrayBuffer(); })
+    .then(b=>new Int16Array(b)).catch(()=>{ delete WX.years[y]; return null; });
+  return WX.years[y];
+}
+// value of variable vi on day-of-year doy in cell c, or null
+function wxVal(arr,nd,vi,doy,c){ const v=arr[(vi*nd+doy)*WX.ncell+c]; return v===WX.m.nodata ? null : v*WX.m.scale; }
+async function wxShow(){
+  const day=WX.day, dt=wxDate(day), y=dt.getUTCFullYear(), want=day;
+  const arr=await wxYear(y); if(want!==WX.day) return;
+  if(!arr){ WX.buf.fill(0); WX.tex.needsUpdate=true; WX.rain=0; $("wxDate").textContent=dt.toLocaleDateString(undefined,{day:"numeric", month:"long", year:"numeric", timeZone:"UTC"}); $("wxSum").textContent=`${y} could not be loaded (a lite copy holds only recent years)`; $("wxGdd").textContent=""; return; }
+  const nd=arr.length/(3*WX.ncell), doy=Math.round((dt-Date.UTC(y,0,1))/864e5), li=WX.m.vars.indexOf(WX.layer);
+  const t=WX.m.texture, buf=WX.buf;
+  for(let i=0;i<t.cols*t.rows;i++){
+    const c=WX.cellOf[i], v=c<0?null:wxVal(arr,nd,li,doy,c);
+    if(v===null||(WX.layer==="ppt"&&v<0.25)){ buf[i*4+3]=0; continue; }
+    const col=wxColor(WX.layer,v); buf[i*4]=col[0]; buf[i*4+1]=col[1]; buf[i*4+2]=col[2]; buf[i*4+3]=255;
+  }
+  WX.tex.needsUpdate=true;
+  // frame summary
+  let hi=-1e9, lo=1e9, rs=0, rn=0, rmax=0;
+  for(let c=0;c<WX.ncell;c++){
+    const a=wxVal(arr,nd,0,doy,c), b=wxVal(arr,nd,1,doy,c), r=wxVal(arr,nd,2,doy,c);
+    if(a!==null) hi=Math.max(hi,a); if(b!==null) lo=Math.min(lo,b); if(r!==null){ rs+=r; rn++; rmax=Math.max(rmax,r); }
+  }
+  const rm=rn?rs/rn:0; WX.rain = rm>=1 ? clamp(0.35+rm/20,0,1) : 0;
+  $("wxDate").textContent=dt.toLocaleDateString(undefined,{weekday:"short", day:"numeric", month:"long", year:"numeric", timeZone:"UTC"});
+  $("wxSum").textContent = hi>-1e9 ? `Frame: hottest ${hi.toFixed(1)}°C · coldest ${lo.toFixed(1)}°C · rain avg ${rm.toFixed(1)} mm, max ${rmax.toFixed(1)} mm` : "No data for this day";
+  // growing degree days at the site, 1 April to this day (Oct 31 at most), base 50 °F, from the daily mean of max and min
+  const sc=WX.siteCell, m=dt.getUTCMonth();
+  if(sc<0){ $("wxGdd").textContent=""; }
+  else if(m<3){ const a=wxVal(arr,nd,0,doy,sc), b=wxVal(arr,nd,1,doy,sc); $("wxGdd").textContent=`${WX_SITE.name}: high ${a===null?"–":a.toFixed(1)}°C, low ${b===null?"–":b.toFixed(1)}°C. Growing season count starts 1 April.`; }
+  else{
+    const end=Math.min(doy, Math.round((Date.UTC(y,9,31)-Date.UTC(y,0,1))/864e5)), start=Math.round((Date.UTC(y,3,1)-Date.UTC(y,0,1))/864e5);
+    let g=0, miss=0;
+    for(let d=start; d<=end; d++){ const a=wxVal(arr,nd,0,d,sc), b=wxVal(arr,nd,1,d,sc); if(a===null||b===null){ miss++; continue; } g+=Math.max(0,((a+b)/2)*9/5+32-50); }
+    $("wxGdd").textContent=`${WX_SITE.name}, 4 km cell: ${Math.round(g)} growing degree days (°F) since 1 April${m>9?", the whole April–October season":""}${miss?` · ${miss} days missing`:""}.`;
+  }
+  if(doy>330) wxYear(y+1);   // fetch ahead while playing
+}
+function wxLegend(){
+  const R=WX_RAMP[WX.layer];
+  $("wxRamp").style.background=`linear-gradient(90deg,${R.stops.map(([t,c])=>`rgb(${c.join(",")}) ${(t*100).toFixed(0)}%`).join(",")})`;
+  $("wxR0").textContent=`${R.lo}${R.unit}`; $("wxR1").textContent=`${R.hi}${R.unit}${WX.layer==="ppt"?"+":""}`;
+}
+function wxSet(d){ WX.day=clamp(Math.round(d),0,WX.n); $("wxDay").value=WX.day; wxShow(); }
+function wxStop(){ clearInterval(WX.timer); WX.timer=0; $("wxPlay").textContent="Play"; $("wxPlay").setAttribute("aria-pressed","false"); }
+(async function loadWeather(){
+  if(REG.id!=="napa_valley") return;
+  try{
+    const m=await fetch("assets/regions/napa_valley/daily/index.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
+    const g=m.grid, t=m.texture;
+    WX.m=m; WX.ncell=g.rows*g.cols; WX.t0=Date.UTC(m.years[0].year,0,1);
+    WX.n=Math.round((Date.parse(m.last_day+"T00:00:00Z")-WX.t0)/864e5);
+    WX.cellOf=Int32Array.from(t.cell); WX.buf=new Uint8Array(t.cols*t.rows*4);
+    WX.tex=new THREE.DataTexture(WX.buf,t.cols,t.rows,THREE.RGBAFormat); WX.tex.magFilter=THREE.LinearFilter; WX.tex.minFilter=THREE.LinearFilter; WX.tex.needsUpdate=true;
+    const b=t.bbox_utm;                                          // texture row 0 is north, like the satellite image
+    lUni.uWxExt.value.set((b[0]-GNIS_UTM[0])/1000, -(b[3]-GNIS_UTM[1])/1000, (b[2]-b[0])/1000, (b[3]-b[1])/1000); lUni.uWx.value=WX.tex;
+    const sc=Math.floor((WX_SITE.lon-g.lon0)/g.dlon), sr=Math.floor((g.lat0-WX_SITE.lat)/g.dlat);
+    WX.siteCell = sr>=0&&sr<g.rows&&sc>=0&&sc<g.cols ? sr*g.cols+sc : -1;
+    $("wxDay").max=WX.n; WX.ok=true; $("wxBtn").hidden=false; wxLegend(); wxSet(WX.n);
+  }catch(e){}
+})();
+$("wxBtn").onclick=()=>{ WX.on=!WX.on; $("wxBtn").setAttribute("aria-pressed",WX.on); if(!WX.on) wxStop(); if(WX.on&&ageOf(p)>0.06) goTo(CH.length-1); };
+$("wxX").onclick=()=>{ WX.on=false; $("wxBtn").setAttribute("aria-pressed",false); wxStop(); };
+$("wxDay").oninput=e=>{ wxStop(); wxSet(+e.target.value); };
+$("wxPrev").onclick=()=>{ wxStop(); wxSet(WX.day-1); };
+$("wxNext").onclick=()=>{ wxStop(); wxSet(WX.day+1); };
+$("wxStep").onclick=()=>{ WX.step = WX.step===1?7:WX.step===7?30:1; $("wxStep").textContent = WX.step===1?"1 day":WX.step===7?"1 week":"1 month"; };
+$("wxPlay").onclick=()=>{
+  if(WX.timer){ wxStop(); return; }
+  if(WX.day>=WX.n) wxSet(0);
+  $("wxPlay").textContent="Pause"; $("wxPlay").setAttribute("aria-pressed","true");
+  WX.timer=setInterval(()=>{ if(WX.day>=WX.n){ wxStop(); return; } wxSet(WX.day+WX.step); }, 120);
+};
+document.querySelectorAll(".wx [data-l]").forEach(btn=>btn.onclick=()=>{
+  WX.layer=btn.dataset.l; document.querySelectorAll(".wx [data-l]").forEach(x=>x.setAttribute("aria-pressed",x===btn)); wxLegend(); wxShow();
+});
 /* Rivers and creeks: USGS NHD channels as mapped today (scripts/make_rivers.py), drawn into a texture over the frame
    and, finer, over each close-up. Width follows the channel length upstream (size class 1 to 6). */
 const RIV={on:true, ok:false, lines:null, names:[]};
@@ -1592,6 +1723,9 @@ function apply(a,p){
   lUni.uErode.value = sm(2.8,0.5,a);
   lUni.uTopo.value = sm(0.01,0.0002,a);                       // contours from the last ~10 ka into the last two centuries
   rain.material.uniforms.uAmt.value = band(a,1.45,0.4,0.12);
+  lUni.uWxOn.value = WX.on&&WX.ok ? sm(0.06,0.0005,a) : 0;
+  if(lUni.uWxOn.value>0) rain.material.uniforms.uAmt.value = Math.max(rain.material.uniforms.uAmt.value, WX.rain*lUni.uWxOn.value);
+  const wxHide=!(WX.on&&WX.ok&&a<0.06); if($("wx").hidden!==wxHide) $("wx").hidden=wxHide;
   lUni.uGold.value = sm(1.5,0,a);
   waterMat.uniforms.uAmt.value = sm(2,8,a);
   let hc=0; for(let k=0;k<6;k++) hc+=w[k]*H[k][CENTER];
@@ -2264,7 +2398,7 @@ const PLAB=[{x:X0+Math.min(3,SX*0.06), z:Z1-Math.min(3,SZ*0.06), t:a=>a>8?"Faral
 function placeLab(q,show,op){ let hh=0; for(let k=0;k<6;k++) hh+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][q.i];
   pl3.set(q.x,Math.max(hh,0)*VE+0.25,q.z).project(lCam); const vis=show&&pl3.z<1; q.el.hidden=!vis;
   if(vis){ q.el.style.opacity=op.toFixed(2); q.el.style.left=((pl3.x+1)/2*innerWidth)+"px"; q.el.style.top=((1-pl3.y)/2*innerHeight)+"px"; } }
-if((new URLSearchParams(location.search)).has("debug")) window.TTM={lCam,lCtl,gCam,gUni,lUni,DATA,CH,PLATES,SITE,RIV,GEO,LOC,PM,markerDir,get st(){ return {p,autoCam}; }};
+if((new URLSearchParams(location.search)).has("debug")) window.TTM={lCam,lCtl,gCam,gUni,lUni,DATA,CH,PLATES,SITE,RIV,GEO,LOC,PM,WX,markerDir,get st(){ return {p,autoCam}; }};
 let last=performance.now(), T=0;
 function frame(now){
   const dt=Math.min(0.05,(now-last)/1000); last=now; T+=dt;

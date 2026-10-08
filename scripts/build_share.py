@@ -125,8 +125,17 @@ def pack(path):
     return "gz", gzip.compress(raw, 9, mtime=0)
 
 
+def is_old_daily(p, keep=5):
+    """Daily weather years (fetch_prism_daily.py) older than the last `keep` built; lite copies leave them out."""
+    if p.parent.name != "daily" or p.suffix != ".bin" or not p.stem.isdigit():
+        return False
+    years = sorted(int(q.stem) for q in p.parent.glob("*.bin") if q.stem.isdigit())
+    return int(p.stem) < years[-1] - keep + 1
+
+
 def collect(root=ROOT, lite=False, page="timemachine"):
-    """Every data file the page can fetch. lite leaves out the 10 m close-up images (about 20 MB).
+    """Every data file the page can fetch. lite leaves out the 10 m close-up images (about 20 MB) and daily weather
+    older than the last five years.
     The main viewer skips prototype/assets/locations/; a location page embeds only its own folder."""
     assets = root / "prototype" / "assets"
     sub = PAGES[page]["assets"]
@@ -134,7 +143,8 @@ def collect(root=ROOT, lite=False, page="timemachine"):
     files = [p for p in sorted(base.rglob("*"))
              if p.is_file() and p.suffix in MIME and not p.name.endswith(SKIP_SUFFIXES)
              and (sub or p.relative_to(assets).parts[0] != LOCATIONS)
-             and not (lite and p.name.endswith(".imagery.jpg"))]
+             and not (lite and p.name.endswith(".imagery.jpg"))
+             and not (lite and is_old_daily(p))]
     if not sub:
         files += [root / e for e in EXTRA if (root / e).exists()]
         files += sorted((root / "data" / "regions").glob("*/scenes.json"))   # chapters of autopilot regions
