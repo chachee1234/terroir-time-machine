@@ -986,6 +986,19 @@
           "sha256": "51d4af847155a8c0d3c1361c65eabd86dcecc21255065cc9d24afebd690f99f1"
         }
       ]
+    },
+    {
+      "id": "mendocino-faults",
+      "source": "GEM Global Active Faults Database",
+      "url": "https://raw.githubusercontent.com/GEMScienceTools/gem-global-active-faults/master/geojson/gem_active_faults_harmonized.geojson",
+      "rights": "CC BY-SA 4.0 (GEM Global Active Faults Database, Styron & Pagani 2020); California traces from USGS UCERF3",
+      "source_sha256": "37babb516edfac22b5ae91744495d8546b3ae4676b4d4f68cc77da8222df20e1",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/mendocino/faults.json",
+          "sha256": "b03407bb389e2691ddef2ce43314f8629847530952a5e47992ef05512f4b3910"
+        }
+      ]
     }
   ],
   "locations": {
