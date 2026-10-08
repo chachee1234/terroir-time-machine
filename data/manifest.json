@@ -836,6 +836,208 @@
           "sha256": "4be244d1698a5c4f916e855ec366901363b5d05399ffb4b58abd7e7f53423815"
         }
       ]
+    },
+    {
+      "id": "napa_valley-prism-daily",
+      "source": "PRISM Climate Group, Oregon State University, AN81d 4 km daily tmax/tmin/ppt (lower 48 GeoTIFFs, clipped in memory)",
+      "service": "https://services.nacse.org/prism/data/get/us/4km/{var}/{YYYYMMDD}",
+      "fetched": "2026-10-08",
+      "coverage": {
+        "first_day": "1981-01-01",
+        "last_day": "2026-10-06",
+        "files": 50145
+      },
+      "rights": "Free with credit to the PRISM Climate Group, Oregon State University (SOURCES.md G41)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/index.json",
+          "sha256": "433d500e08d4a6d07d736568822efb1f049dd76b982be8610a13d8eae5b20d6f"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1981.bin",
+          "sha256": "8d4d4ab584f63f6fc7d209f05232467c63b1f2f5c329c3d993b1ad8fed0a98f6"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1982.bin",
+          "sha256": "cd4336a8750bdf9726647069588de097cb227259ca2af5794f5250fe62a537ef"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1983.bin",
+          "sha256": "6aecb95a0c7d277d8ba159782a7db3b0d4ada7f9b9f25491df1f869f9d7ec6a1"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1984.bin",
+          "sha256": "0c8f70fe1aabfec649a58a8aa83af5974a8167d9c0b7750e8167380e9fb302b4"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1985.bin",
+          "sha256": "bc1cd621943ef284d5d5fa3bf64c85230f41e72d1012482175cbe4ea1e0f0d89"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1986.bin",
+          "sha256": "8bd215be43b560a10df23ead1908e4f3a518958845e86cb9f9927730c47ed30d"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1987.bin",
+          "sha256": "5c3eecabb1d7d6305e624f1533faaa0600a93e3e2f7102973e079aa275b880bd"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1988.bin",
+          "sha256": "bd407c1a753e98967b83c38b862e64dadb3104141db08e13f92acb90d770be5f"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1989.bin",
+          "sha256": "e88c3212f1a07ba9ce9838aa9cd2f12ecf9ae582d616451784586a41f81d2e35"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1990.bin",
+          "sha256": "3cca9405d4c4560c8a781431efe6bed9cfbcfbd9bb5c575d2ec32be5a4aff0d5"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1991.bin",
+          "sha256": "cc83af449553e03d1ed6a4d8f366e52f1c865f2b14e24c7ffac286e837f9ccb4"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1992.bin",
+          "sha256": "3d7df05d1aa60ff3bb613feb3247c3f553bf98a92ff1c9504fe46f7ac99496ee"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1993.bin",
+          "sha256": "b2af147fb78df7abff599519af944428b7ad570397fd40a0d27a306275d31145"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1994.bin",
+          "sha256": "7379518474a98811e815ddb8fced818a92a3349cf0ecd8ff2a32fc8e0b02f023"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1995.bin",
+          "sha256": "7ec332c3e7f4790f502137678f8c58f9197beaa568be8518ef4c157e437d8064"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1996.bin",
+          "sha256": "80a0a0c6ef70bd25410d07b13ee8a88e044302be0be701da74733c56544a084c"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1997.bin",
+          "sha256": "e37ea3e152343e554a7001b3fef1f0013776c65d84bd641fe5a0411c2b0d55e7"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1998.bin",
+          "sha256": "62a716eab7816f957d49654a1ef0341a032be967ce6b30af7c7df6bdb26a1482"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/1999.bin",
+          "sha256": "c5746f85ce2f43c9c65c1633972183a87323bae69a24c2a2c4271a8fe175261f"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2000.bin",
+          "sha256": "412f12830f64c8d01decbe8b902102da84a0a224938335f0729e1abcdd38efc4"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2001.bin",
+          "sha256": "876ad74877810abd10dc214e8c52cfc4ac040746fdac7d7cb370df061ac2f77e"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2002.bin",
+          "sha256": "b324107e9cfb6dbdede50acd836df1a3706d94167dbcf4c990536020e129e8a7"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2003.bin",
+          "sha256": "a5018f14fc00eea58b695cbf91948e5c0be40197c28188919fce6d4c49123ec3"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2004.bin",
+          "sha256": "c7405565f46744b0bb53210f8d92e0a07086000e01bcb52d2222ab1776b619a9"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2005.bin",
+          "sha256": "4ea45eb6ca1d483c229f0ecd8d30f35ccb65f24b413cf439bd036ffeff788286"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2006.bin",
+          "sha256": "c424375fac871a131df9a7ef100d56535ac7b173a8325376ffa36e05f2a7fb68"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2007.bin",
+          "sha256": "16cc39ca7ddd29175c5d99969df73142f313fed7f0091613926a4aeddbc1c999"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2008.bin",
+          "sha256": "3cba82ca20ff42c6766e87b6187c20e416370aadd432c51df049724c751e1bf6"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2009.bin",
+          "sha256": "063e8d3528e3f554771ca4fe3e29d5760cb1a287206137c574d8a9843e4a5b1c"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2010.bin",
+          "sha256": "d2e9098b3191e81695e000108123cba7ac1a9a83afd8c03979a7330d0afaf548"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2011.bin",
+          "sha256": "00520548fe4d538018c4dec2bdf5b3af54473a6764fb41e56b9f5e93fc608de5"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2012.bin",
+          "sha256": "f35e93a9ddb8c32fe62893636f6b1f9280048315908751f93b144a1204c93ce1"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2013.bin",
+          "sha256": "d81bec85d7b15314fa89d39001b213c55ebc4b95104f5ffb4dc9e0c461534fde"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2014.bin",
+          "sha256": "15630a283eae32825b984d2cd8ec7d0d0ede950538adc736e67508508a18a0c5"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2015.bin",
+          "sha256": "a2a9c4adfbfaca9a814e67f90a417b6968035c8693b9fadfa47967b860be89ef"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2016.bin",
+          "sha256": "4a58cf5f45dd78c3c03e2e430ead3be64ec415e7b2416ebb1711b1bac1233b7f"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2017.bin",
+          "sha256": "65c22e02dd7b24918e452d0bb8a10b20ba7f05d19e29e842c66add9135fd5c45"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2018.bin",
+          "sha256": "a4784a21454b67316385b361361fec6b9509a645ecbbfd22e8e157b7e6109a09"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2019.bin",
+          "sha256": "128f30d18dd4674a40516fbc9e632c276427a21c018c79b049f9729020ddbb41"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2020.bin",
+          "sha256": "958f9661d61f1e907795e9316219aefe53547759a2eecaba986714ffe59dd997"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2021.bin",
+          "sha256": "bcf1a4249e7ca8b49063fb517c4815677e710ae3c757ce51ea6f9248daa927c8"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2022.bin",
+          "sha256": "e0cec461490270edaab458a42e5801f72fcf4eab571ef5a459c8303aabeb1689"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2023.bin",
+          "sha256": "34bf89b41531bcdea393cfb4312f05a327dcbc8aaa83d9b6fbcf792d5c16e82c"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2024.bin",
+          "sha256": "0c395026c0877f9125abe4a310aa36a0f1e0fd3f2af98f02658f75d6393fa2ca"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2025.bin",
+          "sha256": "365c5ebf9879ccaf11e07541ca9a7601e501623c6f3e94c9ec20af24963bdd03"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/daily/2026.bin",
+          "sha256": "51bf501145363b626615a684bc3fb86d38aef5e43057409801e681ed4e62aca8"
+        }
+      ]
     }
   ],
   "locations": {
