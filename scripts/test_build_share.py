@@ -11,6 +11,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_share as bs  # noqa: E402
 
+# Files the viewer fetches whose data lands in a separate PR (code first, data after). Once the file
+# is committed it must be embedded like any other; remove it from here when that happens.
+PENDING_DATA = {"prototype/assets/regions/napa_valley/daily/index.json"}   # PRISM daily, PR #43 follow-up
+
 
 class ShareBuildTest(unittest.TestCase):
     def test_int16_coding_round_trips(self):
@@ -30,6 +34,10 @@ class ShareBuildTest(unittest.TestCase):
         self.assertTrue(literal)
         for u in literal:
             path = os.path.normpath(os.path.join("prototype", u)).replace(os.sep, "/")
+            if path in PENDING_DATA and not (bs.ROOT / path).exists():
+                # built by a later data step; until then the viewer must treat it as absent, not crash
+                self.assertIn(f'fetch("{u}").then(r=>{{ if(!r.ok) throw 0;', page, u)
+                continue
             self.assertIn(path, embedded, u)
         self.assertFalse([p for p in embedded if p.endswith(".geolibre.json")])
 

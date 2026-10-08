@@ -295,8 +295,8 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   <div class="scale"><span>1.8 billion years ago</span><span class="note hide-sm">Time axis is logarithmic · artistic reconstruction, simplified geography · <a id="srcLink" href="sources.html" target="_blank" rel="noopener" title="Every layer, where it comes from and its license (opens a new tab)">Sources</a> · Films: <a href="corison-100ka.html" target="_blank" rel="noopener" title="Corison, the last 100,000 years (opens a new tab)">Corison 100,000 yr</a>, <a href="mayacamas-8ma.html" target="_blank" rel="noopener" title="How the Mayacamas rose, 8 million years, model animation (opens a new tab)">Mayacamas 8 Myr</a>, <a href="san-andreas-30ma.html" target="_blank" rel="noopener" title="How the San Andreas Fault was born, 30 million years, model animation (opens a new tab)">San Andreas 30 Myr</a></span><span>Today</span></div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js" integrity="sha384-wagZhIFgY4hD+7awjQjR4e2E294y6J2HSnd8eTNc15ZubTeQeVRZwhQJ+W6hnBsf" crossorigin="anonymous"></script>
 <script>
 (async function(){
 "use strict";
@@ -689,10 +689,10 @@ const REG = await (async function loadRegion(){
                                        fetch(base+".bin").then(r=>{ if(!r.ok) throw 0; return r.arrayBuffer(); })]);
       const g=m.browser_grid, nx=g.cols||g.cells, nz=g.rows||g.cells, h=new Int16Array(buf); if(h.length!==nx*nz) continue;
       const b=m.aoi.bbox_utm, id=m.aoi.region||"mt_st_helena";
-      return {id, parents:m.aoi.parents||[id==="mt_st_helena"?"napa_valley":id], name:m.aoi.name||(id==="napa_valley"?"Napa Valley":"30 km block"), h, nx, nz, x0:(b[0]-GNIS_UTM[0])/1000, x1:(b[2]-GNIS_UTM[0])/1000, z0:-(b[3]-GNIS_UTM[1])/1000, z1:-(b[1]-GNIS_UTM[1])/1000};
+      return {missing:base!==tries[0]?want:null, id, parents:m.aoi.parents||[id==="mt_st_helena"?"napa_valley":id], name:m.aoi.name||(id==="napa_valley"?"Napa Valley":"30 km block"), h, nx, nz, x0:(b[0]-GNIS_UTM[0])/1000, x1:(b[2]-GNIS_UTM[0])/1000, z0:-(b[3]-GNIS_UTM[1])/1000, z1:-(b[1]-GNIS_UTM[1])/1000};
     }catch(e){}
   }
-  return {id:"procedural", parents:["napa_valley"], h:null, nx:224, nz:224, x0:-15, x1:15, z0:-15, z1:15};
+  return {missing:want, id:"procedural", parents:["napa_valley"], h:null, nx:224, nz:224, x0:-15, x1:15, z0:-15, z1:15};
 })();
 const X0=REG.x0, X1=REG.x1, Z0=REG.z0, Z1=REG.z1, SX=X1-X0, SZ=Z1-Z0, NX=REG.nx, NZ=REG.nz;
 const CXm=(X0+X1)/2, CZm=(Z0+Z1)/2, LEXT=Math.max(SX,SZ), realDEM=!!REG.h;
@@ -2243,6 +2243,7 @@ function shareURL(){
   return u.toString();
 }
 function toast(msg){ const el=$("toast"); el.textContent=msg; el.hidden=false; el.style.opacity=1; clearTimeout(toast.h); toast.h=setTimeout(()=>{ el.style.opacity=0; setTimeout(()=>el.hidden=true,400); },2600); }
+if(REG.missing) toast(`No map for “${REG.missing}” yet, showing ${REG.h?REG_SHORT:"a placeholder block"} instead.`);   // unknown ?region=
 $("shareBtn").onclick=async()=>{ const url=shareURL(); let ok=false;
   try{ history.replaceState(null,"",url); }catch(e){ /* file:// in some browsers */ }
   try{ await navigator.clipboard.writeText(url); ok=true; }catch(e){}
