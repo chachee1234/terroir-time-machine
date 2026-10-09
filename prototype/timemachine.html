@@ -1,5 +1,19 @@
 <meta charset="utf-8">
 <title>Terroir Time Machine</title>
+<meta name="description" content="Travel 1.8 billion years through the rocks, soils and climate under Napa and Sonoma wine country, from drifting continents to today's vineyards.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Terroir Time Machine">
+<meta property="og:title" content="Terroir Time Machine: 1.8 billion years under wine country">
+<meta property="og:description" content="Travel 1.8 billion years through the rocks, soils and climate under Napa and Sonoma wine country, from drifting continents to today's vineyards.">
+<meta property="og:url" content="https://chachee1234.github.io/terroir-time-machine/prototype/timemachine.html">
+<meta property="og:image" content="https://chachee1234.github.io/terroir-time-machine/prototype/assets/social-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Napa and Sonoma valleys in 3D with AVA outlines, from the Terroir Time Machine">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Terroir Time Machine: 1.8 billion years under wine country">
+<meta name="twitter:description" content="Travel 1.8 billion years through the rocks, soils and climate under Napa and Sonoma wine country.">
+<meta name="twitter:image" content="https://chachee1234.github.io/terroir-time-machine/prototype/assets/social-card.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -17,6 +31,7 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 #stage{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 40%,#16202a 0%,#07090b 70%)}
 #gl{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 #space{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 40%,#16202a 0%,#07090b 70%)}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 85% 80% at 50% 45%,transparent 58%,rgba(0,0,0,.26) 100%)}
 .ui{position:absolute;z-index:2}
 .top{top:calc(12px + env(safe-area-inset-top,0px));left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;pointer-events:none}
 .brand{font-family:var(--serif);font-size:20px;line-height:1.1;text-shadow:0 1px 12px rgba(0,0,0,.6)}
@@ -71,7 +86,7 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .tick{position:absolute;top:0;transform:translateX(-50%);background:none;border:0;padding:0 2px;color:var(--muted);font:11px var(--mono);cursor:pointer;white-space:nowrap}
 .tick::after{content:"";display:block;width:1px;height:7px;background:currentColor;margin:2px auto 0}
 .tick.on{color:var(--magma)}
-.tick.minor span{display:none}
+.tick.minor span,.tick.hid span{visibility:hidden}   /* hidden, not removed: every tick mark stays on one line under the labels */
 .tick:focus-visible{outline:2px solid var(--magma)}
 #scrub{position:absolute;left:0;right:0;bottom:4px;width:100%;margin:0;-webkit-appearance:none;appearance:none;background:transparent;height:24px;cursor:pointer}
 #scrub::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(90deg,#3b4a63 0%,#2d5d6e 26%,#6b5a43 46%,#8a4a2a 60%,#c0622a 70%,#5f7a45 100%)}
@@ -82,9 +97,9 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .note{font-size:11.5px;color:var(--muted)}
 #speed{min-width:52px}
 .err{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;color:var(--muted);z-index:5}
-.compass{position:absolute;z-index:2;right:16px;top:calc(52px + env(safe-area-inset-top,0px));width:64px;height:64px;pointer-events:none;filter:drop-shadow(0 1px 6px rgba(0,0,0,.6))}
+.compass{position:absolute;z-index:2;right:16px;top:var(--cmp,calc(52px + env(safe-area-inset-top,0px)));width:64px;height:64px;pointer-events:none;filter:drop-shadow(0 1px 6px rgba(0,0,0,.6))}
 .compass svg{width:100%;height:100%;display:block}
-.legend{position:absolute;z-index:2;right:16px;top:calc(124px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;align-items:flex-end;gap:4px;pointer-events:none;font-size:11.5px;color:var(--muted);text-shadow:0 1px 6px rgba(0,0,0,.9);transition:opacity .4s}
+.legend{position:absolute;z-index:2;right:16px;top:var(--lgd,calc(124px + env(safe-area-inset-top,0px)));display:flex;flex-direction:column;align-items:flex-end;gap:4px;pointer-events:none;font-size:11.5px;color:var(--muted);text-shadow:0 1px 6px rgba(0,0,0,.9);transition:opacity .4s}
 .legend div{display:flex;align-items:center;gap:6px}
 .legend div[hidden]{display:none}
 .legend i{display:inline-block;width:18px;height:3px;border-radius:2px;background:var(--c)}
@@ -128,7 +143,8 @@ body.xs-open .locator{display:none}
 .plc.ava{color:#ffe7a8;font-size:11px;letter-spacing:.05em;text-transform:uppercase;pointer-events:auto;cursor:pointer}
 .plc.ava:hover{color:#fff;text-decoration:underline}
 a.chip.tog{text-decoration:none}
-.places{position:absolute;z-index:3;right:16px;top:calc(52px + env(safe-area-inset-top,0px));width:min(300px,calc(100% - 32px));max-height:calc(100% - 250px);display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:6px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+body.gscale .chip.lc{display:none}   /* at planet scale only the chips that act on the globe (Plates, Regions) */
+.places{position:absolute;z-index:3;right:16px;top:var(--cmp,calc(52px + env(safe-area-inset-top,0px)));width:min(300px,calc(100% - 32px));max-height:calc(100% - 250px);display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:6px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .places header{display:flex;justify-content:space-between;align-items:center;padding:7px 8px 4px 12px;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .places header b{color:var(--ink);font-weight:500}
 .places header button{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;min-width:32px;min-height:28px;cursor:pointer;border-radius:4px}
@@ -164,11 +180,11 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   .card{bottom:calc(146px + env(safe-area-inset-bottom,0px));padding:12px 14px}
   .card h2{font-size:19px}
   .card p{font-size:13.5px}
-  .tick span{display:none}
-  .tick.on span{display:inline}
+  .tick span{visibility:hidden}
+  .tick.on span{visibility:visible}
   .hide-sm{display:none}
-  .compass{width:52px;height:52px;top:calc(84px + env(safe-area-inset-top,0px))}
-  .legend{top:calc(142px + env(safe-area-inset-top,0px))}
+  .compass{width:52px;height:52px;top:var(--cmp,calc(84px + env(safe-area-inset-top,0px)))}
+  .legend{top:var(--lgd,calc(142px + env(safe-area-inset-top,0px)))}
   .scalebar{bottom:calc(120px + env(safe-area-inset-bottom,0px))}
   .xsec{top:calc(150px + env(safe-area-inset-top,0px))}
   .xsec canvas{height:150px}
@@ -189,16 +205,16 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   <div class="chips">
     <span class="chip" id="scaleChip">Planet</span>
     <span class="chip" id="clsChip"><i></i><span>Reconstruction</span></span>
-    <button class="chip tog" id="avaBtn" aria-pressed="true">AVAs</button>
-    <button class="chip tog" id="geoBtn" aria-pressed="false" title="Mapped geologic units on today's terrain (USGS SIM 2956)" hidden>Geology</button>
-    <button class="chip tog" id="satBtn" aria-pressed="false" title="Sentinel-2 true-colour image on today's terrain" hidden>Satellite</button>
-    <button class="chip tog" id="wxBtn" aria-pressed="false" aria-controls="wx" title="Daily weather, 1981 to recent days (PRISM 4 km)" hidden>Weather</button>
-    <button class="chip tog" id="rivBtn" aria-pressed="true" title="Rivers and creeks as mapped today (USGS National Hydrography Dataset)" hidden>Rivers</button>
+    <button class="chip tog lc" id="avaBtn" aria-pressed="true">AVAs</button>
+    <button class="chip tog lc" id="geoBtn" aria-pressed="false" title="Mapped geologic units on today's terrain (USGS SIM 2956)" hidden>Geology</button>
+    <button class="chip tog lc" id="satBtn" aria-pressed="false" title="Sentinel-2 true-colour image on today's terrain" hidden>Satellite</button>
+    <button class="chip tog lc" id="wxBtn" aria-pressed="false" aria-controls="wx" title="Daily weather, 1981 to recent days (PRISM 4 km)" hidden>Weather</button>
+    <button class="chip tog lc" id="rivBtn" aria-pressed="true" title="Rivers and creeks as mapped today (USGS National Hydrography Dataset)" hidden>Rivers</button>
     <button class="chip tog" id="sdBtn" aria-pressed="false" aria-controls="sub">Plates</button>
-    <button class="chip tog" id="xsBtn" aria-pressed="false" aria-controls="xsec">Section</button>
-    <button class="chip tog" id="plBtn" aria-pressed="false" aria-controls="places" hidden>Places</button>
+    <button class="chip tog lc" id="xsBtn" aria-pressed="false" aria-controls="xsec">Section</button>
+    <button class="chip tog lc" id="plBtn" aria-pressed="false" aria-controls="places" hidden>Places</button>
     <button class="chip tog" id="rgBtn" title="All California AVAs and the expansion plan, on the present-day globe">Regions</button>
-    <a class="chip" id="gibLink" href="gibraltar.html" style="color:inherit;text-decoration:none;pointer-events:auto" title="Meanwhile, 5.33 Ma: the Mediterranean dries out and the Zanclean flood refills it through the Strait of Gibraltar">Gibraltar ↗</a>
+    <a class="chip lc" id="gibLink" href="gibraltar.html" style="color:inherit;text-decoration:none;pointer-events:auto" title="Meanwhile, 5.33 Ma: the Mediterranean dries out and the Zanclean flood refills it through the Strait of Gibraltar">Gibraltar ↗</a>
   </div>
 </div>
 
@@ -345,7 +361,7 @@ const CHAPTERS_BUILTIN = /*CHAPTERS*/[
  {"id": "ch_700ma", "age_ma": 700, "tag": "700 Ma", "title": "Snowball Earth, and a coastline is born", "body": "Ice may have reached the equator. Meanwhile Rodinia tears apart, and the tear becomes the western edge of Laurentia. California will eventually be built against this edge, piece by piece, from material the ocean delivers.", "visual_class": "reconstruction-stylized", "key": true},
  {"id": "ch_430ma", "age_ma": 430, "tag": "430 Ma", "title": "Life reaches land", "body": "The first plants spread across the continents and turn them green. Off western North America, the coast is a quiet edge facing open ocean.", "visual_class": "reconstruction-stylized", "key": false},
  {"id": "ch_250ma", "age_ma": 250, "tag": "250 Ma", "title": "Pangaea, and the long subduction begins", "body": "Every major continent is joined. Off the west coast an ocean plate begins sinking beneath the continent. That subduction zone will run for about 200 million years and build much of California.", "visual_class": "reconstruction-stylized", "key": true},
- {"id": "ch_150ma", "age_ma": 150, "tag": "150 Ma", "title": "This spot is deep ocean", "body": "The ground that will one day hold Mount St. Helena and Napa Valley is seafloor. The Farallon plate slides east into a deep trench, and mud, sand and slices of ocean crust are scraped off and piled up. That pile becomes the Franciscan Complex and Coast Range ophiolite beneath the Mayacamas. The cut in the globe shows the ocean plate sinking beneath the continent.", "visual_class": "illustration", "key": true},
+ {"id": "ch_150ma", "age_ma": 150, "tag": "150 Ma", "title": "This spot is deep ocean", "body": "The ground that will one day hold Mount St. Helena and Napa Valley is seafloor. The Farallon plate slides east into a deep trench, and mud, sand and slices of ocean crust are scraped off and piled up. That pile becomes the Franciscan Complex and Coast Range ophiolite beneath the Mayacamas. Press Plates to cut the globe open and watch the ocean plate sink beneath the continent.", "visual_class": "illustration", "key": true},
  {"id": "ch_66ma", "age_ma": 66, "tag": "66 Ma", "title": "A distant impact darkens the sky", "body": "An asteroid strikes what is now Mexico. The dust dims sunlight worldwide and ends the age of dinosaurs. Here, the scraped-up seafloor keeps accumulating under the waves.", "visual_class": "illustration", "key": false},
  {"id": "ch_28ma", "age_ma": 28, "tag": "28 Ma", "title": "The San Andreas system is born", "body": "The spreading ridge between the Pacific and Farallon plates reaches the trench. Subduction shuts off piece by piece and a sliding boundary, the San Andreas system, takes over. The pile of old seafloor starts rising out of the sea. From here the view drops from the planet to the ground.", "visual_class": "illustration", "key": true},
  {"id": "ch_8ma", "age_ma": 8, "tag": "8 Ma", "title": "The Sonoma Volcanics begin", "body": "A gap opens in the sinking plate and hot mantle rises through it. Volcanoes erupt across what is now Sonoma and Napa for about five million years, generally younger toward the north. Subduction here has ended and the old thrusts go quiet. The bright lines are today's mapped Maacama and Collayomi faults, part of the Pacific–North American plate boundary zone; the dashes show their right-lateral slip.", "visual_class": "illustration", "key": true},
@@ -414,7 +430,7 @@ function plateAt(pl,a,out){
    polygon is rotated by its plate's absolute rotation (quaternions every few Ma, slerped in between) and drawn
    into an equirectangular canvas the globe shader reads as its land mask. Before 410 Ma the stylized blobs stay. */
 const pmQ=[0,0,0,0], pmR=[0,0,0], pmV=new THREE.Vector3(), pmE2=new THREE.Vector3(), pmE3=new THREE.Vector3();
-const PM={ok:false, W:2048, H:1024, cv:document.createElement("canvas"), ctx:null, tex:null, lastA:-1, ages:null, q:null, polys:[], pid:{}, w:0};
+const PM={ok:false, W:2048, H:1024, cv:document.createElement("canvas"), ctx:null, tex:null, lastA:-1, ages:null, q:null, polys:[], pid:{}, cen:{}, w:0};
 PM.cv.width=PM.W; PM.cv.height=PM.H; PM.ctx=PM.cv.getContext("2d");
 // a second, smaller canvas colours each plate family (EarthByte plate IDs share a leading digit by region:
 // 1 North America, 2 South America, 3 Europe, 4 Asia, 5 India/Arabia, 6 East Asia, 7 Africa, 8 Australia/Antarctica)
@@ -424,6 +440,8 @@ const pmFam=id=>+String(id)[0];
 PM.MAX=410; PM.FADE=[430,400];
 // stylized continent i -> the plate whose rotation carries its label once the model takes over
 PM.LAB=[101,302,401,201,701,801,802,501];
+// their names once the model takes over: the old names while the supercontinent stands, today's after it breaks up
+PM.NAME=[["Laurentia","North America"],["Baltica","Europe"],["Siberia","Siberia"],["Amazonia","South America"],["Africa","Africa"],["Australia","Australia"],["Antarctica","Antarctica"],["India","India"]];
 function pmQuat(pi,a,out){
   const A=PM.ages, step=A[1]-A[0], n=A.length, x=clamp(a/step,0,n-1), i=Math.min(n-2,Math.floor(x)), t=x-i;
   const o=(pi*n+i)*4, Q=PM.q;
@@ -447,6 +465,9 @@ function pmLoad(d){
     return {pi:r[0], from:r[1], to:r[2], v, fam:pmFam(d.plates[r[0]])}; });
   PM.ctex=new THREE.CanvasTexture(PM.cc); PM.ctex.wrapS=THREE.RepeatWrapping; PM.ctex.minFilter=PM.ctex.magFilter=THREE.LinearFilter; PM.ctex.generateMipmaps=false;
   gUni.uPlC.value=PM.ctex; pmSeeds();
+  // middle of each plate's present-day coastlines: where its name sits once the model carries it
+  PM.cen={}; PM.polys.forEach(P=>{ const c=PM.cen[P.pi]||(PM.cen[P.pi]=[0,0,0]), v=P.v; for(let k=0;k<v.length;k+=3){ c[0]+=v[k]; c[1]+=v[k+1]; c[2]+=v[k+2]; } });
+  for(const k in PM.cen){ const c=PM.cen[k], m=Math.hypot(c[0],c[1],c[2])||1; c[0]/=m; c[1]/=m; c[2]/=m; }
   PM.tex=new THREE.CanvasTexture(PM.cv); PM.tex.wrapS=THREE.RepeatWrapping; PM.tex.minFilter=PM.tex.magFilter=THREE.LinearFilter; PM.tex.generateMipmaps=false;
   gUni.uLand.value=PM.tex; PM.ok=true; PM.lastA=-1;
 }
@@ -676,8 +697,10 @@ const globe = new THREE.Mesh(new THREE.SphereGeometry(1,288,216), globeMat);
 gScene.add(globe); gScene.add(MV.pts);
 /* Subduction on the globe: the "Plates in motion" section (sdDraw below) stands in a pit cut into the
    globe at Laurentia's stylized western margin and moves with it. Illustration, enlarged SUB3D.S times:
-   the section is 600 km across and 235 km deep; the pit's other faces are plain mantle. */
-const SUB3D={on:true, S:3, cv:document.createElement("canvas"), w:1200, h:506, ctx:null, tex:null, vis:0,
+   the section is 600 km across and 235 km deep; the pit's other faces are plain mantle.
+   Off until the Plates chip asks for it (owner, 2026-10-08): at planet scale the enlarged block reads as a
+   feature of the map, so the globe shows plates, not the local section, unless the viewer opens it. */
+const SUB3D={on:false, S:3, cv:document.createElement("canvas"), w:1200, h:506, ctx:null, tex:null, vis:0,
   mid:new THREE.Vector3(), cam:new THREE.Vector3()};
 SUB3D.cv.width=SUB3D.w; SUB3D.cv.height=SUB3D.h; SUB3D.ctx=SUB3D.cv.getContext("2d");
 SUB3D.tex=new THREE.CanvasTexture(SUB3D.cv); SUB3D.tex.minFilter=THREE.LinearFilter; SUB3D.tex.generateMipmaps=false;
@@ -880,6 +903,21 @@ if(realDEM){
   let mx=0; for(let i=0;i<NV;i++) mx=Math.max(mx,H[5][i]); const sc=1.33/mx; for(let i=0;i<NV;i++) H[5][i]*=sc;
 }
 H.forEach((h,k)=>geo.setAttribute("h"+k,new THREE.BufferAttribute(h,1)));
+/* Relief occlusion (aesthetic shading only): how far each point sits below or above its surroundings,
+   per stage, at two scales (≈1 km and ≈4 km). Valleys and gullies get less sky light, ridges a little
+   more, so the relief reads without shadow maps. Packed as two vec3s (stages 0-2, 3-5), blended in the
+   vertex shader with the same weights as the heights. 0 = neutral, which is also what meshes without
+   these attributes read. */
+const CAV = (function(){
+  const cell=SX/(NX-1), r1=Math.max(1,Math.round(1/cell)), r2=Math.max(2,Math.round(4/cell));
+  const A=new Float32Array(NV*3), B=new Float32Array(NV*3), all=[];
+  for(let k=0;k<6;k++){ const b1=blurGrid(H[k],r1), b2=blurGrid(H[k],r2), c=new Float32Array(NV);
+    for(let i=0;i<NV;i++){ const d1=(b1[i]-H[k][i])*VE, d2=(b2[i]-H[k][i])*VE;
+      c[i]=clamp(0.55*Math.tanh(d1/0.05)+0.45*Math.tanh(d2/0.18),-1,1); }
+    all.push(c); const T=k<3?A:B; for(let i=0;i<NV;i++) T[i*3+k%3]=c[i]; }
+  geo.setAttribute("aCavA",new THREE.BufferAttribute(A,3)); geo.setAttribute("aCavB",new THREE.BufferAttribute(B,3));
+  return all;
+})();
 const CENTER = Math.max(0,idxAt(0,0));
 
 /* Drainage from the modern surface: priority-flood from the block edges gives every cell a
@@ -949,23 +987,34 @@ const lUni = {
 };
 if(HI) buildDemTexture(HI.h,HI.m.cols,HI.m.rows,HI.m.scale||1); else if(realDEM) buildDemTexture(REG.h,NX,NZ);
 const TERRAIN_VS = `
-attribute float h0,h1,h2,h3,h4,h5; attribute float aTop;
+attribute float h0,h1,h2,h3,h4,h5; attribute float aTop; attribute vec3 aCavA,aCavB;
 uniform vec3 uWa,uWb; uniform float uVE,uBase;
-varying vec3 vW; varying float vH; varying float vS; varying float vR;
+varying vec3 vW; varying float vH; varying float vS; varying float vR; varying float vCav;
 void main(){
   float h=h0*uWa.x+h1*uWa.y+h2*uWa.z+h3*uWb.x+h4*uWb.y+h5*uWb.z;
+  vCav=dot(aCavA,uWa)+dot(aCavB,uWb);   // 0 on the slab walls, which have no aCav attributes
   vec3 p=position; p.y = aTop>0.5 ? h*uVE : uBase*uVE;
   vec4 w=modelMatrix*vec4(p,1.0); vW=w.xyz; vH=h; vS=aTop; vR=length(p.xz);
   gl_Position=projectionMatrix*viewMatrix*w;
 }`;
 const LIGHT_FOG = `
+varying float vCav;
 vec3 shade(vec3 col, vec3 N){
   float d=max(dot(N,uSun),0.0);
   float hemi=0.5+0.5*N.y;
-  return col*(uSunCol*d*1.05 + mix(vec3(0.16,0.14,0.13),vec3(0.36,0.42,0.5),hemi)*0.85);
+  float sky=1.0-0.6*max(vCav,0.0)+0.12*max(-vCav,0.0), sunO=1.0-0.25*max(vCav,0.0);   // relief occlusion
+  // a touch of warm bounce light on faces turned away from the sun
+  vec3 bounce=vec3(0.10,0.07,0.04)*max(dot(N,-vec3(uSun.x,0.0,uSun.z)),0.0)*sky;
+  return col*(uSunCol*d*1.05*sunO + mix(vec3(0.16,0.14,0.13),vec3(0.36,0.42,0.5),hemi)*0.85*sky + bounce);
 }
 uniform float uFogN,uFogF;
-vec3 fogit(vec3 col){ float f=smoothstep(uFogN,uFogF,distance(vW,cameraPosition)); return mix(col,uFog,f); }
+// aerial perspective: haze thickens with distance and toward low ground, and glows where you look toward the sun
+vec3 fogit(vec3 col){ vec3 V=vW-cameraPosition; float dd=length(V);
+  float f=smoothstep(uFogN,uFogF,dd)*mix(1.0,0.82,smoothstep(0.0,2.5,vW.y));
+  float fwd=pow(max(dot(V/dd,uSun),0.0),6.0);
+  float near=smoothstep(uFogN*0.15,uFogF,dd);
+  vec3 fc=uFog+uSunCol*0.22*fwd;
+  return mix(col,fc,max(f,near*fwd*0.25)); }
 `;
 // Mapped active faults: Maacama and Collayomi traces from the USGS UCERF3 fault model (via the GEM
 // Global Active Faults Database, CC BY-SA 4.0), in scene km (x east, z south of the GNIS point),
@@ -1177,6 +1226,7 @@ const terrainMat = new THREE.ShaderMaterial({
     float g=uLava*smoothstep(3.2,0.3,vR)*smoothstep(0.6,1.4,vH);
     float fl=0.7+0.3*sin(uTime*7.0+n2*20.0);
     lit+=vec3(1.0,0.36,0.06)*g*fl*(0.6+1.4*smoothstep(0.55,0.75,noise(vW*1.5+vec3(0.0,uTime*0.3,0.0))));
+    lit+=col*vec3(1.0,0.42,0.14)*uLava*0.8*exp(-vR*0.6)*(0.85+0.15*fl)*(0.6+0.4*N.y);   // firelight from the vent on the slopes around it
     // fault traces on the surface (drawn after the water tint so they read through the sea)
     float cc=acrossC(vW), al=alongC(vW), px=fwidth(cc);
     float th=max(max(fline(cc-TH0,px),fline(cc-TH1,px)),max(fline(cc-TH2,px),fline(cc-TH3,px)));
@@ -1268,31 +1318,50 @@ const waterMat = new THREE.ShaderMaterial({
 const water = new THREE.Mesh(new THREE.BoxGeometry(SX-0.04, -BASE*VE, SZ-0.04), waterMat); water.position.x=CXm; water.position.z=CZm;
 water.position.y = BASE*VE/2 - 0.001; lScene.add(water);
 
-// eruption column particles
-const ashN = reduce ? 600 : 2600;
+// eruption column particles (aesthetic: the shapes are invented, as the chapter cards say).
+// Most puffs rise fast out of the vent, slow as they reach the top and spread into an umbrella cloud;
+// in the caldera eruption about a fifth collapse from a low fountain and roll down the flanks as surges.
+// Puffs are lit as soft spheres from the sun and glow orange low over the vent. Budget: 3,200 points,
+// 600 with reduced motion; drawn after the terrain with no depth writes.
+const ashN = reduce ? 600 : 3200;
 const ash = (function(){
   const seed=new Float32Array(ashN*4); for(let i=0;i<ashN*4;i++) seed[i]=Math.random();
   const g=new THREE.BufferGeometry();
   g.setAttribute("position",new THREE.BufferAttribute(new Float32Array(ashN*3),3));
   g.setAttribute("seed",new THREE.BufferAttribute(seed,4));
   const m=new THREE.ShaderMaterial({
-    uniforms:{uTime:lUni.uTime, uE:{value:0}, uTop:{value:2}, uScale:{value:400}, uFog:lUni.uFog},
+    uniforms:{uTime:lUni.uTime, uE:{value:0}, uSurge:{value:0}, uTop:{value:2}, uScale:{value:400}, uFog:lUni.uFog, uSunV:{value:new THREE.Vector3(0,1,0)}},
     transparent:true, depthWrite:false,
-    vertexShader:`attribute vec4 seed; uniform float uTime,uE,uTop,uScale; varying float vL; varying float vA;
+    vertexShader:`attribute vec4 seed; uniform float uTime,uE,uSurge,uTop,uScale; varying float vL; varying float vA; varying float vS; varying float vHot;
     void main(){
-      float life=fract(uTime*(0.05+0.05*seed.w)+seed.x); vL=life;
-      float ang=seed.y*6.2831, rad=(0.25+life*life*4.5)*(0.4+0.6*seed.z);
-      vec3 p=vec3(cos(ang)*rad + life*life*9.0, uTop+life*(9.0+uE*9.0)*(0.6+0.4*seed.w), sin(ang)*rad);
-      vA=uE*smoothstep(0.0,0.05,life)*(1.0-life);
+      float surge=step(0.85,seed.z)*uSurge;
+      float life=fract(uTime*(0.045+0.05*seed.w)+seed.x); vL=life; vS=seed.y;
+      float ang=seed.y*6.2831, ca=cos(ang), sa=sin(ang);
+      float rise=1.0-exp(-3.2*life), umb=smoothstep(0.45,1.0,life);
+      float rad=(0.25+rise*1.7)*(0.45+0.55*seed.z)+umb*umb*7.5*(0.3+0.7*fract(seed.w*7.3));
+      vec3 p=vec3(ca*rad+life*life*9.0, uTop-0.25+rise*(9.0+uE*9.0)*(0.75+0.25*seed.w), sa*rad);
+      // surge: out along the ground, following the cone's falling surface (volcano() in the stage builder)
+      float sr=0.5+life*7.0*(0.55+0.45*seed.w);
+      float gy=uTop-1.55*${VE.toFixed(2)}*(1.0-exp(-pow(sr/3.3,1.35)));
+      vec3 q=vec3(ca*sr, max(gy,0.0)+0.2+life*1.2*seed.w+0.5*sin(life*3.1416), sa*sr);
+      p=mix(p,q,surge);
+      vHot=uE*exp(-max(p.y-uTop,0.0)*0.6)*(1.0-life)*(1.0-0.8*surge);
+      vA=uE*smoothstep(0.0,0.015,life)*(1.0-life)*(1.0-0.35*surge); vS+=surge*10.0;
       vec4 mv=modelViewMatrix*vec4(p,1.0);
-      gl_PointSize=uScale*(0.35+life*1.4)*(0.5+uE*0.5)/(-mv.z);
+      gl_PointSize=uScale*(0.4+life*1.5+umb*1.6+surge*0.8)*(0.5+uE*0.5)/(-mv.z);
       gl_Position=projectionMatrix*mv;
     }`,
-    fragmentShader:`varying float vL; varying float vA; uniform vec3 uFog;
-    void main(){ vec2 d=gl_PointCoord-0.5; float r=length(d); if(r>0.5) discard;
-      vec3 c=mix(vec3(1.0,0.45,0.12),vec3(0.36,0.33,0.31),smoothstep(0.0,0.12,vL));
-      c=mix(c,uFog*0.6,smoothstep(0.5,1.0,vL)*0.5);
-      gl_FragColor=vec4(c,vA*smoothstep(0.5,0.1,r)*0.55); }`
+    fragmentShader:`varying float vL; varying float vA; varying float vS; varying float vHot; uniform vec3 uFog,uSunV;
+    void main(){ vec2 d=gl_PointCoord-0.5; float r=length(d)*2.0; if(r>1.0) discard;
+      float an=atan(d.y,d.x), edge=0.84+0.07*sin(an*5.0+vS*40.0)+0.04*sin(an*9.0+vS*17.0);   // lumpy, cauliflower edge
+      float m=1.0-smoothstep(edge*0.5,edge,r);
+      vec3 n=vec3(d.x*2.0,-d.y*2.0,sqrt(max(0.0,1.0-r*r)));        // a soft sphere, lit from the sun
+      float lam=0.5+0.65*max(dot(n,uSunV),0.0);
+      vec3 ashC=mix(vec3(0.40,0.37,0.34),vec3(0.66,0.63,0.60),max(smoothstep(0.45,1.0,vL)*0.5,step(9.0,vS)*0.7))*lam;   // surges (vS>9) run pale
+      vec3 c=mix(vec3(1.0,0.5,0.16),ashC,smoothstep(0.0,0.035,vL));
+      c+=vec3(1.0,0.38,0.10)*vHot*(0.3+0.7*clamp(-n.y+0.3,0.0,1.0))*0.7;   // lit from below by the vent
+      c=mix(c,uFog*0.85,smoothstep(0.55,1.0,vL)*0.35);
+      gl_FragColor=vec4(c,vA*m*0.6); }`
   });
   const pts=new THREE.Points(g,m); pts.frustumCulled=false; lScene.add(pts); return pts;
 })();
@@ -1464,6 +1533,11 @@ function wxStop(){ clearInterval(WX.timer); WX.timer=0; $("wxPlay").textContent=
 (async function loadWeather(){
   if(REG.id!=="napa_valley") return;
   try{
+    // the daily files are large and optional (the public site may be built without them): ask for them only
+    // when the regions index lists the "daily" layer, so a copy without them shows no Weather chip and no 404
+    const idx=await fetch("assets/regions/index.json").then(r=>r.ok?r.json():null).catch(()=>null);
+    const nv=idx&&idx.regions.find(x=>x.id==="napa_valley");
+    if(!nv||!(nv.layers||[]).includes("daily")) return;
     const m=await fetch("assets/regions/napa_valley/daily/index.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
     const g=m.grid, t=m.texture;
     WX.m=m; WX.ncell=g.rows*g.cols; WX.t0=Date.UTC(m.years[0].year,0,1);
@@ -1573,6 +1647,9 @@ function buildPatch(q,m,h16){
     for(let k=0;k<5;k++) hh[k][i]=sampleGrid(H[k],x,z);
     hh[5][i]=lerp(sampleGrid(H[5],x,z), v<-32000?0:v*sc/1000, sm(0,ramp,Math.min(c,r,nx-1-c,nzz-1-r))); }
   hh.forEach((a,k)=>g.setAttribute("h"+k,new THREE.BufferAttribute(a,1)));
+  { const cA=new Float32Array(n*3), cB=new Float32Array(n*3);
+    for(let i=0;i<n;i++){ const x=pp.getX(i), z=pp.getZ(i); for(let k=0;k<6;k++) (k<3?cA:cB)[i*3+k%3]=sampleGrid(CAV[k],x,z); }
+    g.setAttribute("aCavA",new THREE.BufferAttribute(cA,3)); g.setAttribute("aCavB",new THREE.BufferAttribute(cB,3)); }
   const kA=(bc*SZ/(NZ-1))/(cx*cz), acc0=new Float32Array(n).fill(1), dist0=new Float32Array(n);
   const inB=(x,z)=>x>b.x0&&x<b.x1&&z>b.z0&&z<b.z1;
   for(let v=0;v<NV;v++){ const d=BASE_REC[v]; if(d<0) continue; const dx=P.getX(d), dz=P.getZ(d);
@@ -1800,6 +1877,7 @@ function apply(a,p){
   const dome=band(a,3.45,2.95,0.08), big=band(a,2.905,2.845,0.012);
   lUni.uLava.value = Math.max(dome*0.55, big);
   ash.material.uniforms.uE.value = Math.max(dome*0.3, big);
+  ash.material.uniforms.uSurge.value = big; SHK.big = big;
   lUni.uAsh.value = a<2.86 ? sm(2.2,2.86,a) : big*0.6;
   lUni.uVines.value = sm(0.00017,0.00004,a)*((GEO.on&&GEO.ok)||(SAT.on&&SAT.ok)?0.25:1);   // vineyards spread from the mid-1800s (dimmed under the geology map)
   lUni.uGeoOn.value = GEO.on&&GEO.ok ? sm(0.06,0.0005,a) : 0;
@@ -1875,6 +1953,17 @@ function deriveGlobeCam(){
   return alt*R_E;
 }
 let orbit=0.9, lInit=false;
+/* Camera follow as a critically damped spring (SmoothDamp): it eases in as well as out, so a new
+   chapter never starts the camera with a jolt, and the hand-over from the dive keeps its speed. */
+const CV={p:new THREE.Vector3(), t:new THREE.Vector3(), prevP:new THREE.Vector3(), prevT:new THREE.Vector3(), last:-1}, dmpA=new THREE.Vector3(), dmpB=new THREE.Vector3();
+function damp3(cur,tgt,vel,st,dt){
+  const w=2/st, x=w*dt, e=1/(1+x+0.48*x*x+0.235*x*x*x);
+  dmpA.copy(cur).sub(tgt); dmpB.copy(vel).addScaledVector(dmpA,w).multiplyScalar(dt);
+  vel.addScaledVector(dmpB,-w).multiplyScalar(e);
+  cur.copy(tgt).add(dmpA.add(dmpB).multiplyScalar(e));
+}
+// a short, decaying shudder when the caldera eruption starts (aesthetic; never with reduced motion)
+const SHK={big:0, was:false, e:0, off:new THREE.Vector3()};
 function driveLocalCam(a,hc,dt){
   if(!reduce) orbit += dt*0.045*(playing?1:0.6);
   const t=sm(170,0,a), kL=LEXT/30;
@@ -1886,6 +1975,8 @@ function driveLocalCam(a,hc,dt){
     let hl=0; for(let k=0;k<6;k++) hl+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][L.i];
     tx=L.fx; tz=L.fz; dist=L.kind==="site"?(SITE.mode?0.95:1.6):clamp(L.fr*2.3,3,30); elev=L.kind==="site"?0.5:0.6; ty=Math.max(0,hl)*VE*0.8; lift=0; }
   if(!lInit){ lInit=true; lCam.position.set(tx+Math.sin(orbit)*30*kL,34*kL,tz+Math.cos(orbit)*30*kL); }
+  if(T-CV.last>dt*1.5+1e-4){ CV.p.set(0,0,0); CV.t.set(0,0,0); }   // the user or a flight had the camera: start from rest
+  CV.last=T; CV.prevP.copy(lCam.position); CV.prevT.copy(lCtl.target);
   tv.set(tx+Math.sin(orbit)*Math.cos(elev)*dist, Math.sin(elev)*dist + ty + lift, tz+Math.cos(orbit)*Math.cos(elev)*dist);
   const zs=clamp((A_DIVE-a)/(A_DIVE-A_LAND),0,1), z=zs*zs*zs*(zs*(zs*6-15)+10);   // smootherstep: eases in and out, no jolt at either end
   if(z<1){ // the dive: from where the globe camera left off down to the block, altitude on a log scale
@@ -1904,10 +1995,11 @@ function driveLocalCam(a,hc,dt){
     // roll: start with the globe's north up, end with the block's up
     yL.set(0,bU.y,bS.y).lerp(up,sm(0.2,1,z)).normalize(); lCam.up.copy(yL);
     lCam.lookAt(tgt); lCam.up.set(0,1,0);
+    if(dt>0){ CV.p.subVectors(lCam.position,CV.prevP).divideScalar(dt); CV.t.subVectors(lCtl.target,CV.prevT).divideScalar(dt); }   // carried into the follow below
     return;
   }
-  lCam.position.lerp(tv, 1-Math.exp(-dt*2.2));
-  lCtl.target.lerp(tv.set(tx, ty, tz), 1-Math.exp(-dt*2.2));
+  damp3(lCam.position, tv, CV.p, 0.9, dt);
+  damp3(lCtl.target, tv.set(tx, ty, tz), CV.t, 0.9, dt);
   lCam.lookAt(lCtl.target);
 }
 
@@ -1916,9 +2008,56 @@ let p=0, playing=false, speed=1, dwell=null, tween=null, ageOverride=null;
 const DUR=110; // seconds for a full 1x run, excluding chapter holds
 const scrub=$("scrub");
 function chapterIndex(pp){ let k=0; for(let i=0;i<CH.length;i++) if(CH[i].p<=pp+1e-6) k=i; return k; }
+/* Between chapters on the globe (older than the dive) the card says what the whole planet is doing, instead of
+   leaving the last chapter up (owner, 2026-10-08). Each line describes what the globe shows in that window:
+   the stylized continents before 410 Ma (SOURCES.md G12, G14 context), the Müller et al. 2019 plate model after (G32). */
+const INTERLUDES=[
+  {from:1800, to:410, t:"Continents drift between supercontinents", src:"stylized",
+   b:"Before 410 million years ago the continents on this globe are hand-placed shapes that loosely follow the published supercontinent cycles, Columbia and then Rodinia. Positions and outlines are stylized, not a plate model."},
+  {from:410, to:330, t:"The continents close in", src:"G32",
+   b:"Gondwana in the south and Laurentia and Baltica in the north drift toward each other as the ocean between them closes. Pangaea is taking shape."},
+  {from:330, to:200, t:"Pangaea, one supercontinent", src:"G32",
+   b:"Nearly all the land is joined in one supercontinent, Pangaea, surrounded by a single world ocean, Panthalassa. Its western edge, the future North America, faces that ocean."},
+  {from:200, to:130, t:"Pangaea breaks apart", src:"G32",
+   b:"North America pulls away from Africa and the central Atlantic opens. In the south, Gondwana begins to split into the continents we know."},
+  {from:130, to:66, t:"The southern continents separate", src:"G32",
+   b:"South America and Africa part as the South Atlantic opens. India breaks away from Gondwana and moves north across the ocean."},
+  {from:66, to:A_DIVE, t:"India meets Asia", src:"G32",
+   b:"India closes on Asia and collides with it. Australia moves away from Antarctica, and the Atlantic keeps widening."}];
+const IL0=1000;   // card ids from IL0 up are interludes, below are chapters
+function cardIndex(pp){
+  const i=chapterIndex(pp); if(tween||RGN.sel||pp>=P_SWITCH) return i;
+  const nx=CH[i+1], hold=Math.min(0.03,((nx?nx.p:1)-CH[i].p)*0.4);   // a chapter stays up a little after its tick
+  if(pp-CH[i].p<=hold) return i;
+  const a=ageOf(pp), k=INTERLUDES.findIndex(q=>a<=q.from&&a>q.to);
+  return k<0 ? i : IL0+k;
+}
+function showInterlude(k){
+  const q=INTERLUDES[k], card=$("card"), mod=q.src!=="stylized"&&PM.ok, kn=mod?"Reconstruction · Müller et al. 2019 plate model":CLS.recon.name;
+  const tag=`${fmtAge(q.from).join(" ")} to ${fmtAge(q.to).join(" ")} · the whole planet`;
+  SITE.card=false; AVAP.cur=null; $("cAct").hidden=true; $("cProf").hidden=true; card.classList.add("swap");
+  setTimeout(()=>{ $("cEye").textContent=tag; $("cTitle").textContent=q.t; $("cBody").textContent=q.b;
+    $("cCls").innerHTML=`<b style="--c:${CLS.recon.c}">■</b> ${kn}`;
+    const chip=$("clsChip"); chip.style.setProperty("--c",CLS.recon.c); chip.lastElementChild.textContent="Reconstruction";
+    card.classList.remove("swap"); }, reduce?0:220);
+  const el=$("tcapT"); el.innerHTML="<b>Meanwhile</b>"; el.appendChild(document.createTextNode(q.t));   // over the middle of its window
+  const bar=document.querySelector(".bar"), w=el.getBoundingClientRect().width, tr=$("scrub").getBoundingClientRect(), pm=(pOf(q.from)+pOf(q.to))/2;
+  if(bar){ const br=bar.getBoundingClientRect(); el.style.left=clamp(tr.left+tr.width*pm-br.left, w/2+8, br.width-w/2-8)+"px"; }
+  document.querySelectorAll(".tick").forEach(t=>t.classList.remove("on")); declutterTicks();
+}
 
 function renderTicks(){ $("ticks").innerHTML = CH.map((c,i)=>`<button class="tick${c.key?" key":" minor"}" data-i="${i}" style="left:${(c.p*100).toFixed(2)}%" aria-label="Jump to ${c.tag}: ${c.t}"><span>${c.tag}</span></button>`).join(""); }
-renderTicks();
+/* Tick labels that would overlap another are hidden (250 / 150 Ma, 3 / 2.85 Ma): the current chapter's label wins,
+   then the two ends, then older before younger. The tick mark itself stays and still jumps there. */
+function declutterTicks(){
+  const ts=[...document.querySelectorAll("#ticks .tick")]; if(!ts.length) return;
+  ts.forEach(t=>t.classList.remove("hid"));
+  const rank=t=>t.classList.contains("on")?0:(t===ts[0]||t===ts[ts.length-1])?1:2, kept=[];
+  ts.map((t,j)=>({t,j,r:rank(t)})).sort((x,y)=>x.r-y.r||x.j-y.j).forEach(({t})=>{
+    const s=t.firstElementChild, b=s&&s.getBoundingClientRect(); if(!b||!b.width||getComputedStyle(s).visibility==="hidden") return;
+    if(kept.some(k=>b.left<k.right+6&&b.right>k.left-6)) t.classList.add("hid"); else kept.push(b); });
+}
+renderTicks(); declutterTicks();
 // Load the data copies; keep the built-in ones on any failure or on data the viewer can't use.
 // an autopilot region keeps the shared planet-scale chapters it lists and adds its own (data/regions/<id>/scenes.json)
 Promise.all([fetch("../SCENES.json").then(r=>r.ok?r.json():Promise.reject(r.status)),
@@ -1926,7 +2065,7 @@ Promise.all([fetch("../SCENES.json").then(r=>r.ok?r.json():Promise.reject(r.stat
   let list=m.chapters||[];
   if(own){ const keep=new Set((own.shared&&own.shared.ids)||[]); list=list.filter(c=>keep.has(c.id)).concat(own.chapters||[]).sort((x,y)=>y.age_ma-x.age_ma); }
   if(list.length<2 || list.some(c=>!VC2CLS[c.visual_class] || typeof c.age_ma!=="number")) throw "unusable chapters";
-  CH.splice(0,CH.length,...list.map(toCh)); prepChapters(); renderTicks(); lastCh=-1; DATA.chapters=own?"SCENES.json + data/regions/"+REG.id+"/scenes.json":"SCENES.json";
+  CH.splice(0,CH.length,...list.map(toCh)); prepChapters(); renderTicks(); declutterTicks(); lastCh=-1; DATA.chapters=own?"SCENES.json + data/regions/"+REG.id+"/scenes.json":"SCENES.json";
 }).catch(()=>{});
 fetch("../data/plates/stylized.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{
   const L=d.plates||[];
@@ -1938,6 +2077,7 @@ $("ticks").addEventListener("click",e=>{ const b=e.target.closest(".tick"); if(b
 
 function showCard(i){
   if(i===lastCh||RGN.sel) return;
+  if(i>=IL0){ lastCh=i; showInterlude(i-IL0); return; }
   if(SITE.cur&&i===CH.length-1&&SITE.card){ lastCh=i; placeCaption(i); document.querySelectorAll(".tick").forEach((t,j)=>t.classList.toggle("on",j===i)); return; }
   if(AVAP.cur&&i===CH.length-1){ lastCh=i; placeCaption(i); document.querySelectorAll(".tick").forEach((t,j)=>t.classList.toggle("on",j===i)); return; }
   SITE.card=false; AVAP.cur=null; lastCh=i; const c=CH[i], card=$("card"); $("cAct").hidden=true; $("cProf").hidden=true;
@@ -1951,7 +2091,7 @@ function showCard(i){
     card.classList.remove("swap");
   }, reduce?0:220);
   placeCaption(i);
-  document.querySelectorAll(".tick").forEach((t,j)=>t.classList.toggle("on",j===i));
+  document.querySelectorAll(".tick").forEach((t,j)=>t.classList.toggle("on",j===i)); declutterTicks();
 }
 function setPlaying(on){ playing=on; $("play").textContent=on?"Pause":(p>=1?"Replay":"Play"); $("play").setAttribute("aria-pressed",on); if(on) autoCam=true; }
 $("play").onclick=()=>{ if(!playing && p>=0.9999){ p=0; lastCh=-1; } setPlaying(!playing); };
@@ -2353,7 +2493,7 @@ function placeCaption(i){
   const br=bar.getBoundingClientRect(), tr=tk.getBoundingClientRect(), w=el.getBoundingClientRect().width;
   const x=clamp(tr.left+tr.width/2-br.left, w/2+8, br.width-w/2-8); el.style.left=x+"px";
 }
-addEventListener("resize",()=>placeCaption(lastCh));
+addEventListener("resize",()=>{ if(lastCh<IL0) placeCaption(lastCh); declutterTicks(); });
 
 /* =================================================================== PLATES IN MOTION
    An animated W–E section across the margin at this latitude, 600 km wide and 230 km deep, no
@@ -2600,9 +2740,26 @@ function placeLab(q,show,op){ let hh=0; for(let k=0;k<6;k++) hh+=lUni[k<3?"uWa":
   pl3.set(q.x,Math.max(hh,0)*VE+0.25,q.z).project(lCam); const vis=show&&pl3.z<1; q.el.hidden=!vis;
   if(vis){ q.el.style.opacity=op.toFixed(2); q.el.style.left=((pl3.x+1)/2*innerWidth)+"px"; q.el.style.top=((1-pl3.y)/2*innerHeight)+"px"; } }
 if((new URLSearchParams(location.search)).has("debug")) window.TTM={lCam,lCtl,gCam,gUni,lUni,DATA,CH,PLATES,SITE,RIV,GEO,LOC,PM,MV,WX,markerDir,get st(){ return {p,autoCam}; }};
+/* The compass, legend and Places panel sit just under the chip rows, however many rows the chips wrap to. */
+function placeHud(){ const b=document.querySelector(".top .chips").getBoundingClientRect().bottom, cs=$("compass").offsetHeight||64, st=document.body.style;
+  st.setProperty("--cmp",Math.round(b+8)+"px"); st.setProperty("--lgd",Math.round(b+16+cs)+"px"); }
+if(window.ResizeObserver) new ResizeObserver(placeHud).observe(document.querySelector(".top .chips")); addEventListener("resize",placeHud); placeHud();
+// planet scale (older than the dive): chips for the block, its section and its places are hidden, and their panels close
+function setGlobeScale(on){ if(document.body.classList.contains("gscale")===on) return;
+  document.body.classList.toggle("gscale",on); if(on){ if(xs.open) xsToggle(false); if(!$("places").hidden) openPlaces(false); } placeHud(); }
 let last=performance.now(), T=0;
+/* Frame-time budget: if frames run slow for a few seconds, render fewer pixels (down to 1 per CSS
+   pixel); give them back when there is headroom, never above the level that was too slow. */
+const PR={max:Math.min(devicePixelRatio,2), cur:Math.min(devicePixelRatio,2), ceil:Math.min(devicePixelRatio,2), ema:16, t:0};
+function budget(dt){
+  PR.ema+=(dt*1000-PR.ema)*0.05; PR.t+=dt; if(PR.t<2.5||document.hidden) return; PR.t=0;
+  const lo=Math.min(1,PR.max); let n=PR.cur;
+  if(PR.ema>26&&PR.cur>lo){ PR.ceil=PR.cur-0.25; n=Math.max(lo,PR.cur-0.25); }
+  else if(PR.ema<19&&PR.cur<PR.ceil) n=Math.min(PR.ceil,PR.cur+0.25);
+  if(n!==PR.cur){ PR.cur=n; renderer.setPixelRatio(n); renderer.setSize(innerWidth,innerHeight,false); }
+}
 function frame(now){
-  const dt=Math.min(0.05,(now-last)/1000); last=now; T+=dt;
+  const dt=Math.min(0.05,(now-last)/1000); last=now; T+=dt; budget(dt);
   gUni.uTime.value=T; lUni.uTime.value=T;
 
   if(tween){
@@ -2622,9 +2779,9 @@ function frame(now){
   scrub.value=p; scrub.setAttribute("aria-valuetext", fmtAge(a).join(" ")+" ago");
   const [num,unit]=fmtAge(a); $("age").innerHTML = unit ? `${num}<span>${unit}</span>` : num;
   $("era").textContent = eraName(a);
-  showCard(dwell?dwell.i:chapterIndex(p));
+  showCard(dwell?dwell.i:cardIndex(p));
 
-  const st=apply(a,p); SUB3D.local=st.local;
+  const st=apply(a,p); SUB3D.local=st.local; setGlobeScale(!st.local);
   { const sm_=!!(SITE.cur&&SITE.on&&a<0.06&&st.local);
     { const on=sm_&&SEVO.ok&&LOC.cur&&SEVO.id===LOC.cur.id, u=lUni; u.uSiteOn.value+=((on?1:0)-u.uSiteOn.value)*Math.min(1,dt*3);
       if(on){ const tau=siteTau(), half=SITE.cur.section.half_m; u.uSiteT.value=tau; u.uSiteFront.value=-half+(2*half+300)*sm(0.10,0.58,tau);
@@ -2669,6 +2826,10 @@ function frame(now){
     lCtl.zoomSpeed = dist>LEXT*2 ? 3 : 1; lCtl.minDistance = LOC.cur ? 0.08 : 1.2;   // close-ups: down to about 80 m
     lCam.near=clamp(dist*0.02,0.002,0.1); lCam.far=Math.max(400,LEXT*8,dist*1.6); lCam.updateProjectionMatrix();
     lUni.uFogN.value=Math.max(LEXT*1.5,dist*2); lUni.uFogF.value=Math.max(LEXT*4.7,dist*6);
+    { const on=SHK.big>0.5; if(on&&!SHK.was&&!reduce&&autoCam) SHK.e=1; SHK.was=on; SHK.e*=Math.exp(-dt*1.3);
+      if(SHK.e>0.01){ SHK.off.set(Math.sin(T*37)+0.5*Math.sin(T*23), 0.7*Math.sin(T*41+1), Math.sin(T*29+2)+0.4*Math.sin(T*53)).multiplyScalar(SHK.e*0.006*dist); lCam.position.add(SHK.off); }
+      else SHK.off.set(0,0,0); }
+    lCam.updateMatrixWorld(); ash.material.uniforms.uSunV.value.copy(lUni.uSun.value).transformDirection(lCam.matrixWorldInverse);
     const altKm=deriveGlobeCam(); far = dist>LEXT*5;
     // globe around the block: same sun, same haze; clouds, air glow and stars only from high up
     gSunL.copy(bE).multiplyScalar(lUni.uSun.value.x).addScaledVector(bU,lUni.uSun.value.y).addScaledVector(bS,lUni.uSun.value.z);
@@ -2689,6 +2850,7 @@ function frame(now){
         if(vis&&placed.some(b=>Math.abs(b.y-y)<17&&Math.abs(b.x+b.w/2-x-q.w/2)<(b.w+q.w)/2)) vis=false;
         q.el.hidden=!vis; if(vis){ placed.push({x,y,w:q.w}); q.el.style.left=x+"px"; q.el.style.top=y+"px"; } }); }
     renderer.clear(); renderer.render(gScene,gCam); renderer.clearDepth(); renderer.render(lScene,lCam);
+    lCam.position.sub(SHK.off);
     { const xd=$("xdot"); let vis=xs.open&&!far; if(vis){ pl3.set(XS_X,Math.max(xsHs[XS_I0],0)*VE+0.06,XS_Z).project(lCam); vis=pl3.z<1;
         if(vis){ xd.style.left=((pl3.x+1)/2*innerWidth)+"px"; xd.style.top=((1-pl3.y)/2*innerHeight)+"px"; } } xd.hidden=!vis; }
     pv.set(0,st.hc*VE+0.35,0).project(lCam);
@@ -2735,11 +2897,20 @@ function frame(now){
     setCompass(screenAngle(marker.position,nrm,gCam));
     ["lgFault","lgThr","lgStream","lgTopo","lgAva","lgGeo","lgSat","lgRiv"].forEach(id=>$(id).hidden=true); $("spin").hidden=true; $("locator").style.opacity=0; AVA.labels.forEach(q=>q.el.hidden=true); $("lgEdge").hidden=false; $("lgSut").hidden=gUni.uModel.value>0.5; $("lgMove").hidden=gUni.uPlOn.value<0.5; legend.style.opacity=1;
     { const mod=gUni.uModel.value>0.5, t=mod?"Coastlines · Müller et al. 2019 plate model (EarthByte)":"Continent edge, stylized (hand-drawn, not a plate model)";
-      if(PM.legend!==t){ PM.legend=t; $("lgEdge").lastChild.textContent=t; GLAB.forEach((q,i)=>q.el.textContent=PLATES[i].lb+(mod?" · plate model":" · stylized")); } }
+      if(PM.legend!==t){ PM.legend=t; $("lgEdge").lastChild.textContent=t; } }
     sbar.hidden=true; PLACES.forEach(q=>q.el.hidden=true); FLAB.forEach(q=>q.el.hidden=true); PLAB.forEach(q=>q.el.hidden=true);
-    // plate names
-    GLAB.forEach((q,i)=>{ const c=gUni.uC.value[i]; pl3.copy(c).multiplyScalar(1.02); const face=pl3.dot(cv0.copy(gCam.position).normalize())>0.35;
-      pl3.project(gCam); q.el.hidden=!face; if(face){ q.el.style.left=((pl3.x+1)/2*innerWidth)+"px"; q.el.style.top=((1-pl3.y)/2*innerHeight)+"px"; } });
+    // plate names: on the plate model, at the middle of that plate's own coastlines (the stylized blob centres can sit
+    // over a neighbour, e.g. Baltica's over Greenland); never near the limb, and a name that would overlap another is dropped
+    { const mod=gUni.uModel.value>0.5, cd=cv0.copy(gCam.position).normalize(), placed=[];
+      GLAB.forEach((q,i)=>{ const id=PM.LAB[i], pi=PM.pid[id], c=PM.cen[pi];
+        if(mod&&c){ pmRot(pmQuat(pi,a,pmQ),c[0],c[1],c[2],pmR); pmE2V(pmR,pl3); } else pl3.copy(gUni.uC.value[i]);
+        const t=mod ? PM.NAME[i][a>200?0:1] : PLATES[i].lb+" · stylized"; if(q.el.textContent!==t){ q.el.textContent=t; q.w=0; }
+        let vis=pl3.normalize().dot(cd)>0.45;
+        if(vis){ pl3.multiplyScalar(1.02).project(gCam); vis=pl3.z<1; }
+        const x=(pl3.x+1)/2*innerWidth, y=(1-pl3.y)/2*innerHeight;
+        if(vis){ if(!q.w){ q.el.hidden=false; q.w=q.el.offsetWidth; }
+          if(placed.some(b=>Math.abs(b.y-y)<18&&Math.abs(b.x-x)<(b.w+q.w)/2+6)) vis=false; }
+        q.el.hidden=!vis; if(vis){ placed.push({x,y,w:q.w}); q.el.style.left=x+"px"; q.el.style.top=y+"px"; } }); }
   }
   if(!pin.hidden){ pin.style.left=((pv.x+1)/2*innerWidth)+"px"; pin.style.top=((1-pv.y)/2*innerHeight-6)+"px"; }
   requestAnimationFrame(frame);
