@@ -185,7 +185,23 @@ def pack(region):
                        "value. PRISM interpolates station readings; recent months are provisional and may be "
                        "revised by PRISM."}
     (out / "index.json").write_text(json.dumps(index, indent=1) + "\n")
+    mark_layer(region["id"])
     return index, out
+
+
+def mark_layer(region_id, layer="daily"):
+    """List `layer` for the region in prototype/assets/regions/index.json. The viewer only asks for the daily
+    files when it is listed, so a site built without them shows no Weather chip and logs no 404."""
+    p = ROOT / "prototype" / "assets" / "regions" / "index.json"
+    if not p.exists():
+        return False
+    idx = json.loads(p.read_text())
+    for r in idx["regions"]:
+        if r["id"] == region_id and layer not in r.setdefault("layers", []):
+            r["layers"].append(layer)
+            p.write_text(json.dumps(idx, indent=1) + "\n")
+            return True
+    return False
 
 
 def main():

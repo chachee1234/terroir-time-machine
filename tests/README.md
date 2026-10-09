@@ -26,5 +26,5 @@ The default location for the copy is `../three-r128` next to the repo; set `THRE
 ## Rules
 
 - Never skip, disable or loosen a test to get a gate green. Fix the code, or fix the test only when the test itself is wrong, and say why in the PR.
-- `OPTIONAL` in `tests/browser/harness.mjs` and `PENDING_DATA` in `scripts/test_build_share.py` list files the viewer asks for whose data arrives in a later PR. Remove the entry when the data lands.
+- Optional data (the daily weather) is requested only when `prototype/assets/regions/index.json` lists its layer (`"daily"`), so a copy without it, such as the public site, shows no Weather chip and no missing files. `scripts/fetch_prism_daily.py` adds the layer when it packs; `test_prism_daily` fails if the layer and the files disagree. `OPTIONAL` in `tests/browser/harness.mjs` stays empty.
 - Updating three.js means updating the `integrity` hashes in `prototype/timemachine.html`, `prototype/gibraltar.html` and `THREE_TAG` in `scripts/build_share.py`; the security gate fetches the CDN files and fails on a mismatch.

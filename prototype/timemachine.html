@@ -1,5 +1,19 @@
 <meta charset="utf-8">
 <title>Terroir Time Machine</title>
+<meta name="description" content="Travel 1.8 billion years through the rocks, soils and climate under Napa and Sonoma wine country, from drifting continents to today's vineyards.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Terroir Time Machine">
+<meta property="og:title" content="Terroir Time Machine: 1.8 billion years under wine country">
+<meta property="og:description" content="Travel 1.8 billion years through the rocks, soils and climate under Napa and Sonoma wine country, from drifting continents to today's vineyards.">
+<meta property="og:url" content="https://chachee1234.github.io/terroir-time-machine/prototype/timemachine.html">
+<meta property="og:image" content="https://chachee1234.github.io/terroir-time-machine/prototype/assets/social-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Napa and Sonoma valleys in 3D with AVA outlines, from the Terroir Time Machine">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Terroir Time Machine: 1.8 billion years under wine country">
+<meta name="twitter:description" content="Travel 1.8 billion years through the rocks, soils and climate under Napa and Sonoma wine country.">
+<meta name="twitter:image" content="https://chachee1234.github.io/terroir-time-machine/prototype/assets/social-card.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -1379,6 +1393,11 @@ function wxStop(){ clearInterval(WX.timer); WX.timer=0; $("wxPlay").textContent=
 (async function loadWeather(){
   if(REG.id!=="napa_valley") return;
   try{
+    // the daily files are large and optional (the public site may be built without them): ask for them only
+    // when the regions index lists the "daily" layer, so a copy without them shows no Weather chip and no 404
+    const idx=await fetch("assets/regions/index.json").then(r=>r.ok?r.json():null).catch(()=>null);
+    const nv=idx&&idx.regions.find(x=>x.id==="napa_valley");
+    if(!nv||!(nv.layers||[]).includes("daily")) return;
     const m=await fetch("assets/regions/napa_valley/daily/index.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
     const g=m.grid, t=m.texture;
     WX.m=m; WX.ncell=g.rows*g.cols; WX.t0=Date.UTC(m.years[0].year,0,1);

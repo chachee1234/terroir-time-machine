@@ -40,6 +40,14 @@ for (const url of PAGES) {
   });
 }
 
+test("the site root (index.html) forwards to the time machine", async () => {
+  const { page, context, log } = await open(browser, srv.base + "/index.html", { settle: 1500 });
+  const u = new URL(page.url());
+  await context.close();
+  assert.equal(u.pathname, TM);
+  assert.deepEqual(problems(log), []);
+});
+
 test("globe.html forwards old links to the regions view", async () => {
   const { page, context, log } = await open(browser, srv.base + "/prototype/globe.html?site=los_carneros", { settle: 1500 });
   const u = new URL(page.url());

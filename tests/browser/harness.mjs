@@ -40,9 +40,9 @@ export function serve(root = ROOT) {
 
 // Hosts the pages may name. Everything else is a privacy/tracking violation (ACCEPTANCE_TESTS Q04).
 export const ALLOWED_HOSTS = ["cdnjs.cloudflare.com", "cdn.jsdelivr.net", "fonts.googleapis.com", "fonts.gstatic.com"];
-// Same-origin files the viewer asks for but that a data step builds later; the viewer must cope
-// with their absence (it checks r.ok). Only listed here while the data is not in the repo.
-export const OPTIONAL = [/\/assets\/regions\/napa_valley\/daily\//];
+// Same-origin files the viewer may ask for that are allowed to be missing. Empty: optional data (the
+// daily weather) is only requested when assets/regions/index.json lists it, so any 404 is a real fault.
+export const OPTIONAL = [];
 
 const THREE_DIR = process.env.THREE_DIR || path.join(ROOT, "..", "three-r128");
 const THREE_FILES = {
