@@ -4,3 +4,4 @@ __pycache__/
 data/raw/
 dist/
 node_modules/
+_site/
