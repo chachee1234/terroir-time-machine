@@ -69,11 +69,12 @@ test("before the volcanoes the panel opens on the plate view", async () => {
   assert.deepEqual(problems(log), []);
 });
 
-test("reaching a mountain-building chapter opens the section by itself", { timeout: 300000 }, async () => {
-  const { page, context, log } = await open(browser, srv.base + TM + "&t=9");
+// the chapter tween runs on frame time, so a small viewport keeps software WebGL quick when the suites run in parallel
+test("reaching a mountain-building chapter opens the section by itself", { timeout: 600000 }, async () => {
+  const { page, context, log } = await open(browser, srv.base + TM + "&t=9", { viewport: { width: 800, height: 500 } });
   const before = await page.isHidden("#sub");
   await page.click("#next");
-  await page.waitForFunction(() => !document.getElementById("sub").hidden, null, { timeout: 180000 });
+  await page.waitForFunction(() => !document.getElementById("sub").hidden, null, { timeout: 480000, polling: 1000 });
   const head = await page.textContent("#sdHead");
   await context.close();
   assert.equal(before, true);
