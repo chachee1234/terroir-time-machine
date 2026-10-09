@@ -6,17 +6,19 @@ Owner instruction (2026-09-27): "compose prompt to autonomously keep expanding t
 Change `ON` to `OFF` (a one-line commit on `main`, or on the Start-from branch) and every run stops before doing anything. The routine can also be paused or deleted at claude.ai → Code → Routines.
 
 **Start from:** `main` (PR #9 and #12 merged 2026-09-28)
-**Working branch:** `autopilot` (one PR, never merged by the routine)
+**Working branch:** `globe-showcase` (one PR, never merged by the routine). Until the owner restarts region work, runs work the Globe showcase queue below on this branch; the `autopilot` branch is idle.
+
+**Owner decision, 2026-10-08:** pause Napa/AVA detail and region work (R4, D1–D3 below are "paused by owner"). Focus: a whole-globe plate showcase. Reference look, style only, no copied frames: a plate-coloured world map with boundary lines, and 3D cut-away blocks for ridge, subduction, collision and transform.
 
 ## Rules for each run
 1. Read AGENTS.md, STATUS.md, the newest files in `status/`, this file, and only the sections of ROADMAP_REGIONS.md, SCIENCE_RULES.md and SOURCES.md the step needs. AGENTS.md and GOVERNANCE.md win over this file. This cloud routine does not use the FreeLLMAPI pool (GOVERNANCE.md §2a); that pool runs locally or inside the Workflow F and G jobs, and only the §2a checkable subtasks may go to it. Once Workflow F is built and two weekly PRs have merged, this routine is proposed for retirement (GOVERNANCE.md §6), with owner approval.
-2. If the switch is OFF, or the `autopilot` PR already holds 5 unreviewed steps (checked items below marked `[x]` with no owner "reviewed" note since the last merge), stop and write nothing.
+2. If the switch is OFF, or the working branch's PR already holds 5 unreviewed steps (checked items below marked `[x]` with no owner "reviewed" note since the last merge), stop and write nothing.
 3. Do the first unchecked step only. One bounded step per run; two repair attempts at most, then mark the step `[!] blocked: <reason>` and stop.
 4. Data: only open-licensed sources already listed in SOURCES.md or in "Allowed sources" below, fetched with the repo's Tier 0 scripts. At most 600 terrain tiles or 150 MB per run. Raw downloads stay in git-ignored `data/raw/`. Record every new dataset in SOURCES.md (licence, URL, date) and `data/manifest.json`.
 5. Science: no invented facts, ages, rates or licences. Anything not backed by a listed source is a labelled gap or schematic (SCIENCE_RULES.md).
 6. Check: `python3 -m unittest discover -s scripts -p 'test_*.py'` passes, and a headless Chromium run of every page touched shows no console errors. Never mark an untested check as passed.
-7. Commit to `autopilot` only; push; open the PR if none is open (base: the Start-from branch), else update its description. Never merge, never push to `main`, never force-push.
-8. Tick the step here, write a `status/<YYYY-MM-DD>-autopilot.md` entry (not STATUS.md) with the exact commands and the next action, and end with a short summary of what changed and what the owner should look at.
+7. Commit to the working branch only; push; open the PR if none is open (base: the Start-from branch), else update its description. Never merge, never push to `main`, never force-push.
+8. Tick the step here, write a `status/<YYYY-MM-DD>-<working branch>.md` entry (not STATUS.md) with the exact commands and the next action, and end with a short summary of what changed and what the owner should look at.
 
 ## Allowed sources (beyond SOURCES.md)
 - AWS Open Data Terrain Tiles (G19), UC Davis AVA Project (CC0), USGS UCERF3 via GEM (CC BY-SA 4.0), USGS/CGS geologic maps (public domain), USDA NRCS SSURGO via Soil Data Access (public domain), California DWR/Land IQ crop mapping (check the dataset's stated licence first), Sentinel-2 L2A via Earth Search STAC (Copernicus open licence, attribution required), USDA NAIP (public domain).
@@ -31,10 +33,27 @@ The owner maps sources in GeoLibre and saves them as `data/geolibre/<region_id>.
 ## Region order (owner rule, 2026-09-27)
 Sonoma first, then branch out to the next AVA that touches a mapped one; when nothing touches, move to the closest AVA. `python3 scripts/region_order.py` computes the list into `prototype/assets/regions/order.json` from the UC Davis AVA outlines. A frame-sized parent AVA is mapped before its members (Northern Sonoma before Russian River Valley and Alexander Valley), and AVAs nested in a mapped frame become its close-ups. Re-run the script whenever a region is finished (pass all finished ids with `--mapped`) and take the first entry.
 
-## Queue
-Region work comes first. Each region takes three steps; any engine change a step needs is done inside that step, keeping Napa and the 30 km block unchanged.
+## Queue: Globe showcase (owner, 2026-10-08)
+One step per run, in order, on `globe-showcase`. Every step keeps these owner rules:
+- A visual-class label is always on screen: Reconstruction, Illustration or Measured.
+- Globe additions stay under 6 MB in total (page weight added since G0, measured on the built files).
+- 60 fps on an M1 MacBook Air. Headless Chromium uses software WebGL, so it cannot prove this; keep per-frame work light and say in the PR that the owner's check on the Mac is pending.
+- Headless check of every page touched, unit and browser tests pass, PR, and a `status/<date>-globe-showcase.md` note.
+- Napa, the regions and the 30 km block keep working as they do now.
+
+- [x] G0. Fix first (2026-10-09): the subduction block cut into the globe no longer shows at planet scale (off until the Plates chip opens it); plate names sit on their own coastlines and drop when they would overlap; colliding timeline labels are hidden; at planet scale only the Plates and Regions chips show and the compass sits under the chips; between chapters the card shows a "whole planet" line instead of a stale chapter.
+- [ ] G1. Plate colours + boundaries: export the Müller et al. 2019 resolved topologies every 1 Myr, 0–410 Ma, with pygplates on the owner's Mac (ask the owner before installing pygplates; the run writes the export script and exact copy-paste Mac commands, and stops there until the files are committed). Each plate gets its own colour; ridges, trenches (with teeth) and transforms are drawn and move with the plates.
+- [ ] G2. Transparent ocean toggle on the globe so seafloor relief shows; seafloor age colouring only if the EarthByte age-grid licence checks out (record it in SOURCES.md either way).
+- [ ] G3. Motion from above: streaks flowing from ridge to trench, and convergence arrows.
+- [ ] G4. Boundary blocks: click a boundary to open a 3D cut-away block (ridge; ocean–continent subduction with a volcano; continent–continent collision with folding strata; transform offset), with a transparent water layer and animated mantle-convection arrows, labelled Illustration. Reuse SUB3D and the diorama slab code.
+- [ ] G5. Mountains grow: `data/orogens.json` (Himalaya/Tibet, Andes, Alps, Rockies, Sierra Nevada, Cascades, Zagros, Atlas, Pyrenees, Carpathians, New Guinea, Southern Alps NZ, Taiwan, East African highlands), each with an uplift window and a source; today's relief is carried back on its plates; at 0 Ma it matches `relief.png` exactly.
+- [ ] G6. Showcase tour: Atlantic opening (180 Ma), Andes (100 Ma), India–Asia (50 Ma), Alps (35 Ma), San Andreas (28 Ma), then the last 5 Ma slowed down, ending on labelled ranges.
+- [ ] G7. Before 410 Ma: keep the stylized globe, labelled stylized. Research a published 1.8–2 Ga full-plate model and report its licence in the PR and status note; do not add it without the owner's approval.
+
+## Queue: regions (paused by owner, 2026-10-08)
+Region work came first until the 2026-10-08 owner decision above. Each region takes three steps; any engine change a step needs is done inside that step, keeping Napa and the 30 km block unchanged.
 - [x] R1–R3. Sonoma Valley: done by owner request on 2026-09-28 (branch `napa-sonoma-frame`), not as its own region. Sonoma Valley already lay inside the Napa frame, so the frame (`data/regions/napa_valley.json`, id kept) was widened into a joint Napa–Sonoma frame with `parents` [napa_valley, sonoma_valley]; its terrain, close-ups for the AVAs inside it, outlines, faults, towns, geology drape, live globe marker and Places entries are in place. Separate region files, `faults.json`, `places.json` and per-region `scenes.json` (ROADMAP_REGIONS.md items 1–3) are still to do and belong to R4.
-- [ ] R4+. Next region from `prototype/assets/regions/order.json` (Petaluma Gap done 2026-09-30; Northern Sonoma done 2026-10-03; West Sonoma Coast done 2026-10-06; Mendocino in progress with Russian River Valley and Alexander Valley as close-ups), three steps each: (1) region file with anchor and UTM zone (ROADMAP_REGIONS.md items 1 and 4), `fetch_tiles.py --frame-grid` terrain and close-ups, `ava_extract.py --region` outlines, `make_imagery_texture.py --region` satellite texture; (2) faults, towns and generic chapters as region data (items 2 and 3); (3) live marker, Places list, headless check, and `geolibre_export.py` with the region's id added to `--regions`; add the region to `prototype/assets/regions/index.json` with its `layers`. Re-run `region_order.py --mapped` with every AVA id in `prototype/assets/ava.json` plus the finished region's.
+- [ ] R4+. (paused by owner, 2026-10-08) Next region from `prototype/assets/regions/order.json` (Petaluma Gap done 2026-09-30; Northern Sonoma done 2026-10-03; West Sonoma Coast done 2026-10-06; Mendocino in progress with Russian River Valley and Alexander Valley as close-ups), three steps each: (1) region file with anchor and UTM zone (ROADMAP_REGIONS.md items 1 and 4), `fetch_tiles.py --frame-grid` terrain and close-ups, `ava_extract.py --region` outlines, `make_imagery_texture.py --region` satellite texture; (2) faults, towns and generic chapters as region data (items 2 and 3); (3) live marker, Places list, headless check, and `geolibre_export.py` with the region's id added to `--regions`; add the region to `prototype/assets/regions/index.json` with its `layers`. Re-run `region_order.py --mapped` with every AVA id in `prototype/assets/ava.json` plus the finished region's.
   - [x] R4.1 Petaluma Gap step 1 (2026-09-28): `data/regions/petaluma_gap.json` (frame, `anchor`, `utm_zone`), outlines in the region's own `ava.json` (`ava_extract.py` now honours `ava_viewer`), terrain and a Sonoma Mountain close-up, Sentinel-2 texture. SOURCES G24.
   - [x] R4.2 Petaluma Gap step 2 (2026-09-29): `faults.json` (4 UCERF3 traces via GEM, new `scripts/region_faults.py`), `places.json` (towns a labelled gap: no reachable listed gazetteer covers the frame), `data/regions/petaluma_gap/scenes.json` (six shared chapters, Napa-only ones listed as gaps, a sourced "Today" card). SOURCES G24.
   - [x] R4.3 Petaluma Gap step 3 (2026-09-30): `timemachine.html?region=petaluma_gap` loads the region's own outlines, faults and chapters (Napa unchanged); `prototype/assets/regions/index.json` lists regions with a page and their layers; the globe shows Petaluma Gap as live and its label opens that page; `order.json` re-run; GeoLibre project `petaluma_gap.geolibre.json`. Headless check clean.
@@ -46,8 +65,8 @@ Region work comes first. Each region takes three steps; any engine change a step
   - [x] R4.3 West Sonoma Coast step 3 (2026-10-06): `timemachine.html?region=west_sonoma_coast` loads the region's outlines, faults and chapters (no viewer change needed); `index.json` entry; live on the globe; `order.json` re-run with west_sonoma_coast and fort_ross_seaview (nested in West Sonoma Coast, already a close-up) counted as mapped, next: Mendocino; GeoLibre project `west_sonoma_coast.geolibre.json`. Headless check clean.
   - [x] R4.1 Mendocino step 1 (2026-10-07): `data/regions/mendocino.json` (frame, `anchor`, `utm_zone`, `frame_cut_avas`, `pit_floor_m`), eleven AVA outlines in the region's own `ava.json`, terrain and ten close-ups, Sentinel-2 texture and 10 m close-up images. SOURCES G40.
   - [x] R4.2 Mendocino step 2 (2026-10-08): `faults.json` (3 UCERF3 traces via GEM: Maacama, San Andreas North Coast, Wight Way), `places.json` (Ukiah; other towns a labelled gap), `data/regions/mendocino/scenes.json` (six shared chapters, Napa-specific ones listed as gaps or not applicable, a sourced "Today" card). SOURCES G40.
-  - [ ] R4.3 Mendocino step 3: live page, index, globe marker, GeoLibre export.
-Present-day detail, done between regions when a region step is blocked:
-- [ ] D1. Soils: SSURGO map units for the section column and a "Today" soils drape (Soil Data Access query script, cached).
-- [ ] D2. Vineyards: replace the schematic vine tint with mapped vineyards (DWR/Land IQ, if its licence allows; else NASS CDL, public domain).
-- [ ] D3. Globe: raise California to z9 (≈1 km), keeping page weight under 8 MB.
+  - [ ] R4.3 Mendocino step 3: live page, index, globe marker, GeoLibre export. (paused by owner, 2026-10-08)
+Present-day detail, done between regions when a region step is blocked (all paused by owner, 2026-10-08):
+- [ ] D1. (paused by owner) Soils: SSURGO map units for the section column and a "Today" soils drape (Soil Data Access query script, cached).
+- [ ] D2. (paused by owner) Vineyards: replace the schematic vine tint with mapped vineyards (DWR/Land IQ, if its licence allows; else NASS CDL, public domain).
+- [ ] D3. (paused by owner) Globe: raise California to z9 (≈1 km), keeping page weight under 8 MB.
