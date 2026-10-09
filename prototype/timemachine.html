@@ -31,6 +31,7 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 #stage{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 40%,#16202a 0%,#07090b 70%)}
 #gl{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 #space{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 40%,#16202a 0%,#07090b 70%)}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 85% 80% at 50% 45%,transparent 58%,rgba(0,0,0,.26) 100%)}
 .ui{position:absolute;z-index:2}
 .top{top:calc(12px + env(safe-area-inset-top,0px));left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;pointer-events:none}
 .brand{font-family:var(--serif);font-size:20px;line-height:1.1;text-shadow:0 1px 12px rgba(0,0,0,.6)}
@@ -817,6 +818,21 @@ if(realDEM){
   let mx=0; for(let i=0;i<NV;i++) mx=Math.max(mx,H[5][i]); const sc=1.33/mx; for(let i=0;i<NV;i++) H[5][i]*=sc;
 }
 H.forEach((h,k)=>geo.setAttribute("h"+k,new THREE.BufferAttribute(h,1)));
+/* Relief occlusion (aesthetic shading only): how far each point sits below or above its surroundings,
+   per stage, at two scales (≈1 km and ≈4 km). Valleys and gullies get less sky light, ridges a little
+   more, so the relief reads without shadow maps. Packed as two vec3s (stages 0-2, 3-5), blended in the
+   vertex shader with the same weights as the heights. 0 = neutral, which is also what meshes without
+   these attributes read. */
+const CAV = (function(){
+  const cell=SX/(NX-1), r1=Math.max(1,Math.round(1/cell)), r2=Math.max(2,Math.round(4/cell));
+  const A=new Float32Array(NV*3), B=new Float32Array(NV*3), all=[];
+  for(let k=0;k<6;k++){ const b1=blurGrid(H[k],r1), b2=blurGrid(H[k],r2), c=new Float32Array(NV);
+    for(let i=0;i<NV;i++){ const d1=(b1[i]-H[k][i])*VE, d2=(b2[i]-H[k][i])*VE;
+      c[i]=clamp(0.55*Math.tanh(d1/0.05)+0.45*Math.tanh(d2/0.18),-1,1); }
+    all.push(c); const T=k<3?A:B; for(let i=0;i<NV;i++) T[i*3+k%3]=c[i]; }
+  geo.setAttribute("aCavA",new THREE.BufferAttribute(A,3)); geo.setAttribute("aCavB",new THREE.BufferAttribute(B,3));
+  return all;
+})();
 const CENTER = Math.max(0,idxAt(0,0));
 
 /* Drainage from the modern surface: priority-flood from the block edges gives every cell a
@@ -886,23 +902,34 @@ const lUni = {
 };
 if(HI) buildDemTexture(HI.h,HI.m.cols,HI.m.rows,HI.m.scale||1); else if(realDEM) buildDemTexture(REG.h,NX,NZ);
 const TERRAIN_VS = `
-attribute float h0,h1,h2,h3,h4,h5; attribute float aTop;
+attribute float h0,h1,h2,h3,h4,h5; attribute float aTop; attribute vec3 aCavA,aCavB;
 uniform vec3 uWa,uWb; uniform float uVE,uBase;
-varying vec3 vW; varying float vH; varying float vS; varying float vR;
+varying vec3 vW; varying float vH; varying float vS; varying float vR; varying float vCav;
 void main(){
   float h=h0*uWa.x+h1*uWa.y+h2*uWa.z+h3*uWb.x+h4*uWb.y+h5*uWb.z;
+  vCav=dot(aCavA,uWa)+dot(aCavB,uWb);   // 0 on the slab walls, which have no aCav attributes
   vec3 p=position; p.y = aTop>0.5 ? h*uVE : uBase*uVE;
   vec4 w=modelMatrix*vec4(p,1.0); vW=w.xyz; vH=h; vS=aTop; vR=length(p.xz);
   gl_Position=projectionMatrix*viewMatrix*w;
 }`;
 const LIGHT_FOG = `
+varying float vCav;
 vec3 shade(vec3 col, vec3 N){
   float d=max(dot(N,uSun),0.0);
   float hemi=0.5+0.5*N.y;
-  return col*(uSunCol*d*1.05 + mix(vec3(0.16,0.14,0.13),vec3(0.36,0.42,0.5),hemi)*0.85);
+  float sky=1.0-0.6*max(vCav,0.0)+0.12*max(-vCav,0.0), sunO=1.0-0.25*max(vCav,0.0);   // relief occlusion
+  // a touch of warm bounce light on faces turned away from the sun
+  vec3 bounce=vec3(0.10,0.07,0.04)*max(dot(N,-vec3(uSun.x,0.0,uSun.z)),0.0)*sky;
+  return col*(uSunCol*d*1.05*sunO + mix(vec3(0.16,0.14,0.13),vec3(0.36,0.42,0.5),hemi)*0.85*sky + bounce);
 }
 uniform float uFogN,uFogF;
-vec3 fogit(vec3 col){ float f=smoothstep(uFogN,uFogF,distance(vW,cameraPosition)); return mix(col,uFog,f); }
+// aerial perspective: haze thickens with distance and toward low ground, and glows where you look toward the sun
+vec3 fogit(vec3 col){ vec3 V=vW-cameraPosition; float dd=length(V);
+  float f=smoothstep(uFogN,uFogF,dd)*mix(1.0,0.82,smoothstep(0.0,2.5,vW.y));
+  float fwd=pow(max(dot(V/dd,uSun),0.0),6.0);
+  float near=smoothstep(uFogN*0.15,uFogF,dd);
+  vec3 fc=uFog+uSunCol*0.22*fwd;
+  return mix(col,fc,max(f,near*fwd*0.25)); }
 `;
 // Mapped active faults: Maacama and Collayomi traces from the USGS UCERF3 fault model (via the GEM
 // Global Active Faults Database, CC BY-SA 4.0), in scene km (x east, z south of the GNIS point),
@@ -1114,6 +1141,7 @@ const terrainMat = new THREE.ShaderMaterial({
     float g=uLava*smoothstep(3.2,0.3,vR)*smoothstep(0.6,1.4,vH);
     float fl=0.7+0.3*sin(uTime*7.0+n2*20.0);
     lit+=vec3(1.0,0.36,0.06)*g*fl*(0.6+1.4*smoothstep(0.55,0.75,noise(vW*1.5+vec3(0.0,uTime*0.3,0.0))));
+    lit+=col*vec3(1.0,0.42,0.14)*uLava*0.8*exp(-vR*0.6)*(0.85+0.15*fl)*(0.6+0.4*N.y);   // firelight from the vent on the slopes around it
     // fault traces on the surface (drawn after the water tint so they read through the sea)
     float cc=acrossC(vW), al=alongC(vW), px=fwidth(cc);
     float th=max(max(fline(cc-TH0,px),fline(cc-TH1,px)),max(fline(cc-TH2,px),fline(cc-TH3,px)));
@@ -1205,31 +1233,50 @@ const waterMat = new THREE.ShaderMaterial({
 const water = new THREE.Mesh(new THREE.BoxGeometry(SX-0.04, -BASE*VE, SZ-0.04), waterMat); water.position.x=CXm; water.position.z=CZm;
 water.position.y = BASE*VE/2 - 0.001; lScene.add(water);
 
-// eruption column particles
-const ashN = reduce ? 600 : 2600;
+// eruption column particles (aesthetic: the shapes are invented, as the chapter cards say).
+// Most puffs rise fast out of the vent, slow as they reach the top and spread into an umbrella cloud;
+// in the caldera eruption about a fifth collapse from a low fountain and roll down the flanks as surges.
+// Puffs are lit as soft spheres from the sun and glow orange low over the vent. Budget: 3,200 points,
+// 600 with reduced motion; drawn after the terrain with no depth writes.
+const ashN = reduce ? 600 : 3200;
 const ash = (function(){
   const seed=new Float32Array(ashN*4); for(let i=0;i<ashN*4;i++) seed[i]=Math.random();
   const g=new THREE.BufferGeometry();
   g.setAttribute("position",new THREE.BufferAttribute(new Float32Array(ashN*3),3));
   g.setAttribute("seed",new THREE.BufferAttribute(seed,4));
   const m=new THREE.ShaderMaterial({
-    uniforms:{uTime:lUni.uTime, uE:{value:0}, uTop:{value:2}, uScale:{value:400}, uFog:lUni.uFog},
+    uniforms:{uTime:lUni.uTime, uE:{value:0}, uSurge:{value:0}, uTop:{value:2}, uScale:{value:400}, uFog:lUni.uFog, uSunV:{value:new THREE.Vector3(0,1,0)}},
     transparent:true, depthWrite:false,
-    vertexShader:`attribute vec4 seed; uniform float uTime,uE,uTop,uScale; varying float vL; varying float vA;
+    vertexShader:`attribute vec4 seed; uniform float uTime,uE,uSurge,uTop,uScale; varying float vL; varying float vA; varying float vS; varying float vHot;
     void main(){
-      float life=fract(uTime*(0.05+0.05*seed.w)+seed.x); vL=life;
-      float ang=seed.y*6.2831, rad=(0.25+life*life*4.5)*(0.4+0.6*seed.z);
-      vec3 p=vec3(cos(ang)*rad + life*life*9.0, uTop+life*(9.0+uE*9.0)*(0.6+0.4*seed.w), sin(ang)*rad);
-      vA=uE*smoothstep(0.0,0.05,life)*(1.0-life);
+      float surge=step(0.85,seed.z)*uSurge;
+      float life=fract(uTime*(0.045+0.05*seed.w)+seed.x); vL=life; vS=seed.y;
+      float ang=seed.y*6.2831, ca=cos(ang), sa=sin(ang);
+      float rise=1.0-exp(-3.2*life), umb=smoothstep(0.45,1.0,life);
+      float rad=(0.25+rise*1.7)*(0.45+0.55*seed.z)+umb*umb*7.5*(0.3+0.7*fract(seed.w*7.3));
+      vec3 p=vec3(ca*rad+life*life*9.0, uTop-0.25+rise*(9.0+uE*9.0)*(0.75+0.25*seed.w), sa*rad);
+      // surge: out along the ground, following the cone's falling surface (volcano() in the stage builder)
+      float sr=0.5+life*7.0*(0.55+0.45*seed.w);
+      float gy=uTop-1.55*${VE.toFixed(2)}*(1.0-exp(-pow(sr/3.3,1.35)));
+      vec3 q=vec3(ca*sr, max(gy,0.0)+0.2+life*1.2*seed.w+0.5*sin(life*3.1416), sa*sr);
+      p=mix(p,q,surge);
+      vHot=uE*exp(-max(p.y-uTop,0.0)*0.6)*(1.0-life)*(1.0-0.8*surge);
+      vA=uE*smoothstep(0.0,0.015,life)*(1.0-life)*(1.0-0.35*surge); vS+=surge*10.0;
       vec4 mv=modelViewMatrix*vec4(p,1.0);
-      gl_PointSize=uScale*(0.35+life*1.4)*(0.5+uE*0.5)/(-mv.z);
+      gl_PointSize=uScale*(0.4+life*1.5+umb*1.6+surge*0.8)*(0.5+uE*0.5)/(-mv.z);
       gl_Position=projectionMatrix*mv;
     }`,
-    fragmentShader:`varying float vL; varying float vA; uniform vec3 uFog;
-    void main(){ vec2 d=gl_PointCoord-0.5; float r=length(d); if(r>0.5) discard;
-      vec3 c=mix(vec3(1.0,0.45,0.12),vec3(0.36,0.33,0.31),smoothstep(0.0,0.12,vL));
-      c=mix(c,uFog*0.6,smoothstep(0.5,1.0,vL)*0.5);
-      gl_FragColor=vec4(c,vA*smoothstep(0.5,0.1,r)*0.55); }`
+    fragmentShader:`varying float vL; varying float vA; varying float vS; varying float vHot; uniform vec3 uFog,uSunV;
+    void main(){ vec2 d=gl_PointCoord-0.5; float r=length(d)*2.0; if(r>1.0) discard;
+      float an=atan(d.y,d.x), edge=0.84+0.07*sin(an*5.0+vS*40.0)+0.04*sin(an*9.0+vS*17.0);   // lumpy, cauliflower edge
+      float m=1.0-smoothstep(edge*0.5,edge,r);
+      vec3 n=vec3(d.x*2.0,-d.y*2.0,sqrt(max(0.0,1.0-r*r)));        // a soft sphere, lit from the sun
+      float lam=0.5+0.65*max(dot(n,uSunV),0.0);
+      vec3 ashC=mix(vec3(0.40,0.37,0.34),vec3(0.66,0.63,0.60),max(smoothstep(0.45,1.0,vL)*0.5,step(9.0,vS)*0.7))*lam;   // surges (vS>9) run pale
+      vec3 c=mix(vec3(1.0,0.5,0.16),ashC,smoothstep(0.0,0.035,vL));
+      c+=vec3(1.0,0.38,0.10)*vHot*(0.3+0.7*clamp(-n.y+0.3,0.0,1.0))*0.7;   // lit from below by the vent
+      c=mix(c,uFog*0.85,smoothstep(0.55,1.0,vL)*0.35);
+      gl_FragColor=vec4(c,vA*m*0.6); }`
   });
   const pts=new THREE.Points(g,m); pts.frustumCulled=false; lScene.add(pts); return pts;
 })();
@@ -1515,6 +1562,9 @@ function buildPatch(q,m,h16){
     for(let k=0;k<5;k++) hh[k][i]=sampleGrid(H[k],x,z);
     hh[5][i]=lerp(sampleGrid(H[5],x,z), v<-32000?0:v*sc/1000, sm(0,ramp,Math.min(c,r,nx-1-c,nzz-1-r))); }
   hh.forEach((a,k)=>g.setAttribute("h"+k,new THREE.BufferAttribute(a,1)));
+  { const cA=new Float32Array(n*3), cB=new Float32Array(n*3);
+    for(let i=0;i<n;i++){ const x=pp.getX(i), z=pp.getZ(i); for(let k=0;k<6;k++) (k<3?cA:cB)[i*3+k%3]=sampleGrid(CAV[k],x,z); }
+    g.setAttribute("aCavA",new THREE.BufferAttribute(cA,3)); g.setAttribute("aCavB",new THREE.BufferAttribute(cB,3)); }
   const kA=(bc*SZ/(NZ-1))/(cx*cz), acc0=new Float32Array(n).fill(1), dist0=new Float32Array(n);
   const inB=(x,z)=>x>b.x0&&x<b.x1&&z>b.z0&&z<b.z1;
   for(let v=0;v<NV;v++){ const d=BASE_REC[v]; if(d<0) continue; const dx=P.getX(d), dz=P.getZ(d);
@@ -1740,6 +1790,7 @@ function apply(a,p){
   const dome=band(a,3.45,2.95,0.08), big=band(a,2.905,2.845,0.012);
   lUni.uLava.value = Math.max(dome*0.55, big);
   ash.material.uniforms.uE.value = Math.max(dome*0.3, big);
+  ash.material.uniforms.uSurge.value = big; SHK.big = big;
   lUni.uAsh.value = a<2.86 ? sm(2.2,2.86,a) : big*0.6;
   lUni.uVines.value = sm(0.00017,0.00004,a)*((GEO.on&&GEO.ok)||(SAT.on&&SAT.ok)?0.25:1);   // vineyards spread from the mid-1800s (dimmed under the geology map)
   lUni.uGeoOn.value = GEO.on&&GEO.ok ? sm(0.06,0.0005,a) : 0;
@@ -1815,6 +1866,17 @@ function deriveGlobeCam(){
   return alt*R_E;
 }
 let orbit=0.9, lInit=false;
+/* Camera follow as a critically damped spring (SmoothDamp): it eases in as well as out, so a new
+   chapter never starts the camera with a jolt, and the hand-over from the dive keeps its speed. */
+const CV={p:new THREE.Vector3(), t:new THREE.Vector3(), prevP:new THREE.Vector3(), prevT:new THREE.Vector3(), last:-1}, dmpA=new THREE.Vector3(), dmpB=new THREE.Vector3();
+function damp3(cur,tgt,vel,st,dt){
+  const w=2/st, x=w*dt, e=1/(1+x+0.48*x*x+0.235*x*x*x);
+  dmpA.copy(cur).sub(tgt); dmpB.copy(vel).addScaledVector(dmpA,w).multiplyScalar(dt);
+  vel.addScaledVector(dmpB,-w).multiplyScalar(e);
+  cur.copy(tgt).add(dmpA.add(dmpB).multiplyScalar(e));
+}
+// a short, decaying shudder when the caldera eruption starts (aesthetic; never with reduced motion)
+const SHK={big:0, was:false, e:0, off:new THREE.Vector3()};
 function driveLocalCam(a,hc,dt){
   if(!reduce) orbit += dt*0.045*(playing?1:0.6);
   const t=sm(170,0,a), kL=LEXT/30;
@@ -1826,6 +1888,8 @@ function driveLocalCam(a,hc,dt){
     let hl=0; for(let k=0;k<6;k++) hl+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][L.i];
     tx=L.fx; tz=L.fz; dist=L.kind==="site"?(SITE.mode?0.95:1.6):clamp(L.fr*2.3,3,30); elev=L.kind==="site"?0.5:0.6; ty=Math.max(0,hl)*VE*0.8; lift=0; }
   if(!lInit){ lInit=true; lCam.position.set(tx+Math.sin(orbit)*30*kL,34*kL,tz+Math.cos(orbit)*30*kL); }
+  if(T-CV.last>dt*1.5+1e-4){ CV.p.set(0,0,0); CV.t.set(0,0,0); }   // the user or a flight had the camera: start from rest
+  CV.last=T; CV.prevP.copy(lCam.position); CV.prevT.copy(lCtl.target);
   tv.set(tx+Math.sin(orbit)*Math.cos(elev)*dist, Math.sin(elev)*dist + ty + lift, tz+Math.cos(orbit)*Math.cos(elev)*dist);
   const zs=clamp((A_DIVE-a)/(A_DIVE-A_LAND),0,1), z=zs*zs*zs*(zs*(zs*6-15)+10);   // smootherstep: eases in and out, no jolt at either end
   if(z<1){ // the dive: from where the globe camera left off down to the block, altitude on a log scale
@@ -1844,10 +1908,11 @@ function driveLocalCam(a,hc,dt){
     // roll: start with the globe's north up, end with the block's up
     yL.set(0,bU.y,bS.y).lerp(up,sm(0.2,1,z)).normalize(); lCam.up.copy(yL);
     lCam.lookAt(tgt); lCam.up.set(0,1,0);
+    if(dt>0){ CV.p.subVectors(lCam.position,CV.prevP).divideScalar(dt); CV.t.subVectors(lCtl.target,CV.prevT).divideScalar(dt); }   // carried into the follow below
     return;
   }
-  lCam.position.lerp(tv, 1-Math.exp(-dt*2.2));
-  lCtl.target.lerp(tv.set(tx, ty, tz), 1-Math.exp(-dt*2.2));
+  damp3(lCam.position, tv, CV.p, 0.9, dt);
+  damp3(lCtl.target, tv.set(tx, ty, tz), CV.t, 0.9, dt);
   lCam.lookAt(lCtl.target);
 }
 
@@ -2483,8 +2548,18 @@ if(window.ResizeObserver) new ResizeObserver(placeHud).observe(document.querySel
 function setGlobeScale(on){ if(document.body.classList.contains("gscale")===on) return;
   document.body.classList.toggle("gscale",on); if(on){ if(xs.open) xsToggle(false); if(!$("places").hidden) openPlaces(false); } placeHud(); }
 let last=performance.now(), T=0;
+/* Frame-time budget: if frames run slow for a few seconds, render fewer pixels (down to 1 per CSS
+   pixel); give them back when there is headroom, never above the level that was too slow. */
+const PR={max:Math.min(devicePixelRatio,2), cur:Math.min(devicePixelRatio,2), ceil:Math.min(devicePixelRatio,2), ema:16, t:0};
+function budget(dt){
+  PR.ema+=(dt*1000-PR.ema)*0.05; PR.t+=dt; if(PR.t<2.5||document.hidden) return; PR.t=0;
+  const lo=Math.min(1,PR.max); let n=PR.cur;
+  if(PR.ema>26&&PR.cur>lo){ PR.ceil=PR.cur-0.25; n=Math.max(lo,PR.cur-0.25); }
+  else if(PR.ema<19&&PR.cur<PR.ceil) n=Math.min(PR.ceil,PR.cur+0.25);
+  if(n!==PR.cur){ PR.cur=n; renderer.setPixelRatio(n); renderer.setSize(innerWidth,innerHeight,false); }
+}
 function frame(now){
-  const dt=Math.min(0.05,(now-last)/1000); last=now; T+=dt;
+  const dt=Math.min(0.05,(now-last)/1000); last=now; T+=dt; budget(dt);
   gUni.uTime.value=T; lUni.uTime.value=T;
 
   if(tween){
@@ -2551,6 +2626,10 @@ function frame(now){
     lCtl.zoomSpeed = dist>LEXT*2 ? 3 : 1; lCtl.minDistance = LOC.cur ? 0.08 : 1.2;   // close-ups: down to about 80 m
     lCam.near=clamp(dist*0.02,0.002,0.1); lCam.far=Math.max(400,LEXT*8,dist*1.6); lCam.updateProjectionMatrix();
     lUni.uFogN.value=Math.max(LEXT*1.5,dist*2); lUni.uFogF.value=Math.max(LEXT*4.7,dist*6);
+    { const on=SHK.big>0.5; if(on&&!SHK.was&&!reduce&&autoCam) SHK.e=1; SHK.was=on; SHK.e*=Math.exp(-dt*1.3);
+      if(SHK.e>0.01){ SHK.off.set(Math.sin(T*37)+0.5*Math.sin(T*23), 0.7*Math.sin(T*41+1), Math.sin(T*29+2)+0.4*Math.sin(T*53)).multiplyScalar(SHK.e*0.006*dist); lCam.position.add(SHK.off); }
+      else SHK.off.set(0,0,0); }
+    lCam.updateMatrixWorld(); ash.material.uniforms.uSunV.value.copy(lUni.uSun.value).transformDirection(lCam.matrixWorldInverse);
     const altKm=deriveGlobeCam(); far = dist>LEXT*5;
     // globe around the block: same sun, same haze; clouds, air glow and stars only from high up
     gSunL.copy(bE).multiplyScalar(lUni.uSun.value.x).addScaledVector(bU,lUni.uSun.value.y).addScaledVector(bS,lUni.uSun.value.z);
@@ -2571,6 +2650,7 @@ function frame(now){
         if(vis&&placed.some(b=>Math.abs(b.y-y)<17&&Math.abs(b.x+b.w/2-x-q.w/2)<(b.w+q.w)/2)) vis=false;
         q.el.hidden=!vis; if(vis){ placed.push({x,y,w:q.w}); q.el.style.left=x+"px"; q.el.style.top=y+"px"; } }); }
     renderer.clear(); renderer.render(gScene,gCam); renderer.clearDepth(); renderer.render(lScene,lCam);
+    lCam.position.sub(SHK.off);
     { const xd=$("xdot"); let vis=xs.open&&!far; if(vis){ pl3.set(XS_X,Math.max(xsHs[XS_I0],0)*VE+0.06,XS_Z).project(lCam); vis=pl3.z<1;
         if(vis){ xd.style.left=((pl3.x+1)/2*innerWidth)+"px"; xd.style.top=((1-pl3.y)/2*innerHeight)+"px"; } } xd.hidden=!vis; }
     pv.set(0,st.hc*VE+0.35,0).project(lCam);
