@@ -836,6 +836,169 @@
           "sha256": "4be244d1698a5c4f916e855ec366901363b5d05399ffb4b58abd7e7f53423815"
         }
       ]
+    },
+    {
+      "id": "west_sonoma_coast-faults",
+      "source": "GEM Global Active Faults Database",
+      "url": "https://raw.githubusercontent.com/GEMScienceTools/gem-global-active-faults/master/geojson/gem_active_faults_harmonized.geojson",
+      "rights": "CC BY-SA 4.0 (GEM Global Active Faults Database, Styron & Pagani 2020); California traces from USGS UCERF3",
+      "source_sha256": "37babb516edfac22b5ae91744495d8546b3ae4676b4d4f68cc77da8222df20e1",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/west_sonoma_coast/faults.json",
+          "sha256": "57f18d7b95c84b2c534b2d9c4a8bb0ff35df7e16bcc005f7e308de4d4111e166"
+        }
+      ]
+    },
+    {
+      "id": "ava-mendocino",
+      "source": "UC Davis Library & DataLab, American Viticultural Areas (AVA) Project",
+      "url": "https://raw.githubusercontent.com/UCDavisLibrary/ava/master/avas_aggregated_files/avas.geojson",
+      "rights": "CC0 1.0",
+      "source_sha256": "c90068f7154764519f0a7c6fb2788e597b7c56bf7581e8c0faa979554d984926",
+      "derived": [
+        {
+          "file": "data/ava/mendocino_avas.geojson",
+          "sha256": "bbc9f0582e71feabf254a4b00d4bd36a8ccd31992eb964ee787cb33f069e4d12"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/ava.json",
+          "sha256": "8c6c8367a1ddf0e3ad30133908e4abb1e2491825763871c93f92483eed9624cd"
+        }
+      ]
+    },
+    {
+      "id": "mendocino-terrain-tiles-z13",
+      "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+      "url_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "zoom": 13,
+      "tiles": 360,
+      "tiles_sha256": "50be4d1aa1957ed5a756e8072baa2522d343c83c7fc3e08cd30bc3864663ead4",
+      "fetched": "2026-10-07",
+      "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/mendocino/terrain.bin",
+          "sha256": "49a22cb9619fce6aa884f9e0d49442fbf679c36159cd5508823f4322e6d302d1"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/dem_hi.bin",
+          "sha256": "b37703bd51afa38511b2cca3a6224882ac954e8c3d56669241c7ebceff05eb86"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/anderson_valley.bin",
+          "sha256": "76f10afb38b808acb1b102e76262ff4ed3686f4fd84d65bac6f6bbb12839dffb"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/benmore_valley.bin",
+          "sha256": "8d2204d6aa01c26f4499af5465b598340ccfbc683078218689e8be32fd69ff74"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/cole_ranch.bin",
+          "sha256": "a237a848a4e3d527c04263f46451f1be5b49b697dbd23d4dfd369bda699c7a8b"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/comptche.bin",
+          "sha256": "3d65bf41eff0b16593e40c4819baec9f5ea1f25227e04d9c4d1a78627a37b4df"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/eagle_peak_mendocino_county.bin",
+          "sha256": "7f8fdd4895bcf2f76681695b419a9ab28dac931fad974fd0ed6c8cc8fba3a1c1"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/mcdowell_valley.bin",
+          "sha256": "9f35323c1b558c5277347fdab51f4e54ee3e7590a21e4bb8614393b27970320e"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/mendocino_ridge.bin",
+          "sha256": "986c646ccdd85c6e90ef88ea9caaeb2273cc0a712a07f2f1ee6ac7d5230e219e"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/potter_valley.bin",
+          "sha256": "030e894a4d5d7143ae086452c4271d2c409731a657c3f1a3bf06b4edd9a0aa33"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/redwood_valley.bin",
+          "sha256": "d0ca90549cab7b8aa416c178668479a240bee1972320beb5f2281fa59323b3f3"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/yorkville_highlands.bin",
+          "sha256": "46c4a3efb83794d2f64d08b3c4bec52433e6f895d7e0d4089c64d38863b5705c"
+        }
+      ],
+      "pit_floor_m": -100,
+      "pit_pixels_set_to_0m": 785
+    },
+    {
+      "id": "mendocino-sentinel2-imagery",
+      "source": "Sentinel-2 L2A TCI (B04, B03, B02), Cloud-Optimized GeoTIFFs",
+      "url": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs",
+      "scenes": [
+        "S2B_10SDJ_20250923_0_L2A"
+      ],
+      "date": "2025-09-23",
+      "fetched": "2026-10-07",
+      "rights": "Copernicus Sentinel data: free, full and open access under the Copernicus data policy (Commission Delegated Regulation (EU) No 1159/2013); attribution required",
+      "credit": "Contains modified Copernicus Sentinel data 2025, processed by ESA; Sentinel-2 L2A COGs from AWS Open Data (Element 84)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/mendocino/imagery.jpg",
+          "sha256": "6cf3bb8c148711d12393f1916ef846f034ce9140c83825e690ce6edb3b37b40f"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/anderson_valley.imagery.jpg",
+          "sha256": "99ae102a91ec9747e3e2dd2cf22ca2130d1c25bbe869abbcae30f2a4be3e0753"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/benmore_valley.imagery.jpg",
+          "sha256": "475f95267f4326be2061c4aa9ebb8248ba8a7c8e2870ed8fa7ad085a2add8907"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/cole_ranch.imagery.jpg",
+          "sha256": "166d36a235b7eecf47a52d63f708104a7b4628af12f341da94a36534b7d042eb"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/comptche.imagery.jpg",
+          "sha256": "9edd5eab0a13c614fe4db5f8f0c1146063cfc35dbe24a57198cdc3a9b3d14775"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/eagle_peak_mendocino_county.imagery.jpg",
+          "sha256": "3bb8fb2615a4679b77f909d39279eaa643dd4765b1ea35303cf180d080e930fe"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/mcdowell_valley.imagery.jpg",
+          "sha256": "4550cb715a93c0b34f5af410d0168cf116ff57713e4e79bb9f4e0ff405c2750b"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/mendocino_ridge.imagery.jpg",
+          "sha256": "e7d5450718d9a784f91e786df45bb78787f865816a12c293c4ab7bfa0d414dd7"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/potter_valley.imagery.jpg",
+          "sha256": "e7a41f1b86949a0518036a45a8ab7fa49af48d8b16e4cbd5082e1b59d450e005"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/redwood_valley.imagery.jpg",
+          "sha256": "8d1dfb600aca7ca9449c18c6a7393571ebf7e6178dea71daa2fa62ee7b548822"
+        },
+        {
+          "file": "prototype/assets/regions/mendocino/detail/yorkville_highlands.imagery.jpg",
+          "sha256": "51d4af847155a8c0d3c1361c65eabd86dcecc21255065cc9d24afebd690f99f1"
+        }
+      ]
+    },
+    {
+      "id": "mendocino-faults",
+      "source": "GEM Global Active Faults Database",
+      "url": "https://raw.githubusercontent.com/GEMScienceTools/gem-global-active-faults/master/geojson/gem_active_faults_harmonized.geojson",
+      "rights": "CC BY-SA 4.0 (GEM Global Active Faults Database, Styron & Pagani 2020); California traces from USGS UCERF3",
+      "source_sha256": "37babb516edfac22b5ae91744495d8546b3ae4676b4d4f68cc77da8222df20e1",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/mendocino/faults.json",
+          "sha256": "b03407bb389e2691ddef2ce43314f8629847530952a5e47992ef05512f4b3910"
+        }
+      ]
     }
   ],
   "locations": {

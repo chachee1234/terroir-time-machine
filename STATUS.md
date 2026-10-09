@@ -390,6 +390,17 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - Checks: all 18 `scripts/test_*.py` pass; `python3 scripts/validate.py` PASS; headless load of `sources.html` and `timemachine.html` shows no new errors (one remote 404 on sources.html also happens on main).
 - Open PRs #24 and #25 (and #28's branch) still carry SFEI in their viewer and data; they need the same removal before merging. Share HTML files rebuilt without SFEI.
 
+## Autopilot R4.2: West Sonoma Coast step 2 (branch `autopilot`, restarted from main after PR #28 merged) — 2026-10-05
+- Region data: `prototype/assets/regions/west_sonoma_coast/faults.json` (San Andreas North Coast, Rodgers Creek–Healdsburg); `places.json` (no towns: no Natural Earth place inside the frame; gap recorded); `data/regions/west_sonoma_coast/scenes.json` (six shared chapters, Napa-specific chapters as gaps, the Mount St. Helena chapters not applicable, a "Today" card from G17/G18/G19/G35). `test_region_faults.py` checks the new file. SOURCES G35. No downloads (cached GEM and Natural Earth files).
+- Commands: `python3 scripts/region_faults.py --region data/regions/west_sonoma_coast.json --from-file <cached GEM geojson, SHA-256 37babb51…>`; `python3 -m unittest discover -s scripts -p 'test_*.py'` → 141, 2 skipped, all pass; `python3 scripts/validate.py` → PASS. No page touched, so no headless check this step.
+- Next smallest action: R4.3 West Sonoma Coast live page, index entry, globe marker, GeoLibre export.
+
+## Autopilot R4.3: West Sonoma Coast step 3 (branch `autopilot`) — 2026-10-06
+- `timemachine.html?region=west_sonoma_coast` opens the region: outlines, two faults, chapters ("The West Sonoma Coast today"), no town labels (recorded gap). No viewer code change was needed. `regions/index.json` gains the region; GeoLibre project `west_sonoma_coast.geolibre.json` (other projects byte-identical).
+- `region_order.py --mapped` re-run adding west_sonoma_coast and fort_ross_seaview: Fort Ross-Seaview is nested in West Sonoma Coast (UC Davis `contains`) and already a close-up, but its own `within` field does not name West Sonoma Coast, so without this it came up as the next region. Next region: Mendocino.
+- Commands: `python3 scripts/region_order.py --mapped <previous list>,west_sonoma_coast,fort_ross_seaview`; `python3 scripts/geolibre_export.py --regions napa_valley,sonoma_valley,petaluma_gap,northern_sonoma,west_sonoma_coast`; `python3 -m unittest discover -s scripts -p 'test_*.py'` → Ran 141 tests in 36.751s  OK (skipped=2) ; `python3 scripts/validate.py` → PASS. Headless Chromium (swiftshader, three r128 local): `?region=west_sonoma_coast` at 250, 20 and 0 Ma, `?region=petaluma_gap`, the default page and `?view=regions`: no page errors, no failed requests. In the test browser the camera needs about 60 s to settle on this frame (slow software rendering); settled view checked by screenshot. Not tested: real-hardware frame rate, phones, Safari.
+- Next smallest action: owner review of PR #39; then R4 Mendocino step 1 (frame likely large: 58 km, seven close-ups).
+
 ## 2026-10-06 — Corison, the last 100,000 years (video)
 - New `prototype/corison-100ka.html`: an 84 s reconstruction of the 5 × 5 km around Corison from 100 ka to today on the site's 10 m ground: sea-level strip, a SW–NE section through the winery with the deposits growing, a regional inset with San Pablo Bay draining and refilling, the West Napa Fault offset (~1.3 mm/yr), the ice-age Napa River cut and refill, an illustrated old creek channel across the property, two Holocene flood sheets, 1971 planting and today's satellite image. Each chapter is tagged Measured / Modelled; sources in SOURCES.md G36.
 - `scripts/make_corison_100ka.py` → `sites/corison_100ka.{u8,json}` (uint8 fields; `.u8` so the share build, which packs `.bin` as Int16, skips it). `scripts/render_corison_video.mjs` renders the MP4 (Playwright + ffmpeg, about 0.6 s a frame with SwiftShader).
@@ -405,6 +416,10 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 ## 2026-10-07 — Links to the three animation pages
 - The time machine's footer (next to Sources) now links the Corison 100,000-year, Mayacamas 8 Myr and San Andreas 30 Myr pages merged in PR #40; each opens in a new tab.
 - Checks: `python3 -m unittest discover -s scripts -p 'test_*.py'`; `python3 scripts/validate.py`; headless load of timemachine.html.
+
+## PR #39 merge conflicts resolved (branch `autopilot`) — 2026-10-07
+- Merged main (PRs #40, #41) into `autopilot`; conflicts only in SOURCES.md and STATUS.md (both sides appended). Main had renumbered the West Sonoma Coast entry to G35, so this branch's R4.2 notes moved under G35 ahead of G36/G37, and `data/regions/west_sonoma_coast/scenes.json`, AUTOPILOT.md and the STATUS entries now cite G35 instead of G34.
+- Checks: `python3 -m unittest discover -s scripts -p 'test_*.py'` → 143 run, all pass except `test_corison_100ka` and `test_deep_time_fields` (from main), which cannot import numpy in this container (not installed; not this PR's code); `python3 scripts/validate.py` → PASS; headless Chromium `?region=west_sonoma_coast`, `?region=petaluma_gap`, default page and `?view=regions`: no page errors, no failed requests.
 
 ## First location outside California: Strait of Gibraltar and the Zanclean flood (branch `gibraltar-flood`) — 2026-09-29
 - Owner: "Turn into next location on ttm with animation of these events" (the Messinian Salinity Crisis and the Zanclean flood, about 5.97–5.33 Ma).

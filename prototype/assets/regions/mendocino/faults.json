@@ -1,0 +1,197 @@
+{
+ "region": "mendocino",
+ "source": "GEM Global Active Faults Database",
+ "url": "https://raw.githubusercontent.com/GEMScienceTools/gem-global-active-faults/master/geojson/gem_active_faults_harmonized.geojson",
+ "rights": "CC BY-SA 4.0 (GEM Global Active Faults Database, Styron & Pagani 2020); California traces from USGS UCERF3",
+ "source_sha256": "37babb516edfac22b5ae91744495d8546b3ae4676b4d4f68cc77da8222df20e1",
+ "crs": "EPSG:26910 (NAD83 / UTM zone 10N) kilometres; WGS84 input treated as NAD83",
+ "rule": "every trace with a vertex inside bbox_utm, kept whole",
+ "note": "fault-model traces (simplified), not field-mapped surface ruptures",
+ "faults": [
+  {
+   "id": "UCF_644",
+   "name": "Maacama 2011 CFM",
+   "label": "Maacama",
+   "catalog": "UCERF3",
+   "slip_type": "Dextral",
+   "dip_deg": 63.0,
+   "net_slip_mm_yr": [
+    7.91,
+    5.91,
+    11.05
+   ],
+   "pts_km": [
+    [
+     530.761,
+     4261.344
+    ],
+    [
+     522.373,
+     4274.211
+    ],
+    [
+     517.23,
+     4281.402
+    ],
+    [
+     503.647,
+     4296.325
+    ],
+    [
+     492.752,
+     4318.724
+    ],
+    [
+     482.629,
+     4338.977
+    ],
+    [
+     479.982,
+     4344.672
+    ],
+    [
+     477.299,
+     4349.39
+    ],
+    [
+     470.315,
+     4360.719
+    ],
+    [
+     467.653,
+     4365.235
+    ],
+    [
+     452.595,
+     4397.21
+    ],
+    [
+     442.537,
+     4410.879
+    ]
+   ]
+  },
+  {
+   "id": "UCF_654",
+   "name": "San Andreas (North Coast) 2011 CFM",
+   "label": "San Andreas (North Coast)",
+   "catalog": "UCERF3",
+   "slip_type": "Dextral",
+   "dip_deg": 90.0,
+   "net_slip_mm_yr": [
+    17.96,
+    13.2,
+    22.88
+   ],
+   "pts_km": [
+    [
+     529.44,
+     4194.386
+    ],
+    [
+     526.189,
+     4198.689
+    ],
+    [
+     519.729,
+     4208.552
+    ],
+    [
+     513.244,
+     4216.664
+    ],
+    [
+     509.229,
+     4222.035
+    ],
+    [
+     502.775,
+     4230.937
+    ],
+    [
+     499.939,
+     4235.634
+    ],
+    [
+     493.022,
+     4246.569
+    ],
+    [
+     489.624,
+     4251.095
+    ],
+    [
+     481.088,
+     4261.3
+    ],
+    [
+     477.152,
+     4266.229
+    ],
+    [
+     472.971,
+     4271.44
+    ],
+    [
+     468.32,
+     4277.52
+    ],
+    [
+     462.367,
+     4285.379
+    ],
+    [
+     457.981,
+     4290.893
+    ],
+    [
+     454.636,
+     4295.578
+    ],
+    [
+     448.815,
+     4303.586
+    ],
+    [
+     440.174,
+     4317.083
+    ],
+    [
+     436.84,
+     4322.444
+    ],
+    [
+     431.264,
+     4333.484
+    ]
+   ]
+  },
+  {
+   "id": "UCF_697",
+   "name": "Wight Way 2011 CFM",
+   "label": "Wight Way",
+   "catalog": "UCERF3",
+   "slip_type": "Reverse",
+   "dip_deg": 69.0,
+   "net_slip_mm_yr": [
+    0.03,
+    0.0,
+    0.1
+   ],
+   "pts_km": [
+    [
+     513.437,
+     4311.555
+    ],
+    [
+     502.915,
+     4307.592
+    ],
+    [
+     496.707,
+     4309.631
+    ]
+   ]
+  }
+ ]
+}

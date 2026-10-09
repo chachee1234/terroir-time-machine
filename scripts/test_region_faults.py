@@ -35,6 +35,12 @@ class RegionFaultTests(unittest.TestCase):
     def test_northern_sonoma_file_matches_its_frame(self):
         self.check_frame("northern_sonoma")
 
+    def test_west_sonoma_coast_file_matches_its_frame(self):
+        self.check_frame("west_sonoma_coast")
+
+    def test_mendocino_file_matches_its_frame(self):
+        self.check_frame("mendocino")
+
     def check_frame(self, rid):
         with open(os.path.join(ROOT, "data", "regions", rid + ".json")) as f:
             r = json.load(f)

@@ -1,0 +1,66 @@
+{
+  "region": "mendocino",
+  "schema": "SCENES.json chapter objects, plus optional span_ma, camera and focus (ROADMAP_REGIONS.md item 2)",
+  "status": "generic chapters only; written by the autopilot (R4.2), not reviewed",
+  "shared": {
+    "note": "planet-scale chapters reused verbatim from SCENES.json by id; their text does not name a place in the Napa frame",
+    "ids": [
+      "ch_1_8ga",
+      "ch_1_1ga",
+      "ch_700ma",
+      "ch_430ma",
+      "ch_250ma",
+      "ch_28ma"
+    ]
+  },
+  "gaps": [
+    {
+      "id": "ch_150ma",
+      "reason": "SCENES.json text describes the ground under Mount St. Helena and Napa Valley; no source in SOURCES.md yet describes the Franciscan rocks of this frame"
+    },
+    {
+      "id": "ch_66ma",
+      "reason": "its last sentence describes the Napa frame; kept out until a Mendocino version is sourced"
+    },
+    {
+      "id": "ch_8ma",
+      "reason": "Sonoma Volcanics chapter not written for this frame: no mapped geology for this frame is in SOURCES.md yet"
+    },
+    {
+      "id": "ch_1ma",
+      "reason": "uplift and erosion text is written for the Mayacamas; no source for this frame yet"
+    }
+  ],
+  "not_applicable": [
+    {
+      "id": "ch_3_0ma",
+      "reason": "the Mount St. Helena volcano is outside this frame"
+    },
+    {
+      "id": "ch_2_85ma",
+      "reason": "the Mount St. Helena caldera eruption is outside this frame"
+    }
+  ],
+  "chapters": [
+    {
+      "id": "today",
+      "age_ma": 0,
+      "span_ma": [
+        0.0002,
+        0
+      ],
+      "tag": "Today",
+      "title": "Mendocino today",
+      "body": "The Mendocino AVA lies in Mendocino County, within the North Coast AVA; the UC Davis AVA Project lists it as established on 16 July 1984. Seven AVAs are nested in it, among them Anderson Valley, Potter Valley, Redwood Valley and Yorkville Highlands, and Benmore Valley, Comptche and Eagle Peak Mendocino County also lie inside this frame. The frame runs from the Pacific shore inland; its highest ground, about 1,300 m, is at its east edge. Traces of three faults from the USGS UCERF3 fault model enter the frame: the right-lateral San Andreas (North Coast) and Maacama faults, and the short Wight Way reverse fault. The gold lines are the AVA boundaries.",
+      "visual_class": "measured-approx",
+      "key": true,
+      "dwell_s": 10,
+      "sources": [
+        "G18",
+        "G19",
+        "G17",
+        "G40"
+      ]
+    }
+  ]
+}

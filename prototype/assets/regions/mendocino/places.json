@@ -1,0 +1,21 @@
+{
+ "region": "mendocino",
+ "source": "Natural Earth 1:10m populated places (public domain), ne_10m_populated_places_simple.geojson, SHA-256 fd3fa867a320cbd5\u2026",
+ "crs": "EPSG:26910 (NAD83 / UTM zone 10N) metres; WGS84 input treated as NAD83",
+ "places": [
+  {
+   "name": "Ukiah",
+   "kind": "town",
+   "lonlat": [
+    -123.210862,
+    39.154237
+   ],
+   "utm": [
+    481780.8,
+    4333913.8
+   ],
+   "source": "Natural Earth 1:10m populated places"
+  }
+ ],
+ "gap": "Only Ukiah is labelled: it is the one Natural Earth 1:10m populated place inside this frame (the file's Mendocino point, the coastal town, lies about 12 km west of the frame). Boonville, Philo, Hopland, Redwood Valley, Potter Valley and other towns are not in that file, and GNIS and Census gazetteers are blocked from the cloud sandbox. Adding them needs a reachable open gazetteer listed in SOURCES.md, or an owner instruction to use another source (for example OpenStreetMap, ODbL)."
+}
