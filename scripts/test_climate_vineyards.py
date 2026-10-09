@@ -4,7 +4,6 @@ import json
 import struct
 import sys
 import unittest
-import zlib
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -79,6 +78,16 @@ class Vineyards(unittest.TestCase):
         latest = v["years"][str(v["drape"]["year"])]
         self.assertGreater(latest["ava_acres"]["Napa Valley"], latest["ava_acres"]["St. Helena"])
         self.assertGreater(latest["frame_acres"], latest["ava_acres"]["Napa Valley"])
+
+
+class CdlDownloadLink(unittest.TestCase):
+    def test_only_cropscape_links_are_followed(self):
+        ok = "https://nassgeodata.gmu.edu/webservice/nass_data_cache/tmp/CDL_2024_clip.tif"
+        self.assertEqual(mv.cdl_file_url(ok), ok)
+        for bad in ("file:///etc/passwd", "https://example.com/x.tif", "ftp://nassgeodata.gmu.edu/x.tif",
+                    "https://nassgeodata.gmu.edu.evil.test/x.tif", "https://user@evil.test/@nassgeodata.gmu.edu/x"):
+            with self.subTest(url=bad), self.assertRaises(SystemExit):
+                mv.cdl_file_url(bad)
 
 
 if __name__ == "__main__":

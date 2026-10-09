@@ -38,7 +38,7 @@ EXTRA = ["SCENES.json", "data/plates/stylized.json"]
 # GeoLibre project files are only opened by web.geolibre.app from GitHub, never by the viewer.
 SKIP_SUFFIXES = (".geolibre.json",)
 MIME = {".json": "application/json", ".bin": "application/octet-stream", ".png": "image/png", ".jpg": "image/jpeg"}
-THREE_TAG = '<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>'
+THREE_TAG = '<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js" integrity="sha384-wagZhIFgY4hD+7awjQjR4e2E294y6J2HSnd8eTNc15ZubTeQeVRZwhQJ+W6hnBsf" crossorigin="anonymous"></script>'
 
 SHIM = r"""<script>
 /* Shareable build: data files are embedded below and served to the viewer's fetch() calls. */
