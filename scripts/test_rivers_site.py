@@ -77,6 +77,11 @@ class SiteTest(unittest.TestCase):
         self.assertLess(lum(dark), lum(light))
         self.assertIsNone(ms.munsell_rgb("10YR", None, 2))
 
+    def test_merge_colours_prefers_same_master_horizon(self):
+        osd = [{"name": "A1", "top_cm": 23, "bottom_cm": 53, "rgb": "#a"}, {"name": "B2t", "top_cm": 53, "bottom_cm": 122, "rgb": "#b"}]
+        hz = ms.merge_colours([{"name": "Bt1", "top_cm": 45, "bottom_cm": 58, "rock_frag_pct": 0}], osd)
+        self.assertEqual((hz[0]["osd_horizon"], hz[0]["rgb"], hz[0]["gravel_pct"]), ("B2t", "#b", None))
+
     def test_horizons_keep_texture_modifier_and_gravel(self):
         doc = {"HORIZONS": [[{"name": "IIC1", "top": 112, "bottom": 127, "texture_class": "sandy loam",
                               "moist_hue": "10YR", "moist_value": 3, "moist_chroma": 3, "pH": 6.3,
@@ -89,8 +94,17 @@ class SiteTest(unittest.TestCase):
         self.assertEqual(s["geology"]["at_site"], "Qf")
         self.assertIn("st__helena", [a["id"] for a in s["avas"]])
         hz = s["soil"]["horizons"]
-        self.assertEqual([h["name"] for h in hz][:2], ["Ap", "B21"])
         self.assertTrue(all(a["bottom_cm"] == b["top_cm"] for a, b in zip(hz, hz[1:])))
+        # the USDA soil survey maps Pleasanton loam at the winery; Bale is only reported (unverified)
+        so = s["soil"]
+        self.assertEqual((so["series"], so["mapped"]["component"]), ("PLEASANTON", "Pleasanton"))
+        self.assertEqual(so["reported"]["status"], "unverified")
+        self.assertEqual([h["name"] for h in hz][:2], ["Ap", "A"])
+        for h in hz:
+            self.assertAlmostEqual(h["sand_pct"] + h["silt_pct"] + h["clay_pct"], 100, delta=1)
+            self.assertTrue(h["rgb"], h["name"])
+        self.assertEqual([h["osd_horizon"][0] for h in hz], [h["name"][0] for h in hz])  # colours from the same master horizon
+        self.assertIn(so["reported"]["source"], s["sources"])
         sec = s["section"]
         self.assertEqual(len(sec["ground_m"]), int(round(2 * sec["half_m"] / sec["step_m"])) + 1)
         self.assertIn("Napa River", [c["name"] for c in sec["streams"]])
