@@ -1414,7 +1414,8 @@ const OWN_LAYERS = OWN ? fetch("assets/regions/index.json").then(r=>r.ok?r.json(
     t.flipY=false; t.magFilter=THREE.NearestFilter; t.minFilter=THREE.NearestFilter; t.generateMipmaps=false; t.needsUpdate=true;
     lUni.uGeo.value=t; GEO.ok=true; GEO.legend=lg; $("geoBtn").hidden=false;
     geoLegend(null);
-    // finer copies of the same map on each close-up's own grid (make_geology_texture.py --closeups)
+    // finer copies on each close-up's own grid (make_geology_texture.py --closeups), young deposits from the
+    // USGS 1:24,000 map where it reaches (make_quaternary_texture.py)
     GEO.detail=REG.id==="mt_st_helena" ? null : await fetch(base+"detail/geology.json").then(r=>r.ok?r.json():null).catch(()=>null);
     try{ if(LOC.mesh&&LOC.cur) loadPatchGeology(LOC.cur); }catch(e){ /* close-ups not set up yet */ }
   }catch(e){ /* no drape for this region */ }
@@ -1423,9 +1424,10 @@ const OWN_LAYERS = OWN ? fetch("assets/regions/index.json").then(r=>r.ok?r.json(
 function geoLegend(patch){
   const lg=GEO.legend; if(!lg) return; const key=patch?patch.id:""; if(GEO.lgKey===key) return; GEO.lgKey=key;
   const units=patch?patch.units:lg.units;
-  $("geoSw").innerHTML=units.slice(0,12).map(u=>`<em style="--c:${u.color}">${u.ptype}</em>`).join("")
+  const at=t=>String(t||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  $("geoSw").innerHTML=units.slice(0,12).map(u=>`<em style="--c:${u.color}"${u.name?` title="${at(u.name)}"`:""}>${u.ptype}</em>`).join("")
     +(units.length>12?`<em style="--c:transparent">+${units.length-12} more</em>`:"");
-  $("lgGeo").firstElementChild.textContent="Geologic units · "+(lg.label||"")+(patch?`, drawn at ${Math.round(patch.cell_m[0])} m`:"");
+  $("lgGeo").firstElementChild.textContent="Geologic units · "+(patch&&patch.fine_fraction&&GEO.detail.fine?GEO.detail.label:(lg.label||""))+(patch?`, drawn at ${Math.round(patch.cell_m[0])} m`:"");
 }
 function loadPatchGeology(q){
   const d=GEO.detail&&GEO.detail.closeups.find(c=>c.id===q.id); if(!d||!LOC.mesh) return;
