@@ -62,9 +62,9 @@ li{margin:3px 0}
 <thead><tr><th>What</th><th>Value</th><th>Source</th></tr></thead>
 <tbody id="siteRows"></tbody></table></div>
 <h2>Soil layers shown in the section</h2>
-<p>The series' typical pedon from the USDA Official Series Description, not a pit dug at this vineyard. Colours are approximate conversions of the Munsell colours (moist).</p>
+<p>Layer depths, texture, sand, silt, clay, organic matter, pH and gravel (rock fragments over 2 mm, by volume) are the USDA soil survey's representative values for the mapped soil (S9), not a pit dug at this vineyard. Colours come from the series' typical pedon in the Official Series Description (S10), approximate conversions of the Munsell colours (moist).</p>
 <div class="wrap"><table>
-<thead><tr><th>Layer</th><th>Depth</th><th>Texture</th><th>Colour (moist)</th><th>pH</th><th>Gravel</th></tr></thead>
+<thead><tr><th>Layer</th><th>Depth</th><th>Texture</th><th>Colour (moist)</th><th>Sand %</th><th>Silt %</th><th>Clay %</th><th>Organic matter %</th><th>pH</th><th>Gravel</th></tr></thead>
 <tbody id="hzRows"></tbody></table></div>
 <h2>Sources for this site</h2>
 <ul id="siteSrc"></ul>
@@ -73,7 +73,6 @@ li{margin:3px 0}
 <p>These are blocked by the project's current network setting, so they are not in the time machine yet:</p>
 <div class="wrap"><table>
 <tbody>
-<tr class="gap"><td><b>USDA soil survey (SSURGO)</b></td><td>the mapped soil under every vineyard, with sand, silt, clay and gravel by layer</td><td><code>sdmdataaccess.sc.egov.usda.gov</code></td></tr>
 <tr class="gap"><td><b>USGS 1:24,000 Quaternary maps</b></td><td>old stream and fan deposits at vineyard scale</td><td><code>ngmdb.usgs.gov</code>, <code>pubs.usgs.gov</code></td></tr>
 <tr class="gap"><td><b>PRISM climate</b></td><td>rainfall and temperature at 800 m</td><td><code>services.nacse.org</code></td></tr>
 <tr class="gap"><td><b>Vineyard fields and acreage</b></td><td>USDA Cropland Data Layer and California crop mapping</td><td><code>nassgeodata.gmu.edu</code>, <code>data.cnra.ca.gov</code></td></tr>
@@ -88,14 +87,18 @@ fetch("assets/regions/napa_valley/sites/corison.json").then(r=>{ if(!r.ok) throw
   const sec=d.section, near=sec.streams.map(c=>`${c.name||"unnamed creek"} ${(Math.abs(c.offset_m)/1000).toFixed(1)} km ${c.offset_m<0?"SW":"NE"}`).join("; ");
   const rows=[
     ["Location",`${d.location.lat}, ${d.location.lon} (about ${d.location.accuracy_m} m). ${d.location.note}`,d.location.source],
-    ["Soil",`${d.soil.reported_as}, ${d.soil.status}. ${d.soil.note}`,d.soil.source],
-    ["Soil series",`${d.soil.taxonomic_class||""}. ${d.soil.overview||""}`,"S4"],
-    ["Drainage",d.soil.drainage,"S4"],
+    ...(d.soil.mapped ? [
+      ["Soil (mapped)",`${d.soil.mapped.map_unit}, map unit ${d.soil.mapped.musym}: ${d.soil.mapped.component} ${d.soil.mapped.component_pct} % of the unit. ${d.soil.note} Survey: ${d.soil.mapped.survey}, version ${d.soil.mapped.survey_version}.`,d.soil.source],
+      ["Soils in the close-up",d.soil.mapped.closeup.map(m=>`${m.name} ${m.pct} %`).join("; "),d.soil.source]] : []),
+    ...(d.soil.reported ? [["Soil (reported)",`${d.soil.reported.as}, ${d.soil.reported.status}. ${d.soil.reported.note}`,d.soil.reported.source]]
+      : [["Soil",`${d.soil.reported_as}, ${d.soil.status}. ${d.soil.note}`,d.soil.source]]),
+    ["Soil series",`${d.soil.taxonomic_class||""}. ${d.soil.overview||""}`,d.soil.mapped?"S10":"S4"],
+    ["Drainage",d.soil.drainage,d.soil.mapped?d.soil.source:"S4"],
     ["Geology at the site",`USGS map unit ${d.geology.at_site}. ${d.geology.limits}`,d.geology.source],
     ["Across the valley (SW to NE)",`Units along the section: ${sec.units.filter(u=>u.ptype).map(u=>u.ptype).filter((v,i,a)=>a.indexOf(v)===i).join(", ")}. Channels crossing it: ${near||"none"}.`,"S5, S6"],
     ...d.claims.map(c=>["Reported",c.text,c.source])];
   document.getElementById("siteRows").innerHTML=rows.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("");
-  document.getElementById("hzRows").innerHTML=d.soil.horizons.map(h=>`<tr><td><b>${esc(h.name)}</b>${h.buried?" (buried)":""}</td><td>${h.top_cm}–${h.bottom_cm} cm</td><td>${esc(h.texture)}</td><td><span class="hz" style="--c:${esc(h.rgb||"transparent")}"></span>${esc(h.moist)}</td><td>${h.pH??""}</td><td>${h.gravel_pct?h.gravel_pct+" %":""}</td></tr>`).join("");
+  document.getElementById("hzRows").innerHTML=d.soil.horizons.map(h=>`<tr><td><b>${esc(h.name)}</b>${h.buried?" (buried)":""}</td><td>${h.top_cm}–${h.bottom_cm} cm</td><td>${esc(h.texture)}</td><td><span class="hz" style="--c:${esc(h.rgb||"transparent")}"></span>${esc(h.moist)}</td><td>${h.sand_pct??""}</td><td>${h.silt_pct??""}</td><td>${h.clay_pct??""}</td><td>${h.om_pct??""}</td><td>${h.pH??""}</td><td>${h.gravel_pct?h.gravel_pct+" %":""}</td></tr>`).join("");
   document.getElementById("siteSrc").innerHTML=Object.entries(S).map(([k,s])=>`<li><b>${esc(k)}</b> ${link(s)} <span style="color:var(--muted)">(${esc(s.kind)})</span></li>`).join("");
 }).catch(()=>{ document.getElementById("siteIntro").textContent="The site file could not be loaded (open this page from the viewer's folder)."; });
 </script>

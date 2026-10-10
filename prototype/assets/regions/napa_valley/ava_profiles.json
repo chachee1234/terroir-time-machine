@@ -1,11 +1,12 @@
 {
  "region": "napa_valley",
  "built": "2026-10-01",
+ "soils_built": "2026-10-10",
  "sources": {
   "elevation": "AWS Terrain Tiles (USGS 3DEP source), each AVA's close-up grid (SOURCES.md G19)",
   "outline": "UC Davis AVA Project (G18), simplified to 25 m",
   "geology": "USGS SIM 2956, 1:100,000 (G07); unit names from its FGDC metadata",
-  "soils": "USDA-NRCS SSURGO via Soil Data Access, map-unit area inside the outline (G33)",
+  "soils": "USDA-NRCS SSURGO via Soil Data Access, map-unit area inside the outline; layers are the survey's representative values for each map unit's main soil (G33)",
   "vineyards": "USDA NASS Cropland Data Layer 2024, grapes (G30)",
   "producers": "data/ava_producers.json: unverified (search summaries); each AVA lists its source pages"
  },
@@ -79,7 +80,136 @@
      "clay": 19,
      "rock outcrop": 34,
      "water": 7
-    }
+    },
+    "layers": [
+     {
+      "soil": "Henneke",
+      "map_unit": "Henneke-Montara-Rock outcrop complex",
+      "pct": 34.1,
+      "soil_pct": 40.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 8,
+        "texture": "gravelly loam",
+        "clay_pct": 19.0,
+        "sand_pct": 43.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 3.0,
+        "pH": 7.3
+       },
+       {
+        "top_cm": 8,
+        "bottom_cm": 28,
+        "texture": "gravelly clay loam",
+        "clay_pct": 33.0,
+        "sand_pct": 34.0,
+        "rock_frag_pct": 20.0,
+        "om_pct": 2.0,
+        "pH": 7.4
+       },
+       {
+        "top_cm": 28,
+        "bottom_cm": 41,
+        "texture": "very gravelly clay",
+        "clay_pct": 43.0,
+        "sand_pct": 28.0,
+        "rock_frag_pct": 50.0,
+        "om_pct": 1.3,
+        "pH": 7.5
+       },
+       {
+        "top_cm": 41,
+        "bottom_cm": 48,
+        "texture": "very gravelly clay",
+        "clay_pct": 40.0,
+        "sand_pct": 30.0,
+        "rock_frag_pct": 50.0,
+        "om_pct": 0.8,
+        "pH": 7.5
+       },
+       {
+        "top_cm": 48,
+        "bottom_cm": 73,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Maxwell",
+      "map_unit": "Maxwell clay loam",
+      "pct": 17.1,
+      "soil_pct": 70.0,
+      "drainage": "Somewhat poorly drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 15,
+        "texture": "clay loam",
+        "clay_pct": 37.5,
+        "sand_pct": 31.5,
+        "rock_frag_pct": 0,
+        "om_pct": 2.0,
+        "pH": 7.5
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 213,
+        "texture": "clay",
+        "clay_pct": 47.5,
+        "sand_pct": 23.3,
+        "rock_frag_pct": 0,
+        "om_pct": 1.5,
+        "pH": 8.2
+       }
+      ]
+     },
+     {
+      "soil": "Sobrante",
+      "map_unit": "Sobrante-Guenoc-Hambright complex",
+      "pct": 14.6,
+      "soil_pct": 35.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 25,
+        "texture": "loam",
+        "clay_pct": 17.5,
+        "sand_pct": 43.0,
+        "rock_frag_pct": 9.0,
+        "om_pct": 2.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 25,
+        "bottom_cm": 97,
+        "texture": "clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 35.9,
+        "rock_frag_pct": 11.0,
+        "om_pct": 1.5,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 97,
+        "bottom_cm": 122,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -173,7 +303,116 @@
      "clay": 18,
      "rock outcrop": 6,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Suther",
+      "map_unit": "Suther loam",
+      "pct": 14.5,
+      "soil_pct": 85.0,
+      "drainage": "Moderately well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 8,
+        "texture": "loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 13.0,
+        "om_pct": 1.5,
+        "pH": 5.8
+       },
+       {
+        "top_cm": 8,
+        "bottom_cm": 36,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.85,
+        "pH": 5.8
+       },
+       {
+        "top_cm": 36,
+        "bottom_cm": 91,
+        "texture": "gravelly clay",
+        "clay_pct": 47.5,
+        "sand_pct": 23.3,
+        "rock_frag_pct": 30.0,
+        "om_pct": 0.6,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 91,
+        "bottom_cm": 150,
+        "texture": "weathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Rock land",
+      "map_unit": "Rock land",
+      "pct": 5.9,
+      "soil_pct": 85.0,
+      "drainage": "Excessively drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 25,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Laughlin",
+      "map_unit": "Laughlin loam",
+      "pct": 5.1,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 10,
+        "texture": "loam",
+        "clay_pct": 21.5,
+        "sand_pct": 41.4,
+        "rock_frag_pct": 14.0,
+        "om_pct": 3.5,
+        "pH": 5.8
+       },
+       {
+        "top_cm": 10,
+        "bottom_cm": 56,
+        "texture": "sandy clay loam",
+        "clay_pct": 25.0,
+        "sand_pct": 57.0,
+        "rock_frag_pct": 14.0,
+        "om_pct": 1.5,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 56,
+        "bottom_cm": 81,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -270,7 +509,126 @@
      "clay": 9,
      "rock outcrop": 16,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Bale",
+      "map_unit": "Bale loam",
+      "pct": 31.6,
+      "soil_pct": 85.0,
+      "drainage": "Somewhat poorly drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 61,
+        "texture": "loam",
+        "clay_pct": 21.5,
+        "sand_pct": 41.4,
+        "rock_frag_pct": 11.0,
+        "om_pct": 2.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 61,
+        "bottom_cm": 152,
+        "texture": "stratified gravelly sandy loam to loam",
+        "clay_pct": 13.0,
+        "sand_pct": 67.4,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.75,
+        "pH": 6.1
+       }
+      ]
+     },
+     {
+      "soil": "Forward",
+      "map_unit": "Forward silt loam",
+      "pct": 21.0,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 5,
+        "texture": "slightly decomposed plant material",
+        "clay_pct": 15.0,
+        "sand_pct": 35.0,
+        "rock_frag_pct": 0,
+        "om_pct": 70.0,
+        "pH": 5.5
+       },
+       {
+        "top_cm": 5,
+        "bottom_cm": 15,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 5.6,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 30,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 1.72,
+        "pH": 5.7
+       },
+       {
+        "top_cm": 30,
+        "bottom_cm": 48,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 8.0,
+        "om_pct": 0.9,
+        "pH": 5.1
+       },
+       {
+        "top_cm": 48,
+        "bottom_cm": 71,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.5,
+        "pH": 5.1
+       }
+      ]
+     },
+     {
+      "soil": "Hambright",
+      "map_unit": "Hambright rock-Outcrop complex",
+      "pct": 12.7,
+      "soil_pct": 50.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 30,
+        "texture": "very stony loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 39.0,
+        "om_pct": 5.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 30,
+        "bottom_cm": 55,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -369,7 +727,136 @@
      "clay": 0,
      "rock outcrop": 27,
      "water": 1
-    }
+    },
+    "layers": [
+     {
+      "soil": "Forward",
+      "map_unit": "Forward silt loam",
+      "pct": 26.0,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 5,
+        "texture": "slightly decomposed plant material",
+        "clay_pct": 15.0,
+        "sand_pct": 35.0,
+        "rock_frag_pct": 0,
+        "om_pct": 70.0,
+        "pH": 5.5
+       },
+       {
+        "top_cm": 5,
+        "bottom_cm": 15,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 5.6,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 30,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 1.72,
+        "pH": 5.7
+       },
+       {
+        "top_cm": 30,
+        "bottom_cm": 48,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 8.0,
+        "om_pct": 0.9,
+        "pH": 5.1
+       },
+       {
+        "top_cm": 48,
+        "bottom_cm": 71,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.5,
+        "pH": 5.1
+       }
+      ]
+     },
+     {
+      "soil": "Rock outcrop",
+      "map_unit": "Rock outcrop-Kidd complex",
+      "pct": 24.8,
+      "soil_pct": 70.0,
+      "drainage": null,
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 25,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Aiken",
+      "map_unit": "Aiken loam",
+      "pct": 19.6,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 20,
+        "texture": "loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 10.0,
+        "om_pct": 5.0,
+        "pH": 5.8
+       },
+       {
+        "top_cm": 20,
+        "bottom_cm": 36,
+        "texture": "clay loam",
+        "clay_pct": 33.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 14.0,
+        "om_pct": 0.75,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 36,
+        "bottom_cm": 112,
+        "texture": "clay",
+        "clay_pct": 45.0,
+        "sand_pct": 26.1,
+        "rock_frag_pct": 14.0,
+        "om_pct": 0.75,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 112,
+        "bottom_cm": 137,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -467,7 +954,136 @@
      "clay": 20,
      "rock outcrop": 1,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Felta",
+      "map_unit": "Felta very gravelly loam",
+      "pct": 23.5,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 13,
+        "texture": "very gravelly loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 45.0,
+        "om_pct": 2.0,
+        "pH": 5.8
+       },
+       {
+        "top_cm": 13,
+        "bottom_cm": 61,
+        "texture": "very gravelly clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 50.0,
+        "om_pct": 0.85,
+        "pH": 5.8
+       },
+       {
+        "top_cm": 61,
+        "bottom_cm": 152,
+        "texture": "very gravelly sandy clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 55.5,
+        "rock_frag_pct": 52.0,
+        "om_pct": 0.25,
+        "pH": 5.8
+       }
+      ]
+     },
+     {
+      "soil": "Laniger",
+      "map_unit": "Laniger loam",
+      "pct": 13.9,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 28,
+        "texture": "loam",
+        "clay_pct": 20.0,
+        "sand_pct": 37.4,
+        "rock_frag_pct": 8.0,
+        "om_pct": 3.0,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 28,
+        "bottom_cm": 64,
+        "texture": "loam",
+        "clay_pct": 20.0,
+        "sand_pct": 37.4,
+        "rock_frag_pct": 8.0,
+        "om_pct": 0.75,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 64,
+        "bottom_cm": 89,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Spreckels",
+      "map_unit": "Spreckels loam",
+      "pct": 9.4,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 23,
+        "texture": "loam",
+        "clay_pct": 21.0,
+        "sand_pct": 41.6,
+        "rock_frag_pct": 13.0,
+        "om_pct": 1.25,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 23,
+        "bottom_cm": 46,
+        "texture": "clay loam",
+        "clay_pct": 28.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.6,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 46,
+        "bottom_cm": 94,
+        "texture": "clay",
+        "clay_pct": 47.5,
+        "sand_pct": 23.3,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.25,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 94,
+        "bottom_cm": 152,
+        "texture": "cemented",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -563,7 +1179,146 @@
      "clay": 1,
      "rock outcrop": 0,
      "water": 1
-    }
+    },
+    "layers": [
+     {
+      "soil": "Bressa",
+      "map_unit": "Bressa-Dibble complex",
+      "pct": 37.6,
+      "soil_pct": 70.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 25,
+        "texture": "silt loam",
+        "clay_pct": 20.0,
+        "sand_pct": 26.5,
+        "rock_frag_pct": 10.0,
+        "om_pct": 1.75,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 25,
+        "bottom_cm": 84,
+        "texture": "silty clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 15.0,
+        "rock_frag_pct": 14.0,
+        "om_pct": 0.75,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 84,
+        "bottom_cm": 152,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Henneke",
+      "map_unit": "Henneke gravelly loam",
+      "pct": 17.8,
+      "soil_pct": 85.0,
+      "drainage": "Excessively drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 18,
+        "texture": "gravelly loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 34.0,
+        "om_pct": 4.5,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 18,
+        "bottom_cm": 38,
+        "texture": "very gravelly clay loam",
+        "clay_pct": 39.0,
+        "sand_pct": 30.0,
+        "rock_frag_pct": 41.0,
+        "om_pct": 1.25,
+        "pH": 7.5
+       },
+       {
+        "top_cm": 38,
+        "bottom_cm": 63,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Pleasanton",
+      "map_unit": "Pleasanton loam",
+      "pct": 16.2,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 53,
+        "texture": "loam",
+        "clay_pct": 19.5,
+        "sand_pct": 42.4,
+        "rock_frag_pct": 0,
+        "om_pct": 1.5,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 53,
+        "bottom_cm": 84,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 0,
+        "om_pct": 1.5,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 84,
+        "bottom_cm": 114,
+        "texture": "very gravelly clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 40.0,
+        "om_pct": 1.5,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 114,
+        "bottom_cm": 140,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 0,
+        "om_pct": 0.75,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 140,
+        "bottom_cm": 200,
+        "texture": "stratified very gravelly clay",
+        "clay_pct": 30.0,
+        "sand_pct": 37.9,
+        "rock_frag_pct": 38.0,
+        "om_pct": 0.25,
+        "pH": 7.6
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -651,7 +1406,156 @@
      "clay": 1,
      "rock outcrop": 13,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Forward",
+      "map_unit": "Forward silt loam",
+      "pct": 53.0,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 5,
+        "texture": "slightly decomposed plant material",
+        "clay_pct": 15.0,
+        "sand_pct": 35.0,
+        "rock_frag_pct": 0,
+        "om_pct": 70.0,
+        "pH": 5.5
+       },
+       {
+        "top_cm": 5,
+        "bottom_cm": 15,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 5.6,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 30,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 1.72,
+        "pH": 5.7
+       },
+       {
+        "top_cm": 30,
+        "bottom_cm": 48,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 8.0,
+        "om_pct": 0.9,
+        "pH": 5.1
+       },
+       {
+        "top_cm": 48,
+        "bottom_cm": 71,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.5,
+        "pH": 5.1
+       }
+      ]
+     },
+     {
+      "soil": "Boomer",
+      "map_unit": "Boomer-Forward-Felta complex",
+      "pct": 14.6,
+      "soil_pct": 40.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 10,
+        "texture": "loam",
+        "clay_pct": 22.5,
+        "sand_pct": 39.8,
+        "rock_frag_pct": 6.0,
+        "om_pct": 2.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 10,
+        "bottom_cm": 112,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.75,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 112,
+        "bottom_cm": 150,
+        "texture": "weathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Aiken",
+      "map_unit": "Aiken loam",
+      "pct": 11.9,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 20,
+        "texture": "loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 10.0,
+        "om_pct": 5.0,
+        "pH": 5.8
+       },
+       {
+        "top_cm": 20,
+        "bottom_cm": 36,
+        "texture": "clay loam",
+        "clay_pct": 33.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 14.0,
+        "om_pct": 0.75,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 36,
+        "bottom_cm": 112,
+        "texture": "clay",
+        "clay_pct": 45.0,
+        "sand_pct": 26.1,
+        "rock_frag_pct": 14.0,
+        "om_pct": 0.75,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 112,
+        "bottom_cm": 137,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -749,7 +1653,146 @@
      "clay": 0,
      "rock outcrop": 42,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Rock outcrop",
+      "map_unit": "Rock outcrop-Kidd complex",
+      "pct": 33.3,
+      "soil_pct": 70.0,
+      "drainage": null,
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 25,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Boomer",
+      "map_unit": "Boomer gravelly loam",
+      "pct": 22.1,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 5,
+        "texture": "slightly decomposed plant material",
+        "clay_pct": 15.0,
+        "sand_pct": 35.0,
+        "rock_frag_pct": 0,
+        "om_pct": 60.0,
+        "pH": 5.5
+       },
+       {
+        "top_cm": 5,
+        "bottom_cm": 15,
+        "texture": "gravelly loam",
+        "clay_pct": 20.0,
+        "sand_pct": 42.0,
+        "rock_frag_pct": 20.0,
+        "om_pct": 5.8,
+        "pH": 6.0
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 33,
+        "texture": "gravelly loam",
+        "clay_pct": 26.0,
+        "sand_pct": 36.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 2.25,
+        "pH": 6.0
+       },
+       {
+        "top_cm": 33,
+        "bottom_cm": 61,
+        "texture": "gravelly clay loam",
+        "clay_pct": 28.0,
+        "sand_pct": 34.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.91,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 61,
+        "bottom_cm": 91,
+        "texture": "gravelly clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 34.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.39,
+        "pH": 6.2
+       }
+      ]
+     },
+     {
+      "soil": "Forward",
+      "map_unit": "Forward silt loam",
+      "pct": 15.8,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 5,
+        "texture": "slightly decomposed plant material",
+        "clay_pct": 15.0,
+        "sand_pct": 35.0,
+        "rock_frag_pct": 0,
+        "om_pct": 70.0,
+        "pH": 5.5
+       },
+       {
+        "top_cm": 5,
+        "bottom_cm": 15,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 5.6,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 30,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 1.72,
+        "pH": 5.7
+       },
+       {
+        "top_cm": 30,
+        "bottom_cm": 48,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 8.0,
+        "om_pct": 0.9,
+        "pH": 5.1
+       },
+       {
+        "top_cm": 48,
+        "bottom_cm": 71,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.5,
+        "pH": 5.1
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -847,7 +1890,136 @@
      "clay": 44,
      "rock outcrop": 5,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Goulding",
+      "map_unit": "Goulding cobbly clay loam",
+      "pct": 28.9,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 23,
+        "texture": "cobbly clay loam",
+        "clay_pct": 28.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 27.0,
+        "om_pct": 1.5,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 23,
+        "bottom_cm": 46,
+        "texture": "very gravelly clay loam",
+        "clay_pct": 28.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 44.0,
+        "om_pct": 0.25,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 46,
+        "bottom_cm": 71,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Henneke",
+      "map_unit": "Henneke gravelly loam",
+      "pct": 10.5,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 13,
+        "texture": "gravelly loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 31.0,
+        "om_pct": 4.5,
+        "pH": 7.2
+       },
+       {
+        "top_cm": 13,
+        "bottom_cm": 41,
+        "texture": "very gravelly clay",
+        "clay_pct": 45.0,
+        "sand_pct": 25.7,
+        "rock_frag_pct": 41.0,
+        "om_pct": 0.25,
+        "pH": 7.5
+       },
+       {
+        "top_cm": 41,
+        "bottom_cm": 66,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Boomer",
+      "map_unit": "Boomer loam",
+      "pct": 4.8,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 48,
+        "texture": "loam",
+        "clay_pct": 22.5,
+        "sand_pct": 39.8,
+        "rock_frag_pct": 14.0,
+        "om_pct": 2.0,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 48,
+        "bottom_cm": 94,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 14.0,
+        "om_pct": 0.85,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 94,
+        "bottom_cm": 140,
+        "texture": "gravelly clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 28.0,
+        "om_pct": 0.25,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 140,
+        "bottom_cm": 165,
+        "texture": "weathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -944,7 +2116,176 @@
      "clay": 18,
      "rock outcrop": 2,
      "water": 1
-    }
+    },
+    "layers": [
+     {
+      "soil": "Forward",
+      "map_unit": "Forward silt loam",
+      "pct": 19.2,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 5,
+        "texture": "slightly decomposed plant material",
+        "clay_pct": 15.0,
+        "sand_pct": 35.0,
+        "rock_frag_pct": 0,
+        "om_pct": 70.0,
+        "pH": 5.5
+       },
+       {
+        "top_cm": 5,
+        "bottom_cm": 15,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 5.6,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 30,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 1.72,
+        "pH": 5.7
+       },
+       {
+        "top_cm": 30,
+        "bottom_cm": 48,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 8.0,
+        "om_pct": 0.9,
+        "pH": 5.1
+       },
+       {
+        "top_cm": 48,
+        "bottom_cm": 71,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.5,
+        "pH": 5.1
+       }
+      ]
+     },
+     {
+      "soil": "Pleasanton",
+      "map_unit": "Pleasanton loam",
+      "pct": 14.3,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 13,
+        "texture": "loam",
+        "clay_pct": 20.0,
+        "sand_pct": 40.0,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.8,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 13,
+        "bottom_cm": 45,
+        "texture": "loam",
+        "clay_pct": 22.0,
+        "sand_pct": 40.0,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.8,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 45,
+        "bottom_cm": 58,
+        "texture": "clay loam",
+        "clay_pct": 32.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.5,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 58,
+        "bottom_cm": 112,
+        "texture": "fine gravelly clay loam",
+        "clay_pct": 33.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.5,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 112,
+        "bottom_cm": 168,
+        "texture": "fine gravelly sandy clay loam",
+        "clay_pct": 32.0,
+        "sand_pct": 52.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.5,
+        "pH": 7.0
+       }
+      ]
+     },
+     {
+      "soil": "Cortina",
+      "map_unit": "Cortina very gravelly loam",
+      "pct": 10.0,
+      "soil_pct": 85.0,
+      "drainage": "Excessively drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 28,
+        "texture": "very gravelly loam",
+        "clay_pct": 12.0,
+        "sand_pct": 45.0,
+        "rock_frag_pct": 50.0,
+        "om_pct": 1.0,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 28,
+        "bottom_cm": 53,
+        "texture": "very gravelly sandy loam",
+        "clay_pct": 8.0,
+        "sand_pct": 68.0,
+        "rock_frag_pct": 50.0,
+        "om_pct": 0.7,
+        "pH": 7.5
+       },
+       {
+        "top_cm": 53,
+        "bottom_cm": 81,
+        "texture": "extremely gravelly loamy sand",
+        "clay_pct": 5.0,
+        "sand_pct": 78.0,
+        "rock_frag_pct": 70.0,
+        "om_pct": 0.3,
+        "pH": 7.5
+       },
+       {
+        "top_cm": 81,
+        "bottom_cm": 152,
+        "texture": "extremely gravelly loamy sand",
+        "clay_pct": 4.0,
+        "sand_pct": 79.0,
+        "rock_frag_pct": 80.0,
+        "om_pct": 0.2,
+        "pH": 7.5
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -1034,7 +2375,176 @@
      "clay": 3,
      "rock outcrop": 4,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Forward",
+      "map_unit": "Forward silt loam",
+      "pct": 24.6,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 5,
+        "texture": "slightly decomposed plant material",
+        "clay_pct": 15.0,
+        "sand_pct": 35.0,
+        "rock_frag_pct": 0,
+        "om_pct": 70.0,
+        "pH": 5.5
+       },
+       {
+        "top_cm": 5,
+        "bottom_cm": 15,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 5.6,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 30,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 1.72,
+        "pH": 5.7
+       },
+       {
+        "top_cm": 30,
+        "bottom_cm": 48,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 8.0,
+        "om_pct": 0.9,
+        "pH": 5.1
+       },
+       {
+        "top_cm": 48,
+        "bottom_cm": 71,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.5,
+        "pH": 5.1
+       }
+      ]
+     },
+     {
+      "soil": "Boomer",
+      "map_unit": "Boomer gravelly loam",
+      "pct": 21.0,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 5,
+        "texture": "slightly decomposed plant material",
+        "clay_pct": 15.0,
+        "sand_pct": 35.0,
+        "rock_frag_pct": 0,
+        "om_pct": 60.0,
+        "pH": 5.5
+       },
+       {
+        "top_cm": 5,
+        "bottom_cm": 15,
+        "texture": "gravelly loam",
+        "clay_pct": 20.0,
+        "sand_pct": 42.0,
+        "rock_frag_pct": 20.0,
+        "om_pct": 5.8,
+        "pH": 6.0
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 33,
+        "texture": "gravelly loam",
+        "clay_pct": 26.0,
+        "sand_pct": 36.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 2.25,
+        "pH": 6.0
+       },
+       {
+        "top_cm": 33,
+        "bottom_cm": 61,
+        "texture": "gravelly clay loam",
+        "clay_pct": 28.0,
+        "sand_pct": 34.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.91,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 61,
+        "bottom_cm": 91,
+        "texture": "gravelly clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 34.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.39,
+        "pH": 6.2
+       }
+      ]
+     },
+     {
+      "soil": "Aiken",
+      "map_unit": "Aiken loam",
+      "pct": 8.1,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 20,
+        "texture": "loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 10.0,
+        "om_pct": 5.0,
+        "pH": 5.8
+       },
+       {
+        "top_cm": 20,
+        "bottom_cm": 36,
+        "texture": "clay loam",
+        "clay_pct": 33.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 14.0,
+        "om_pct": 0.75,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 36,
+        "bottom_cm": 112,
+        "texture": "clay",
+        "clay_pct": 45.0,
+        "sand_pct": 26.1,
+        "rock_frag_pct": 14.0,
+        "om_pct": 0.75,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 112,
+        "bottom_cm": 137,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -1135,7 +2645,146 @@
      "clay": 30,
      "rock outcrop": 3,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Pleasanton",
+      "map_unit": "Pleasanton loam",
+      "pct": 19.5,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 13,
+        "texture": "loam",
+        "clay_pct": 20.0,
+        "sand_pct": 40.0,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.8,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 13,
+        "bottom_cm": 45,
+        "texture": "loam",
+        "clay_pct": 22.0,
+        "sand_pct": 40.0,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.8,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 45,
+        "bottom_cm": 58,
+        "texture": "clay loam",
+        "clay_pct": 32.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.5,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 58,
+        "bottom_cm": 112,
+        "texture": "fine gravelly clay loam",
+        "clay_pct": 33.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.5,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 112,
+        "bottom_cm": 168,
+        "texture": "fine gravelly sandy clay loam",
+        "clay_pct": 32.0,
+        "sand_pct": 52.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.5,
+        "pH": 7.0
+       }
+      ]
+     },
+     {
+      "soil": "Bale",
+      "map_unit": "Bale clay loam",
+      "pct": 17.1,
+      "soil_pct": 85.0,
+      "drainage": "Somewhat poorly drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 61,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 12.0,
+        "om_pct": 2.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 61,
+        "bottom_cm": 152,
+        "texture": "stratified gravelly sandy loam to loam",
+        "clay_pct": 18.0,
+        "sand_pct": 66.8,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.75,
+        "pH": 6.1
+       }
+      ]
+     },
+     {
+      "soil": "Yolo",
+      "map_unit": "Yolo loam",
+      "pct": 10.8,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 15,
+        "texture": "loam",
+        "clay_pct": 22.0,
+        "sand_pct": 36.0,
+        "rock_frag_pct": 0,
+        "om_pct": 2.8,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 61,
+        "texture": "silt loam",
+        "clay_pct": 21.0,
+        "sand_pct": 11.0,
+        "rock_frag_pct": 0,
+        "om_pct": 1.3,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 61,
+        "bottom_cm": 114,
+        "texture": "silt loam",
+        "clay_pct": 20.0,
+        "sand_pct": 11.4,
+        "rock_frag_pct": 0,
+        "om_pct": 1.0,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 114,
+        "bottom_cm": 152,
+        "texture": "silt loam",
+        "clay_pct": 20.0,
+        "sand_pct": 11.4,
+        "rock_frag_pct": 0,
+        "om_pct": 0.8,
+        "pH": 6.7
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -1232,7 +2881,146 @@
      "clay": 30,
      "rock outcrop": 14,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Bale",
+      "map_unit": "Bale clay loam",
+      "pct": 24.0,
+      "soil_pct": 85.0,
+      "drainage": "Somewhat poorly drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 61,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 12.0,
+        "om_pct": 2.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 61,
+        "bottom_cm": 152,
+        "texture": "stratified gravelly sandy loam to loam",
+        "clay_pct": 18.0,
+        "sand_pct": 66.8,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.75,
+        "pH": 6.1
+       }
+      ]
+     },
+     {
+      "soil": "Pleasanton",
+      "map_unit": "Pleasanton loam",
+      "pct": 10.5,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 13,
+        "texture": "loam",
+        "clay_pct": 20.0,
+        "sand_pct": 40.0,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.8,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 13,
+        "bottom_cm": 45,
+        "texture": "loam",
+        "clay_pct": 22.0,
+        "sand_pct": 40.0,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.8,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 45,
+        "bottom_cm": 58,
+        "texture": "clay loam",
+        "clay_pct": 32.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.5,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 58,
+        "bottom_cm": 112,
+        "texture": "fine gravelly clay loam",
+        "clay_pct": 33.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.5,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 112,
+        "bottom_cm": 168,
+        "texture": "fine gravelly sandy clay loam",
+        "clay_pct": 32.0,
+        "sand_pct": 52.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.5,
+        "pH": 7.0
+       }
+      ]
+     },
+     {
+      "soil": "Clear Lake",
+      "map_unit": "Clear Lake clay",
+      "pct": 7.9,
+      "soil_pct": 90.0,
+      "drainage": "Poorly drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 15,
+        "texture": "clay",
+        "clay_pct": 45.0,
+        "sand_pct": 26.0,
+        "rock_frag_pct": 0,
+        "om_pct": 2.0,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 66,
+        "texture": "clay",
+        "clay_pct": 49.0,
+        "sand_pct": 23.0,
+        "rock_frag_pct": 0,
+        "om_pct": 1.3,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 66,
+        "bottom_cm": 91,
+        "texture": "clay",
+        "clay_pct": 50.0,
+        "sand_pct": 22.0,
+        "rock_frag_pct": 0,
+        "om_pct": 1.0,
+        "pH": 8.0
+       },
+       {
+        "top_cm": 91,
+        "bottom_cm": 152,
+        "texture": "clay",
+        "clay_pct": 45.0,
+        "sand_pct": 26.0,
+        "rock_frag_pct": 0,
+        "om_pct": 0.8,
+        "pH": 8.0
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -1328,7 +3116,106 @@
      "clay": 4,
      "rock outcrop": 50,
      "water": 1
-    }
+    },
+    "layers": [
+     {
+      "soil": "Rock outcrop",
+      "map_unit": "Rock outcrop-Hambright complex",
+      "pct": 23.9,
+      "soil_pct": 60.0,
+      "drainage": null,
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 25,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Aiken",
+      "map_unit": "Aiken loam",
+      "pct": 22.7,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 20,
+        "texture": "loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 10.0,
+        "om_pct": 5.0,
+        "pH": 5.8
+       },
+       {
+        "top_cm": 20,
+        "bottom_cm": 36,
+        "texture": "clay loam",
+        "clay_pct": 33.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 14.0,
+        "om_pct": 0.75,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 36,
+        "bottom_cm": 112,
+        "texture": "clay",
+        "clay_pct": 45.0,
+        "sand_pct": 26.1,
+        "rock_frag_pct": 14.0,
+        "om_pct": 0.75,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 112,
+        "bottom_cm": 137,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Hambright",
+      "map_unit": "Hambright rock-Outcrop complex",
+      "pct": 21.8,
+      "soil_pct": 50.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 30,
+        "texture": "very stony loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 39.0,
+        "om_pct": 5.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 30,
+        "bottom_cm": 55,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -1424,7 +3311,136 @@
      "clay": 20,
      "rock outcrop": 6,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Felton",
+      "map_unit": "Felton gravelly loam",
+      "pct": 16.9,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 25,
+        "texture": "gravelly loam",
+        "clay_pct": 22.5,
+        "sand_pct": 39.8,
+        "rock_frag_pct": 27.0,
+        "om_pct": 7.5,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 25,
+        "bottom_cm": 84,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 11.0,
+        "om_pct": 0.75,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 84,
+        "bottom_cm": 150,
+        "texture": "weathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Cole",
+      "map_unit": "Cole silt loam",
+      "pct": 13.3,
+      "soil_pct": 85.0,
+      "drainage": "Somewhat poorly drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 20,
+        "texture": "silt loam",
+        "clay_pct": 25.0,
+        "sand_pct": 20.0,
+        "rock_frag_pct": 0,
+        "om_pct": 4.0,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 20,
+        "bottom_cm": 46,
+        "texture": "silty clay loam",
+        "clay_pct": 33.0,
+        "sand_pct": 17.6,
+        "rock_frag_pct": 0,
+        "om_pct": 3.0,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 46,
+        "bottom_cm": 81,
+        "texture": "silty clay loam",
+        "clay_pct": 35.0,
+        "sand_pct": 16.9,
+        "rock_frag_pct": 0,
+        "om_pct": 2.0,
+        "pH": 7.5
+       },
+       {
+        "top_cm": 81,
+        "bottom_cm": 104,
+        "texture": "silty clay loam",
+        "clay_pct": 37.0,
+        "sand_pct": 19.0,
+        "rock_frag_pct": 0,
+        "om_pct": 1.0,
+        "pH": 7.5
+       },
+       {
+        "top_cm": 104,
+        "bottom_cm": 122,
+        "texture": "clay loam",
+        "clay_pct": 39.0,
+        "sand_pct": 30.0,
+        "rock_frag_pct": 0,
+        "om_pct": 0.7,
+        "pH": 8.0
+       }
+      ]
+     },
+     {
+      "soil": "Lodo",
+      "map_unit": "Lodo-Maymen-Felton association",
+      "pct": 11.7,
+      "soil_pct": 45.0,
+      "drainage": "Somewhat excessively drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 18,
+        "texture": "loam",
+        "clay_pct": 22.5,
+        "sand_pct": 39.8,
+        "rock_frag_pct": 10.0,
+        "om_pct": 3.5,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 18,
+        "bottom_cm": 43,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -1520,7 +3536,156 @@
      "clay": 12,
      "rock outcrop": 4,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Felton",
+      "map_unit": "Felton gravelly loam",
+      "pct": 27.1,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 25,
+        "texture": "gravelly loam",
+        "clay_pct": 22.5,
+        "sand_pct": 39.8,
+        "rock_frag_pct": 27.0,
+        "om_pct": 7.5,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 25,
+        "bottom_cm": 84,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 11.0,
+        "om_pct": 0.75,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 84,
+        "bottom_cm": 150,
+        "texture": "weathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Forward",
+      "map_unit": "Forward silt loam",
+      "pct": 22.5,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 5,
+        "texture": "slightly decomposed plant material",
+        "clay_pct": 15.0,
+        "sand_pct": 35.0,
+        "rock_frag_pct": 0,
+        "om_pct": 70.0,
+        "pH": 5.5
+       },
+       {
+        "top_cm": 5,
+        "bottom_cm": 15,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 5.6,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 30,
+        "texture": "silt loam",
+        "clay_pct": 13.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 10.0,
+        "om_pct": 1.72,
+        "pH": 5.7
+       },
+       {
+        "top_cm": 30,
+        "bottom_cm": 48,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 8.0,
+        "om_pct": 0.9,
+        "pH": 5.1
+       },
+       {
+        "top_cm": 48,
+        "bottom_cm": 71,
+        "texture": "silt loam",
+        "clay_pct": 12.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.5,
+        "pH": 5.1
+       }
+      ]
+     },
+     {
+      "soil": "Fagan",
+      "map_unit": "Fagan clay loam",
+      "pct": 10.2,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 41,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 0,
+        "om_pct": 2.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 41,
+        "bottom_cm": 71,
+        "texture": "clay",
+        "clay_pct": 50.0,
+        "sand_pct": 11.0,
+        "rock_frag_pct": 0,
+        "om_pct": 0.75,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 71,
+        "bottom_cm": 117,
+        "texture": "sandy clay loam",
+        "clay_pct": 32.5,
+        "sand_pct": 53.5,
+        "rock_frag_pct": 0,
+        "om_pct": 0.75,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 117,
+        "bottom_cm": 150,
+        "texture": "weathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -1616,7 +3781,116 @@
      "clay": 33,
      "rock outcrop": 12,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Bale",
+      "map_unit": "Bale clay loam",
+      "pct": 30.8,
+      "soil_pct": 85.0,
+      "drainage": "Somewhat poorly drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 61,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 12.0,
+        "om_pct": 2.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 61,
+        "bottom_cm": 152,
+        "texture": "stratified gravelly sandy loam to loam",
+        "clay_pct": 18.0,
+        "sand_pct": 66.8,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.75,
+        "pH": 6.1
+       }
+      ]
+     },
+     {
+      "soil": "Boomer",
+      "map_unit": "Boomer gravelly loam",
+      "pct": 15.6,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 5,
+        "texture": "slightly decomposed plant material",
+        "clay_pct": 15.0,
+        "sand_pct": 35.0,
+        "rock_frag_pct": 0,
+        "om_pct": 60.0,
+        "pH": 5.5
+       },
+       {
+        "top_cm": 5,
+        "bottom_cm": 15,
+        "texture": "gravelly loam",
+        "clay_pct": 20.0,
+        "sand_pct": 42.0,
+        "rock_frag_pct": 20.0,
+        "om_pct": 5.8,
+        "pH": 6.0
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 33,
+        "texture": "gravelly loam",
+        "clay_pct": 26.0,
+        "sand_pct": 36.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 2.25,
+        "pH": 6.0
+       },
+       {
+        "top_cm": 33,
+        "bottom_cm": 61,
+        "texture": "gravelly clay loam",
+        "clay_pct": 28.0,
+        "sand_pct": 34.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.91,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 61,
+        "bottom_cm": 91,
+        "texture": "gravelly clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 34.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.39,
+        "pH": 6.2
+       }
+      ]
+     },
+     {
+      "soil": "Rock outcrop",
+      "map_unit": "Rock outcrop-Hambright complex",
+      "pct": 10.8,
+      "soil_pct": 60.0,
+      "drainage": null,
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 25,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -1717,7 +3991,136 @@
      "clay": 65,
      "rock outcrop": 0,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Goulding",
+      "map_unit": "Goulding clay loam",
+      "pct": 48.7,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 23,
+        "texture": "gravelly clay loam",
+        "clay_pct": 28.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 15.0,
+        "om_pct": 1.5,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 23,
+        "bottom_cm": 46,
+        "texture": "very gravelly clay loam",
+        "clay_pct": 28.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 41.0,
+        "om_pct": 0.25,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 46,
+        "bottom_cm": 71,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Spreckels",
+      "map_unit": "Spreckels loam",
+      "pct": 18.4,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 23,
+        "texture": "loam",
+        "clay_pct": 21.0,
+        "sand_pct": 41.6,
+        "rock_frag_pct": 13.0,
+        "om_pct": 1.25,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 23,
+        "bottom_cm": 46,
+        "texture": "clay loam",
+        "clay_pct": 28.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.6,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 46,
+        "bottom_cm": 94,
+        "texture": "clay",
+        "clay_pct": 47.5,
+        "sand_pct": 23.3,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.25,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 94,
+        "bottom_cm": 152,
+        "texture": "cemented",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Haire",
+      "map_unit": "Haire clay loam",
+      "pct": 5.2,
+      "soil_pct": 85.0,
+      "drainage": "Moderately well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 61,
+        "texture": "clay loam",
+        "clay_pct": 33.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 12.0,
+        "om_pct": 2.0,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 61,
+        "bottom_cm": 91,
+        "texture": "clay",
+        "clay_pct": 50.0,
+        "sand_pct": 22.1,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.25,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 91,
+        "bottom_cm": 152,
+        "texture": "very cobbly clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 48.0,
+        "om_pct": 0.25,
+        "pH": 5.3
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -1803,7 +4206,106 @@
      "clay": 31,
      "rock outcrop": 20,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Goulding",
+      "map_unit": "Goulding-Toomes complex",
+      "pct": 27.6,
+      "soil_pct": 50.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 28,
+        "texture": "gravelly clay loam",
+        "clay_pct": 28.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 15.0,
+        "om_pct": 1.5,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 28,
+        "bottom_cm": 51,
+        "texture": "very gravelly clay loam",
+        "clay_pct": 28.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 41.0,
+        "om_pct": 0.25,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 51,
+        "bottom_cm": 76,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Rock land",
+      "map_unit": "Rock land",
+      "pct": 19.9,
+      "soil_pct": 85.0,
+      "drainage": "Excessively drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 25,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Red Hill",
+      "map_unit": "Red Hill clay loam",
+      "pct": 16.5,
+      "soil_pct": 85.0,
+      "drainage": "Moderately well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 41,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 2.0,
+        "om_pct": 2.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 41,
+        "bottom_cm": 122,
+        "texture": "clay loam",
+        "clay_pct": 35.0,
+        "sand_pct": 33.3,
+        "rock_frag_pct": 2.0,
+        "om_pct": 0.6,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 122,
+        "bottom_cm": 203,
+        "texture": "clay",
+        "clay_pct": 42.5,
+        "sand_pct": 28.1,
+        "rock_frag_pct": 2.0,
+        "om_pct": 0.25,
+        "pH": 5.8
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -1901,7 +4403,146 @@
      "clay": 67,
      "rock outcrop": 0,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Goulding",
+      "map_unit": "Goulding clay loam",
+      "pct": 55.9,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 23,
+        "texture": "gravelly clay loam",
+        "clay_pct": 28.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 15.0,
+        "om_pct": 1.5,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 23,
+        "bottom_cm": 46,
+        "texture": "very gravelly clay loam",
+        "clay_pct": 28.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 41.0,
+        "om_pct": 0.25,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 46,
+        "bottom_cm": 61,
+        "texture": "unweathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Spreckels",
+      "map_unit": "Spreckels loam",
+      "pct": 23.7,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 23,
+        "texture": "loam",
+        "clay_pct": 21.0,
+        "sand_pct": 41.6,
+        "rock_frag_pct": 13.0,
+        "om_pct": 1.25,
+        "pH": 6.3
+       },
+       {
+        "top_cm": 23,
+        "bottom_cm": 46,
+        "texture": "clay loam",
+        "clay_pct": 28.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.6,
+        "pH": 6.6
+       },
+       {
+        "top_cm": 46,
+        "bottom_cm": 94,
+        "texture": "clay",
+        "clay_pct": 47.5,
+        "sand_pct": 23.3,
+        "rock_frag_pct": 13.0,
+        "om_pct": 0.25,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 94,
+        "bottom_cm": 152,
+        "texture": "cemented",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Red Hill",
+      "map_unit": "Red Hill clay loam",
+      "pct": 4.3,
+      "soil_pct": 85.0,
+      "drainage": "Moderately well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 41,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 2.0,
+        "om_pct": 2.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 41,
+        "bottom_cm": 122,
+        "texture": "clay loam",
+        "clay_pct": 35.0,
+        "sand_pct": 33.3,
+        "rock_frag_pct": 2.0,
+        "om_pct": 0.6,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 122,
+        "bottom_cm": 203,
+        "texture": "clay",
+        "clay_pct": 42.5,
+        "sand_pct": 28.1,
+        "rock_frag_pct": 2.0,
+        "om_pct": 0.25,
+        "pH": 5.8
+       },
+       {
+        "top_cm": 203,
+        "bottom_cm": 220,
+        "texture": "weathered bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -1996,7 +4637,166 @@
      "clay": 16,
      "rock outcrop": 3,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Haire",
+      "map_unit": "Haire loam",
+      "pct": 23.5,
+      "soil_pct": 85.0,
+      "drainage": "Moderately well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 56,
+        "texture": "loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 12.0,
+        "om_pct": 2.0,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 56,
+        "bottom_cm": 69,
+        "texture": "sandy clay loam",
+        "clay_pct": 27.5,
+        "sand_pct": 55.1,
+        "rock_frag_pct": 0,
+        "om_pct": 0.75,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 69,
+        "bottom_cm": 114,
+        "texture": "clay",
+        "clay_pct": 50.0,
+        "sand_pct": 22.1,
+        "rock_frag_pct": 0,
+        "om_pct": 0.75,
+        "pH": 5.0
+       },
+       {
+        "top_cm": 114,
+        "bottom_cm": 152,
+        "texture": "sandy clay",
+        "clay_pct": 40.0,
+        "sand_pct": 51.8,
+        "rock_frag_pct": 0,
+        "om_pct": 0.75,
+        "pH": 5.0
+       }
+      ]
+     },
+     {
+      "soil": "Pleasanton",
+      "map_unit": "Pleasanton loam",
+      "pct": 12.7,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 13,
+        "texture": "loam",
+        "clay_pct": 20.0,
+        "sand_pct": 40.0,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.8,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 13,
+        "bottom_cm": 45,
+        "texture": "loam",
+        "clay_pct": 22.0,
+        "sand_pct": 40.0,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.8,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 45,
+        "bottom_cm": 58,
+        "texture": "clay loam",
+        "clay_pct": 32.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.5,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 58,
+        "bottom_cm": 112,
+        "texture": "fine gravelly clay loam",
+        "clay_pct": 33.0,
+        "sand_pct": 33.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.5,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 112,
+        "bottom_cm": 168,
+        "texture": "fine gravelly sandy clay loam",
+        "clay_pct": 32.0,
+        "sand_pct": 52.0,
+        "rock_frag_pct": 15.0,
+        "om_pct": 0.5,
+        "pH": 7.0
+       }
+      ]
+     },
+     {
+      "soil": "Yolo",
+      "map_unit": "Yolo loam",
+      "pct": 11.5,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 15,
+        "texture": "loam",
+        "clay_pct": 22.0,
+        "sand_pct": 36.0,
+        "rock_frag_pct": 0,
+        "om_pct": 2.8,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 61,
+        "texture": "silt loam",
+        "clay_pct": 21.0,
+        "sand_pct": 11.0,
+        "rock_frag_pct": 0,
+        "om_pct": 1.3,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 61,
+        "bottom_cm": 114,
+        "texture": "silt loam",
+        "clay_pct": 20.0,
+        "sand_pct": 11.4,
+        "rock_frag_pct": 0,
+        "om_pct": 1.0,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 114,
+        "bottom_cm": 152,
+        "texture": "silt loam",
+        "clay_pct": 20.0,
+        "sand_pct": 11.4,
+        "rock_frag_pct": 0,
+        "om_pct": 0.8,
+        "pH": 6.7
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -2092,7 +4892,116 @@
      "clay": 5,
      "rock outcrop": 40,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Hambright",
+      "map_unit": "Hambright rock-Outcrop complex",
+      "pct": 28.1,
+      "soil_pct": 50.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 30,
+        "texture": "very stony loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 39.0,
+        "om_pct": 5.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 30,
+        "bottom_cm": 55,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Coombs",
+      "map_unit": "Coombs gravelly loam",
+      "pct": 21.3,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 36,
+        "texture": "gravelly loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 24.0,
+        "om_pct": 0.75,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 36,
+        "bottom_cm": 137,
+        "texture": "clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 24.0,
+        "om_pct": 0.75,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 137,
+        "bottom_cm": 152,
+        "texture": "very gravelly loamy fine sand",
+        "clay_pct": 2.5,
+        "sand_pct": 80.7,
+        "rock_frag_pct": 52.0,
+        "om_pct": 0.3,
+        "pH": 5.8
+       }
+      ]
+     },
+     {
+      "soil": "Sobrante",
+      "map_unit": "Sobrante loam",
+      "pct": 11.1,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 15,
+        "texture": "loam",
+        "clay_pct": 17.5,
+        "sand_pct": 43.0,
+        "rock_frag_pct": 9.0,
+        "om_pct": 2.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 76,
+        "texture": "clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 25.0,
+        "rock_frag_pct": 11.0,
+        "om_pct": 0.75,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 76,
+        "bottom_cm": 101,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -2160,7 +5069,116 @@
      "clay": 0,
      "rock outcrop": 20,
      "water": 4
-    }
+    },
+    "layers": [
+     {
+      "soil": "Toomes",
+      "map_unit": "Toomes stony loam",
+      "pct": 38.7,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 25,
+        "texture": "very stony loam",
+        "clay_pct": 18.5,
+        "sand_pct": 43.0,
+        "rock_frag_pct": 46.0,
+        "om_pct": 1.5,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 25,
+        "bottom_cm": 36,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Hambright",
+      "map_unit": "Hambright-Toomes stony loams",
+      "pct": 34.8,
+      "soil_pct": 70.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 13,
+        "texture": "stony loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 35.0,
+        "om_pct": 1.5,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 13,
+        "bottom_cm": 48,
+        "texture": "very cobbly loam",
+        "clay_pct": 25.0,
+        "sand_pct": 40.0,
+        "rock_frag_pct": 36.0,
+        "om_pct": 0.25,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 48,
+        "bottom_cm": 73,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Sobrante",
+      "map_unit": "Sobrante loam",
+      "pct": 9.9,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 15,
+        "texture": "loam",
+        "clay_pct": 17.5,
+        "sand_pct": 43.0,
+        "rock_frag_pct": 9.0,
+        "om_pct": 2.0,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 15,
+        "bottom_cm": 76,
+        "texture": "clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 25.0,
+        "rock_frag_pct": 11.0,
+        "om_pct": 0.75,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 76,
+        "bottom_cm": 101,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -2255,7 +5273,156 @@
      "clay": 57,
      "rock outcrop": 0,
      "water": 1
-    }
+    },
+    "layers": [
+     {
+      "soil": "Haire",
+      "map_unit": "Haire clay loam",
+      "pct": 26.3,
+      "soil_pct": 85.0,
+      "drainage": "Moderately well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 61,
+        "texture": "clay loam",
+        "clay_pct": 33.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 12.0,
+        "om_pct": 2.0,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 61,
+        "bottom_cm": 91,
+        "texture": "clay",
+        "clay_pct": 50.0,
+        "sand_pct": 22.1,
+        "rock_frag_pct": 5.0,
+        "om_pct": 0.25,
+        "pH": 5.6
+       },
+       {
+        "top_cm": 91,
+        "bottom_cm": 152,
+        "texture": "very cobbly clay loam",
+        "clay_pct": 31.0,
+        "sand_pct": 35.4,
+        "rock_frag_pct": 48.0,
+        "om_pct": 0.25,
+        "pH": 5.3
+       }
+      ]
+     },
+     {
+      "soil": "Reyes",
+      "map_unit": "Reyes clay",
+      "pct": 8.7,
+      "soil_pct": 90.0,
+      "drainage": "Somewhat poorly drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 3,
+        "texture": "slightly decomposed plant material",
+        "clay_pct": 15.0,
+        "sand_pct": 10.0,
+        "rock_frag_pct": 0,
+        "om_pct": 75.0,
+        "pH": 5.5
+       },
+       {
+        "top_cm": 3,
+        "bottom_cm": 38,
+        "texture": "clay",
+        "clay_pct": 58.0,
+        "sand_pct": 3.0,
+        "rock_frag_pct": 0,
+        "om_pct": 6.0,
+        "pH": 4.5
+       },
+       {
+        "top_cm": 38,
+        "bottom_cm": 140,
+        "texture": "clay",
+        "clay_pct": 58.0,
+        "sand_pct": 3.0,
+        "rock_frag_pct": 0,
+        "om_pct": 3.5,
+        "pH": 3.5
+       },
+       {
+        "top_cm": 140,
+        "bottom_cm": 200,
+        "texture": "clay",
+        "clay_pct": 58.0,
+        "sand_pct": 3.0,
+        "rock_frag_pct": 0,
+        "om_pct": 3.0,
+        "pH": 3.5
+       }
+      ]
+     },
+     {
+      "soil": "Zamora",
+      "map_unit": "Zamora silty clay loam",
+      "pct": 4.3,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 13,
+        "texture": "silty clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 17.0,
+        "rock_frag_pct": 0,
+        "om_pct": 3.0,
+        "pH": 6.2
+       },
+       {
+        "top_cm": 13,
+        "bottom_cm": 43,
+        "texture": "clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 34.0,
+        "rock_frag_pct": 0,
+        "om_pct": 2.0,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 43,
+        "bottom_cm": 74,
+        "texture": "clay loam",
+        "clay_pct": 32.0,
+        "sand_pct": 35.0,
+        "rock_frag_pct": 0,
+        "om_pct": 1.0,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 74,
+        "bottom_cm": 104,
+        "texture": "clay loam",
+        "clay_pct": 38.0,
+        "sand_pct": 31.0,
+        "rock_frag_pct": 0,
+        "om_pct": 0.7,
+        "pH": 7.0
+       },
+       {
+        "top_cm": 104,
+        "bottom_cm": 140,
+        "texture": "sandy clay loam",
+        "clay_pct": 34.0,
+        "sand_pct": 49.0,
+        "rock_frag_pct": 0,
+        "om_pct": 0.5,
+        "pH": 7.0
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -2321,7 +5488,156 @@
      "clay": 76,
      "rock outcrop": 0,
      "water": 0
-    }
+    },
+    "layers": [
+     {
+      "soil": "Sycamore",
+      "map_unit": "Sycamore silty clay loam",
+      "pct": 29.2,
+      "soil_pct": 85.0,
+      "drainage": "Somewhat poorly drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 23,
+        "texture": "silty clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 7.0,
+        "rock_frag_pct": 0,
+        "om_pct": 2.4,
+        "pH": 6.4
+       },
+       {
+        "top_cm": 23,
+        "bottom_cm": 64,
+        "texture": "silty clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 7.0,
+        "rock_frag_pct": 0,
+        "om_pct": 1.2,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 64,
+        "bottom_cm": 79,
+        "texture": "silty clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 7.0,
+        "rock_frag_pct": 0,
+        "om_pct": 0.77,
+        "pH": 7.5
+       },
+       {
+        "top_cm": 79,
+        "bottom_cm": 152,
+        "texture": "silty clay loam",
+        "clay_pct": 28.0,
+        "sand_pct": 7.0,
+        "rock_frag_pct": 0,
+        "om_pct": 0.5,
+        "pH": 8.0
+       }
+      ]
+     },
+     {
+      "soil": "Dibble",
+      "map_unit": "Dibble-Los Osos clay loams",
+      "pct": 22.6,
+      "soil_pct": 60.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 33,
+        "texture": "clay loam",
+        "clay_pct": 28.5,
+        "sand_pct": 34.2,
+        "rock_frag_pct": 2.0,
+        "om_pct": 0.75,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 33,
+        "bottom_cm": 76,
+        "texture": "clay loam",
+        "clay_pct": 38.0,
+        "sand_pct": 27.0,
+        "rock_frag_pct": 2.0,
+        "om_pct": 0.25,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 76,
+        "bottom_cm": 150,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Yolo",
+      "map_unit": "Yolo silty clay loam",
+      "pct": 11.0,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 23,
+        "texture": "silty clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 7.0,
+        "rock_frag_pct": 0,
+        "om_pct": 2.4,
+        "pH": 7.4
+       },
+       {
+        "top_cm": 23,
+        "bottom_cm": 46,
+        "texture": "silty clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 7.0,
+        "rock_frag_pct": 0,
+        "om_pct": 1.8,
+        "pH": 7.5
+       },
+       {
+        "top_cm": 46,
+        "bottom_cm": 71,
+        "texture": "silty clay loam",
+        "clay_pct": 30.0,
+        "sand_pct": 7.0,
+        "rock_frag_pct": 0,
+        "om_pct": 1.3,
+        "pH": 7.3
+       },
+       {
+        "top_cm": 71,
+        "bottom_cm": 91,
+        "texture": "clay loam",
+        "clay_pct": 28.0,
+        "sand_pct": 27.0,
+        "rock_frag_pct": 0,
+        "om_pct": 1.0,
+        "pH": 7.4
+       },
+       {
+        "top_cm": 91,
+        "bottom_cm": 112,
+        "texture": "loam",
+        "clay_pct": 25.0,
+        "sand_pct": 32.0,
+        "rock_frag_pct": 0,
+        "om_pct": 0.8,
+        "pH": 7.5
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",
@@ -2387,7 +5703,116 @@
      "clay": 9,
      "rock outcrop": 3,
      "water": 1
-    }
+    },
+    "layers": [
+     {
+      "soil": "Hambright",
+      "map_unit": "Hambright loam",
+      "pct": 46.0,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 13,
+        "texture": "loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 17.0,
+        "om_pct": 1.5,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 13,
+        "bottom_cm": 48,
+        "texture": "very cobbly loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 32.0,
+        "om_pct": 0.25,
+        "pH": 6.5
+       },
+       {
+        "top_cm": 48,
+        "bottom_cm": 73,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Toomes",
+      "map_unit": "Toomes stony loam",
+      "pct": 14.0,
+      "soil_pct": 85.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 25,
+        "texture": "very stony loam",
+        "clay_pct": 18.5,
+        "sand_pct": 43.0,
+        "rock_frag_pct": 46.0,
+        "om_pct": 1.5,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 25,
+        "bottom_cm": 36,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     },
+     {
+      "soil": "Dibble",
+      "map_unit": "Dibble-Los Osos loams",
+      "pct": 13.0,
+      "soil_pct": 60.0,
+      "drainage": "Well drained",
+      "layers": [
+       {
+        "top_cm": 0,
+        "bottom_cm": 8,
+        "texture": "loam",
+        "clay_pct": 23.5,
+        "sand_pct": 39.2,
+        "rock_frag_pct": 2.0,
+        "om_pct": 0.75,
+        "pH": 6.1
+       },
+       {
+        "top_cm": 8,
+        "bottom_cm": 51,
+        "texture": "clay loam",
+        "clay_pct": 38.0,
+        "sand_pct": 27.0,
+        "rock_frag_pct": 2.0,
+        "om_pct": 0.25,
+        "pH": 6.7
+       },
+       {
+        "top_cm": 51,
+        "bottom_cm": 150,
+        "texture": "bedrock",
+        "clay_pct": null,
+        "sand_pct": null,
+        "rock_frag_pct": 0,
+        "om_pct": null,
+        "pH": null
+       }
+      ]
+     }
+    ]
    },
    "vineyard_acres": {
     "year": "2024",

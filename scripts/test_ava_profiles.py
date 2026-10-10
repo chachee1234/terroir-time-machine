@@ -56,6 +56,19 @@ class Output(unittest.TestCase):
             if a.get("soils"):
                 self.assertLessEqual(sum(u["pct"] for u in a["soils"]["map_units"]), 100.1, aid)
 
+    def test_soil_layers(self):
+        n = 0
+        for aid, a in self.d["avas"].items():
+            for s in (a.get("soils") or {}).get("layers", []):
+                n += 1
+                self.assertGreater(s["pct"], 0, aid)
+                self.assertTrue(s["layers"], aid)
+                for lo, hi in zip(s["layers"], s["layers"][1:]):
+                    self.assertEqual(lo["bottom_cm"], hi["top_cm"], aid)
+                for h in s["layers"]:
+                    self.assertTrue(h["clay_pct"] is None or 0 <= h["clay_pct"] <= 100, aid)
+        self.assertGreater(n, 26)
+
     def test_producers_carry_sources(self):
         for aid, a in self.d["avas"].items():
             pr = a.get("producers")

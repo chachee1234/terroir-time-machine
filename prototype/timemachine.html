@@ -2281,21 +2281,35 @@ const siteKm=m=>(Math.abs(m)/1000).toFixed(1).replace(/\.0$/,"")+" km";
 function siteCard(){
   const d=SITE.cur; if(!d||ageOf(p)>0.06) return; SITE.card=true; AVAP.cur=null; $("cProf").hidden=true;
   const ava=d.avas.filter(v=>v.id!=="napa_valley").map(v=>v.name).join(", ")||"Napa Valley";
-  const hz=d.soil.horizons, grav=hz.find(h=>h.gravel_pct), sec=d.section;
+  const so=d.soil, hz=so.horizons, grav=hz.find(h=>h.gravel_pct>=10), sec=d.section;
   const named=sec.streams.filter(c=>c.name).sort((a,b)=>Math.abs(a.offset_m)-Math.abs(b.offset_m))[0];
   const creek=sec.streams.filter(c=>!c.name).sort((a,b)=>Math.abs(a.offset_m)-Math.abs(b.offset_m))[0];
   const side=o=>o<0?"southwest":"northeast";
   $("cEye").textContent=`Vineyard close-up · ${ava} AVA`;
   $("cTitle").textContent=d.vineyard ? d.name.replace(/ winery$/i,"")+" · "+d.vineyard : d.name;
-  $("cBody").textContent=`${d.soil.reported_as} (${d.soil.status}) on alluvial fan deposits, USGS unit ${d.geology.at_site}. `
-    +`The soil is stacked stream deposits: loam over two buried older topsoils`+(grav?`, then gravel ${grav.top_cm}–${grav.bottom_cm} cm down and sand below it`:"")+`. `
+  $("cBody").textContent=`${so.name||so.reported_as} (${so.status}) on alluvial fan deposits, USGS unit ${d.geology.at_site}. `
+    +siteLayersText(hz,grav)
+    +(so.reported?`The 2024 interview names ${so.reported.as} (${so.reported.status}). `:"")
     +(creek?`A creek crosses the section ${siteKm(creek.offset_m)} ${side(creek.offset_m)}`:"")+(creek&&named?"; ":"")
     +(named?`the ${named.name} is ${siteKm(named.offset_m)} ${side(named.offset_m)}`:"")+". "
     +(d.claims.find(c=>/1971/.test(c.text))?"Planted 1971 on St. George rootstock.":"");
-  $("cCls").innerHTML=`<b style="--c:var(--approx)">■</b> Soil survey, geologic map, mapped streams · layer thickness illustrated`;
+  $("cCls").innerHTML=`<b style="--c:var(--approx)">■</b> Soil survey, geologic map, mapped streams`+(so.mapped?" · soil numbers are the survey's typical values, not a pit here":" · layer thickness illustrated");
   const src=document.createElement("a"); src.href="sources.html#"+d.id; src.target="_blank"; src.rel="noopener"; src.textContent="Sources for this site ↗";
   const rp=document.createElement("button"); rp.textContent="Replay the layers"; rp.className="pri"; rp.onclick=()=>{ if(!xs.open) xsToggle(true); SITE.on=true; xsSet(SITE.sx,SITE.sz); siteReplay(); };
   const ca=$("cAct"); ca.innerHTML=""; ca.appendChild(rp); ca.appendChild(src); ca.hidden=false;
+}
+/* One sentence on the soil layers: the top layer, the clay-richest subsoil, where gravel starts, from the horizons
+   (survey numbers when the site has them, otherwise the series description) */
+function siteLayersText(hz,grav){
+  if(!hz.length) return "";
+  const top=hz[0], last=hz[hz.length-1], pc=v=>v==null?"":` (${Math.round(v)} % clay)`;
+  if(hz.some(h=>h.buried))
+    return `The soil is stacked stream deposits: ${top.texture} over ${hz.filter(h=>h.buried).length} buried older topsoil${hz.filter(h=>h.buried).length>1?"s":""}`
+      +(grav?`, then gravel ${grav.top_cm}–${grav.bottom_cm} cm down`:"")+". ";
+  const sub=hz.filter(h=>/^B/.test(h.name)&&h.clay_pct!=null).sort((a,b)=>b.clay_pct-a.clay_pct)[0];
+  return `Layers: ${top.texture} at the surface${pc(top.clay_pct)}`
+    +(sub?`, ${sub.texture.replace(/^(fine |very )?(gravelly )/,"")} subsoil from ${hz.find(h=>/^B/.test(h.name)).top_cm} cm${pc(sub.clay_pct)}`:"")
+    +(grav?`, gravel about ${grav.gravel_pct} % from ${grav.top_cm} cm`:"")+`; described to ${last.bottom_cm} cm. `;
 }
 /* AVA profile in the description card: elevation, soils, geology, grape acres and notable producers for the chosen
    close-up (assets/regions/<id>/ava_profiles.json from scripts/make_ava_profiles.py). Shares are of the whole AVA
@@ -2322,7 +2336,10 @@ function avaCard(a,d){
   if(e) rows.push(["Elevation",`${e.min}–${e.max} m · median ${e.median} m<br><small>80% of the area lies between ${e.p10} and ${e.p90} m</small>`]);
   if(so&&so.map_units.length){ const g=so.share_by_name;
     rows.push(["Soils",so.map_units.map(m=>`${esc(m.name)} ${pc(m.pct)}`).join(" · ")
-      +`<br><small>By map-unit name: ${pc(g.clay)} clay, ${pc(g["gravelly or cobbly"])} gravelly or cobbly, ${pc(g["rock outcrop"])} rock outcrop. USDA SSURGO, ${so.n_names} soil names in all</small>`]); }
+      +`<br><small>By map-unit name: ${pc(g.clay)} clay, ${pc(g["gravelly or cobbly"])} gravelly or cobbly, ${pc(g["rock outcrop"])} rock outcrop. USDA SSURGO, ${so.n_names} soil names in all</small>`]);
+    if(so.layers&&so.layers.length) rows.push(["Soil layers",so.layers.map(s=>`<b>${esc(s.soil)}</b> <small>(${pc(s.pct)} of the AVA)</small>: `
+      +s.layers.map(h=>`${h.top_cm}–${h.bottom_cm} cm ${esc(h.texture||"")}`+(h.clay_pct!=null?` ${Math.round(h.clay_pct)}% clay`:"")+(h.rock_frag_pct>=10?`, ${Math.round(h.rock_frag_pct)}% gravel`:"")).join(" · ")).join("<br>")
+      +"<br><small>USDA SSURGO typical values for the three most widespread soils, not samples from vineyards</small>"]); }
   rows.push(["Geology",geo.length?geo.map(u=>`${esc(u.name||u.ptype)} <small>(${esc(u.ptype)})</small> ${pc(u.pct)}`).join(" · ")+"<br><small>USGS SIM 2956, 1:100,000</small>"
     :"<small>Outside the USGS SIM 2956 geologic map, so not shown yet</small>"]);
   if(va&&va.acres) rows.push(["Vineyards",`${va.acres.toLocaleString()} acres of grapes <small>(USDA Cropland Data Layer ${esc(va.year)})</small>`]);
@@ -2372,12 +2389,21 @@ async function buildSiteLayers(q,mat,nx,nzz,h5,dr){
   mat.uniformsNeedUpdate=true; SEVO.ok=true; if(SITE.mode) siteReplay();   // start the story once the map can show it
 }
 function siteGloss(h){
+  const cl=h.clay_pct!=null?`${Math.round(h.clay_pct)} % clay`:"", gr=h.gravel_pct>=10?`gravel ${h.gravel_pct} %`:"";
+  const w=(...a)=>a.filter(Boolean).join(", ");
   if(h.buried) return "buried topsoil, an older surface";
-  if(h.gravel_pct) return `old stream-bed gravel, about ${h.gravel_pct} %`;
-  if(/sand/.test(h.texture)) return "stream sand";
-  if(/^Ap/.test(h.name)) return "plowed topsoil";
-  if(/^B/.test(h.name)) return /clay films/.test(h.narrative||"") ? "subsoil, thin clay coatings" : "subsoil";
-  return "";
+  if(h.clay_pct==null){   // series description only
+    if(h.gravel_pct) return `old stream-bed gravel, about ${h.gravel_pct} %`;
+    if(/sand/.test(h.texture)) return "stream sand";
+    if(/^Ap/.test(h.name)) return "plowed topsoil";
+    if(/^B/.test(h.name)) return /clay films/.test(h.narrative||"") ? "subsoil, thin clay coatings" : "subsoil";
+    return ""; }
+  if(/^Ap/.test(h.name)) return w(cl,"plowed topsoil",gr);
+  if(/^A/.test(h.name)) return w(cl,"topsoil",gr);
+  if(/^Bt/.test(h.name)) return w(cl,"clay-rich subsoil",gr);
+  if(/^B/.test(h.name)) return w(cl,"subsoil",gr);
+  if(/^C/.test(h.name)) return w(cl,"the deposit the soil formed in",gr);
+  return w(cl,gr);
 }
 function siteRand(i){ const x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); }
 function drawSiteSection(){
@@ -2434,7 +2460,7 @@ function drawSiteSection(){
   const px1=1000/(2*half)*(SW-6); g.textAlign="center"; g.fillText("1 km",6+SW/2,Hh-5); g.fillRect(6+SW/2-px1/2,Hh-17,px1,1.5);
   // soil column: the series' typical layers, laid down bottom first
   const cx=SW+16, cw=colW-16, ct=22, cb=Hh-16, hz=d.soil.horizons, depth=hz.length?hz[hz.length-1].bottom_cm:150, Yc=cm=>ct+cm/depth*(cb-ct);
-  g.fillStyle=XC.ink; g.font="600 10.5px "+font; g.textAlign="left"; g.fillText(`${(d.soil.series_name||"").replace(/^./,c=>c)[0]}${(d.soil.series_name||"").slice(1).toLowerCase()} soil · layers`,cx,ct-8);
+  g.fillStyle=XC.ink; g.font="600 10.5px "+font; g.textAlign="left"; g.fillText(`${(d.soil.series_name||"").replace(/^./,c=>c)[0]}${(d.soil.series_name||"").slice(1).toLowerCase()} soil · layers`+(d.soil.mapped?" (USDA survey)":""),cx,ct-8);
   g.font="9.5px "+font; g.fillStyle=XC.mut; g.textAlign="right"; g.fillText("0",cx-3,Yc(0)+4); g.textAlign="left"; g.fillText(depth+" cm",cx,cb+11);
   hz.forEach((h,i)=>{ const k=(hz.length-1-i)/Math.max(1,hz.length-1), t0=0.14+0.66*k, al=reduce?1:sm(t0,t0+0.06,tau); if(al<=0) return;
     const y0=Yc(h.top_cm), y1=Yc(h.bottom_cm), sw=20, grow=reduce?1:sm(t0,t0+0.1,tau);
@@ -2449,11 +2475,14 @@ function drawSiteSection(){
     g.globalAlpha=1; });
   // caption for the step being shown
   const cr=sec.streams.filter(c=>!c.name).sort((a,b)=>Math.abs(a.offset_m)-Math.abs(b.offset_m))[0], nr=sec.streams.filter(c=>c.name).sort((a,b)=>Math.abs(a.offset_m)-Math.abs(b.offset_m))[0];
-  const tail=` Map: fan and floods drawn on the mapped young deposits (SIM 2956) and today's terrain, spread and timing illustrated; vineyards where USDA CDL maps grapes in 2024. Layers: USDA series description, typical pedon (not a pit at this vineyard). Units: ${d.geology.label}. Deposit thickness and timing illustrated. Vertical ×${ve.toFixed(0)}.`;
+  const sm1=d.soil.mapped, nbur=hz.filter(h=>h.buried).length, deep=hz.filter(h=>h.gravel_pct>=10)[0];
+  const tail=` Map: fan and floods drawn on the mapped young deposits (SIM 2956) and today's terrain, spread and timing illustrated; vineyards where USDA CDL maps grapes in 2024. Layers: `
+    +(sm1?`USDA soil survey, ${sm1.map_unit.replace(/, MLRA.*$/,"")} (typical values, not a pit at this vineyard); colours from the series description`:"USDA series description, typical pedon (not a pit at this vineyard)")+`. Units: ${d.geology.label}. Deposit thickness and timing illustrated. Vertical ×${ve.toFixed(0)}.`;
   const note = tau<0.10 ? "First the hills: older rock on the flanks of the valley (USGS map units)."
     : tau<0.58 ? "Creeks from the western hills spread gravel, sand and silt over the valley floor and build the fan (Qf); on the map, braided channels sweep across it. The lowest soil layers are that stream sand and gravel."
-    : tau<0.76 ? `Floods lay loam over old ground surfaces and bury two older topsoils. Channels today: ${cr?"a creek "+siteKm(cr.offset_m)+(cr.offset_m<0?" SW":" NE"):""}${cr&&nr?", ":""}${nr?"the "+nr.name+" "+siteKm(nr.offset_m)+(nr.offset_m<0?" SW":" NE"):""} (USGS NHD).`
-    : "Soil forms in the top loam under grassland and scattered oaks (illustrated); then vineyard blocks go in. Today's vineyard soil. The buried gravel is an old stream bed; exactly where that channel ran under the vineyard is not mapped yet."+tail;
+    : tau<0.76 ? `Floods lay loam over the fan`+(nbur?` and bury ${nbur===2?"two older topsoils":nbur+" older topsoil"+(nbur>1?"s":"")}`:"")+`. Channels today: ${cr?"a creek "+siteKm(cr.offset_m)+(cr.offset_m<0?" SW":" NE"):""}${cr&&nr?", ":""}${nr?"the "+nr.name+" "+siteKm(nr.offset_m)+(nr.offset_m<0?" SW":" NE"):""} (USGS NHD).`
+    : "Soil forms in the top loam under grassland and scattered oaks (illustrated)"+(hz.some(h=>/^Bt/.test(h.name))?"; rain carries clay down into the subsoil":"")+"; then vineyard blocks go in. Today's vineyard soil."
+      +(deep?` The gravel from ${deep.top_cm} cm down was laid by streams on the fan; exactly where those channels ran under the vineyard is not mapped yet.`:"")+tail;
   if($("xsNote").textContent!==note) $("xsNote").textContent=note;
 }
 
@@ -2858,7 +2887,7 @@ function frame(now){
     { const sp=$("spin"); let vis=!!SITE.cur&&a<0.06&&!far;
       if(vis){ const G=SITE.cur.section.ground_m; pl3.set(SITE.sx,G[G.length>>1]/1000*VE+0.02,SITE.sz).project(lCam); vis=pl3.z<1;
         if(vis){ sp.style.left=((pl3.x+1)/2*innerWidth)+"px"; sp.style.top=((1-pl3.y)/2*innerHeight-6)+"px";
-          const t=SITE.cur.name.replace(/ winery$/i,""); if($("spinT").textContent!==t){ $("spinT").textContent=t; $("spinS").textContent=SITE.cur.soil.reported_as; } } }
+          const t=SITE.cur.name.replace(/ winery$/i,""); if($("spinT").textContent!==t){ $("spinT").textContent=t; $("spinS").textContent=SITE.cur.soil.name||SITE.cur.soil.reported_as; } } }
       sp.hidden=!vis; if(vis&&SITE.cur&&LOC.cur&&LOC.cur.id===SITE.cur.id) pin.hidden=true; }
     const today=a<0.06;
     $("pinT").textContent = today ? "Mount St. Helena" : a<3.5 ? "Mount St. Helena volcanic center" : "Future site of Mount St. Helena";
