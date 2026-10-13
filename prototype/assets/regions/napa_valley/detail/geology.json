@@ -1,5 +1,5 @@
 {
- "label": "USGS SIM 2956, 1:100,000",
+ "label": "USGS 1:24,000 young deposits over SIM 2956",
  "source": "Graymer, R.W., et al., 2007, Geologic Map and Map Database of Eastern Sonoma and Western Napa Counties, California: USGS Scientific Investigations Map 2956, DOI 10.3133/sim2956",
  "rights": "USGS-produced, public domain in the U.S.; credit U.S. Geological Survey (SOURCES.md G07)",
  "input": {
@@ -8,8 +8,21 @@
   "arcs": 10323,
   "polygons": 4003
  },
+ "fine": {
+  "label": "USGS OFR 2006-1037, 1:24,000",
+  "source": "Witter, R.C., Knudsen, K.L., Sowers, J.M., Wentworth, C.M., Koehler, R.D., and Randolph, C.E., 2006, Maps of Quaternary Deposits and Liquefaction Susceptibility in the Central San Francisco Bay Region, California: USGS Open-File Report 2006-1037, https://pubs.usgs.gov/of/2006/1037/",
+  "rights": "Public domain (USGS)",
+  "input": {
+   "file": "of06-1037_4b.shp.zip",
+   "sha256": "4f96c00ecffb819528276acf09f0abfb45d38907ce01cc72e541aa3bf6885cd8",
+   "polygons": 16141
+  },
+  "fallback": [
+   "br"
+  ]
+ },
  "grid": "each close-up's own grid (detail/index.json), NAD83 / UTM 10N, row 0 = north, grid points sampled",
- "limits": "Published at 1:100,000: a finer grid draws the map's contacts smoothly, it does not make them more precise (a line on the map is roughly 50 m wide on the ground). Transparent cells are outside the mapped area.",
+ "limits": "Young deposits (Quaternary units) come from the 1:24,000 map where it reaches (north to 38.625 N); older rock, and everything beyond that map, from SIM 2956 at 1:100,000 (a line roughly 50 m wide on the ground). Each unit lists the map(s) it came from. Transparent cells are outside both maps.",
  "closeups": [
   {
    "id": "guenoc_valley",
@@ -21,76 +34,119 @@
     18.32
    ],
    "mapped_fraction": 0.425,
+   "fine_fraction": 0.0,
    "units": [
     {
      "ptype": "sp",
      "color": "#914648",
-     "cells": 36132
+     "cells": 36132,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Kfm",
      "color": "#d8647c",
-     "cells": 20541
+     "cells": 20541,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "QTob",
      "color": "#acac53",
-     "cells": 18379
+     "cells": 18379,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 17013
+     "cells": 17013,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJgvl",
      "color": "#337fcc",
-     "cells": 5852
+     "cells": 5852,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 4828
+     "cells": 4828,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 4049
+     "cells": 4049,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Jgvm?",
      "color": "#733b9b",
-     "cells": 1878
+     "cells": 1878,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Jk",
      "color": "#ccb933",
-     "cells": 1810
+     "cells": 1810,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "sc",
      "color": "#7c92c0",
-     "cells": 486
+     "cells": 486,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJfs",
      "color": "#c372ca",
-     "cells": 434
+     "cells": 434,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 71
+     "cells": 71,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "QTt",
      "color": "#7cacc0",
-     "cells": 63
+     "cells": 63,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 6
+     "cells": 6,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -103,202 +159,397 @@
     43.781,
     43.781
    ],
-   "mapped_fraction": 0.624,
+   "mapped_fraction": 0.646,
+   "fine_fraction": 0.062,
    "units": [
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 22983
+     "cells": 22982,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJfs",
      "color": "#c372ca",
-     "cells": 20765
+     "cells": 20765,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "fsr",
      "color": "#64d8c1",
-     "cells": 17969
+     "cells": 17969,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 16438
+     "cells": 16438,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 12535
+     "cells": 12521,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "QThg",
      "color": "#862bab",
-     "cells": 10558
+     "cells": 10558,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "sp",
      "color": "#914648",
-     "cells": 10532
+     "cells": 10532,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tslt",
      "color": "#a4cc33",
-     "cells": 8321
-    },
-    {
-     "ptype": "Qls",
-     "color": "#3b939b",
-     "cells": 5228
+     "cells": 8321,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qha",
      "color": "#8172ca",
-     "cells": 4855
+     "cells": 5850,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 5228,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsag",
      "color": "#4c4691",
-     "cells": 4437
+     "cells": 4437,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJfgs",
      "color": "#915f46",
-     "cells": 4394
-    },
-    {
-     "ptype": "gs",
-     "color": "#ab2b9f",
-     "cells": 2910
-    },
-    {
-     "ptype": "Tss",
-     "color": "#46b8b9",
-     "cells": 2765
-    },
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 2628
+     "cells": 4394,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 2590
+     "cells": 3822,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 3430,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
+    },
+    {
+     "ptype": "gs",
+     "color": "#ab2b9f",
+     "cells": 2910,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 2764,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qlsr",
      "color": "#2b30ab",
-     "cells": 1877
+     "cells": 1877,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tswt",
      "color": "#2bab67",
-     "cells": 1762
+     "cells": 1762,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qpf",
      "color": "#aab946",
-     "cells": 1731
-    },
-    {
-     "ptype": "Jmi",
-     "color": "#64c5d8",
-     "cells": 1076
+     "cells": 1731,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 953
-    },
-    {
-     "ptype": "sc",
-     "color": "#7c92c0",
-     "cells": 948
-    },
-    {
-     "ptype": "Qpa",
-     "color": "#854691",
-     "cells": 834
-    },
-    {
-     "ptype": "Qhb",
-     "color": "#33cca6",
-     "cells": 800
+     "cells": 1575,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 672
+     "cells": 1439,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Jmi",
+     "color": "#64c5d8",
+     "cells": 1076,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "sc",
+     "color": "#7c92c0",
+     "cells": 948,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 920,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 598
+     "cells": 837,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
     },
     {
-     "ptype": "Qhff",
-     "color": "#c07c82",
-     "cells": 449
+     "ptype": "Qb",
+     "color": "#ccb933",
+     "cells": 772,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene basin deposits"
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 415
+     "cells": 769,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 449,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
     },
     {
      "ptype": "Tr",
      "color": "#2b90ab",
-     "cells": 411
-    },
-    {
-     "ptype": "Jk",
-     "color": "#ccb933",
-     "cells": 285
-    },
-    {
-     "ptype": "m",
-     "color": "#8aac53",
-     "cells": 164
-    },
-    {
-     "ptype": "KJfc",
-     "color": "#69ac53",
-     "cells": 140
-    },
-    {
-     "ptype": "ch",
-     "color": "#79ca72",
-     "cells": 121
-    },
-    {
-     "ptype": "Tsri",
-     "color": "#53ac5f",
-     "cells": 112
-    },
-    {
-     "ptype": "Qhay",
-     "color": "#9b673b",
-     "cells": 89
-    },
-    {
-     "ptype": "Kfss",
-     "color": "#46918e",
-     "cells": 84
+     "cells": 411,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qoa",
      "color": "#ac6a53",
-     "cells": 42
+     "cells": 386,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
+    },
+    {
+     "ptype": "Jk",
+     "color": "#ccb933",
+     "cells": 285,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 209,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qoa1",
+     "color": "#5374ac",
+     "cells": 166,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger early to late Pleistocene alluvial deposits undifferentiated"
+    },
+    {
+     "ptype": "m",
+     "color": "#8aac53",
+     "cells": 164,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "KJfc",
+     "color": "#69ac53",
+     "cells": 140,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "ch",
+     "color": "#79ca72",
+     "cells": 121,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 112,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 100,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 89,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Kfss",
+     "color": "#46918e",
+     "cells": 84,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsai",
      "color": "#b97246",
-     "cells": 32
+     "cells": 32,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "af",
      "color": "#bcc07c",
-     "cells": 16
+     "cells": 27,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 20,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 14,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
+    },
+    {
+     "ptype": "acf",
+     "color": "#53aca2",
+     "cells": 4,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial channel fill (historical)"
     }
    ]
   },
@@ -312,141 +563,223 @@
     17.613
    ],
    "mapped_fraction": 0.936,
+   "fine_fraction": 0.0,
    "units": [
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 67046
+     "cells": 67046,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tslt",
      "color": "#a4cc33",
-     "cells": 47238
+     "cells": 47238,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "sp",
      "color": "#914648",
-     "cells": 33898
+     "cells": 33898,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 14754
+     "cells": 14754,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 12736
+     "cells": 12736,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "fsr",
      "color": "#64d8c1",
-     "cells": 12725
+     "cells": 12725,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 12706
+     "cells": 12706,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qlsr",
      "color": "#2b30ab",
-     "cells": 11576
+     "cells": 11576,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tswt",
      "color": "#2bab67",
-     "cells": 5974
+     "cells": 5974,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Jmi",
      "color": "#64c5d8",
-     "cells": 5947
+     "cells": 5947,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qf",
      "color": "#54b946",
-     "cells": 5229
+     "cells": 5229,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJfs",
      "color": "#c372ca",
-     "cells": 4699
+     "cells": 4699,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 3299
+     "cells": 3299,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsag",
      "color": "#4c4691",
-     "cells": 1656
+     "cells": 1656,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "sc",
      "color": "#7c92c0",
-     "cells": 1319
+     "cells": 1319,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 1290
+     "cells": 1290,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Jk",
      "color": "#ccb933",
-     "cells": 756
+     "cells": 756,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "gs",
      "color": "#ab2b9f",
-     "cells": 665
+     "cells": 665,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 515
+     "cells": 515,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 439
+     "cells": 439,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 384
+     "cells": 384,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhay",
      "color": "#9b673b",
-     "cells": 226
+     "cells": 226,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhb",
      "color": "#33cca6",
-     "cells": 199
+     "cells": 199,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsri",
      "color": "#53ac5f",
-     "cells": 96
+     "cells": 96,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "af",
      "color": "#bcc07c",
-     "cells": 36
+     "cells": 36,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "m",
      "color": "#8aac53",
-     "cells": 35
+     "cells": 35,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qpf",
      "color": "#aab946",
-     "cells": 2
+     "cells": 2,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -460,181 +793,317 @@
     31.337
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.122,
    "units": [
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 71981
+     "cells": 71976,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 47753
+     "cells": 47748,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 24102
+     "cells": 24075,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsag",
      "color": "#4c4691",
-     "cells": 23257
+     "cells": 23257,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsft",
      "color": "#983b9b",
-     "cells": 11298
+     "cells": 11298,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qha",
      "color": "#8172ca",
-     "cells": 11176
+     "cells": 11176,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     },
     {
      "ptype": "Tslt",
      "color": "#a4cc33",
-     "cells": 10231
+     "cells": 10231,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 8085
+     "cells": 8085,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
      "ptype": "KJfs",
      "color": "#c372ca",
-     "cells": 7180
+     "cells": 7180,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tswt",
      "color": "#2bab67",
-     "cells": 6692
+     "cells": 6692,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 4824
+     "cells": 4822,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
     },
     {
      "ptype": "Qf",
      "color": "#54b946",
-     "cells": 4645
+     "cells": 4667,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
      "ptype": "sp",
      "color": "#914648",
-     "cells": 4477
+     "cells": 4477,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJfgs",
      "color": "#915f46",
-     "cells": 4377
+     "cells": 4377,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 3408
+     "cells": 3408,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 3154
+     "cells": 3154,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "QThg",
      "color": "#862bab",
-     "cells": 2764
+     "cells": 2764,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJgvl",
      "color": "#337fcc",
-     "cells": 2604
+     "cells": 2604,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 1860
+     "cells": 1865,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
      "ptype": "Tsai",
      "color": "#b97246",
-     "cells": 1613
+     "cells": 1613,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 1355
+     "cells": 1355,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
      "ptype": "fsr",
      "color": "#64d8c1",
-     "cells": 1184
+     "cells": 1184,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 1039
+     "cells": 1047,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
      "ptype": "Qpa",
      "color": "#854691",
-     "cells": 883
+     "cells": 884,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
     },
     {
      "ptype": "sc",
      "color": "#7c92c0",
-     "cells": 583
+     "cells": 583,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Qhb",
-     "color": "#33cca6",
-     "cells": 421
+     "ptype": "Qb",
+     "color": "#ccb933",
+     "cells": 421,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene basin deposits"
     },
     {
      "ptype": "QTob",
      "color": "#acac53",
-     "cells": 393
+     "cells": 393,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qoa",
      "color": "#ac6a53",
-     "cells": 299
+     "cells": 299,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
      "ptype": "Tsri",
      "color": "#53ac5f",
-     "cells": 224
+     "cells": 224,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "gs",
      "color": "#ab2b9f",
-     "cells": 195
+     "cells": 195,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 35
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 31,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
     },
     {
      "ptype": "Qpt",
      "color": "#72a5ca",
-     "cells": 18
+     "cells": 18,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene stream terrace deposits"
     },
     {
      "ptype": "Qt",
      "color": "#9b3b56",
-     "cells": 14
+     "cells": 14,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene stream terrace deposits"
     },
     {
      "ptype": "KJfc",
      "color": "#69ac53",
-     "cells": 11
+     "cells": 11,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Jk",
      "color": "#ccb933",
-     "cells": 9
+     "cells": 9,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 7,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -648,171 +1117,298 @@
     30.303
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.119,
    "units": [
     {
      "ptype": "KJgvl",
      "color": "#337fcc",
-     "cells": 51144
+     "cells": 51139,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 46666
+     "cells": 46664,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 35000
+     "cells": 34999,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsft",
      "color": "#983b9b",
-     "cells": 17052
+     "cells": 17052,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qpa",
      "color": "#854691",
-     "cells": 13459
+     "cells": 13464,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
     },
     {
      "ptype": "Kfm",
      "color": "#d8647c",
-     "cells": 13283
+     "cells": 13283,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 11910
+     "cells": 11910,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "sp",
      "color": "#914648",
-     "cells": 9391
+     "cells": 9391,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 8271
+     "cells": 8271,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 7183
+     "cells": 7184,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
      "ptype": "Tsag",
      "color": "#4c4691",
-     "cells": 7112
+     "cells": 7112,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 6721
+     "cells": 6721,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 6284
+     "cells": 6283,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
     },
     {
      "ptype": "Qoa",
      "color": "#ac6a53",
-     "cells": 3920
+     "cells": 3920,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 3919
+     "cells": 3919,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qha",
      "color": "#8172ca",
-     "cells": 3135
+     "cells": 3135,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     },
     {
      "ptype": "KJgv",
      "color": "#879b3b",
-     "cells": 2787
+     "cells": 2787,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qf",
      "color": "#54b946",
-     "cells": 2516
+     "cells": 2516,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 2366
+     "cells": 2365,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
      "ptype": "Tswt",
      "color": "#2bab67",
-     "cells": 2181
+     "cells": 2181,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 1691
+     "cells": 1695,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
      "ptype": "Tsai",
      "color": "#b97246",
-     "cells": 1373
+     "cells": 1373,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qoa?",
      "color": "#7cc0a1",
-     "cells": 1097
+     "cells": 1097,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Kfmg",
      "color": "#c0aa7c",
-     "cells": 954
+     "cells": 954,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tslt",
      "color": "#a4cc33",
-     "cells": 710
+     "cells": 710,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJfs",
      "color": "#c372ca",
-     "cells": 532
+     "cells": 532,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qt",
      "color": "#9b3b56",
-     "cells": 516
+     "cells": 516,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "QTob",
      "color": "#acac53",
-     "cells": 372
+     "cells": 372,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhb",
      "color": "#33cca6",
-     "cells": 180
-    },
-    {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 135
+     "cells": 180,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Kfmc",
      "color": "#7553ac",
-     "cells": 134
+     "cells": 134,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsrp",
      "color": "#997cc0",
-     "cells": 130
+     "cells": 130,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 75,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 60,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
     },
     {
      "ptype": "Qhty",
      "color": "#cab872",
-     "cells": 20
+     "cells": 20,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -825,147 +1421,358 @@
     35.206,
     35.206
    ],
-   "mapped_fraction": 0.458,
+   "mapped_fraction": 0.693,
+   "fine_fraction": 0.277,
    "units": [
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 31485
+     "cells": 31442,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "QThg",
      "color": "#862bab",
-     "cells": 28835
-    },
-    {
-     "ptype": "KJfs",
-     "color": "#c372ca",
-     "cells": 21667
-    },
-    {
-     "ptype": "Tst",
-     "color": "#629b3b",
-     "cells": 12898
+     "cells": 28760,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 4814
+     "cells": 24428,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 3765
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 21667,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "KJfgs",
-     "color": "#915f46",
-     "cells": 3447
-    },
-    {
-     "ptype": "Tss",
-     "color": "#46b8b9",
-     "cells": 2094
-    },
-    {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 1434
-    },
-    {
-     "ptype": "Qhb",
-     "color": "#33cca6",
-     "cells": 1260
-    },
-    {
-     "ptype": "Qhc",
-     "color": "#80ab2b",
-     "cells": 1152
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 12897,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qoa",
      "color": "#ac6a53",
-     "cells": 1133
-    },
-    {
-     "ptype": "Tp",
-     "color": "#9433cc",
-     "cells": 1097
-    },
-    {
-     "ptype": "Qa",
-     "color": "#914665",
-     "cells": 1033
-    },
-    {
-     "ptype": "Qhff",
-     "color": "#c07c82",
-     "cells": 693
+     "cells": 8884,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 494
+     "cells": 6802,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
     },
     {
-     "ptype": "Qpf",
-     "color": "#aab946",
-     "cells": 483
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 5036,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 4774,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 4619,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Qb",
+     "color": "#ccb933",
+     "cells": 4563,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene basin deposits"
+    },
+    {
+     "ptype": "KJfgs",
+     "color": "#915f46",
+     "cells": 3447,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 419
-    },
-    {
-     "ptype": "Qpa",
-     "color": "#854691",
-     "cells": 363
-    },
-    {
-     "ptype": "Qls",
-     "color": "#3b939b",
-     "cells": 328
-    },
-    {
-     "ptype": "sc",
-     "color": "#7c92c0",
-     "cells": 258
-    },
-    {
-     "ptype": "sp",
-     "color": "#914648",
-     "cells": 254
-    },
-    {
-     "ptype": "KJfc",
-     "color": "#69ac53",
-     "cells": 218
+     "cells": 3066,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
      "ptype": "Qhay",
      "color": "#9b673b",
-     "cells": 133
+     "cells": 2944,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial deposits Undifferentiated"
     },
     {
-     "ptype": "Tsr",
-     "color": "#6498d8",
-     "cells": 127
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 2787,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
-     "ptype": "Qt",
-     "color": "#9b3b56",
-     "cells": 94
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 2342,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qoa1",
+     "color": "#5374ac",
+     "cells": 2114,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger early to late Pleistocene alluvial deposits undifferentiated"
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 2094,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qpt",
      "color": "#72a5ca",
-     "cells": 25
+     "cells": 1445,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene stream terrace deposits"
+    },
+    {
+     "ptype": "Tp",
+     "color": "#9433cc",
+     "cells": 1039,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "gq",
+     "color": "#ca7772",
+     "cells": 968,
+     "maps": [
+      "24k"
+     ],
+     "name": "Gravel quarries and percolation ponds"
+    },
+    {
+     "ptype": "Qof",
+     "color": "#469156",
+     "cells": 845,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 783,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 693,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
+    },
+    {
+     "ptype": "Qhl",
+     "color": "#469156",
+     "cells": 484,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan levee deposits"
     },
     {
      "ptype": "af",
      "color": "#bcc07c",
-     "cells": 13
+     "cells": 473,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 463,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 330,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 328,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 265,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "sc",
+     "color": "#7c92c0",
+     "cells": 258,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 254,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "KJfc",
+     "color": "#69ac53",
+     "cells": 218,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 127,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qoa2",
+     "color": "#c07c82",
+     "cells": 54,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older early to late Pleistocene alluvial deposits undifferentiated"
+    },
+    {
+     "ptype": "Qot",
+     "color": "#3b939b",
+     "cells": 49,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene stream terrace deposits"
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 36,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
+    },
+    {
+     "ptype": "acf",
+     "color": "#53aca2",
+     "cells": 9,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial channel fill (historical)"
+    },
+    {
+     "ptype": "ac",
+     "color": "#ab772b",
+     "cells": 4,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial stream channel (historical)"
     }
    ]
   },
@@ -979,176 +1786,303 @@
     29.47
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.054,
    "units": [
     {
      "ptype": "KJgvl",
      "color": "#337fcc",
-     "cells": 70622
+     "cells": 70617,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Kfm",
      "color": "#d8647c",
-     "cells": 40559
+     "cells": 40559,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "sp",
      "color": "#914648",
-     "cells": 35413
+     "cells": 35413,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Jgvm",
      "color": "#72ca8c",
-     "cells": 16940
+     "cells": 16940,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 13400
+     "cells": 13400,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 10137
+     "cells": 10129,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 9466
+     "cells": 9466,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 9320
+     "cells": 9319,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 6979
+     "cells": 6979,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "spm",
      "color": "#a372ca",
-     "cells": 6441
+     "cells": 6441,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qpa",
      "color": "#854691",
-     "cells": 5815
+     "cells": 5817,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 5179
-    },
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 4958
+     "cells": 5183,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
      "ptype": "Kfmc",
      "color": "#7553ac",
-     "cells": 4848
+     "cells": 4848,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 4838,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
      "ptype": "Jk",
      "color": "#ccb933",
-     "cells": 4588
+     "cells": 4588,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 3379
+     "cells": 3379,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qha",
      "color": "#8172ca",
-     "cells": 3155
+     "cells": 3314,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     },
     {
      "ptype": "Jv",
      "color": "#ab2b70",
-     "cells": 2080
+     "cells": 2080,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJgv",
      "color": "#879b3b",
-     "cells": 1870
+     "cells": 1870,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Kfmg",
      "color": "#c0aa7c",
-     "cells": 1722
+     "cells": 1722,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 1138
+     "cells": 1135,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 959
+     "cells": 810,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
     },
     {
      "ptype": "Jgvm?",
      "color": "#733b9b",
-     "cells": 554
+     "cells": 554,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qt",
      "color": "#9b3b56",
-     "cells": 442
-    },
-    {
-     "ptype": "Qhty",
-     "color": "#cab872",
-     "cells": 441
-    },
-    {
-     "ptype": "Qpf",
-     "color": "#aab946",
-     "cells": 342
+     "cells": 442,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 322
+     "cells": 442,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 441,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 342,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "Qoa",
      "color": "#ac6a53",
-     "cells": 316
+     "cells": 317,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
      "ptype": "fsr",
      "color": "#64d8c1",
-     "cells": 264
+     "cells": 264,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhay",
      "color": "#9b673b",
-     "cells": 204
-    },
-    {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 139
+     "cells": 204,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial deposits Undifferentiated"
     },
     {
      "ptype": "Qhff",
      "color": "#c07c82",
-     "cells": 117
+     "cells": 117,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 91,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 62,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "QTc",
      "color": "#3b4b9b",
-     "cells": 21
-    },
-    {
-     "ptype": "alf",
-     "color": "#b94670",
-     "cells": 14
+     "cells": 21,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -1162,121 +2096,213 @@
     23.67
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.165,
    "units": [
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 112214
+     "cells": 112198,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 41921
+     "cells": 41916,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 28912
+     "cells": 28902,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qha",
      "color": "#8172ca",
-     "cells": 18618
+     "cells": 18619,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     },
     {
      "ptype": "KJfs",
      "color": "#c372ca",
-     "cells": 15803
+     "cells": 15797,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 11327
+     "cells": 11328,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 8305
+     "cells": 8302,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJfgs",
      "color": "#915f46",
-     "cells": 5196
+     "cells": 5196,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 4500
+     "cells": 4499,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
     },
     {
      "ptype": "Tsag",
      "color": "#4c4691",
-     "cells": 3907
+     "cells": 3906,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qf",
      "color": "#54b946",
-     "cells": 3879
+     "cells": 3879,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 2500
+     "cells": 2504,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
      "ptype": "QThg",
      "color": "#862bab",
-     "cells": 1720
+     "cells": 1720,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qpa",
      "color": "#854691",
-     "cells": 1210
+     "cells": 1210,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 750
+     "cells": 784,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
      "ptype": "Tsai",
      "color": "#b97246",
-     "cells": 523
+     "cells": 523,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 307
+     "cells": 307,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
      "ptype": "sp",
      "color": "#914648",
-     "cells": 170
+     "cells": 170,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qoa",
      "color": "#ac6a53",
-     "cells": 141
+     "cells": 141,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 118
+     "cells": 118,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsft",
      "color": "#983b9b",
-     "cells": 56
+     "cells": 56,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "fsr",
      "color": "#64d8c1",
-     "cells": 38
+     "cells": 38,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 30,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
     },
     {
      "ptype": "af",
      "color": "#bcc07c",
-     "cells": 29
+     "cells": 1,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -1290,126 +2316,214 @@
     23.367
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.159,
    "units": [
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 88156
+     "cells": 88126,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 49382
+     "cells": 49377,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsft",
      "color": "#983b9b",
-     "cells": 21994
+     "cells": 21994,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 18687
+     "cells": 18649,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJgvl",
      "color": "#337fcc",
-     "cells": 16567
+     "cells": 16567,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 15431
+     "cells": 15910,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 12309
+     "cells": 12308,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 9517
+     "cells": 9515,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
     },
     {
      "ptype": "Qha",
      "color": "#8172ca",
-     "cells": 4744
+     "cells": 4751,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     },
     {
      "ptype": "KJgv",
      "color": "#879b3b",
-     "cells": 4595
+     "cells": 4595,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 4316
+     "cells": 4319,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
      "ptype": "KJfs",
      "color": "#c372ca",
-     "cells": 3086
-    },
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 2632
+     "cells": 3086,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 2383
+     "cells": 2383,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 2216,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 1776
+     "cells": 1776,
+     "maps": [
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 1739
+     "cells": 1745,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
      "ptype": "sp",
      "color": "#914648",
-     "cells": 1516
+     "cells": 1514,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qpa",
      "color": "#854691",
-     "cells": 1355
+     "cells": 1355,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
     },
     {
      "ptype": "Kfm",
      "color": "#d8647c",
-     "cells": 1204
+     "cells": 1204,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsrp",
      "color": "#997cc0",
-     "cells": 217
+     "cells": 217,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsag",
      "color": "#4c4691",
-     "cells": 197
+     "cells": 197,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qpf",
      "color": "#aab946",
-     "cells": 164
+     "cells": 164,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "Qoa",
      "color": "#ac6a53",
-     "cells": 146
+     "cells": 145,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 31
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 31,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
     }
    ]
   },
@@ -1423,226 +2537,438 @@
     39.427
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.192,
    "units": [
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 55724
+     "cells": 55718,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 53235
+     "cells": 52457,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "QThg",
      "color": "#862bab",
-     "cells": 25573
+     "cells": 25142,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJfs",
      "color": "#c372ca",
-     "cells": 23418
-    },
-    {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 22906
-    },
-    {
-     "ptype": "Tsr",
-     "color": "#6498d8",
-     "cells": 10400
-    },
-    {
-     "ptype": "fsr",
-     "color": "#64d8c1",
-     "cells": 10040
-    },
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 8444
-    },
-    {
-     "ptype": "KJfgs",
-     "color": "#915f46",
-     "cells": 5747
+     "cells": 23411,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 5189
+     "cells": 23225,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 10399,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "fsr",
+     "color": "#64d8c1",
+     "cells": 10040,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 8787,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 6368,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
+    },
+    {
+     "ptype": "KJfgs",
+     "color": "#915f46",
+     "cells": 5747,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsrs",
      "color": "#917b46",
-     "cells": 4790
+     "cells": 4790,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "sp",
      "color": "#914648",
-     "cells": 4554
+     "cells": 4554,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 4463
-    },
-    {
-     "ptype": "Qoa",
-     "color": "#ac6a53",
-     "cells": 4071
+     "cells": 4461,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 3645
-    },
-    {
-     "ptype": "Qhb",
-     "color": "#33cca6",
-     "cells": 2794
-    },
-    {
-     "ptype": "Tp",
-     "color": "#9433cc",
-     "cells": 2429
+     "cells": 3597,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 2288
+     "cells": 2414,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
-     "ptype": "Qht",
-     "color": "#8046b9",
-     "cells": 2111
+     "ptype": "Qof",
+     "color": "#469156",
+     "cells": 2255,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial fan deposits"
     },
     {
-     "ptype": "Tsag",
-     "color": "#4c4691",
-     "cells": 1587
-    },
-    {
-     "ptype": "Tsft",
-     "color": "#983b9b",
-     "cells": 1560
+     "ptype": "Tp",
+     "color": "#9433cc",
+     "cells": 2231,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 1522
+     "cells": 2008,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 1934,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 1925,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
+    },
+    {
+     "ptype": "Tsft",
+     "color": "#983b9b",
+     "cells": 1560,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 1558,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tslt",
      "color": "#a4cc33",
-     "cells": 881
+     "cells": 881,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 868,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene basin deposits"
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 814
+     "cells": 865,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
      "ptype": "Tsrp",
      "color": "#997cc0",
-     "cells": 748
+     "cells": 748,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "QTge",
      "color": "#64d895",
-     "cells": 687
-    },
-    {
-     "ptype": "Qpa",
-     "color": "#854691",
-     "cells": 410
-    },
-    {
-     "ptype": "KJfgs?",
-     "color": "#46b98e",
-     "cells": 397
+     "cells": 687,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qt",
      "color": "#9b3b56",
-     "cells": 386
-    },
-    {
-     "ptype": "Tswt",
-     "color": "#2bab67",
-     "cells": 265
-    },
-    {
-     "ptype": "sc",
-     "color": "#7c92c0",
-     "cells": 207
-    },
-    {
-     "ptype": "KJfc",
-     "color": "#69ac53",
-     "cells": 167
-    },
-    {
-     "ptype": "Tsv",
-     "color": "#d87864",
-     "cells": 144
-    },
-    {
-     "ptype": "Qhl",
-     "color": "#469156",
-     "cells": 96
-    },
-    {
-     "ptype": "fgc",
-     "color": "#503b9b",
-     "cells": 94
-    },
-    {
-     "ptype": "KJgvl",
-     "color": "#337fcc",
-     "cells": 91
+     "cells": 590,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene stream terrace deposits"
     },
     {
      "ptype": "Qpf",
      "color": "#aab946",
-     "cells": 50
+     "cells": 428,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
     },
     {
-     "ptype": "Tsri",
-     "color": "#53ac5f",
-     "cells": 44
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 409,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
     },
     {
-     "ptype": "Kfm",
-     "color": "#d8647c",
-     "cells": 39
-    },
-    {
-     "ptype": "Qpt",
-     "color": "#72a5ca",
-     "cells": 31
-    },
-    {
-     "ptype": "fs",
-     "color": "#cc8133",
-     "cells": 31
-    },
-    {
-     "ptype": "gs",
-     "color": "#ab2b9f",
-     "cells": 29
-    },
-    {
-     "ptype": "Tsai",
-     "color": "#b97246",
-     "cells": 27
+     "ptype": "KJfgs?",
+     "color": "#46b98e",
+     "cells": 397,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "af",
      "color": "#bcc07c",
-     "cells": 16
+     "cells": 286,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
+    },
+    {
+     "ptype": "Tswt",
+     "color": "#2bab67",
+     "cells": 265,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "sc",
+     "color": "#7c92c0",
+     "cells": 207,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "KJfc",
+     "color": "#69ac53",
+     "cells": 167,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsv",
+     "color": "#d87864",
+     "cells": 144,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "fgc",
+     "color": "#503b9b",
+     "cells": 94,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 91,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qa?",
+     "color": "#733b9b",
+     "cells": 70,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated (queried)"
+    },
+    {
+     "ptype": "Qhl",
+     "color": "#469156",
+     "cells": 46,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 44,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 41,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 39,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "ac",
+     "color": "#ab772b",
+     "cells": 37,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial stream channel (historical)"
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 36,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qpt",
+     "color": "#72a5ca",
+     "cells": 31,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene stream terrace deposits"
+    },
+    {
+     "ptype": "fs",
+     "color": "#cc8133",
+     "cells": 31,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "gs",
+     "color": "#ab2b9f",
+     "cells": 29,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 27,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 5,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
     }
    ]
   },
@@ -1656,161 +2982,286 @@
     25.536
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.269,
    "units": [
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 67094
-    },
-    {
-     "ptype": "KJfs",
-     "color": "#c372ca",
-     "cells": 28323
+     "cells": 67068,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 22381
+     "cells": 34260,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 28323,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 21831
+     "cells": 21829,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 16318
+     "cells": 16309,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 13949
-    },
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 13223
+     "cells": 13916,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 9896
+     "cells": 9808,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
     },
     {
      "ptype": "Tsft",
      "color": "#983b9b",
-     "cells": 7826
+     "cells": 7825,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "sp",
      "color": "#914648",
-     "cells": 6823
+     "cells": 6822,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "fsr",
      "color": "#64d8c1",
-     "cells": 6770
+     "cells": 6770,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 5603
+     "cells": 5599,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Kfm",
      "color": "#d8647c",
-     "cells": 5386
-    },
-    {
-     "ptype": "KJgvl",
-     "color": "#337fcc",
-     "cells": 4421
+     "cells": 5386,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qha",
      "color": "#8172ca",
-     "cells": 4395
+     "cells": 4484,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     },
     {
-     "ptype": "Qa",
-     "color": "#914665",
-     "cells": 4180
-    },
-    {
-     "ptype": "Qhff",
-     "color": "#c07c82",
-     "cells": 4139
-    },
-    {
-     "ptype": "KJgv",
-     "color": "#879b3b",
-     "cells": 4017
-    },
-    {
-     "ptype": "Qhay",
-     "color": "#9b673b",
-     "cells": 3875
-    },
-    {
-     "ptype": "Qhc",
-     "color": "#80ab2b",
-     "cells": 2873
-    },
-    {
-     "ptype": "Qpf",
-     "color": "#aab946",
-     "cells": 2776
-    },
-    {
-     "ptype": "KJfgs",
-     "color": "#915f46",
-     "cells": 1823
-    },
-    {
-     "ptype": "water",
-     "color": "#9b8c3b",
-     "cells": 1299
-    },
-    {
-     "ptype": "KJfgs?",
-     "color": "#46b98e",
-     "cells": 949
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 4420,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhty",
      "color": "#cab872",
-     "cells": 843
+     "cells": 4284,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 4181,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 4017,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 2875,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 2822,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 2788,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 2718,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
+    },
+    {
+     "ptype": "KJfgs",
+     "color": "#915f46",
+     "cells": 1823,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 1303,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
+    },
+    {
+     "ptype": "KJfgs?",
+     "color": "#46b98e",
+     "cells": 949,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qpa",
      "color": "#854691",
-     "cells": 703
+     "cells": 703,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 434,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial deposits Undifferentiated"
     },
     {
      "ptype": "Tsrp",
      "color": "#997cc0",
-     "cells": 179
-    },
-    {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 90
-    },
-    {
-     "ptype": "alf",
-     "color": "#b94670",
-     "cells": 68
+     "cells": 179,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Kfmg",
      "color": "#c0aa7c",
-     "cells": 62
+     "cells": 62,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 57,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 53,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 48,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
     },
     {
      "ptype": "Tsri",
      "color": "#53ac5f",
-     "cells": 29
+     "cells": 29,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -1824,151 +3275,256 @@
     24.049
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.138,
    "units": [
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 84352
+     "cells": 84323,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJfs",
      "color": "#c372ca",
-     "cells": 68094
+     "cells": 68087,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "fsr",
      "color": "#64d8c1",
-     "cells": 21716
+     "cells": 21716,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 16721
+     "cells": 17010,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 14287
+     "cells": 14251,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "sp",
      "color": "#914648",
-     "cells": 8798
+     "cells": 8796,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 8269
+     "cells": 8269,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 6012
+     "cells": 6007,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 5442
+     "cells": 5439,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsrs",
      "color": "#917b46",
-     "cells": 4250
+     "cells": 4250,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJfgs",
      "color": "#915f46",
-     "cells": 4172
+     "cells": 4172,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 3941
+     "cells": 3937,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsft",
      "color": "#983b9b",
-     "cells": 2851
+     "cells": 2851,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qha",
      "color": "#8172ca",
-     "cells": 2569
+     "cells": 2554,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     },
     {
      "ptype": "Qpf",
      "color": "#aab946",
-     "cells": 2431
+     "cells": 2448,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "Qf",
      "color": "#54b946",
-     "cells": 2084
+     "cells": 1860,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 1441
+     "cells": 1446,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
      "ptype": "KJfgs?",
      "color": "#46b98e",
-     "cells": 1064
+     "cells": 1064,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 973
+     "cells": 988,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 884
+     "cells": 885,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
      "ptype": "Qpa",
      "color": "#854691",
-     "cells": 795
+     "cells": 795,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
     },
     {
      "ptype": "fgc",
      "color": "#503b9b",
-     "cells": 258
+     "cells": 258,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhay",
      "color": "#9b673b",
-     "cells": 229
+     "cells": 227,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial deposits Undifferentiated"
     },
     {
      "ptype": "Tsrp",
      "color": "#997cc0",
-     "cells": 209
+     "cells": 209,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tswt",
      "color": "#2bab67",
-     "cells": 122
+     "cells": 122,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "fs",
      "color": "#cc8133",
-     "cells": 86
+     "cells": 86,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 40
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 40,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
     },
     {
      "ptype": "Tsri",
      "color": "#53ac5f",
-     "cells": 35
+     "cells": 35,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJgvl",
      "color": "#337fcc",
-     "cells": 19
+     "cells": 19,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -1982,151 +3538,261 @@
     22.185
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.486,
    "units": [
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 48733
+     "cells": 64550,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
      "ptype": "KJfs",
      "color": "#c372ca",
-     "cells": 29935
-    },
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 22989
+     "cells": 29935,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 20234
+     "cells": 20219,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJgvl",
      "color": "#337fcc",
-     "cells": 19756
-    },
-    {
-     "ptype": "Qhay",
-     "color": "#9b673b",
-     "cells": 17777
-    },
-    {
-     "ptype": "Tsa",
-     "color": "#8ac07c",
-     "cells": 16339
-    },
-    {
-     "ptype": "sp",
-     "color": "#914648",
-     "cells": 12775
-    },
-    {
-     "ptype": "Kfm",
-     "color": "#d8647c",
-     "cells": 11680
-    },
-    {
-     "ptype": "Tst",
-     "color": "#629b3b",
-     "cells": 9736
-    },
-    {
-     "ptype": "Qhff",
-     "color": "#c07c82",
-     "cells": 7668
-    },
-    {
-     "ptype": "Qht",
-     "color": "#8046b9",
-     "cells": 6756
-    },
-    {
-     "ptype": "Tsr",
-     "color": "#6498d8",
-     "cells": 6664
-    },
-    {
-     "ptype": "water",
-     "color": "#9b8c3b",
-     "cells": 6571
-    },
-    {
-     "ptype": "Qls",
-     "color": "#3b939b",
-     "cells": 5331
-    },
-    {
-     "ptype": "Qhc",
-     "color": "#80ab2b",
-     "cells": 4261
-    },
-    {
-     "ptype": "Qt",
-     "color": "#9b3b56",
-     "cells": 4077
-    },
-    {
-     "ptype": "Qpf",
-     "color": "#aab946",
-     "cells": 3291
-    },
-    {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 1828
-    },
-    {
-     "ptype": "Qa",
-     "color": "#914665",
-     "cells": 1765
-    },
-    {
-     "ptype": "KJgv",
-     "color": "#879b3b",
-     "cells": 1385
+     "cells": 19753,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhty",
      "color": "#cab872",
-     "cells": 1111
+     "cells": 17875,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 16337,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 12774,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 11680,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 10564,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 9736,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 9104,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 6584,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 6558,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 5789,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 5324,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 4305,
+     "maps": [
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 3291,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 2105,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 1768,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 1383,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 1031,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial deposits Undifferentiated"
     },
     {
      "ptype": "fsr",
      "color": "#64d8c1",
-     "cells": 471
-    },
-    {
-     "ptype": "alf",
-     "color": "#b94670",
-     "cells": 302
+     "cells": 471,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qoa",
      "color": "#ac6a53",
-     "cells": 291
+     "cells": 291,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 276,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
     },
     {
      "ptype": "Kfmg",
      "color": "#c0aa7c",
-     "cells": 191
-    },
-    {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 102
+     "cells": 191,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "sp?",
      "color": "#46b964",
-     "cells": 86
+     "cells": 84,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 72,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 55,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
     },
     {
      "ptype": "Tsri",
      "color": "#53ac5f",
-     "cells": 39
+     "cells": 39,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -2140,116 +3806,202 @@
     10.0
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.722,
    "units": [
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 65191
-    },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 55475
-    },
-    {
-     "ptype": "Qhff",
-     "color": "#c07c82",
-     "cells": 26976
+     "cells": 127301,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 19961
+     "cells": 19924,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 17752,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 12288
+     "cells": 12287,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 12270
+     "cells": 12270,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJfs",
      "color": "#c372ca",
-     "cells": 10121
-    },
-    {
-     "ptype": "Qht",
-     "color": "#8046b9",
-     "cells": 9142
-    },
-    {
-     "ptype": "sp",
-     "color": "#914648",
-     "cells": 8335
-    },
-    {
-     "ptype": "Qhay",
-     "color": "#9b673b",
-     "cells": 7690
-    },
-    {
-     "ptype": "Tst",
-     "color": "#629b3b",
-     "cells": 5401
+     "cells": 10121,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhty",
      "color": "#cab872",
-     "cells": 4536
+     "cells": 9879,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 9144,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 8335,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 5401,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 4505
+     "cells": 4506,
+     "maps": [
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 3711
+     "cells": 3712,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
      "ptype": "Qpf",
      "color": "#aab946",
-     "cells": 3343
+     "cells": 3343,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 2630,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 2343,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial deposits Undifferentiated"
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 983
+     "cells": 978,
+     "maps": [
+      "24k"
+     ],
+     "name": "open water"
     },
     {
      "ptype": "af",
      "color": "#bcc07c",
-     "cells": 353
+     "cells": 355,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
     },
     {
      "ptype": "KJgvl",
      "color": "#337fcc",
-     "cells": 283
+     "cells": 283,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsri",
      "color": "#53ac5f",
-     "cells": 190
+     "cells": 190,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 167
+     "cells": 167,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "alf",
      "color": "#b94670",
-     "cells": 41
+     "cells": 41,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
     },
     {
      "ptype": "Qha",
      "color": "#8172ca",
-     "cells": 39
+     "cells": 39,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     }
    ]
   },
@@ -2263,156 +4015,271 @@
     24.233
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.449,
    "units": [
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 65443
+     "cells": 65406,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 38978
+     "cells": 48193,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
      "ptype": "KJgvl",
      "color": "#337fcc",
-     "cells": 34043
-    },
-    {
-     "ptype": "Qhay",
-     "color": "#9b673b",
-     "cells": 24010
-    },
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 22943
-    },
-    {
-     "ptype": "Qls",
-     "color": "#3b939b",
-     "cells": 9393
-    },
-    {
-     "ptype": "KJfs",
-     "color": "#c372ca",
-     "cells": 7185
-    },
-    {
-     "ptype": "Tsr",
-     "color": "#6498d8",
-     "cells": 6911
-    },
-    {
-     "ptype": "Qhff",
-     "color": "#c07c82",
-     "cells": 6610
-    },
-    {
-     "ptype": "sp",
-     "color": "#914648",
-     "cells": 6544
-    },
-    {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 5268
-    },
-    {
-     "ptype": "Qht",
-     "color": "#8046b9",
-     "cells": 4325
-    },
-    {
-     "ptype": "Kfm",
-     "color": "#d8647c",
-     "cells": 3923
-    },
-    {
-     "ptype": "Qhc",
-     "color": "#80ab2b",
-     "cells": 3738
-    },
-    {
-     "ptype": "Qt",
-     "color": "#9b3b56",
-     "cells": 3601
-    },
-    {
-     "ptype": "KJgv",
-     "color": "#879b3b",
-     "cells": 3496
-    },
-    {
-     "ptype": "water",
-     "color": "#9b8c3b",
-     "cells": 2746
-    },
-    {
-     "ptype": "Tss",
-     "color": "#46b8b9",
-     "cells": 2338
-    },
-    {
-     "ptype": "Qpf",
-     "color": "#aab946",
-     "cells": 2143
-    },
-    {
-     "ptype": "Tsai",
-     "color": "#b97246",
-     "cells": 2086
-    },
-    {
-     "ptype": "Tslt",
-     "color": "#a4cc33",
-     "cells": 1870
-    },
-    {
-     "ptype": "Qoa",
-     "color": "#ac6a53",
-     "cells": 1097
-    },
-    {
-     "ptype": "Qpt",
-     "color": "#72a5ca",
-     "cells": 943
-    },
-    {
-     "ptype": "Tst",
-     "color": "#629b3b",
-     "cells": 830
+     "cells": 34037,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhty",
      "color": "#cab872",
-     "cells": 523
+     "cells": 23950,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
     },
     {
-     "ptype": "alf",
-     "color": "#b94670",
-     "cells": 454
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 15217,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 9392,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 7548,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 7185,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 6822,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 6542,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 5503,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 5346,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 3923,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 3769,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 3316,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 3085,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 2735,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 2335,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 2065,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 1870,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 1097,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 830,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 359
+     "cells": 542,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 157
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 446,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial deposits Undifferentiated"
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 428,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
+    },
+    {
+     "ptype": "Qhfy",
+     "color": "#c0aa7c",
+     "cells": 196,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial fan deposits"
     },
     {
      "ptype": "Tsri",
      "color": "#53ac5f",
-     "cells": 122
+     "cells": 122,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 117,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
     },
     {
      "ptype": "sp?",
      "color": "#46b964",
-     "cells": 65
+     "cells": 65,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 62,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
     }
    ]
   },
@@ -2425,117 +4292,228 @@
     25.855,
     25.855
    ],
-   "mapped_fraction": 0.58,
+   "mapped_fraction": 0.585,
+   "fine_fraction": 0.105,
    "units": [
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 91834
+     "cells": 91784,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "sp",
      "color": "#914648",
-     "cells": 9307
-    },
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 8043
-    },
-    {
-     "ptype": "Qhay",
-     "color": "#9b673b",
-     "cells": 7270
+     "cells": 9307,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Kfm",
      "color": "#d8647c",
-     "cells": 6027
+     "cells": 6027,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 5840
+     "cells": 5840,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 5564,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 5298,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 5057
+     "cells": 5057,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJgv",
      "color": "#879b3b",
-     "cells": 4363
+     "cells": 4296,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qha",
      "color": "#8172ca",
-     "cells": 3152
-    },
-    {
-     "ptype": "Qoa",
-     "color": "#ac6a53",
-     "cells": 2465
-    },
-    {
-     "ptype": "Qa",
-     "color": "#914665",
-     "cells": 1785
-    },
-    {
-     "ptype": "Tsai",
-     "color": "#b97246",
-     "cells": 1725
+     "cells": 4017,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 1402
+     "cells": 3633,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 2555,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 2230,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 1709,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhfy",
+     "color": "#c0aa7c",
+     "cells": 1695,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial fan deposits"
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 799
+     "cells": 884,
+     "maps": [
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 745
+     "cells": 745,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhff",
      "color": "#c07c82",
-     "cells": 695
+     "cells": 717,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
+    },
+    {
+     "ptype": "Qpf1",
+     "color": "#ac6a53",
+     "cells": 625,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger latest Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 546
+     "cells": 477,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 471
+     "cells": 461,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
      "ptype": "Qpf",
      "color": "#aab946",
-     "cells": 393
+     "cells": 393,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "Tsri",
      "color": "#53ac5f",
-     "cells": 85
+     "cells": 85,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "alf",
      "color": "#b94670",
-     "cells": 49
+     "cells": 51,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
     },
     {
      "ptype": "af",
      "color": "#bcc07c",
-     "cells": 29
+     "cells": 8,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 2,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -2549,156 +4527,297 @@
     26.273
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.414,
    "units": [
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 78058
+     "cells": 77947,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJgvl",
      "color": "#337fcc",
-     "cells": 39453
+     "cells": 39401,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 30124
+     "cells": 35391,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 19911,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
     },
     {
      "ptype": "Qf",
      "color": "#54b946",
-     "cells": 24287
-    },
-    {
-     "ptype": "Qhay",
-     "color": "#9b673b",
-     "cells": 22198
-    },
-    {
-     "ptype": "Qoa",
-     "color": "#ac6a53",
-     "cells": 11959
+     "cells": 12566,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 10921
+     "cells": 10844,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 7913
+     "cells": 7906,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qpf2",
+     "color": "#7cc0a1",
+     "cells": 7889,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qpf1",
+     "color": "#ac6a53",
+     "cells": 6726,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger latest Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "Kgvu",
      "color": "#b9469c",
-     "cells": 5662
-    },
-    {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 4305
-    },
-    {
-     "ptype": "Qhff",
-     "color": "#c07c82",
-     "cells": 3460
-    },
-    {
-     "ptype": "Qt",
-     "color": "#9b3b56",
-     "cells": 3158
-    },
-    {
-     "ptype": "Qhc",
-     "color": "#80ab2b",
-     "cells": 3123
-    },
-    {
-     "ptype": "Qls",
-     "color": "#3b939b",
-     "cells": 2579
-    },
-    {
-     "ptype": "KJgv",
-     "color": "#879b3b",
-     "cells": 1968
-    },
-    {
-     "ptype": "Kfm",
-     "color": "#d8647c",
-     "cells": 1948
-    },
-    {
-     "ptype": "Tsai",
-     "color": "#b97246",
-     "cells": 1768
+     "cells": 5622,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 1665
+     "cells": 4596,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
     },
     {
-     "ptype": "Tslt",
-     "color": "#a4cc33",
-     "cells": 1581
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 4457,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
-     "ptype": "KJfs",
-     "color": "#c372ca",
-     "cells": 1286
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 4335,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 3461,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 3254,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 2579,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhfy",
+     "color": "#c0aa7c",
+     "cells": 2060,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 1948,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 1820,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qpf",
      "color": "#aab946",
-     "cells": 1015
+     "cells": 1819,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 1752,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 1581,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 1286,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 883
+     "cells": 912,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 856
-    },
-    {
-     "ptype": "Qpt",
-     "color": "#72a5ca",
-     "cells": 804
+     "cells": 855,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
      "ptype": "alf",
      "color": "#b94670",
-     "cells": 332
+     "cells": 330,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
     },
     {
-     "ptype": "Tss",
-     "color": "#46b8b9",
-     "cells": 269
-    },
-    {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 218
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 309,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial deposits Undifferentiated"
     },
     {
      "ptype": "Td",
      "color": "#c07cb4",
-     "cells": 201
+     "cells": 201,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 155,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
     },
     {
      "ptype": "Tsri",
      "color": "#53ac5f",
-     "cells": 100
+     "cells": 100,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 62,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
     },
     {
      "ptype": "sp",
      "color": "#914648",
-     "cells": 50
+     "cells": 50,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 19,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -2712,246 +4831,533 @@
     40.77
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.332,
    "units": [
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 66798
+     "cells": 66208,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJgvl",
      "color": "#337fcc",
-     "cells": 21472
+     "cells": 21447,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 21268
-    },
-    {
-     "ptype": "Qoa",
-     "color": "#ac6a53",
-     "cells": 20595
-    },
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 20215
-    },
-    {
-     "ptype": "Kgvu",
-     "color": "#b9469c",
-     "cells": 15328
-    },
-    {
-     "ptype": "Tst",
-     "color": "#629b3b",
-     "cells": 13932
+     "cells": 20933,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 12821
+     "cells": 19224,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
-     "ptype": "Qhay",
-     "color": "#9b673b",
-     "cells": 7406
+     "ptype": "Kgvu",
+     "color": "#b9469c",
+     "cells": 15123,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 13761,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 12526,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 9292,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
+    },
+    {
+     "ptype": "Qof",
+     "color": "#469156",
+     "cells": 9032,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "KJfs",
      "color": "#c372ca",
-     "cells": 7039
+     "cells": 7039,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Qt",
-     "color": "#9b3b56",
-     "cells": 6617
-    },
-    {
-     "ptype": "Qpf",
-     "color": "#aab946",
-     "cells": 6258
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 6478,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 5318
+     "cells": 5309,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 4303
+     "cells": 4298,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Qhf2",
+     "color": "#337fcc",
+     "cells": 3910,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qpf2",
+     "color": "#7cc0a1",
+     "cells": 3643,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older latest Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "Tsft",
      "color": "#983b9b",
-     "cells": 3762
-    },
-    {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 3562
+     "cells": 3585,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Td",
      "color": "#c07cb4",
-     "cells": 3388
-    },
-    {
-     "ptype": "QTge",
-     "color": "#64d895",
-     "cells": 2876
-    },
-    {
-     "ptype": "QThg",
-     "color": "#862bab",
-     "cells": 2671
-    },
-    {
-     "ptype": "Tp?",
-     "color": "#d8cf64",
-     "cells": 1572
+     "cells": 3382,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 1569
+     "cells": 2899,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
-     "ptype": "Qhff",
-     "color": "#c07c82",
-     "cells": 1252
+     "ptype": "Qpf1",
+     "color": "#ac6a53",
+     "cells": 2786,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger latest Pleistocene alluvial fan deposits"
     },
     {
-     "ptype": "sp",
-     "color": "#914648",
-     "cells": 1026
-    },
-    {
-     "ptype": "Tn",
-     "color": "#3b9b5c",
-     "cells": 1021
-    },
-    {
-     "ptype": "Tsag",
-     "color": "#4c4691",
-     "cells": 926
-    },
-    {
-     "ptype": "KJgv",
-     "color": "#879b3b",
-     "cells": 822
-    },
-    {
-     "ptype": "Kfm",
-     "color": "#d8647c",
-     "cells": 812
-    },
-    {
-     "ptype": "Tsrs",
-     "color": "#917b46",
-     "cells": 767
+     "ptype": "QTge",
+     "color": "#64d895",
+     "cells": 2688,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 741
+     "cells": 2573,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
     },
     {
-     "ptype": "Tsai",
-     "color": "#b97246",
-     "cells": 739
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 2396,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Qhty2",
+     "color": "#862bab",
+     "cells": 2017,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 2009,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tp?",
+     "color": "#d8cf64",
+     "cells": 1569,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 1252,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 1236,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 1218,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 1026,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tn",
+     "color": "#3b9b5c",
+     "cells": 1018,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 926,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 882,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
+    },
+    {
+     "ptype": "Qhfy",
+     "color": "#c0aa7c",
+     "cells": 858,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qhf1",
+     "color": "#879b3b",
+     "cells": 853,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger Holocene alluvial fan deposits"
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 730
+     "cells": 827,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 812,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsrs",
+     "color": "#917b46",
+     "cells": 767,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 758,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 730,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tslt",
      "color": "#a4cc33",
-     "cells": 713
+     "cells": 713,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tms",
      "color": "#ca7772",
-     "cells": 614
+     "cells": 562,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tssd",
      "color": "#ca72af",
-     "cells": 511
+     "cells": 495,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJfgs",
      "color": "#915f46",
-     "cells": 453
+     "cells": 453,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhly",
+     "color": "#9aca72",
+     "cells": 353,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial fan levee deposits"
     },
     {
      "ptype": "Tci",
      "color": "#53aca2",
-     "cells": 358
-    },
-    {
-     "ptype": "Qpt",
-     "color": "#72a5ca",
-     "cells": 334
+     "cells": 303,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsv",
      "color": "#d87864",
-     "cells": 278
+     "cells": 278,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "fsr",
      "color": "#64d8c1",
-     "cells": 254
+     "cells": 254,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJfgc",
      "color": "#7f7cc0",
-     "cells": 194
+     "cells": 194,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsb",
      "color": "#72caad",
-     "cells": 159
+     "cells": 148,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tkt",
      "color": "#4662b9",
-     "cells": 146
+     "cells": 146,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "af",
      "color": "#bcc07c",
-     "cells": 135
+     "cells": 143,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 131
+     "cells": 131,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "alf",
      "color": "#b94670",
-     "cells": 129
+     "cells": 130,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
+    },
+    {
+     "ptype": "Qhty1",
+     "color": "#64d895",
+     "cells": 129,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 126,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial deposits Undifferentiated"
+    },
+    {
+     "ptype": "ac",
+     "color": "#ab772b",
+     "cells": 103,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial stream channel (historical)"
     },
     {
      "ptype": "Tsri",
      "color": "#53ac5f",
-     "cells": 66
+     "cells": 65,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 52,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
     },
     {
      "ptype": "Tp",
      "color": "#9433cc",
-     "cells": 53
+     "cells": 48,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "br?",
+     "color": "#4662b9",
+     "cells": 18,
+     "maps": [
+      "24k"
+     ],
+     "name": "pre-Quaternary deposits and bedrock (queried)"
     },
     {
      "ptype": "sp?",
      "color": "#46b964",
-     "cells": 10
+     "cells": 10,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -2965,121 +5371,239 @@
     17.275
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.441,
    "units": [
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 118176
-    },
-    {
-     "ptype": "Qhay",
-     "color": "#9b673b",
-     "cells": 31697
-    },
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 23909
+     "cells": 118027,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 23434
+     "cells": 31097,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 28000,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 15639,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 14128
+     "cells": 14024,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qha",
      "color": "#8172ca",
-     "cells": 9286
+     "cells": 9344,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     },
     {
      "ptype": "Qoa",
      "color": "#ac6a53",
-     "cells": 6335
+     "cells": 6415,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
      "ptype": "Qhff",
      "color": "#c07c82",
-     "cells": 5290
-    },
-    {
-     "ptype": "KJgv",
-     "color": "#879b3b",
-     "cells": 4550
+     "cells": 5310,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
     },
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 4367
-    },
-    {
-     "ptype": "Tsai",
-     "color": "#b97246",
-     "cells": 4082
-    },
-    {
-     "ptype": "Qhc",
-     "color": "#80ab2b",
-     "cells": 3377
-    },
-    {
-     "ptype": "Qht",
-     "color": "#8046b9",
-     "cells": 3154
-    },
-    {
-     "ptype": "Qa",
-     "color": "#914665",
-     "cells": 3106
+     "cells": 4367,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qpf",
      "color": "#aab946",
-     "cells": 2365
+     "cells": 4223,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
     },
     {
-     "ptype": "Qpt",
-     "color": "#72a5ca",
-     "cells": 1859
+     "ptype": "KJgv",
+     "color": "#879b3b",
+     "cells": 4196,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 4045,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhfy",
+     "color": "#c0aa7c",
+     "cells": 3703,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 3460,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 3159,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 3118,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 1343
+     "cells": 1315,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
+    },
+    {
+     "ptype": "Qpf1",
+     "color": "#ac6a53",
+     "cells": 1028,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger latest Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "alf",
      "color": "#b94670",
-     "cells": 695
+     "cells": 698,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 393
+     "cells": 352,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsri",
      "color": "#53ac5f",
-     "cells": 231
+     "cells": 231,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 187
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 132,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
     },
     {
      "ptype": "KJgvl",
      "color": "#337fcc",
-     "cells": 97
+     "cells": 97,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tslt",
      "color": "#a4cc33",
-     "cells": 83
+     "cells": 83,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 77,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 4,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
     }
    ]
   },
@@ -3093,146 +5617,296 @@
     22.363
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.265,
    "units": [
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 106513
-    },
-    {
-     "ptype": "Tst",
-     "color": "#629b3b",
-     "cells": 24016
-    },
-    {
-     "ptype": "Tc",
-     "color": "#ab772b",
-     "cells": 21518
-    },
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 16225
+     "cells": 105524,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 15578
+     "cells": 29443,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 13407
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 23869,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Qhff",
-     "color": "#c07c82",
-     "cells": 9996
+     "ptype": "Tc",
+     "color": "#ab772b",
+     "cells": 20879,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 14689,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
      "ptype": "Tp",
      "color": "#9433cc",
-     "cells": 8149
+     "cells": 7440,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "QTge",
      "color": "#64d895",
-     "cells": 6436
+     "cells": 6433,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qlsa",
      "color": "#cc3392",
-     "cells": 5761
+     "cells": 5728,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Tsrp",
-     "color": "#997cc0",
-     "cells": 4383
-    },
-    {
-     "ptype": "QThg",
-     "color": "#862bab",
-     "cells": 3763
-    },
-    {
-     "ptype": "Qhb",
-     "color": "#33cca6",
-     "cells": 3567
-    },
-    {
-     "ptype": "Qa",
-     "color": "#914665",
-     "cells": 3524
-    },
-    {
-     "ptype": "Qlso",
-     "color": "#8ad864",
-     "cells": 3445
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 5467,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
     },
     {
      "ptype": "Qpf",
      "color": "#aab946",
-     "cells": 3355
+     "cells": 5218,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Tsrp",
+     "color": "#997cc0",
+     "cells": 4382,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 3867,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 3653,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene basin deposits"
+    },
+    {
+     "ptype": "Qlso",
+     "color": "#8ad864",
+     "cells": 3445,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 3269,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsrb",
      "color": "#ab2b3f",
-     "cells": 3117
+     "cells": 3117,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qoa",
      "color": "#ac6a53",
-     "cells": 2398
+     "cells": 3065,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 2121
+     "cells": 2112,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Qoa?",
-     "color": "#7cc0a1",
-     "cells": 1835
-    },
-    {
-     "ptype": "Tsr",
-     "color": "#6498d8",
-     "cells": 1129
-    },
-    {
-     "ptype": "water",
-     "color": "#9b8c3b",
-     "cells": 964
-    },
-    {
-     "ptype": "Tsag",
-     "color": "#4c4691",
-     "cells": 429
+     "ptype": "Qhfy",
+     "color": "#c0aa7c",
+     "cells": 1983,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial fan deposits"
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 260
+     "cells": 1617,
+     "maps": [
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
+    },
+    {
+     "ptype": "Qoa?",
+     "color": "#7cc0a1",
+     "cells": 1608,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 1575,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 1185,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 1123,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 418,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial deposits Undifferentiated"
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 404,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "ac",
+     "color": "#ab772b",
+     "cells": 288,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial stream channel (historical)"
     },
     {
      "ptype": "Tslt",
      "color": "#a4cc33",
-     "cells": 103
+     "cells": 103,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsri",
      "color": "#53ac5f",
-     "cells": 85
+     "cells": 85,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 66,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
     },
     {
      "ptype": "Tsrs",
      "color": "#917b46",
-     "cells": 40
+     "cells": 40,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 40,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
     },
     {
      "ptype": "af",
      "color": "#bcc07c",
-     "cells": 27
+     "cells": 9,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
     }
    ]
   },
@@ -3246,231 +5920,462 @@
     36.266
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.215,
    "units": [
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 84509
+     "cells": 83772,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJgvl",
      "color": "#337fcc",
-     "cells": 26016
+     "cells": 25991,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsr",
      "color": "#6498d8",
-     "cells": 25030
+     "cells": 24628,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 17801
-    },
-    {
-     "ptype": "Qoa",
-     "color": "#ac6a53",
-     "cells": 13634
-    },
-    {
-     "ptype": "Kgvu",
-     "color": "#b9469c",
-     "cells": 11141
-    },
-    {
-     "ptype": "QTge",
-     "color": "#64d895",
-     "cells": 9776
+     "cells": 17569,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 9520
+     "cells": 13516,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Kgvu",
+     "color": "#b9469c",
+     "cells": 11049,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qf",
      "color": "#54b946",
-     "cells": 8743
+     "cells": 10921,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
-     "ptype": "Qpf",
-     "color": "#aab946",
-     "cells": 7349
+     "ptype": "QTge",
+     "color": "#64d895",
+     "cells": 9435,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 8339,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
+    },
+    {
+     "ptype": "Qof",
+     "color": "#469156",
+     "cells": 7718,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "Qls",
      "color": "#3b939b",
-     "cells": 6770
-    },
-    {
-     "ptype": "Qt",
-     "color": "#9b3b56",
-     "cells": 6736
-    },
-    {
-     "ptype": "Tsft",
-     "color": "#983b9b",
-     "cells": 4569
-    },
-    {
-     "ptype": "KJfs",
-     "color": "#c372ca",
-     "cells": 4359
+     "cells": 6751,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 4327
+     "cells": 4781,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
-     "ptype": "QThg",
-     "color": "#862bab",
-     "cells": 2518
+     "ptype": "KJfs",
+     "color": "#c372ca",
+     "cells": 4359,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Qlso",
-     "color": "#8ad864",
-     "cells": 2017
-    },
-    {
-     "ptype": "Tp?",
-     "color": "#d8cf64",
-     "cells": 1988
-    },
-    {
-     "ptype": "Qhay",
-     "color": "#9b673b",
-     "cells": 1812
-    },
-    {
-     "ptype": "Tslt",
-     "color": "#a4cc33",
-     "cells": 1741
-    },
-    {
-     "ptype": "Tsrs",
-     "color": "#917b46",
-     "cells": 1436
-    },
-    {
-     "ptype": "Tsag",
-     "color": "#4c4691",
-     "cells": 1179
-    },
-    {
-     "ptype": "Tn",
-     "color": "#3b9b5c",
-     "cells": 1104
-    },
-    {
-     "ptype": "Kfm",
-     "color": "#d8647c",
-     "cells": 1026
-    },
-    {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 943
+     "ptype": "Tsft",
+     "color": "#983b9b",
+     "cells": 4340,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 899
+     "cells": 2406,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
-     "ptype": "Tms",
-     "color": "#ca7772",
-     "cells": 774
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 2152,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene stream terrace deposits"
     },
     {
-     "ptype": "Tssd",
-     "color": "#ca72af",
-     "cells": 751
+     "ptype": "Qlso",
+     "color": "#8ad864",
+     "cells": 2017,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Tss",
-     "color": "#46b8b9",
-     "cells": 510
+     "ptype": "Tp?",
+     "color": "#d8cf64",
+     "cells": 1983,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "water",
-     "color": "#9b8c3b",
-     "cells": 455
+     "ptype": "Qhty2",
+     "color": "#862bab",
+     "cells": 1926,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older latest Holocene stream terrace deposits"
     },
     {
-     "ptype": "Tci",
-     "color": "#53aca2",
-     "cells": 421
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 1891,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Tsb",
-     "color": "#72caad",
-     "cells": 402
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 1741,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Qhb",
-     "color": "#33cca6",
-     "cells": 377
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 1708,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
     },
     {
-     "ptype": "Qpt",
-     "color": "#72a5ca",
-     "cells": 350
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 1483,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
     },
     {
-     "ptype": "sp",
-     "color": "#914648",
-     "cells": 327
+     "ptype": "Tsrs",
+     "color": "#917b46",
+     "cells": 1436,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsag",
+     "color": "#4c4691",
+     "cells": 1179,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tn",
+     "color": "#3b9b5c",
+     "cells": 1104,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 294
+     "cells": 1057,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Kfm",
+     "color": "#d8647c",
+     "cells": 1026,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tssd",
+     "color": "#ca72af",
+     "cells": 728,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tms",
+     "color": "#ca7772",
+     "cells": 711,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 592,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 506,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 502,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsb",
+     "color": "#72caad",
+     "cells": 383,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tci",
+     "color": "#53aca2",
+     "cells": 359,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 329,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
+    },
+    {
+     "ptype": "sp",
+     "color": "#914648",
+     "cells": 327,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 265,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene basin deposits"
+    },
+    {
+     "ptype": "Qhly",
+     "color": "#9aca72",
+     "cells": 224,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial fan levee deposits"
     },
     {
      "ptype": "Tsv",
      "color": "#d87864",
-     "cells": 196
+     "cells": 196,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhty1",
+     "color": "#64d895",
+     "cells": 155,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 140,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial deposits Undifferentiated"
     },
     {
      "ptype": "Tsrp",
      "color": "#997cc0",
-     "cells": 97
+     "cells": 97,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "ac",
+     "color": "#ab772b",
+     "cells": 90,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial stream channel (historical)"
     },
     {
      "ptype": "Tp",
      "color": "#9433cc",
-     "cells": 83
+     "cells": 78,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "alf",
      "color": "#b94670",
-     "cells": 61
+     "cells": 62,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
     },
     {
      "ptype": "Tsri",
      "color": "#53ac5f",
-     "cells": 51
+     "cells": 51,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 18
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 20,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
+    },
+    {
+     "ptype": "Qpf2",
+     "color": "#7cc0a1",
+     "cells": 15,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older latest Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "Tkt",
      "color": "#4662b9",
-     "cells": 13
+     "cells": 13,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Td",
      "color": "#c07cb4",
-     "cells": 11
+     "cells": 11,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qlsa",
      "color": "#cc3392",
-     "cells": 10
+     "cells": 10,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "br?",
+     "color": "#4662b9",
+     "cells": 2,
+     "maps": [
+      "24k"
+     ],
+     "name": "pre-Quaternary deposits and bedrock (queried)"
     }
    ]
   },
@@ -3484,141 +6389,258 @@
     22.682
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.134,
    "units": [
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 121041
+     "cells": 120221,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "QTge",
      "color": "#64d895",
-     "cells": 22749
+     "cells": 21889,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qlsa",
      "color": "#cc3392",
-     "cells": 20855
+     "cells": 20549,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tc",
      "color": "#ab772b",
-     "cells": 19145
+     "cells": 18618,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 15149
+     "cells": 15103,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qoa",
      "color": "#ac6a53",
-     "cells": 12366
+     "cells": 13462,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 6852
-    },
-    {
-     "ptype": "Qt",
-     "color": "#9b3b56",
-     "cells": 6509
-    },
-    {
-     "ptype": "Qlso",
-     "color": "#8ad864",
-     "cells": 5738
-    },
-    {
-     "ptype": "Tp",
-     "color": "#9433cc",
-     "cells": 5735
-    },
-    {
-     "ptype": "Tp?",
-     "color": "#d8cf64",
-     "cells": 5093
-    },
-    {
-     "ptype": "Qls",
-     "color": "#3b939b",
-     "cells": 4292
-    },
-    {
-     "ptype": "Tsr",
-     "color": "#6498d8",
-     "cells": 3025
-    },
-    {
-     "ptype": "Qpf",
-     "color": "#aab946",
-     "cells": 2853
-    },
-    {
-     "ptype": "QThg",
-     "color": "#862bab",
-     "cells": 2842
+     "cells": 7786,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
      "ptype": "Qf",
      "color": "#54b946",
-     "cells": 2053
+     "cells": 5898,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
-     "ptype": "Qlsr",
-     "color": "#2b30ab",
-     "cells": 1263
+     "ptype": "Qlso",
+     "color": "#8ad864",
+     "cells": 5736,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "water",
-     "color": "#9b8c3b",
-     "cells": 1133
+     "ptype": "Tp?",
+     "color": "#d8cf64",
+     "cells": 5078,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Tsb",
-     "color": "#72caad",
-     "cells": 1023
+     "ptype": "Tp",
+     "color": "#9433cc",
+     "cells": 4963,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Tss",
-     "color": "#46b8b9",
-     "cells": 837
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 4264,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 4191,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 2996,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 2624,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 565
+     "cells": 2217,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 387
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 1375,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
-     "ptype": "Tssd",
-     "color": "#ca72af",
-     "cells": 273
+     "ptype": "Qlsr",
+     "color": "#2b30ab",
+     "cells": 1263,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Qhff",
-     "color": "#c07c82",
-     "cells": 149
-    },
-    {
-     "ptype": "Tsri",
-     "color": "#53ac5f",
-     "cells": 123
+     "ptype": "Tsb",
+     "color": "#72caad",
+     "cells": 973,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 53
+     "cells": 907,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 41
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 817,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 345,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Tssd",
+     "color": "#ca72af",
+     "cells": 270,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhty1",
+     "color": "#64d895",
+     "cells": 261,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 123,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhfy",
+     "color": "#c0aa7c",
+     "cells": 95,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 53,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 50,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 17,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -3632,151 +6654,323 @@
     22.223
    ],
    "mapped_fraction": 1.0,
+   "fine_fraction": 0.521,
    "units": [
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 49842
-    },
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 43621
+     "cells": 43471,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Kgvu",
      "color": "#b9469c",
-     "cells": 30958
+     "cells": 30316,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Qoa",
-     "color": "#ac6a53",
-     "cells": 30836
-    },
-    {
-     "ptype": "Qhay",
-     "color": "#9b673b",
-     "cells": 20845
-    },
-    {
-     "ptype": "Tss",
-     "color": "#46b8b9",
-     "cells": 15222
-    },
-    {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 11163
-    },
-    {
-     "ptype": "KJgvl",
+     "ptype": "Qhf2",
      "color": "#337fcc",
-     "cells": 9807
+     "cells": 19262,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older Holocene alluvial fan deposits"
     },
     {
-     "ptype": "Tsr",
-     "color": "#6498d8",
-     "cells": 8709
+     "ptype": "Qpf2",
+     "color": "#7cc0a1",
+     "cells": 19065,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older latest Pleistocene alluvial fan deposits"
     },
     {
-     "ptype": "Tslt",
-     "color": "#a4cc33",
-     "cells": 8461
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 18247,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
     },
     {
      "ptype": "Qhf",
      "color": "#5374ac",
-     "cells": 6930
+     "cells": 16457,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 15629,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 11937,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 10071,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 9743,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qpf1",
+     "color": "#ac6a53",
+     "cells": 9385,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 8650,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 8454,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 6797,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     },
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 4932
-    },
-    {
-     "ptype": "Td",
-     "color": "#c07cb4",
-     "cells": 4545
+     "cells": 4907,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 4429
+     "cells": 4814,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
-     "ptype": "Qa",
-     "color": "#914665",
-     "cells": 2227
+     "ptype": "Qhf1",
+     "color": "#879b3b",
+     "cells": 4724,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Td",
+     "color": "#c07cb4",
+     "cells": 4532,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhfy",
+     "color": "#c0aa7c",
+     "cells": 2893,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial fan deposits"
     },
     {
      "ptype": "Qhff",
      "color": "#c07c82",
-     "cells": 1975
+     "cells": 1976,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
     },
     {
      "ptype": "Tsai",
      "color": "#b97246",
-     "cells": 1815
+     "cells": 1791,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Qpf",
-     "color": "#aab946",
-     "cells": 1319
-    },
-    {
-     "ptype": "water",
-     "color": "#9b8c3b",
-     "cells": 1294
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 1668,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
      "ptype": "Qht",
      "color": "#8046b9",
-     "cells": 1139
+     "cells": 1575,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 1347,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 1335,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
+    },
+    {
+     "ptype": "Qof",
+     "color": "#469156",
+     "cells": 1031,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "Tms",
      "color": "#ca7772",
-     "cells": 581
-    },
-    {
-     "ptype": "Tsrb",
-     "color": "#ab2b3f",
-     "cells": 409
+     "cells": 561,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "af",
      "color": "#bcc07c",
-     "cells": 364
+     "cells": 516,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
+    },
+    {
+     "ptype": "Tsrb",
+     "color": "#ab2b3f",
+     "cells": 409,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tstx",
      "color": "#3345cc",
-     "cells": 299
+     "cells": 247,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tci",
      "color": "#53aca2",
-     "cells": 216
+     "cells": 153,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "alf",
      "color": "#b94670",
-     "cells": 133
+     "cells": 132,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 23,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
     },
     {
      "ptype": "Qt",
      "color": "#9b3b56",
-     "cells": 39
-    },
-    {
-     "ptype": "Qpt",
-     "color": "#72a5ca",
-     "cells": 26
+     "cells": 19,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "KJgv",
      "color": "#879b3b",
-     "cells": 8
+     "cells": 4,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhay",
+     "color": "#9b673b",
+     "cells": 3,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -3789,122 +6983,273 @@
     23.541,
     23.541
    ],
-   "mapped_fraction": 0.45,
+   "mapped_fraction": 0.502,
+   "fine_fraction": 0.375,
    "units": [
     {
      "ptype": "Qoa",
      "color": "#ac6a53",
-     "cells": 30796
+     "cells": 30210,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 17914
+     "ptype": "Qhf2",
+     "color": "#337fcc",
+     "cells": 15066,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 12062,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
     },
     {
      "ptype": "Tss",
      "color": "#46b8b9",
-     "cells": 14163
+     "cells": 11399,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Qhay",
-     "color": "#9b673b",
-     "cells": 11946
+     "ptype": "Qpf2",
+     "color": "#7cc0a1",
+     "cells": 10125,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older latest Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "Tslt",
      "color": "#a4cc33",
-     "cells": 8009
-    },
-    {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 6196
+     "cells": 8003,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsa",
      "color": "#8ac07c",
-     "cells": 5648
+     "cells": 5633,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qhbm",
      "color": "#d864d3",
-     "cells": 5274
+     "cells": 5241,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene San Francisco Bay Mud"
     },
     {
      "ptype": "Tst",
      "color": "#629b3b",
-     "cells": 4397
-    },
-    {
-     "ptype": "Qhc",
-     "color": "#80ab2b",
-     "cells": 2356
+     "cells": 4389,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 2148
+     "cells": 4253,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
-     "ptype": "Tsr",
-     "color": "#6498d8",
-     "cells": 2092
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 3912,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 2027
+     "cells": 3568,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
-     "ptype": "Qht",
-     "color": "#8046b9",
-     "cells": 1149
+     "ptype": "Qhf1",
+     "color": "#879b3b",
+     "cells": 2562,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger Holocene alluvial fan deposits"
     },
     {
-     "ptype": "afbm",
-     "color": "#467791",
-     "cells": 1050
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 2534,
+     "maps": [
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
     },
     {
-     "ptype": "Tssd",
-     "color": "#ca72af",
-     "cells": 628
-    },
-    {
-     "ptype": "alf",
-     "color": "#b94670",
-     "cells": 510
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 2084,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Qpf",
      "color": "#aab946",
-     "cells": 479
+     "cells": 2082,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 1701,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
+    },
+    {
+     "ptype": "Qpf1",
+     "color": "#ac6a53",
+     "cells": 1410,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "afem",
+     "color": "#6e9146",
+     "cells": 1089,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill over estuarine mud (historical)"
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 1084,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 999,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 544,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
     },
     {
      "ptype": "Tsrb",
      "color": "#ab2b3f",
-     "cells": 365
-    },
-    {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 345
+     "cells": 365,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsai",
      "color": "#b97246",
-     "cells": 323
+     "cells": 320,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 281,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 270,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
     },
     {
      "ptype": "Tstx",
      "color": "#3345cc",
-     "cells": 267
+     "cells": 225,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 72,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
+    },
+    {
+     "ptype": "Tssd",
+     "color": "#ca72af",
+     "cells": 69,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Td",
      "color": "#c07cb4",
-     "cells": 3
+     "cells": 3,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -3917,82 +7262,191 @@
     22.515,
     22.515
    ],
-   "mapped_fraction": 0.098,
+   "mapped_fraction": 0.18,
+   "fine_fraction": 0.11,
    "units": [
     {
-     "ptype": "Tss",
-     "color": "#46b8b9",
-     "cells": 5238
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 12389,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
      "ptype": "Tslt",
      "color": "#a4cc33",
-     "cells": 5205
+     "cells": 5204,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Tsa",
-     "color": "#8ac07c",
-     "cells": 4038
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 5093,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Qoa",
-     "color": "#ac6a53",
-     "cells": 3420
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 4504,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 2016
+     "cells": 4410,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
-     "ptype": "Tsr",
-     "color": "#6498d8",
-     "cells": 1978
-    },
-    {
-     "ptype": "Tst",
-     "color": "#629b3b",
-     "cells": 1100
-    },
-    {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 921
-    },
-    {
-     "ptype": "Tssd",
-     "color": "#ca72af",
-     "cells": 679
-    },
-    {
-     "ptype": "Qhc",
-     "color": "#80ab2b",
-     "cells": 430
-    },
-    {
-     "ptype": "Tsai",
-     "color": "#b97246",
-     "cells": 355
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 4038,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 158
+     "cells": 1981,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 1978,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 1762,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 1296,
+     "maps": [
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 1100,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 1035,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 867,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 452,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 353,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 332,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 305,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
     },
     {
      "ptype": "Tsrb",
      "color": "#ab2b3f",
-     "cells": 83
+     "cells": 83,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "af",
-     "color": "#bcc07c",
-     "cells": 7
+     "ptype": "Tssd",
+     "color": "#ca72af",
+     "cells": 68,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 63,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
     },
     {
      "ptype": "Tstx",
      "color": "#3345cc",
-     "cells": 2
+     "cells": 2,
+     "maps": [
+      "100k"
+     ]
     }
    ]
   },
@@ -4005,207 +7459,663 @@
     50.824,
     50.824
    ],
-   "mapped_fraction": 0.403,
+   "mapped_fraction": 0.84,
+   "fine_fraction": 0.617,
    "units": [
-    {
-     "ptype": "Tsa",
-     "color": "#8ac07c",
-     "cells": 22014
-    },
-    {
-     "ptype": "Qoa",
-     "color": "#ac6a53",
-     "cells": 18961
-    },
-    {
-     "ptype": "Qf",
-     "color": "#54b946",
-     "cells": 9216
-    },
-    {
-     "ptype": "Kgvu",
-     "color": "#b9469c",
-     "cells": 9102
-    },
-    {
-     "ptype": "Tsr",
-     "color": "#6498d8",
-     "cells": 7247
-    },
-    {
-     "ptype": "Tst",
-     "color": "#629b3b",
-     "cells": 6604
-    },
-    {
-     "ptype": "QThg",
-     "color": "#862bab",
-     "cells": 4007
-    },
-    {
-     "ptype": "Qt",
-     "color": "#9b3b56",
-     "cells": 3862
-    },
-    {
-     "ptype": "Qpf",
-     "color": "#aab946",
-     "cells": 3853
-    },
-    {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 2247
-    },
-    {
-     "ptype": "Td",
-     "color": "#c07cb4",
-     "cells": 2192
-    },
-    {
-     "ptype": "Qa",
-     "color": "#914665",
-     "cells": 2029
-    },
-    {
-     "ptype": "Qhay",
-     "color": "#9b673b",
-     "cells": 2013
-    },
-    {
-     "ptype": "Tsft",
-     "color": "#983b9b",
-     "cells": 1760
-    },
-    {
-     "ptype": "Qhf",
-     "color": "#5374ac",
-     "cells": 1630
-    },
     {
      "ptype": "Qhbm",
      "color": "#d864d3",
-     "cells": 1260
-    },
-    {
-     "ptype": "Tp",
-     "color": "#9433cc",
-     "cells": 931
-    },
-    {
-     "ptype": "Tp?",
-     "color": "#d8cf64",
-     "cells": 814
-    },
-    {
-     "ptype": "Qhc",
-     "color": "#80ab2b",
-     "cells": 691
-    },
-    {
-     "ptype": "Tslt",
-     "color": "#a4cc33",
-     "cells": 691
+     "cells": 53618,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene San Francisco Bay Mud"
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 648
+     "cells": 37043,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
-     "ptype": "Tss",
-     "color": "#46b8b9",
-     "cells": 611
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 21674,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Qls",
-     "color": "#3b939b",
-     "cells": 539
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 11747,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
-     "ptype": "Tms",
-     "color": "#ca7772",
-     "cells": 390
+     "ptype": "Qof",
+     "color": "#469156",
+     "cells": 11372,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial fan deposits"
     },
     {
-     "ptype": "Tssd",
-     "color": "#ca72af",
-     "cells": 384
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 9272,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
-     "ptype": "Qht",
-     "color": "#8046b9",
-     "cells": 358
+     "ptype": "Kgvu",
+     "color": "#b9469c",
+     "cells": 8971,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "afbm",
-     "color": "#467791",
-     "cells": 279
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 7319,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
-     "ptype": "Tci",
-     "color": "#53aca2",
-     "cells": 231
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 7069,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Tsb",
-     "color": "#72caad",
-     "cells": 203
-    },
-    {
-     "ptype": "QTge",
-     "color": "#64d895",
-     "cells": 161
-    },
-    {
-     "ptype": "Tn",
-     "color": "#3b9b5c",
-     "cells": 113
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 6478,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "alf",
      "color": "#b94670",
-     "cells": 110
+     "cells": 4763,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
     },
     {
-     "ptype": "KJgvl",
+     "ptype": "Qhf2",
      "color": "#337fcc",
-     "cells": 98
+     "cells": 4382,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older Holocene alluvial fan deposits"
     },
     {
-     "ptype": "Tsv",
-     "color": "#d87864",
-     "cells": 91
+     "ptype": "QThg",
+     "color": "#862bab",
+     "cells": 3490,
+     "maps": [
+      "100k"
+     ]
     },
     {
-     "ptype": "Tkt",
-     "color": "#4662b9",
-     "cells": 91
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 3283,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     },
     {
-     "ptype": "Tsri",
-     "color": "#53ac5f",
-     "cells": 77
+     "ptype": "Qhty2",
+     "color": "#862bab",
+     "cells": 2411,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qpf2",
+     "color": "#7cc0a1",
+     "cells": 2404,
+     "maps": [
+      "24k"
+     ],
+     "name": "Older latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 2247,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Td",
+     "color": "#c07cb4",
+     "cells": 2190,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhty",
+     "color": "#cab872",
+     "cells": 2055,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 1910,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
+    },
+    {
+     "ptype": "afem",
+     "color": "#6e9146",
+     "cells": 1866,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill over estuarine mud (historical)"
+    },
+    {
+     "ptype": "Tsft",
+     "color": "#983b9b",
+     "cells": 1643,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 1447,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 1420,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 1077,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
+    },
+    {
+     "ptype": "Qhf1",
+     "color": "#879b3b",
+     "cells": 938,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Tp",
+     "color": "#9433cc",
+     "cells": 873,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tp?",
+     "color": "#d8cf64",
+     "cells": 811,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhb",
+     "color": "#33cca6",
+     "cells": 720,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene basin deposits"
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 691,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 601,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qls",
+     "color": "#3b939b",
+     "cells": 535,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 534,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene stream terrace deposits"
     },
     {
      "ptype": "af",
      "color": "#bcc07c",
-     "cells": 75
+     "cells": 482,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
+    },
+    {
+     "ptype": "Qhly",
+     "color": "#9aca72",
+     "cells": 474,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial fan levee deposits"
+    },
+    {
+     "ptype": "Tssd",
+     "color": "#ca72af",
+     "cells": 374,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tms",
+     "color": "#ca7772",
+     "cells": 356,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhed",
+     "color": "#c372ca",
+     "cells": 285,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene estuarine delta deposits"
+    },
+    {
+     "ptype": "Tsb",
+     "color": "#72caad",
+     "cells": 196,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tci",
+     "color": "#53aca2",
+     "cells": 196,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "QTge",
+     "color": "#64d895",
+     "cells": 143,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tn",
+     "color": "#3b9b5c",
+     "cells": 111,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "KJgvl",
+     "color": "#337fcc",
+     "cells": 98,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsv",
+     "color": "#d87864",
+     "cells": 91,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tkt",
+     "color": "#4662b9",
+     "cells": 91,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "ac",
+     "color": "#ab772b",
+     "cells": 85,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial stream channel (historical)"
+    },
+    {
+     "ptype": "Qhfy",
+     "color": "#c0aa7c",
+     "cells": 83,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Tsri",
+     "color": "#53ac5f",
+     "cells": 76,
+     "maps": [
+      "100k"
+     ]
     },
     {
      "ptype": "Tsrb",
      "color": "#ab2b3f",
-     "cells": 63
+     "cells": 63,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhty1",
+     "color": "#64d895",
+     "cells": 62,
+     "maps": [
+      "24k"
+     ],
+     "name": "Younger latest Holocene stream terrace deposits"
     },
     {
      "ptype": "Tstx",
      "color": "#3345cc",
-     "cells": 60
+     "cells": 50,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 28,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
+    },
+    {
+     "ptype": "br?",
+     "color": "#4662b9",
+     "cells": 8,
+     "maps": [
+      "24k"
+     ],
+     "name": "pre-Quaternary deposits and bedrock (queried)"
     },
     {
      "ptype": "KJgv",
      "color": "#879b3b",
-     "cells": 2
+     "cells": 1,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "acf",
+     "color": "#53aca2",
+     "cells": 1,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial channel fill (historical)"
+    }
+   ]
+  },
+  {
+   "id": "suisun_valley",
+   "file": "suisun_valley.geology.png",
+   "cols": 420,
+   "rows": 512,
+   "cell_m": [
+    28.9,
+    28.934
+   ],
+   "mapped_fraction": 0.51,
+   "fine_fraction": 0.51,
+   "units": [
+    {
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 43644,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qhbm",
+     "color": "#d864d3",
+     "cells": 20450,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene San Francisco Bay Mud"
+    },
+    {
+     "ptype": "Qhl",
+     "color": "#469156",
+     "cells": 14773,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan levee deposits"
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 10156,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 4455,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
+    },
+    {
+     "ptype": "Qa",
+     "color": "#914665",
+     "cells": 3488,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 3487,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
+    },
+    {
+     "ptype": "Qhc",
+     "color": "#80ab2b",
+     "cells": 2183,
+     "maps": [
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 2106,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
+    },
+    {
+     "ptype": "water",
+     "color": "#9b8c3b",
+     "cells": 1683,
+     "maps": [
+      "24k"
+     ],
+     "name": "open water"
+    },
+    {
+     "ptype": "afem",
+     "color": "#6e9146",
+     "cells": 982,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill over estuarine mud (historical)"
+    },
+    {
+     "ptype": "af",
+     "color": "#bcc07c",
+     "cells": 904,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 713,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 307,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 214,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "Qoa",
+     "color": "#ac6a53",
+     "cells": 94,
+     "maps": [
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 29,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
+    },
+    {
+     "ptype": "acf",
+     "color": "#53aca2",
+     "cells": 2,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial channel fill (historical)"
     }
    ]
   },
@@ -4218,72 +8128,230 @@
     29.727,
     29.727
    ],
-   "mapped_fraction": 0.039,
+   "mapped_fraction": 0.338,
+   "fine_fraction": 0.311,
    "units": [
     {
-     "ptype": "Tslt",
-     "color": "#a4cc33",
-     "cells": 2291
+     "ptype": "Qhf",
+     "color": "#5374ac",
+     "cells": 34462,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits"
     },
     {
-     "ptype": "Tsa",
-     "color": "#8ac07c",
-     "cells": 2112
+     "ptype": "Qhl",
+     "color": "#469156",
+     "cells": 9113,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan levee deposits"
     },
     {
      "ptype": "Qoa",
      "color": "#ac6a53",
-     "cells": 1317
+     "cells": 7257,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Early to late Pleistocene alluvial deposits undifferentiated"
     },
     {
-     "ptype": "Tss",
-     "color": "#46b8b9",
-     "cells": 1259
+     "ptype": "Qhbm",
+     "color": "#d864d3",
+     "cells": 7229,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene San Francisco Bay Mud"
+    },
+    {
+     "ptype": "Qf",
+     "color": "#54b946",
+     "cells": 6213,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocenealluvial fan deposits"
     },
     {
      "ptype": "Qa",
      "color": "#914665",
-     "cells": 1086
+     "cells": 6057,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene alluvium undifferentiated"
     },
     {
-     "ptype": "Tsr",
-     "color": "#6498d8",
-     "cells": 1042
-    },
-    {
-     "ptype": "Tssd",
-     "color": "#ca72af",
-     "cells": 367
-    },
-    {
-     "ptype": "Qha",
-     "color": "#8172ca",
-     "cells": 168
-    },
-    {
-     "ptype": "Tsai",
-     "color": "#b97246",
-     "cells": 164
+     "ptype": "Qpf",
+     "color": "#aab946",
+     "cells": 2966,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene alluvial fan deposits"
     },
     {
      "ptype": "Qhc",
      "color": "#80ab2b",
-     "cells": 154
+     "cells": 2477,
+     "maps": [
+      "24k"
+     ],
+     "name": "Modern stream channel deposits"
+    },
+    {
+     "ptype": "Tslt",
+     "color": "#a4cc33",
+     "cells": 2289,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Tsa",
+     "color": "#8ac07c",
+     "cells": 2112,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qha",
+     "color": "#8172ca",
+     "cells": 2068,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvium undifferentiated"
     },
     {
      "ptype": "water",
      "color": "#9b8c3b",
-     "cells": 70
+     "cells": 1754,
+     "maps": [
+      "100k",
+      "24k"
+     ],
+     "name": "open water"
     },
     {
-     "ptype": "Tst",
-     "color": "#629b3b",
-     "cells": 60
+     "ptype": "Tss",
+     "color": "#46b8b9",
+     "cells": 1195,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qhff",
+     "color": "#c07c82",
+     "cells": 1047,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene alluvial fan deposits fine facies"
+    },
+    {
+     "ptype": "Tsr",
+     "color": "#6498d8",
+     "cells": 1042,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qht",
+     "color": "#8046b9",
+     "cells": 284,
+     "maps": [
+      "24k"
+     ],
+     "name": "Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "alf",
+     "color": "#b94670",
+     "cells": 218,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial levee fill (historical)"
     },
     {
      "ptype": "af",
      "color": "#bcc07c",
-     "cells": 3
+     "cells": 185,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill (historical)"
+    },
+    {
+     "ptype": "Tsai",
+     "color": "#b97246",
+     "cells": 164,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qt",
+     "color": "#9b3b56",
+     "cells": 142,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocene to Holocene stream terrace deposits"
+    },
+    {
+     "ptype": "adf",
+     "color": "#c07cb4",
+     "cells": 68,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial dam fill (historical)"
+    },
+    {
+     "ptype": "Tst",
+     "color": "#629b3b",
+     "cells": 60,
+     "maps": [
+      "100k"
+     ]
+    },
+    {
+     "ptype": "Qpa",
+     "color": "#854691",
+     "cells": 59,
+     "maps": [
+      "24k"
+     ],
+     "name": "Latest Pleistocenealluvium undifferentiated"
+    },
+    {
+     "ptype": "afem",
+     "color": "#6e9146",
+     "cells": 53,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial fill over estuarine mud (historical)"
+    },
+    {
+     "ptype": "acf",
+     "color": "#53aca2",
+     "cells": 5,
+     "maps": [
+      "24k"
+     ],
+     "name": "Artificial channel fill (historical)"
     }
    ]
   }

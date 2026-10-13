@@ -3,9 +3,12 @@
 
 Tier 0, standard library only. Reads the site's evidence (location, reported soil series, claims with sources),
 then adds, each from its own source:
-  soil     the soil series' horizons (depths, texture, Munsell colours, pH, rock fragments) from the USDA
-           Official Series Description, via the SoilKnowledgeBase JSON snapshot on GitHub (cached in
-           data/raw/osd/, git-ignored). Colours are approximate sRGB from the Munsell notation (munsell_rgb).
+  soil     the USDA soil survey (SSURGO via Soil Data Access, ssurgo_layers.py): the map unit under the site, the
+           map units within 150 m and across the close-up, and the main soil's layers with sand, silt, clay,
+           organic matter, pH, water capacity and rock fragments. Each layer takes its colour from the
+           overlapping horizon of the series' Official Series Description (SoilKnowledgeBase JSON snapshot,
+           cached in data/raw/osd/, git-ignored); colours are approximate sRGB from Munsell (munsell_rgb).
+           Without "survey": true in the evidence file, the OSD typical pedon is used as before.
   geology  the SIM 2956 unit at the site and along a SW-NE line across the valley through it (needs the
            owner-supplied eswn-geol.e00, as make_geology_texture.py does)
   profile  ground elevation along that line from the site's close-up terrain grid (fetch_tiles.py --only <id>)
@@ -33,6 +36,8 @@ from fetch_terrain import utm_from_geographic  # noqa: E402
 import make_geology_texture as mg  # noqa: E402
 import make_climate  # noqa: E402
 from net import open_url  # noqa: E402
+import ssurgo_layers as sl  # noqa: E402
+from make_geology_texture import GRS80, utm_inverse  # noqa: E402
 
 OSD_URL = "https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/{c}/{s}.json"
 OSD_CACHE = ROOT / "data" / "raw" / "osd"
@@ -96,6 +101,44 @@ def horizons(doc):
                      "structure": h.get("structure") if h.get("structure") not in (None, "NA") else None,
                      "narrative": nar})
     return rows
+
+
+def merge_colours(survey_hz, osd_hz):
+    """Survey layers (numbers) with colour, structure and description from the OSD horizon they overlap most,
+    preferring one of the same master horizon (A, B, C) when any of those overlaps."""
+    def master(name):
+        return re.sub(r"^[IVX]+(?=[A-Z])", "", name or "")[:1]
+    out = []
+    for h in survey_hz:
+        ov = [(min(h["bottom_cm"], o["bottom_cm"]) - max(h["top_cm"], o["top_cm"]), o) for o in osd_hz]
+        ov = [(v, o) for v, o in ov if v > 0]
+        o = max(ov, key=lambda t: (master(t[1]["name"]) == master(h["name"]), t[0]))[1] if ov else {}
+        out.append(dict(h, moist=o.get("moist"), dry=o.get("dry"), rgb=o.get("rgb"), rgb_dry=o.get("rgb_dry"),
+                        structure=o.get("structure"), narrative=o.get("narrative"), osd_horizon=o.get("name"),
+                        gravel_pct=h["rock_frag_pct"] or None, buried=h["name"].endswith("b")))
+    return out
+
+
+def utm_box_wkt(bbox):
+    """WGS84 WKT polygon of a UTM zone 10 bbox [e0, n0, e1, n1]."""
+    e0, n0, e1, n1 = bbox
+    pts = [utm_inverse(e, n, GRS80) for e, n in ((e0, n0), (e1, n0), (e1, n1), (e0, n1), (e0, n0))]
+    return "POLYGON((" + ",".join(f"{math.degrees(lo):.6f} {math.degrees(la):.6f}" for la, lo in pts) + "))"
+
+
+def survey_soil(lat, lon, closeup_bbox, offline=False):
+    """The soil survey around a site: map unit at the point, map units nearby and in the close-up, main soil's layers."""
+    mukey, musym, muname = sl.mukey_at(lat, lon, offline)
+    mu = sl.layers([mukey], offline)[mukey]
+    comp = sl.major(mu)
+    share = lambda rows: [{"mukey": k, "name": n, "pct": p} for k, n, p in rows if p >= 1]
+    return {"mukey": mukey, "musym": musym, "map_unit": muname, "survey": mu["survey"], "survey_version": mu["survey_version"],
+            "component": comp["name"] if comp else None, "component_pct": comp["pct"] if comp else None,
+            "drainage": comp["drainage"] if comp else None, "taxonomic_class": comp["taxonomic_class"] if comp else None,
+            "components": [{"name": c["name"], "pct": c["pct"], "drainage": c["drainage"]} for c in mu["components"]],
+            "within_150m": share(sl.units_in(sl.box_wkt(lat, lon, 150), offline)),
+            "closeup": share(sl.units_in(utm_box_wkt(closeup_bbox), offline))[:8],
+            "horizons": comp["horizons"] if comp else []}
 
 
 def section(doc, key):
@@ -188,6 +231,15 @@ def build(site_path, e00, half=1900.0, step=10.0, offline=False):
                 type_location=section(doc, "TYPE LOCATION"), horizons=horizons(doc))
 
     meta, h = load_grid(assets / "detail" / f"{site['id']}.json")
+    if site["soil"].get("survey"):
+        sv = survey_soil(lat, lon, meta["bbox_utm"], offline)
+        soil["osd_horizons"] = soil["horizons"]
+        soil["horizons"] = merge_colours(sv.pop("horizons"), soil["osd_horizons"])
+        soil["mapped"] = sv
+        soil["name"] = sv["map_unit"].split(", MLRA")[0]
+        soil["drainage"] = sv["drainage"] or soil["drainage"]
+    else:
+        soil["name"] = soil.get("reported_as")
     n = int(round(2 * half / step)) + 1
     offs = [-half + 2 * half * i / (n - 1) for i in range(n)]
     pts = [(e0 + UX * o, n0 + UY * o) for o in offs]
@@ -254,7 +306,10 @@ def main():
     s = build(a.site, a.e00, a.half, a.step, a.offline)
     sec = s["section"]
     print(f"{s['name']}: AVAs {', '.join(v['name'] for v in s['avas'])}; geology at site {s['geology']['at_site']}; "
-          f"soil {s['soil']['series_name']} ({len(s['soil']['horizons'])} horizons)")
+          f"soil {s['soil']['name']} ({len(s['soil']['horizons'])} layers)")
+    for hz in s["soil"]["horizons"]:
+        print(f"  {hz['name']:5} {hz['top_cm']:3}-{hz['bottom_cm']:<3} cm {hz['texture']:34} clay {hz.get('clay_pct')} % "
+              f"rock {hz.get('rock_frag_pct')} %  colour from OSD {hz.get('osd_horizon')} {hz.get('moist')}")
     print("  section units: " + ", ".join(f"{r['ptype'] or '-'} {r['from_m']}..{r['to_m']}" for r in sec["units"]))
     print("  streams: " + ", ".join(f"{c['name'] or 'unnamed'} @{c['offset_m']} m" for c in sec["streams"]))
     print(f"  ground {min(sec['ground_m']):.0f}..{max(sec['ground_m']):.0f} m")

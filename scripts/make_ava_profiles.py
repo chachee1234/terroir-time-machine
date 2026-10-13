@@ -11,7 +11,9 @@ Writes prototype/assets/regions/<region>/ava_profiles.json, one record per AVA t
               the unit's name from the map's FGDC metadata (Attribute_Domain_Values, source "author")
   soils       share of the outline in each USDA SSURGO map unit, grouped by the map unit's soil name
               (Soil Data Access, area of intersection; G33), and the share that is gravelly or cobbly, clay,
-              loam or rock outcrop by map-unit name
+              loam or rock outcrop by map-unit name; and, for the three largest map units, the main soil's layers
+              (depth, texture, clay, sand, rock fragments, organic matter, pH: survey representative values,
+              ssurgo_layers.py)
   vineyards   USDA CDL grape acres inside the AVA, latest year (vineyards.json, G30)
   producers   from data/ava_producers.json, each with its source URL (hand-gathered; not computed)
 
@@ -30,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_tiles import decode_png_rgb  # noqa: E402
 from make_geology_texture import GRS80, utm_inverse  # noqa: E402
 from net import open_url  # noqa: E402
+import ssurgo_layers as sl  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SDA = "https://sdmdataaccess.sc.egov.usda.gov/Tabular/post.rest"
@@ -109,8 +112,26 @@ select @aoi = geometry::STGeomFromText('{wkt}', 4326).MakeValid()
 SELECT mu.mukey, mu.muname, SUM(m.mupolygongeo.STIntersection(@aoi).STArea()) AS a
 FROM mupolygon m JOIN mapunit mu ON mu.mukey=m.mukey
 WHERE m.mupolygongeo.STIntersects(@aoi)=1 GROUP BY mu.mukey, mu.muname"""
-    rows = [(r[1], float(r[2])) for r in sda(q)]
+    raw = sda(q)
+    rows = [(r[1], float(r[2])) for r in raw]
     tot = sum(a for _, a in rows) or 1
+    top_mu = sorted(raw, key=lambda r: -float(r[2]))[:10]
+    lay = sl.layers([r[0] for r in top_mu])
+    layers = {}                                   # the three largest soils; slope classes of one soil add up
+    for r in top_mu:
+        mu = lay.get(str(r[0]))
+        comp = sl.major(mu) if mu else None
+        if not comp:
+            continue
+        p = 100 * float(r[2]) / tot
+        if comp["name"] in layers:
+            layers[comp["name"]]["pct"] += p
+        elif len(layers) < 3:
+            layers[comp["name"]] = {"soil": comp["name"], "map_unit": soil_name(r[1]), "pct": p, "soil_pct": comp["pct"],
+                                    "drainage": comp["drainage"], "layers": sl.summary(comp, 5)}
+    layers = sorted(layers.values(), key=lambda x: -x["pct"])
+    for x in layers:
+        x["pct"] = round(x["pct"], 1)
     by = {}
     for nm, a in rows:
         by[soil_name(nm)] = by.get(soil_name(nm), 0) + a
@@ -118,7 +139,7 @@ WHERE m.mupolygongeo.STIntersects(@aoi)=1 GROUP BY mu.mukey, mu.muname"""
     groups = {"gravelly or cobbly": ("gravel", "cobbl", "stony"), "clay": ("clay",), "rock outcrop": ("rock outcrop", "rock-outcrop", "rock land"), "water": ("water",)}
     share = {g: round(100 * sum(a for nm, a in rows if any(k in nm.lower() for k in keys)) / tot) for g, keys in groups.items()}
     return {"map_units": [{"name": n, "pct": round(100 * a / tot, 1)} for n, a in top[:6]],
-            "n_names": len(top), "share_by_name": share}
+            "n_names": len(top), "share_by_name": share, "layers": layers}
 
 
 def main():
@@ -128,6 +149,8 @@ def main():
     ap.add_argument("--producers", type=Path, default=ROOT / "data/ava_producers.json")
     ap.add_argument("--no-soils", action="store_true", help="skip the USDA Soil Data Access queries (offline)")
     ap.add_argument("--only", help="comma-separated AVA ids")
+    ap.add_argument("--soils-only", action="store_true",
+                    help="refresh only the soils of each AVA, keeping every other field of the existing file")
     args = ap.parse_args()
 
     region = json.loads(args.region.read_text())
@@ -145,20 +168,32 @@ def main():
     only = set(args.only.split(",")) if args.only else None
 
     out = {"region": rid, "built": time.strftime("%Y-%m-%d"),
+           "soils_built": time.strftime("%Y-%m-%d"),
            "sources": {"elevation": "AWS Terrain Tiles (USGS 3DEP source), each AVA's close-up grid (SOURCES.md G19)",
                        "outline": "UC Davis AVA Project (G18), simplified to 25 m",
                        "geology": "USGS SIM 2956, 1:100,000 (G07); unit names from its FGDC metadata",
-                       "soils": "USDA-NRCS SSURGO via Soil Data Access, map-unit area inside the outline (G33)",
+                       "soils": "USDA-NRCS SSURGO via Soil Data Access, map-unit area inside the outline; layers are the survey's representative values for each map unit's main soil (G33)",
                        "vineyards": f"USDA NASS Cropland Data Layer {vyear}, grapes (G30)" if vy else None,
                        "producers": "data/ava_producers.json: " + producers.get("status", "hand-gathered") + "; each AVA lists its source pages"},
            "limits": "Shares are of the whole AVA outline, not of its vineyards. Geology at 1:100,000; SSURGO at about 1:24,000; CDL is a satellite classification.",
            "avas": {}}
+    if args.soils_only:
+        out["built"] = old.get("built", out["built"])
     for loc in index:
         if loc.get("kind", "ava") != "ava" or loc["id"] not in avas:
             continue
         aid, a = loc["id"], avas[loc["id"]]
         if only and aid not in only:
             out["avas"][aid] = old["avas"].get(aid)
+            continue
+        if args.soils_only and old["avas"].get(aid):
+            rec = old["avas"][aid]
+            try:
+                rec["soils"] = soils_for(a["rings"])
+            except RuntimeError as e:
+                print(f"{aid}: {e}", file=sys.stderr)
+            out["avas"][aid] = rec
+            print(f"{aid:40s} soil layers: " + "; ".join(f"{x['soil']} {len(x['layers'])}" for x in (rec.get('soils') or {}).get("layers", [])))
             continue
         base = assets / loc["file"]                       # "detail/<id>": <id>.json + <id>.bin
         meta = json.loads(base.with_suffix(".json").read_text())
