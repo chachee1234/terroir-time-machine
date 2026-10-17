@@ -51,7 +51,8 @@ One step per run, in order, on `globe-showcase`. Every step keeps these owner ru
   - [ ] G4. Boundary blocks: click a boundary to open a 3D cut-away block (ridge; ocean–continent subduction with a volcano; continent–continent collision with folding strata; transform offset), with a transparent water layer and animated mantle-convection arrows, labelled Illustration. Reuse SUB3D and the diorama slab code.
 - [!] G5 blocked (2026-10-16): needs a sourced uplift window for each of about 14 ranges (none written yet, and not invented) and the G1 plate frame to carry today's relief back. Same open decision as G3 and G4.
   - [ ] G5. Mountains grow: `data/orogens.json` (Himalaya/Tibet, Andes, Alps, Rockies, Sierra Nevada, Cascades, Zagros, Atlas, Pyrenees, Carpathians, New Guinea, Southern Alps NZ, Taiwan, East African highlands), each with an uplift window and a source; today's relief is carried back on its plates; at 0 Ma it matches `relief.png` exactly.
-- [ ] G6. Showcase tour: Atlantic opening (180 Ma), Andes (100 Ma), India–Asia (50 Ma), Alps (35 Ma), San Andreas (28 Ma), then the last 5 Ma slowed down, ending on labelled ranges.
+- [!] G6 blocked (2026-10-17): the tour ends on labelled ranges, which come from the G5 list, and its plate moves depend on the G1 boundaries. Same open decision as G3 to G5.
+  - [ ] G6. Showcase tour: Atlantic opening (180 Ma), Andes (100 Ma), India–Asia (50 Ma), Alps (35 Ma), San Andreas (28 Ma), then the last 5 Ma slowed down, ending on labelled ranges.
 - [ ] G7. Before 410 Ma: keep the stylized globe, labelled stylized. Research a published 1.8–2 Ga full-plate model and report its licence in the PR and status note; do not add it without the owner's approval.
 
 ## Queue: regions (paused by owner, 2026-10-08)
