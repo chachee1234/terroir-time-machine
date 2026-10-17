@@ -213,6 +213,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
     <button class="chip tog" id="sdBtn" aria-pressed="false" aria-controls="sub">Plates</button>
     <button class="chip tog lc" id="xsBtn" aria-pressed="false" aria-controls="xsec">Section</button>
     <button class="chip tog lc" id="plBtn" aria-pressed="false" aria-controls="places" hidden>Places</button>
+    <button class="chip tog" id="ocnBtn" aria-pressed="false" title="See the seafloor through the water (bathymetry from Terrain Tiles)">Ocean</button>
     <button class="chip tog" id="rgBtn" title="All California AVAs and the expansion plan, on the present-day globe">Regions</button>
     <a class="chip lc" id="gibLink" href="gibraltar.html" style="color:inherit;text-decoration:none;pointer-events:auto" title="Meanwhile, 5.33 Ma: the Mediterranean dries out and the Zanclean flood refills it through the Strait of Gibraltar">Gibraltar ↗</a>
   </div>
@@ -570,7 +571,7 @@ const gUni = {
   // present-day relief (AWS Terrain Tiles: ≈10 km global, ≈2 km California), grey "no data" wash, near-ground fog
   uReal:{value:0}, uRelief:{value:null}, uCa:{value:null}, uCaOn:{value:0}, uCaBox:{value:new THREE.Vector4(-124.6,32.4,-114.0,42.1)},
   uCutOn:{value:0}, uCutC:{value:new THREE.Vector3(1,0,0)}, uCutW:{value:new THREE.Vector3(0,0,1)}, uCutN:{value:new THREE.Vector3(0,1,0)}, uCutTh:{value:new THREE.Vector2()}, uCutS:{value:0.22},
-  uRelK:{value:30}, uGrey:{value:0}, uLand:{value:null}, uModel:{value:0}, uPlC:{value:null}, uPlOn:{value:0}, uAvG:{value:null}, uAvOn:{value:0}, uAvBox:{value:new THREE.Vector4(-124.6,32.4,-114.0,42.1)}, uFogCol:{value:new THREE.Color(.7,.78,.84)}, uFogN:{value:1e3}, uFogF:{value:2e3}
+  uRelK:{value:30}, uGrey:{value:0}, uLand:{value:null}, uModel:{value:0}, uPlC:{value:null}, uPlOn:{value:0}, uOcean:{value:0}, uAvG:{value:null}, uAvOn:{value:0}, uAvBox:{value:new THREE.Vector4(-124.6,32.4,-114.0,42.1)}, uFogCol:{value:new THREE.Color(.7,.78,.84)}, uFogN:{value:1e3}, uFogF:{value:2e3}
 };
 // Earth relief, 8-bit equirectangular (scripts/build_globe.py). Row 0 is 90N.
 new THREE.TextureLoader().load("assets/globe/relief.png", t=>{ t.flipY=false; t.wrapS=THREE.RepeatWrapping; t.minFilter=t.magFilter=THREE.LinearFilter; t.generateMipmaps=false; t.needsUpdate=true; gUni.uRelief.value=t; });
@@ -580,7 +581,7 @@ const globeMat = new THREE.ShaderMaterial({
   fragmentShader:GLSL_NOISE+`
   uniform vec3 uC[8]; uniform float uR[8]; uniform float uGreen,uCap,uIceAll,uDesert,uTime,uRift,uSubd,uEdges,uFlow; uniform vec3 uSun,uWest;
   uniform float uCutOn,uCutS; uniform vec3 uCutC,uCutW,uCutN; uniform vec2 uCutTh;
-  uniform float uReal,uCaOn,uRelK,uGrey,uFogN,uFogF,uAvOn,uModel,uPlOn; uniform sampler2D uRelief,uCa,uAvG,uLand,uPlC; uniform vec4 uCaBox,uAvBox; uniform vec3 uFogCol;
+  uniform float uReal,uCaOn,uRelK,uGrey,uFogN,uFogF,uAvOn,uModel,uPlOn,uOcean; uniform sampler2D uRelief,uCa,uAvG,uLand,uPlC; uniform vec4 uCaBox,uAvBox; uniform vec3 uFogCol;
   float relH(vec2 uv){ float v=texture2D(uRelief,uv).r*255.0;
     return v>=128.0 ? pow((v-128.0)/127.0,2.0)*8848.0 : -pow(max(127.0-v,0.0)/127.0,2.0)*11000.0; }
   float caW(vec2 ll){ vec2 q=(ll-uCaBox.xy)/(uCaBox.zw-uCaBox.xy); vec2 e=min(q,1.0-q); return uCaOn*smoothstep(0.0,0.03,min(e.x,e.y)); }
@@ -645,6 +646,10 @@ const globeMat = new THREE.ShaderMaterial({
     float land=smoothstep(0.0,mix(0.012,0.04,uModel),e);
     vec3 deep=vec3(0.02,0.07,0.18), shallow=vec3(0.06,0.30,0.42);
     vec3 ocean=mix(deep,shallow,smoothstep(-0.14,0.0,e));
+    // Ocean toggle: the seafloor shows through the water, shaded by depth (Terrain Tiles bathymetry, public domain)
+    float dep=clamp(-e/0.14,0.0,1.0), d0=clamp(dot(n,uSun),0.0,1.0);
+    vec3 floorC=mix(vec3(0.36,0.42,0.38),vec3(0.10,0.13,0.18),dep)*(0.25+0.75*d0);
+    ocean=mix(ocean,mix(floorC,ocean,0.42),uOcean*(1.0-land));
     float v=fbm(n*6.0);
     vec3 barren=mix(vec3(0.52,0.37,0.27),vec3(0.72,0.58,0.42),v);
     vec3 green=mix(vec3(0.20,0.33,0.17),vec3(0.44,0.43,0.25),fbm(n*5.0+3.0));
@@ -1399,6 +1404,7 @@ function avaTexture(x0,z0,sx,sz){
 }
 $("rgBtn").onclick=()=>rgOverview();
 $("avaBtn").onclick=()=>{ AVA.on=!AVA.on; $("avaBtn").setAttribute("aria-pressed",AVA.on); };
+let OCN=false; $("ocnBtn").onclick=()=>{ OCN=!OCN; $("ocnBtn").setAttribute("aria-pressed",OCN); };
 // Geology drape: scripts/make_geology_texture.py rasterizes USGS SIM 2956 onto this region's terrain grid.
 const GEO={on:false, ok:false, legend:null, detail:null, patch:null, lgKey:null};
 // An autopilot region only asks for the drapes and data files regions/index.json lists under its "layers".
@@ -1839,6 +1845,7 @@ function apply(a,p){
     PLATES.forEach((pl,i)=>plateAt(pl,a,gUni.uC.value[i]));
     const mk = PM.ok ? sm(PM.FADE[0],PM.FADE[1],a) : 0;     // plate model takes over from the stylized blobs
     gUni.uModel.value = mk;
+    gUni.uOcean.value = OCN?1:0;
     gUni.uPlOn.value = sm(A_DIVE-4,A_DIVE+6,a);                // plate colours, outlines and motion: deep time only
     mvUpdate(a,mk,gUni.uPlOn.value,gUni.uTime.value);
     if(mk>0){ pmDraw(a);
