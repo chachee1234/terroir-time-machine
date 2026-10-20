@@ -80,7 +80,9 @@ def run_export(rotation_files, topology_files, max_age, step):  # pragma: no cov
             ftype = feat.get_feature_type().get_name()
             if ftype not in BOUNDARY_TYPES or not feat.get_geometry():
                 continue
-            for rfg in pygplates.reconstruct(feat, rotations, age, anchor_plate_id=0):
+            reconstructed = []  # pygplates fills this output list; the time is the last argument
+            pygplates.reconstruct(feat, rotations, reconstructed, age)
+            for rfg in reconstructed:
                 geom = rfg.get_reconstructed_geometry()
                 if geom is None:
                     continue
