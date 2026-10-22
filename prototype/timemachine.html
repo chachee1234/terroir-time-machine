@@ -564,6 +564,49 @@ function mvUpdate(a,mk,on,t){
 }
 fetch("assets/plates/muller2019.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{ pmLoad(d); DATA.plateModel="assets/plates/muller2019.json"; }).catch(()=>{});
 
+/* G3a: the moving boundaries from topologies.json (Müller et al. 2019 resolved topologies, 1 Myr steps, 0–250 Ma), drawn
+   on the globe in deep time. Ridges are double lines, trenches and rifts single lines, transforms in their own colour.
+   Before 250 Ma nothing is drawn: the stylized globe stays as it is. One frame per whole million years, rebuilt on change. */
+const TOPO={d:null, geo:null, pts:null, pos:null, col:null, cur:-1, v:new THREE.Vector3(), w:new THREE.Vector3()};
+const TOPO_COL={MidOceanRidge:0xff7a66, SubductionZone:0xffd27a, Transform:0x9fe3c4, ContinentalRift:0xffb070};
+function topoLoad(d){
+  let maxV=0; for(const fr of d.frames){ let s=0; for(const f of fr) s+=f[1].length*2; maxV=Math.max(maxV,s); }
+  TOPO.d=d; TOPO.pos=new Float32Array(maxV*3); TOPO.col=new Float32Array(maxV*3);
+  TOPO.geo=new THREE.BufferGeometry();
+  TOPO.geo.setAttribute("position",new THREE.BufferAttribute(TOPO.pos,3)); TOPO.geo.setAttribute("color",new THREE.BufferAttribute(TOPO.col,3));
+  TOPO.pts=new THREE.LineSegments(TOPO.geo,new THREE.LineBasicMaterial({vertexColors:true, transparent:true, opacity:0.9, depthWrite:false}));
+  TOPO.pts.frustumCulled=false; TOPO.pts.visible=false; gScene.add(TOPO.pts);
+}
+function topoFill(frame){                  // one age's boundaries as line segments at the globe's surface; returns the vertex count
+  const P=TOPO.pos, C=TOPO.col, T=TOPO.d.types, v=TOPO.v, w=TOPO.w; let n=0;
+  for(const [ti,arr] of frame){
+    const name=T[ti], c=TOPO_COL[name]; if(c===undefined) continue;
+    const rs = name==="MidOceanRidge" ? [1.004,1.011] : [1.004];   // ridges: double line
+    const cr=(c>>16&255)/255, cg=(c>>8&255)/255, cb=(c&255)/255;
+    let la=0, lo=0, have=false;
+    for(let k=0;k<arr.length;k+=2){
+      la+=arr[k]; lo+=arr[k+1];
+      const p=la/100*D2R, l=lo/100*D2R;
+      pmE2V([Math.cos(p)*Math.cos(l), Math.cos(p)*Math.sin(l), Math.sin(p)], v);
+      if(have) for(const r of rs){
+        P[3*n]=w.x*r; P[3*n+1]=w.y*r; P[3*n+2]=w.z*r; C[3*n]=cr; C[3*n+1]=cg; C[3*n+2]=cb; n++;
+        P[3*n]=v.x*r; P[3*n+1]=v.y*r; P[3*n+2]=v.z*r; C[3*n]=cr; C[3*n+1]=cg; C[3*n+2]=cb; n++;
+      }
+      w.copy(v); have=true;
+    }
+  }
+  return n;
+}
+function topoUpdate(a,on){
+  TOPO.pts.visible = !!TOPO.d && on>0.01 && a<=250;
+  if(!TOPO.pts.visible) return;
+  const f=Math.max(0,Math.min(TOPO.d.frames.length-1,Math.round(a)));
+  if(f===TOPO.cur) return;
+  TOPO.cur=f; TOPO.geo.setDrawRange(0,topoFill(TOPO.d.frames[f]));
+  TOPO.geo.attributes.position.needsUpdate=true; TOPO.geo.attributes.color.needsUpdate=true;
+}
+fetch("assets/plates/topologies.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(topoLoad).catch(()=>{});
+
 const gUni = {
   uC:{value:PLATES.map(()=>new THREE.Vector3())}, uR:{value:PLATES.map(p=>p.r)},
   uGreen:{value:0}, uCap:{value:1}, uIceAll:{value:0}, uDesert:{value:0}, uSun:{value:new THREE.Vector3(1,0,0)}, uTime:{value:0},
@@ -1848,6 +1891,7 @@ function apply(a,p){
     gUni.uOcean.value = OCN?1:0;
     gUni.uPlOn.value = sm(A_DIVE-4,A_DIVE+6,a);                // plate colours, outlines and motion: deep time only
     mvUpdate(a,mk,gUni.uPlOn.value,gUni.uTime.value);
+    topoUpdate(a,gUni.uPlOn.value);
     if(mk>0){ pmDraw(a);
       PLATES.forEach((pl,i)=>{ const pi=PM.pid[PM.LAB[i]]; if(pi===undefined) return;
         if(i===0){ // Laurentia: centre the margin "blob" so its west edge sits on the trench off today's Napa coast (38.6 N, 125.5 W), carried by the North American plate
@@ -2777,7 +2821,7 @@ const PLAB=[{x:X0+Math.min(3,SX*0.06), z:Z1-Math.min(3,SZ*0.06), t:a=>a>8?"Faral
 function placeLab(q,show,op){ let hh=0; for(let k=0;k<6;k++) hh+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][q.i];
   pl3.set(q.x,Math.max(hh,0)*VE+0.25,q.z).project(lCam); const vis=show&&pl3.z<1; q.el.hidden=!vis;
   if(vis){ q.el.style.opacity=op.toFixed(2); q.el.style.left=((pl3.x+1)/2*innerWidth)+"px"; q.el.style.top=((1-pl3.y)/2*innerHeight)+"px"; } }
-if((new URLSearchParams(location.search)).has("debug")) window.TTM={lCam,lCtl,gCam,gUni,lUni,DATA,CH,PLATES,SITE,RIV,GEO,LOC,PM,MV,WX,markerDir,get st(){ return {p,autoCam}; }};
+if((new URLSearchParams(location.search)).has("debug")) window.TTM={lCam,lCtl,gCam,gUni,lUni,DATA,CH,PLATES,SITE,RIV,GEO,LOC,PM,MV,TOPO,WX,markerDir,get st(){ return {p,autoCam}; }};
 /* The compass, legend and Places panel sit just under the chip rows, however many rows the chips wrap to. */
 function placeHud(){ const b=document.querySelector(".top .chips").getBoundingClientRect().bottom, cs=$("compass").offsetHeight||64, st=document.body.style;
   st.setProperty("--cmp",Math.round(b+8)+"px"); st.setProperty("--lgd",Math.round(b+16+cs)+"px"); }
