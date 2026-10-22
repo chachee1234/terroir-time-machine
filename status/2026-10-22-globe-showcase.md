@@ -20,3 +20,7 @@
 - Functional file ran to completion: 15 pass, 2 fail. Both failures were `uncaught: Cannot set properties of null (setting 'visible')` from G3a's `topoUpdate` running before `topologies.json` loaded. Fixed with a guard.
 - After the fix, a headless probe of `?region=mt_st_helena` shows no problems. The `?region=atlantis` probe shows only the expected 404 probes for its own region files, which the test filters out.
 - Not yet re-run: the full functional file after the fix, and the integration, motion and security files. G3a stays unticked until they run.
+
+## Update: G3a ticked
+- Post-fix browser runs: functional 25/25, security 14/14, integration 2/2, motion 5/5. Lint: PASS.
+- G3a ticked in AUTOPILOT.md. G3 stays open (G3b–G3d); trench teeth and dashed transforms are not drawn yet.
