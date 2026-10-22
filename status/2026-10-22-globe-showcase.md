@@ -15,3 +15,8 @@
 
 ## Next action
 - Re-run the browser suite per file (`THREE_DIR` pointing at the local r128 copy), fix anything it shows, then tick G3a.
+
+## Update: functional suite
+- Functional file ran to completion: 15 pass, 2 fail. Both failures were `uncaught: Cannot set properties of null (setting 'visible')` from G3a's `topoUpdate` running before `topologies.json` loaded. Fixed with a guard.
+- After the fix, a headless probe of `?region=mt_st_helena` shows no problems. The `?region=atlantis` probe shows only the expected 404 probes for its own region files, which the test filters out.
+- Not yet re-run: the full functional file after the fix, and the integration, motion and security files. G3a stays unticked until they run.

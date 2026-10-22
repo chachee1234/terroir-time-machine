@@ -598,7 +598,8 @@ function topoFill(frame){                  // one age's boundaries as line segme
   return n;
 }
 function topoUpdate(a,on){
-  TOPO.pts.visible = !!TOPO.d && on>0.01 && a<=250;
+  if(!TOPO.pts) return;                    // topologies.json not loaded yet
+  TOPO.pts.visible = on>0.01 && a<=250;
   if(!TOPO.pts.visible) return;
   const f=Math.max(0,Math.min(TOPO.d.frames.length-1,Math.round(a)));
   if(f===TOPO.cur) return;
