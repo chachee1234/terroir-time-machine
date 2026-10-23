@@ -58,6 +58,12 @@ One step per run, in order, on `globe-showcase`. Every step keeps these owner ru
   - [ ] G6. Showcase tour: Atlantic opening (180 Ma), Andes (100 Ma), India–Asia (50 Ma), Alps (35 Ma), San Andreas (28 Ma), then the last 5 Ma slowed down, ending on labelled ranges.
 - [x] G7 closed by owner 2026-10-18: disregard Merdith et al. 2021 and any other pre-410 Ma model; deep time before 410 Ma stays the stylized globe, labelled stylized. No further research.
 
+- Owner decision 2026-10-22: after G6, add recording and printing (still one step or sub-step per run).
+  - [ ] G8. Record shot: export any chapter or camera path as video frames (PNG), a matching depth map per frame and the camera path (JSON), from the viewer (`?record=` option or a Record button), for later use in video tools. No AI video in the repo.
+  - [ ] G9a. "Print today's terrain" link: build a TerraPrinter URL (terraprinter.com, by Capital Coders Inc; link only, no code or images copied) from the current view's lat, lon, zoom and vertical exaggeration, credited in the UI and SOURCES.md.
+  - [ ] G9b. "Print this era": export the current block at the current age as 3MF (colours) and STL with three.js's own exporters (MIT), base and engraved label (place · age), exaggeration as on screen; the file's visual class matches the screen (Illustration for ancient eras, Measured for today).
+  - [ ] G9c. Colour options for the print: geology units, soil series (once the soil-section branch lands), AVA outlines, strata on the block walls; multi-colour 3MF with at most 4–8 filament colours.
+
 - [ ] G1b (optional, owner's Mac only, do not attempt in a cloud run): export the 250–410 Ma topologies with the Young et al. 2019 rotations and append them to `topologies.json`. Skip this item; it is done only when the owner runs it.
 
 ## Queue: regions (paused by owner, 2026-10-08)
