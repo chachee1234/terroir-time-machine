@@ -999,6 +999,35 @@
           "sha256": "b03407bb389e2691ddef2ce43314f8629847530952a5e47992ef05512f4b3910"
         }
       ]
+    },
+    {
+      "id": "napa_valley-ssurgo-soils",
+      "source": "USDA-NRCS SSURGO via Soil Data Access",
+      "url": "https://sdmdataaccess.sc.egov.usda.gov",
+      "surveys": [
+        {
+          "areasymbol": "CA055",
+          "name": "Napa County, California",
+          "version": "9/16/2026"
+        },
+        {
+          "areasymbol": "CA097",
+          "name": "Sonoma County, California",
+          "version": "9/15/2026"
+        }
+      ],
+      "fetched": "2026-10-23",
+      "rights": "Public domain (USDA); credit USDA Natural Resources Conservation Service (SOURCES.md G44)",
+      "derived": [
+        {
+          "file": "prototype/assets/regions/napa_valley/soils.json",
+          "sha256": "0922e61f020008be82c6232edd4389fbec57724f6965cfa97240017417717f5b"
+        },
+        {
+          "file": "prototype/assets/regions/napa_valley/soils.png",
+          "sha256": "8dc85b6f062d023bad63d9bff5d0a5196b072c36339e78b448e63e46b6699989"
+        }
+      ]
     }
   ],
   "locations": {
