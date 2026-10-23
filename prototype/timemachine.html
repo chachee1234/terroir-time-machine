@@ -108,6 +108,7 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .legend .lgGeo span{display:grid;grid-template-columns:repeat(3,auto);gap:2px 10px;font:10.5px var(--mono)}
 .legend .lgGeo em{font-style:normal;display:flex;align-items:center;gap:4px;justify-content:flex-end}
 .legend .lgGeo em::before{content:"";width:10px;height:10px;border-radius:2px;background:var(--c)}
+.legend #soilSw{grid-template-columns:repeat(2,auto);font-family:inherit}
 .scalebar{position:absolute;z-index:2;right:16px;bottom:calc(114px + env(safe-area-inset-bottom,0px));font:11px var(--mono);color:var(--ink);text-align:center;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.9)}
 .scalebar div{height:5px;border:1.5px solid var(--ink);border-top:0;margin-top:2px}
 .plc{position:absolute;z-index:2;transform:translate(-5px,-50%);pointer-events:none;font-size:11.5px;white-space:nowrap;color:#f3eee4;text-shadow:0 1px 5px rgba(0,0,0,.95),0 0 2px rgba(0,0,0,.9);letter-spacing:.03em}
@@ -127,6 +128,8 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .xsec canvas{display:block;width:100%;height:200px}
 .xsec.site{width:min(600px,calc(100% - 32px))}
 .xsec.site canvas{height:300px}
+.xsec.soil{width:min(540px,calc(100% - 32px))}
+.xsec.soil canvas{height:270px}
 .xsec header .xsp{font-size:11px;letter-spacing:.06em;text-transform:uppercase;min-width:0;padding:0 8px}
 .tcap{position:relative;height:18px;margin:0 0 2px;pointer-events:none}
 .tcap span{position:absolute;bottom:0;transform:translateX(-50%);white-space:nowrap;font-size:12.5px;color:var(--ink);text-shadow:0 1px 8px rgba(0,0,0,.9);transition:opacity .4s ease;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
@@ -189,6 +192,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   .xsec{top:calc(150px + env(safe-area-inset-top,0px))}
   .xsec canvas{height:150px}
   .xsec.site canvas{height:230px}
+  .xsec.soil canvas{height:240px}
   body.xs-open .compass,body.xs-open .legend{display:none}
   .locator{display:none}
 }
@@ -207,6 +211,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
     <span class="chip" id="clsChip"><i></i><span>Reconstruction</span></span>
     <button class="chip tog lc" id="avaBtn" aria-pressed="true">AVAs</button>
     <button class="chip tog lc" id="geoBtn" aria-pressed="false" title="Mapped geologic units on today's terrain (USGS SIM 2956)" hidden>Geology</button>
+    <button class="chip tog lc" id="soilBtn" aria-pressed="false" title="Soil series on today's terrain (USDA SSURGO soil survey, 1:24,000)" hidden>Soils</button>
     <button class="chip tog lc" id="satBtn" aria-pressed="false" title="Sentinel-2 true-colour image on today's terrain" hidden>Satellite</button>
     <button class="chip tog lc" id="wxBtn" aria-pressed="false" aria-controls="wx" title="Daily weather, 1981 to recent days (PRISM 4 km)" hidden>Weather</button>
     <button class="chip tog lc" id="rivBtn" aria-pressed="true" title="Rivers and creeks as mapped today (USGS National Hydrography Dataset)" hidden>Rivers</button>
@@ -243,6 +248,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   <div id="lgAva"><i style="--c:#ffd27a"></i>AVA boundary</div>
   <div id="lgSat" hidden>Satellite image · <span id="satLb">Sentinel-2</span></div>
   <div id="lgGeo" class="lgGeo" hidden><b>Geologic units · USGS SIM 2956, 1:100,000</b><span id="geoSw"></span></div>
+  <div id="lgSoil" class="lgGeo" hidden><b>Soil series · USDA SSURGO 1:24,000</b><span id="soilSw"></span></div>
   <div id="lgTopo"><i style="--c:#5a3d22;height:1.5px"></i>Contours, 50 m (10 m close up)</div>
 </div>
 <div class="scalebar" id="scalebar" hidden><span id="sbKm">5 km</span><div id="sbar"></div></div>
@@ -979,7 +985,7 @@ const lUni = {
   uSun:{value:new THREE.Vector3(-0.5,0.75,-0.4).normalize()}, uSunCol:{value:new THREE.Color(1,.96,.9)},
   uFog:{value:new THREE.Color(.6,.7,.8)}, uVolc:{value:0}, uLava:{value:0}, uAsh:{value:0}, uVines:{value:0}, uGold:{value:0}, uBase:{value:BASE},
   uThr:{value:0}, uThrAct:{value:0}, uThrOff:{value:0}, uSS:{value:0}, uSSAct:{value:0}, uErode:{value:0}, uTopo:{value:0},
-  uDem:demTex, uDemOn:{value:0}, uDemTexel:{value:new THREE.Vector2(1,1)}, uDemCell:{value:new THREE.Vector2(1,1)}, uAva:{value:null}, uAvaOn:{value:0}, uGeo:{value:null}, uGeoOn:{value:0}, uSat:{value:null}, uSatOn:{value:0}, uRiv:{value:null}, uRivOn:{value:0}, uWx:{value:null}, uWxOn:{value:0}, uWxExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uSatExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uGeoExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)},
+  uDem:demTex, uDemOn:{value:0}, uDemTexel:{value:new THREE.Vector2(1,1)}, uDemCell:{value:new THREE.Vector2(1,1)}, uAva:{value:null}, uAvaOn:{value:0}, uGeo:{value:null}, uGeoOn:{value:0}, uSoils:{value:null}, uSoilsOn:{value:0}, uSoilsExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uSat:{value:null}, uSatOn:{value:0}, uRiv:{value:null}, uRivOn:{value:0}, uWx:{value:null}, uWxOn:{value:0}, uWxExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uSatExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uGeoExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)},
   uExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uDemExt:{value:new THREE.Vector4(X0,Z0,SX,SZ)}, uHole:{value:new THREE.Vector4()}, uFogN:{value:LEXT*1.5}, uFogF:{value:LEXT*4.7},
   // vineyard site story on the close-up surface (SEVO below); uSiteHere is 1 only on that close-up's own mesh
   uSiteOn:{value:0}, uSiteHere:{value:0}, uSiteT:{value:1}, uSiteFront:{value:0}, uSiteP:{value:new THREE.Vector2()}, uSiteExt:{value:new THREE.Vector4(0,0,1,1)},
@@ -1149,7 +1155,7 @@ const terrainMat = new THREE.ShaderMaterial({
   vertexShader:TERRAIN_VS.replace("attribute float aTop;","attribute float aFlow,aDist; varying float vFlow; varying float vDist;").replace("aTop>0.5","true").replace("vS=aTop;","vS=1.0; vFlow=aFlow; vDist=aDist;"),
   fragmentShader:GLSL_NOISE+FAULT_GLSL+`
   uniform vec3 uSun,uSunCol,uFog,uWb; uniform float uVE,uVolc,uLava,uAsh,uVines,uGold,uTime,uErode,uTopo;
-  uniform sampler2D uDem,uAva,uGeo,uSat,uRiv,uWx; uniform float uDemOn,uAvaOn,uGeoOn,uSatOn,uRivOn,uWxOn; uniform vec4 uGeoExt,uSatExt,uWxExt; uniform vec2 uDemTexel,uDemCell; uniform vec4 uExt,uDemExt,uHole;
+  uniform sampler2D uDem,uAva,uGeo,uSat,uRiv,uWx,uSoils; uniform float uDemOn,uAvaOn,uGeoOn,uSatOn,uRivOn,uWxOn,uSoilsOn; uniform vec4 uGeoExt,uSatExt,uWxExt,uSoilsExt; uniform vec2 uDemTexel,uDemCell; uniform vec4 uExt,uDemExt,uHole;
   uniform float uSiteOn,uSiteHere,uSiteT,uSiteFront; uniform vec2 uSiteP; uniform vec4 uSiteExt; uniform sampler2D uSiteA; uniform vec3 uSoilC;
   varying vec3 vW; varying float vH; varying float vS; varying float vR; varying float vFlow; varying float vDist;
   float h21(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
@@ -1207,6 +1213,8 @@ const terrainMat = new THREE.ShaderMaterial({
       if(su.x>0.0&&su.x<1.0&&su.y>0.0&&su.y<1.0){ vec3 sc=texture2D(uSat,su).rgb; col=mix(col,min(sc*1.2,vec3(1.0)),uSatOn); } }
     if(uGeoOn>0.0){ vec2 gu=(vW.xz-uGeoExt.xy)/uGeoExt.zw;       // mapped geologic units (SIM 2956), shaded like the ground
       if(gu.x>0.0&&gu.x<1.0&&gu.y>0.0&&gu.y<1.0){ vec4 gc=texture2D(uGeo,gu); col=mix(col,gc.rgb*0.92,gc.a*uGeoOn*0.9); } }
+    if(uSoilsOn>0.0){ vec2 ou=(vW.xz-uSoilsExt.xy)/uSoilsExt.zw;  // soil series (USDA SSURGO map units, 30 m)
+      if(ou.x>0.0&&ou.x<1.0&&ou.y>0.0&&ou.y<1.0){ vec4 oc=texture2D(uSoils,ou); col=mix(col,oc.rgb*0.92,oc.a*uSoilsOn*0.88); } }
     if(uWxOn>0.0){ vec2 wu=(vW.xz-uWxExt.xy)/uWxExt.zw;           // daily weather (PRISM 4 km), one colour per cell
       if(wu.x>0.0&&wu.x<1.0&&wu.y>0.0&&wu.y<1.0){ vec4 wc=texture2D(uWx,wu); col=mix(col,wc.rgb*0.9,wc.a*uWxOn*0.8); } }
     float sWet=0.0, sOn=uSiteOn*uSiteHere;
@@ -1412,7 +1420,7 @@ const OWN_LAYERS = OWN ? fetch("assets/regions/index.json").then(r=>r.ok?r.json(
     const lg=await fetch(base+"geology_legend.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
     const t=await new Promise((ok,no)=>new THREE.TextureLoader().load(base+"geology.png",ok,undefined,no));
     t.flipY=false; t.magFilter=THREE.NearestFilter; t.minFilter=THREE.NearestFilter; t.generateMipmaps=false; t.needsUpdate=true;
-    lUni.uGeo.value=t; GEO.ok=true; GEO.legend=lg; $("geoBtn").hidden=false;
+    lUni.uGeo.value=t; GEO.ok=true; GEO.legend=lg; GEO.img=t.image; $("geoBtn").hidden=false;
     geoLegend(null);
     // finer copies on each close-up's own grid (make_geology_texture.py --closeups), young deposits from the
     // USGS 1:24,000 map where it reaches (make_quaternary_texture.py)
@@ -1439,6 +1447,50 @@ function loadPatchGeology(q){
     u.uGeo={value:t}; u.uGeoExt={value:new THREE.Vector4(b.x0-cx/2, b.z0-cz/2, b.x1-b.x0+cx, b.z1-b.z0+cz)};
     mesh.material.uniformsNeedUpdate=true; GEO.patch=d;
   });
+}
+// SIM 2956 unit code at a scene point, read from the frame's geology.png ("" outside the map)
+function geoAt(x,z){
+  if(!GEO.ok||!GEO.img||!GEO.legend.grid) return "";
+  const gd=GEO.legend.grid, b=gd.bbox_utm;
+  if(!GEO.px){ const c=document.createElement("canvas"); c.width=gd.cols; c.height=gd.rows; const g=c.getContext("2d"); g.drawImage(GEO.img,0,0); GEO.px=g.getImageData(0,0,gd.cols,gd.rows).data; }
+  const E=GNIS_UTM[0]+x*1000, N=GNIS_UTM[1]-z*1000, col=Math.floor((E-b[0])/(b[2]-b[0])*gd.cols), row=Math.floor((b[3]-N)/(b[3]-b[1])*gd.rows);
+  if(col<0||row<0||col>=gd.cols||row>=gd.rows) return "";
+  const i=(row*gd.cols+col)*4, px=GEO.px; if(px[i+3]<128) return "";
+  const u=GEO.legend.units.find(u=>Math.abs(parseInt(u.color.slice(1,3),16)-px[i])+Math.abs(parseInt(u.color.slice(3,5),16)-px[i+1])+Math.abs(parseInt(u.color.slice(5,7),16)-px[i+2])<6);
+  return u?u.ptype:"";
+}
+// Soils: scripts/ssurgo_layers.py --frame puts the USDA soil survey's map units (Napa CA055, Sonoma CA097) on the
+// frame's 30 m grid. soils.png holds 1 + the unit's index in soils.json (red*256+green); this colours it by soil series
+// for the drape and keeps the indices for the section column.
+const SOIL={on:false, ok:false, meta:null, idx:null, W:0, H:0};
+(async function loadSoils(){
+  const base="assets/regions/"+REG.id+"/";
+  if(!realDEM||REG.id==="mt_st_helena") return;
+  if(OWN&&!(await OWN_LAYERS).includes("soils")) return;
+  try{
+    const m=await fetch(base+"soils.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
+    const blob=await fetch(base+m.grid.file).then(r=>{ if(!r.ok) throw 0; return r.blob(); });
+    const im=self.createImageBitmap ? await createImageBitmap(blob,{premultiplyAlpha:"none",colorSpaceConversion:"none"}) : await loadImg(URL.createObjectURL(blob));
+    const W=im.width, Hh=im.height, c=document.createElement("canvas"); c.width=W; c.height=Hh;
+    const g=c.getContext("2d"); g.drawImage(im,0,0); const px=g.getImageData(0,0,W,Hh).data;
+    const pal=m.series.map(s=>[1,3,5].map(k=>parseInt(s.color.slice(k,k+2),16))), ser=m.units.map(u=>pal[u.series]);
+    const idx=new Uint16Array(W*Hh), rgba=new Uint8Array(W*Hh*4);
+    for(let i=0;i<W*Hh;i++){ if(px[i*4+3]<128) continue; const v=px[i*4]*256+px[i*4+1], q=ser[v-1]; if(!q) continue;
+      idx[i]=v; rgba[i*4]=q[0]; rgba[i*4+1]=q[1]; rgba[i*4+2]=q[2]; rgba[i*4+3]=255; }
+    const t=new THREE.DataTexture(rgba,W,Hh,THREE.RGBAFormat); t.magFilter=t.minFilter=THREE.NearestFilter; t.generateMipmaps=false; t.needsUpdate=true;
+    const b=m.grid.bbox_utm;                                     // row 0 north, like the other drapes
+    lUni.uSoilsExt.value.set((b[0]-GNIS_UTM[0])/1000, -(b[3]-GNIS_UTM[1])/1000, (b[2]-b[0])/1000, (b[3]-b[1])/1000); lUni.uSoils.value=t;
+    Object.assign(SOIL,{ok:true, meta:m, idx, W, H:Hh}); $("soilBtn").hidden=false;
+    const at=t=>String(t||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    $("soilSw").innerHTML=m.series.slice(0,12).map(s=>`<em style="--c:${s.color}" title="${at(s.name)}: ${s.area_pct} % of the surveyed frame">${at(s.name)}</em>`).join("")
+      +(m.series.length>12?`<em style="--c:transparent">+${m.series.length-12} more</em>`:"");
+  }catch(e){ /* no soil survey for this region */ }
+})();
+// the map unit under a scene point (km east, km south of the summit), or null outside the surveys
+function soilAt(x,z){
+  if(!SOIL.ok) return null; const gd=SOIL.meta.grid, b=gd.bbox_utm, E=GNIS_UTM[0]+x*1000, N=GNIS_UTM[1]-z*1000;
+  const c=Math.floor((E-b[0])/gd.cell_m), r=Math.floor((b[3]-N)/gd.cell_m);
+  if(c<0||r<0||c>=SOIL.W||r>=SOIL.H) return null; const v=SOIL.idx[r*SOIL.W+c]; return v?SOIL.meta.units[v-1]:null;
 }
 // Satellite drape: scripts/make_imagery_texture.py crops a Sentinel-2 true-colour scene to this region's frame.
 const SAT={on:true, ok:false, detail:null};   // on by default: fades in by itself as the timeline reaches today
@@ -1596,7 +1648,9 @@ function rivTexture(x0,z0,sx,sz,CW){
   const t=new THREE.CanvasTexture(cv); t.flipY=false; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); return t;
 }
 $("rivBtn").onclick=()=>{ RIV.on=!RIV.on; $("rivBtn").setAttribute("aria-pressed",RIV.on); if(RIV.on&&ageOf(p)>0.06) goTo(CH.length-1); };
-$("geoBtn").onclick=()=>{ GEO.on=!GEO.on; $("geoBtn").setAttribute("aria-pressed",GEO.on); if(GEO.on&&ageOf(p)>0.06) goTo(CH.length-1); };
+$("geoBtn").onclick=()=>{ GEO.on=!GEO.on; $("geoBtn").setAttribute("aria-pressed",GEO.on); if(GEO.on&&SOIL.on){ SOIL.on=false; $("soilBtn").setAttribute("aria-pressed",false); } if(GEO.on&&ageOf(p)>0.06) goTo(CH.length-1); };
+// Soils and Geology are two maps of the same ground: one at a time
+$("soilBtn").onclick=()=>{ SOIL.on=!SOIL.on; $("soilBtn").setAttribute("aria-pressed",SOIL.on); if(SOIL.on&&GEO.on){ GEO.on=false; $("geoBtn").setAttribute("aria-pressed",false); } if(SOIL.on&&ageOf(p)>0.06) goTo(CH.length-1); };
 (async function loadAVA(){
   try{
     const d=await fetch(OWN?"assets/regions/"+REG.id+"/ava.json":"assets/ava.json").then(r=>{ if(!r.ok) throw 0; return r.json(); });
@@ -1881,8 +1935,9 @@ function apply(a,p){
   ash.material.uniforms.uE.value = Math.max(dome*0.3, big);
   ash.material.uniforms.uSurge.value = big; SHK.big = big;
   lUni.uAsh.value = a<2.86 ? sm(2.2,2.86,a) : big*0.6;
-  lUni.uVines.value = sm(0.00017,0.00004,a)*((GEO.on&&GEO.ok)||(SAT.on&&SAT.ok)?0.25:1);   // vineyards spread from the mid-1800s (dimmed under the geology map)
+  lUni.uVines.value = sm(0.00017,0.00004,a)*((GEO.on&&GEO.ok)||(SOIL.on&&SOIL.ok)||(SAT.on&&SAT.ok)?0.25:1);   // vineyards spread from the mid-1800s (dimmed under the geology map)
   lUni.uGeoOn.value = GEO.on&&GEO.ok ? sm(0.06,0.0005,a) : 0;
+  lUni.uSoilsOn.value = SOIL.on&&SOIL.ok ? sm(0.06,0.0005,a) : 0;
   lUni.uSatOn.value = SAT.on&&SAT.ok ? sm(0.06,0.0005,a) : 0;
   lUni.uRivOn.value = RIV.on&&RIV.ok ? sm(0.06,0.0005,a) : 0;     // today's channels, like the satellite image     // the satellite image shows today's ground only: it fades in over the last few thousand years of the slider
   lUni.uThr.value = sm(175,150,a)*lerp(0.35,1,sm(6,10,a)); lUni.uThrAct.value = sm(7,10,a); lUni.uThrOff.value = 0.12*sm(170,40,a);
@@ -2158,7 +2213,9 @@ const xsLine=(function(){ const g=new THREE.BufferGeometry(), idx=[]; g.setAttri
 const XC={water:"rgba(38,96,128,.75)", fran:"#66705f", franL:"rgba(30,34,28,.35)", chert:"rgba(150,70,55,.55)", lava:"#4b4452", tuff:"#b89678", allu:"#c7ab72", soil:"#4a3322", fa:"#ff5a3c", fi:"#8a3a2c", ink:"#ece6d9", mut:"#a39d91"};
 function drawSection(a,w){
   const g=xs.ctx, W=xs.w, Hh=xs.h; if(!W) return;
-  const colW=Math.max(96,Math.round(W*0.3)), SW=W-colW-8, top=2.6, bot=-3.2;
+  const su=a<0.05 ? soilAt(XS_X,XS_Z) : null;          // the surveyed map unit at the point, today only
+  if(xs.el.classList.contains("soil")!==!!su){ xs.el.classList.toggle("soil",!!su); xsSize(); return drawSection(a,w); }
+  const colW=su ? Math.max(150,Math.round(W*0.44)) : Math.max(96,Math.round(W*0.3)), SW=W-colW-8, top=2.6, bot=-3.2;
   const X=c=>6+(c-XS_C0)/XS_SPAN*(SW-6), Y=y=>6+(top-y)/(top-bot)*(Hh-22);
   g.clearRect(0,0,W,Hh);
   const ve=((Hh-22)/(top-bot))/((SW-6)/XS_SPAN), veTxt="Vertical scale exaggerated "+ve.toFixed(0)+"×.";
@@ -2208,6 +2265,8 @@ function drawSection(a,w){
   if(ss>0.3){ g.fillStyle=XC.fa; g.textAlign="center"; XS_SS.forEach(t=>g.fillText(t.n,X(t.c),Y(bot)-4)); g.textAlign="left"; }
   // column under the point
   const cx=SW+14, cw=colW-14, ct=6, ch=Hh-22;
+  if(su){ const geo=geoAt(XS_X,XS_Z); drawSoilColumn(g,su,geo,cx,ct,cw,Hh-ct-4);
+    $("xsNote").textContent=soilNote(su,geo)+" Fault crossings are from mapped traces (USGS UCERF3). "+veTxt; return; }
   g.fillStyle=XC.ink; g.font="600 10.5px "+getComputedStyle(document.body).fontFamily; const summit=xsR[XS_I0]<1.2; g.fillText(summit?"Under the summit":"Under the point",cx,ct+8);
   const rows=[], r0=xsR[XS_I0];
   if(a<0.05&&summit){ rows.push(["O","leaf litter, duff","#2d2419",0.5],["A","dark gravelly loam","#4a3322",1],["B","reddish clay-rich subsoil","#7a4a30",1.2],["C","weathered tuff","#a58a6e",1],["R","welded tuff, Tswt","#b89678",1.6]); }
@@ -2224,10 +2283,67 @@ function drawSection(a,w){
   rows.forEach(r=>{ const hh=r[3]/tot*avail; g.fillStyle=r[2]; g.fillRect(cx,yy,18,hh-1.5);
     g.fillStyle=XC.ink; const tx=r[0]?r[0]+"  "+r[1]:r[1]; wrapText(g,tx,cx+24,yy+10,cw-26,11); yy+=hh; });
   $("xsNote").textContent = a<0.05&&!summit
-    ? "Schematic column, not a soil survey or a geologic map of this spot (USDA SSURGO soils are planned). Fault crossings are from mapped traces (USGS UCERF3). "+veTxt
+    ? "Schematic column, not a soil survey or a geologic map of this spot: the USDA soil survey used here (Napa and Sonoma counties) does not reach this point. Fault crossings are from mapped traces (USGS UCERF3). "+veTxt
     : a<0.05
-    ? "Soil horizons are schematic, typical of thin volcanic mountain soils, not a soil survey. Summit rock Tswt is mapped (USGS SIM 2956). "+veTxt
+    ? "Soil horizons are schematic, typical of thin volcanic mountain soils, not a soil survey (the USDA survey used here does not reach the summit). Summit rock Tswt is mapped (USGS SIM 2956). "+veTxt
     : "Illustration: layer shapes and the old thrusts are schematic. Fault crossings are from mapped traces (USGS UCERF3). "+veTxt;
+}
+/* The surveyed soil column: the map unit's main soil (its largest component with layers), each layer at its true
+   depth (cm, its own scale, not the section's km), then the SIM 2956 unit below. These are the survey's typical
+   values for that soil wherever the map unit is drawn, not a pit dug at this spot. */
+function texColor(h){
+  const t=h.texture||"", base=/bedrock|weathered|unweathered|cemented/.test(t)?[138,127,116]
+    : /muck|peat|mucky/.test(t)?[47,36,24] : /clay/.test(t)&&!/loam/.test(t)?[139,78,52] : /clay loam/.test(t)?[147,96,61]
+    : /sand/.test(t)&&!/loam/.test(t)?[205,178,126] : /sandy/.test(t)?[180,141,92] : /silt/.test(t)?[154,122,86] : [122,90,60];
+  const dk=1-Math.min(Math.max(h.om_pct||0,0),4)/4*0.45;      // organic matter darkens a layer
+  return `rgb(${base.map(v=>Math.round(v*dk)).join(",")})`;
+}
+function fitText(g,t,mw){ if(g.measureText(t).width<=mw) return t; while(t.length>1&&g.measureText(t+"…").width>mw) t=t.slice(0,-1); return t+"…"; }
+function soilMain(su){ const cs=su.components.filter(c=>c.horizons.length); return cs.find(c=>c.major)||cs[0]||null; }
+const GEO_AGE=[[/^QT/,"Pliocene to Pleistocene deposits"],[/^Q/,"young (Quaternary) deposits"],[/^T/,"Tertiary rock"],[/^KJ/,"Jurassic to Cretaceous rock"],
+  [/^K/,"Cretaceous rock"],[/^J/,"Jurassic rock"],[/^sp$/,"serpentinite"],[/^water$/,"open water"]];
+function geoGloss(code){ const m=GEO_AGE.find(([re])=>re.test(code)); return m?m[1]:"rock unit"; }
+function drawSoilColumn(g,su,geo,cx,ct,cw,ch){
+  const font=getComputedStyle(document.body).fontFamily, comp=soilMain(su);
+  g.textBaseline="alphabetic"; g.fillStyle=XC.ink; g.font="600 10.5px "+font;
+  let y=wrapText(g,su.name,cx,ct+8,cw-2,12)+12;
+  g.font="10px "+font; g.fillStyle=XC.mut;
+  const sub=comp ? `${comp.name} ${Math.round(comp.pct)} % of the unit${comp.drainage?" · "+comp.drainage.toLowerCase():""}` : "no soil layers in the survey";
+  y=wrapText(g,sub,cx,y,cw-2,11)+6;
+  const yBot=ct+ch-12, hz=comp?comp.horizons:[], last=hz.length?hz[hz.length-1].bottom_cm:0, rd=comp&&comp.restriction?comp.restriction.depth_cm:null;
+  const D=Math.max(50,Math.ceil(Math.max(last,rd||0,hz.length?100:0)/50)*50), soilH=hz.length?(yBot-y)*0.8:0, Yd=d=>y+d/D*soilH, bx=cx+16, bw=16;
+  // depth ticks
+  g.font="9px "+font; g.fillStyle=XC.mut; g.textAlign="right";
+  if(hz.length) for(let d=0;d<=D;d+=D>200?100:50){ g.fillText(String(d),bx-3,Yd(d)+3); g.fillRect(bx-2,Yd(d),2,1); }
+  g.textAlign="left";
+  hz.forEach(h=>{ const y0=Yd(h.top_cm), y1=Yd(h.bottom_cm), hh=y1-y0; g.fillStyle=texColor(h); g.fillRect(bx,y0,bw,Math.max(1,hh-1));
+    const gr=h.gravel_pct||0; if(gr>0){ g.fillStyle="rgba(230,220,200,.75)"; const n=Math.round(gr/100*hh*bw/6);
+      for(let k=0;k<n;k++){ const fx=((k*0.618034)%1), fy=((k*0.754877+0.3)%1); g.fillRect(bx+1+fx*(bw-3),y0+1+fy*Math.max(1,hh-3),1.6,1.6); } }
+    if(hh<9) return;
+    const tw=cw-bw-22; g.fillStyle=XC.ink; g.font="10px "+font;
+    g.fillText(fitText(g,`${h.top_cm}–${h.bottom_cm} cm ${h.texture||""}`,tw),bx+bw+5,y0+9);
+    if(hh>=20){ const bits=[h.clay_pct!=null?`clay ${Math.round(h.clay_pct)} %`:"", gr?`gravel ${gr} %`:"", h.pH!=null?`pH ${h.pH}`:"", h.om_pct!=null&&h.om_pct>=1?`OM ${h.om_pct} %`:""].filter(Boolean).join(" · ");
+      g.fillStyle=XC.mut; g.font="9px "+font; g.fillText(fitText(g,bits,tw),bx+bw+5,y0+19); } });
+  if(rd!=null&&rd<=D){ g.setLineDash([3,2]); g.strokeStyle=XC.ink; g.lineWidth=1; g.beginPath(); g.moveTo(bx-2,Yd(rd)); g.lineTo(bx+bw+4,Yd(rd)); g.stroke(); g.setLineDash([]); }
+  // the mapped rock unit below the soil (SIM 2956, 1:100,000)
+  const r0=hz.length?Yd(last)+2:y, gu=geo&&GEO.legend.units.find(u=>u.ptype===geo);
+  g.fillStyle=gu?gu.color:XC.fran; g.fillRect(bx,r0,bw,Math.max(6,yBot-r0));
+  g.fillStyle="rgba(0,0,0,.25)"; for(let k=r0+3;k<yBot;k+=5) g.fillRect(bx,k,bw,1);
+  g.fillStyle=XC.ink; g.font="10px "+font;
+  wrapText(g, geo ? `Below: ${geo}, ${geoGloss(geo)} (USGS SIM 2956)` : "Below: rock not mapped here", bx+bw+5, Math.min(yBot-2,r0+10), cw-bw-22, 11);
+  g.fillStyle=XC.mut; g.font="italic 9px "+font; g.fillText("SSURGO map-unit average, not a pit",cx,ct+ch);
+}
+function soilNote(su,geo){
+  const comp=soilMain(su), others=su.components.filter(c=>c!==comp&&c.pct).map(c=>`${c.name} ${Math.round(c.pct)} %`);
+  const sv=(SOIL.meta.surveys.find(s=>s.areasymbol===su.survey)||{}), rd=comp&&comp.restriction;
+  const awc=comp?comp.horizons.reduce((s,h)=>s+(h.awc||0)*Math.max(0,Math.min(h.bottom_cm,150)-h.top_cm),0):0;
+  return "USDA SSURGO 1:24,000, map unit average, not a pit at this spot. "
+    +`Map unit ${su.musym}, ${su.name} (${sv.name||su.survey}, survey of ${sv.version||"?"})`
+    +(comp?`: ${comp.name} ${Math.round(comp.pct)} %${others.length?", with "+others.slice(0,4).join(", ")+(others.length>4?" and others":""):""}. `
+          +`${comp.drainage?comp.drainage+"; ":""}${rd?`${rd.kind.toLowerCase()} at ${rd.depth_cm} cm`:"no restrictive layer within the described depth"}; `
+          +(awc>=1?`about ${Math.round(awc)} cm of plant-available water in the top 150 cm`:"no plant-available water recorded")+". Layers drawn at true depth, with the survey's typical values."
+         :": no soil layers in the survey.")
+    +(geo?` Below the soil: SIM 2956 unit ${geo} (1:100,000; drawn under the deepest layer, not at a measured depth).`:"");
 }
 // click (not drag) on the map: move the section to that point and open the panel
 function groundHit(nx,ny){
@@ -2256,7 +2372,7 @@ let xsBottom=0;
 function xsPlace(){ const b=Math.round((xs.open?xs.el:sd.el).getBoundingClientRect().bottom); if(b!==xsBottom){ xsBottom=b; document.body.style.setProperty("--xsb",b+"px"); } }
 function wrapText(g,t,x,y,mw,lh){ const ws=t.split(" "); let line="";
   for(const wd of ws){ const tl=line?line+" "+wd:wd; if(g.measureText(tl).width>mw&&line){ g.fillText(line,x,y); line=wd; y+=lh; } else line=tl; }
-  if(line) g.fillText(line,x,y); }
+  if(line) g.fillText(line,x,y); return y; }   // the last line's baseline
 
 /* =================================================================== VINEYARD SITES
    One vineyard in detail (scripts/make_site.py, data/sites/<id>.json): the soil series' layers from the USDA
@@ -2770,7 +2886,7 @@ const PLAB=[{x:X0+Math.min(3,SX*0.06), z:Z1-Math.min(3,SZ*0.06), t:a=>a>8?"Faral
 function placeLab(q,show,op){ let hh=0; for(let k=0;k<6;k++) hh+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][q.i];
   pl3.set(q.x,Math.max(hh,0)*VE+0.25,q.z).project(lCam); const vis=show&&pl3.z<1; q.el.hidden=!vis;
   if(vis){ q.el.style.opacity=op.toFixed(2); q.el.style.left=((pl3.x+1)/2*innerWidth)+"px"; q.el.style.top=((1-pl3.y)/2*innerHeight)+"px"; } }
-if((new URLSearchParams(location.search)).has("debug")) window.TTM={lCam,lCtl,gCam,gUni,lUni,DATA,CH,PLATES,SITE,RIV,GEO,LOC,PM,MV,WX,markerDir,get st(){ return {p,autoCam}; }};
+if((new URLSearchParams(location.search)).has("debug")) window.TTM={lCam,lCtl,gCam,gUni,lUni,DATA,CH,PLATES,SITE,RIV,GEO,SOIL,soilAt,geoAt,xsSet,LOC,PM,MV,WX,markerDir,get st(){ return {p,autoCam}; }};
 /* The compass, legend and Places panel sit just under the chip rows, however many rows the chips wrap to. */
 function placeHud(){ const b=document.querySelector(".top .chips").getBoundingClientRect().bottom, cs=$("compass").offsetHeight||64, st=document.body.style;
   st.setProperty("--cmp",Math.round(b+8)+"px"); st.setProperty("--lgd",Math.round(b+16+cs)+"px"); }
@@ -2902,8 +3018,8 @@ function frame(now){
     $("lgEdge").hidden=true; $("lgSut").hidden=true; $("lgMove").hidden=true; $("lgThr").hidden=!lh;
     const lg=lUni.uGeoOn.value>0.05; $("lgGeo").hidden=!lg; const lsat=lUni.uSatOn.value>0.05; $("lgSat").hidden=!lsat; if(lsat&&SAT.label){ const t=SAT.patchLabel||SAT.label; if($("satLb").textContent!==t) $("satLb").textContent=t; }
     if(lg) geoLegend(LOC.mesh&&GEO.patch?GEO.patch:null);
-    const lr=lUni.uRivOn.value>0.05; $("lgRiv").hidden=!lr;
-    $("lgFault").hidden=!lf; $("lgStream").hidden=!ls; $("lgTopo").hidden=!lt; legend.style.opacity=(lf||lh||ls||lt||lg||lsat||lr)?1:0;
+    const lr=lUni.uRivOn.value>0.05; $("lgRiv").hidden=!lr; const lso=lUni.uSoilsOn.value>0.05; $("lgSoil").hidden=!lso;
+    $("lgFault").hidden=!lf; $("lgStream").hidden=!ls; $("lgTopo").hidden=!lt; legend.style.opacity=(lf||lh||ls||lt||lg||lsat||lr||lso)?1:0;
     // 5 km scale bar measured at the summit, across the screen
     camR.setFromMatrixColumn(lCam.matrixWorld,0); camR.y=0; camR.normalize();
     cv0.copy(lCtl.target).project(lCam); cv1.copy(lCtl.target).addScaledVector(camR,1).project(lCam);

@@ -154,3 +154,26 @@ test("chapter ticks are labelled buttons and the age readout is live", async () 
   assert.ok(chapters, "SCENES.json parses");
   assert.deepEqual(problems(log), []);
 });
+
+test("Soils chip drapes the soil survey, and the section column shows the surveyed map unit with a fallback outside it", { timeout: 300000 }, async () => {
+  const { page, context, log } = await open(browser, srv.base + `${TM}?t=0&debug`, { settle: 6000 });
+  await page.waitForFunction(() => window.TTM && TTM.SOIL.ok, null, { timeout: 120000 });
+  assert.equal(await page.isVisible("#soilBtn"), true);
+  await page.click("#geoBtn"); await page.click("#soilBtn");          // one map at a time
+  assert.equal(await page.getAttribute("#soilBtn", "aria-pressed"), "true");
+  assert.equal(await page.getAttribute("#geoBtn", "aria-pressed"), "false");
+  await page.waitForFunction(() => !document.getElementById("lgSoil").hidden, null, { timeout: 60000 });
+  assert.match(await page.textContent("#soilSw"), /Bressa/);
+  // Corison winery (38.484983, -122.44736): SSURGO map unit 170, Pleasanton loam
+  await page.evaluate(() => TTM.xsSet(16.307, 20.358));
+  await page.click("#xsBtn");
+  await page.waitForFunction(() => /Pleasanton loam/.test(document.getElementById("xsNote").textContent), null, { timeout: 60000 });
+  const note = await page.textContent("#xsNote");
+  assert.match(note, /^USDA SSURGO 1:24,000, map unit average, not a pit at this spot\./);
+  assert.match(note, /SIM 2956 unit Qf/);
+  // east of the Napa and Sonoma surveys: the schematic column, saying why
+  await page.evaluate(() => TTM.xsSet(38, -6));
+  await page.waitForFunction(() => /^Schematic column/.test(document.getElementById("xsNote").textContent), null, { timeout: 60000 });
+  await context.close();
+  assert.deepEqual(problems(log), []);
+});
