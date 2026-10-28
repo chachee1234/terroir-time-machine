@@ -15,3 +15,8 @@
 
 ## Next action
 - Read the four browser logs, fix anything they show, then tick G3b1 in AUTOPILOT.md and update this note.
+
+## Update 2026-10-28: browser results so far
+- On the G3b1 code, before the environment reset: functional 25/25 pass, integration 2/2 pass, motion 5/5 pass. Security: 5 of 6 tests had passed on an earlier run; a re-run stopped partway (its log ends at test 5) and was not completed.
+- This container has no three.js r128 copy and no access to npm or cdnjs, so the security suite cannot be re-run here.
+- G3b1 stays unticked until the security suite passes on this code. Next run: re-run security (with a copy of three.js r128 in THREE_DIR), then tick G3b1.
