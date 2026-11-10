@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Hand-off task card (GOVERNANCE.md §2a, Workflow H)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "layer", "status", "task", "inputs", "output", "format"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,80}$"},
+    "layer": {"enum": ["L1", "L2"]},
+    "status": {"enum": ["ready", "drafted", "failed-check", "blocked", "accepted", "rejected", "done"]},
+    "for": {"type": "string"},
+    "task": {"type": "string", "minLength": 20},
+    "inputs": {"type": "array", "items": {"type": "string"}, "maxItems": 20},
+    "output": {"type": "string", "pattern": "^data/drafts/l1/[a-z0-9][a-z0-9_./-]*\\.(md|json)$"},
+    "format": {"enum": ["markdown", "json"]},
+    "output_schema": {"type": "string"},
+    "max_chars": {"type": "integer", "minimum": 50, "maximum": 20000},
+    "attempts": {"type": "integer", "minimum": 0},
+    "created": {"type": "string"},
+    "note": {"type": "string"}
+  }
+}
