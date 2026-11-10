@@ -36,6 +36,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from make_climate import Tiff, frame_window, clip  # noqa: E402
 from fetch_tiles import geographic_from_utm  # noqa: E402
+from net import open_url  # noqa: E402
 
 URL = "https://services.nacse.org/prism/data/get/us/4km/{var}/{day}"
 VARS = ("tmax", "tmin", "ppt")
@@ -55,7 +56,7 @@ def download(var, day, tries=4):
     req = urllib.request.Request(url, headers={"User-Agent": "terroir-time-machine"})
     for k in range(tries):
         try:
-            with urllib.request.urlopen(req, timeout=120) as r:
+            with open_url(req, timeout=120) as r:
                 data = r.read()
             if data.startswith(b"PK"):
                 return data
@@ -184,7 +185,23 @@ def pack(region):
                        "value. PRISM interpolates station readings; recent months are provisional and may be "
                        "revised by PRISM."}
     (out / "index.json").write_text(json.dumps(index, indent=1) + "\n")
+    mark_layer(region["id"])
     return index, out
+
+
+def mark_layer(region_id, layer="daily"):
+    """List `layer` for the region in prototype/assets/regions/index.json. The viewer only asks for the daily
+    files when it is listed, so a site built without them shows no Weather chip and logs no 404."""
+    p = ROOT / "prototype" / "assets" / "regions" / "index.json"
+    if not p.exists():
+        return False
+    idx = json.loads(p.read_text())
+    for r in idx["regions"]:
+        if r["id"] == region_id and layer not in r.setdefault("layers", []):
+            r["layers"].append(layer)
+            p.write_text(json.dumps(idx, indent=1) + "\n")
+            return True
+    return False
 
 
 def main():

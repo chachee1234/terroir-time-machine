@@ -11,6 +11,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_share as bs  # noqa: E402
 
+# Files the viewer fetches only when present: the daily weather may be left out of a copy (it is large), so the
+# viewer asks for it only when the regions index lists the "daily" layer. When committed it is embedded like
+# any other file.
+OPTIONAL_DATA = {"prototype/assets/regions/napa_valley/daily/index.json"}   # PRISM daily weather
+
 
 class ShareBuildTest(unittest.TestCase):
     def test_int16_coding_round_trips(self):
@@ -30,6 +35,11 @@ class ShareBuildTest(unittest.TestCase):
         self.assertTrue(literal)
         for u in literal:
             path = os.path.normpath(os.path.join("prototype", u)).replace(os.sep, "/")
+            if path in OPTIONAL_DATA and not (bs.ROOT / path).exists():
+                # absent from this copy: the viewer must not ask for it (no 404) and must cope if it does
+                self.assertIn('(nv.layers||[]).includes("daily")', page, u)
+                self.assertIn(f'fetch("{u}").then(r=>{{ if(!r.ok) throw 0;', page, u)
+                continue
             self.assertIn(path, embedded, u)
         self.assertFalse([p for p in embedded if p.endswith(".geolibre.json")])
 

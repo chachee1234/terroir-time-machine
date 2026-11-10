@@ -3,28 +3,12 @@
  "source": "prototype/assets/globe/ca_avas.json (UC Davis AVA Project, CC0)",
  "params": {
   "start": "sonoma_valley",
-  "mapped": "napa_valley,sonoma_valley,atlas_peak,bennett_valley,calistoga,chalk_hill,chiles_valley,coombsville,crystal_springs_of_napa_valley,diamond_mountain_district,fountaingrove_district,guenoc_valley,howell_mountain,knights_valley,los_carneros,moon_mountain_district_sonoma_county,mt__veeder,oak_knoll_district_of_napa_valley,oakville,rutherford,solano_county_green_valley,sonoma_mountain,spring_mountain_district,st__helena,stags_leap_district,suisun_valley,wild_horse_valley,yountville,petaluma_gap,northern_sonoma",
+  "mapped": "napa_valley,sonoma_valley,atlas_peak,bennett_valley,calistoga,chalk_hill,chiles_valley,coombsville,crystal_springs_of_napa_valley,diamond_mountain_district,fountaingrove_district,guenoc_valley,howell_mountain,knights_valley,los_carneros,moon_mountain_district_sonoma_county,mt__veeder,oak_knoll_district_of_napa_valley,oakville,rutherford,solano_county_green_valley,sonoma_mountain,spring_mountain_district,st__helena,stags_leap_district,suisun_valley,wild_horse_valley,yountville,petaluma_gap,northern_sonoma,west_sonoma_coast,fort_ross_seaview",
   "max_km": 80.0,
   "touch_km": 1.5,
   "limit": 40
  },
  "order": [
-  {
-   "id": "west_sonoma_coast",
-   "name": "West Sonoma Coast",
-   "rule": "touches a mapped region",
-   "gap_km": 0.0,
-   "size_km": 62.3,
-   "close_ups": []
-  },
-  {
-   "id": "fort_ross_seaview",
-   "name": "Fort Ross-Seaview",
-   "rule": "touches a mapped region",
-   "gap_km": 0.0,
-   "size_km": 17.7,
-   "close_ups": []
-  },
   {
    "id": "mendocino",
    "name": "Mendocino",
@@ -383,6 +367,22 @@
    "rule": "closest (nothing touching)",
    "gap_km": 1.7,
    "size_km": 8.0,
+   "close_ups": []
+  },
+  {
+   "id": "diablo_grande",
+   "name": "Diablo Grande",
+   "rule": "closest (nothing touching)",
+   "gap_km": 14.5,
+   "size_km": 17.2,
+   "close_ups": []
+  },
+  {
+   "id": "salado_creek",
+   "name": "Salado Creek",
+   "rule": "closest (nothing touching)",
+   "gap_km": 6.0,
+   "size_km": 6.9,
    "close_ups": []
   }
  ]

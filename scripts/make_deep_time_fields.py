@@ -20,7 +20,7 @@ from PIL import Image
 
 sys.path.insert(0, os.path.dirname(__file__))
 from make_geology_texture import utm_forward  # noqa: E402
-from make_corison_100ka import box, smooth01  # noqa: E402
+from make_corison_100ka import box  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 P = os.path.join(ROOT, "prototype/assets/")

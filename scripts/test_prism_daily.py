@@ -45,8 +45,12 @@ class Pack(unittest.TestCase):
                               ("ppt", [0.0, 12.3, 0.0, 0.0])):
                 (cache / var).mkdir()
                 (cache / var / f"{day:%Y%m%d}.f32").write_bytes(array("f", vals).tobytes())
+            regions = tmp / "prototype" / "assets" / "regions" / "index.json"
+            regions.parent.mkdir(parents=True)
+            regions.write_text(json.dumps({"regions": [{"id": "test_region", "layers": ["imagery"]}]}))
             with mock.patch.object(fp, "cache_dir", return_value=cache), mock.patch.object(fp, "ROOT", tmp):
                 index, out = fp.pack(dict(region, assets_dir="assets"))
+            self.assertEqual(json.loads(regions.read_text())["regions"][0]["layers"], ["imagery", "daily"])
             self.assertEqual(index["years"], [{"year": 1984, "days": 366, "days_with_data": 1}])
             self.assertEqual(index["last_day"], "1984-03-02")
             a = array("h")
@@ -59,6 +63,12 @@ class Pack(unittest.TestCase):
 
 
 class Committed(unittest.TestCase):
+    def test_daily_layer_listed_only_when_built(self):
+        # the viewer fetches daily/index.json only when "daily" is listed, so the two must agree
+        idx = json.loads((ROOT / "prototype" / "assets" / "regions" / "index.json").read_text())
+        layers = next(r for r in idx["regions"] if r["id"] == REGION["id"]).get("layers", [])
+        self.assertEqual("daily" in layers, (DAILY / "index.json").exists())
+
     def test_files_match_index(self):
         if not (DAILY / "index.json").exists():
             self.skipTest("no daily weather built")
