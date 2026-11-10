@@ -439,6 +439,15 @@ Drape the SIM 2956 geologic units (Tswt and neighbours, from `eswn-geol.e00`) on
 - No code or data changes. `python3 -m unittest discover -s scripts -p 'test_*.py'` → 132 pass, 1 skipped.
 - Next smallest action: owner review and merge.
 
+## 2026-10-05 — Corison story in steps, with a color key (branch corison-phases)
+- Owner asked for a color key, more information, stops at the key phases of soil development, and smoother transitions.
+- prototype/timemachine.html: the site story now runs in six steps (older rock, gravel fan, floods and buried topsoils, soil forms, vineyard, today). Each step eases in and out, then stops; Next / Back and step buttons under the section, Start over in the header. Reduced motion jumps to each step's end. `SITE.tau` still pins the clock for tests.
+- Each step has a title and a paragraph built from the site file: the soil layers that step laid down (depths, texture, gravel, Munsell moist colour), soil-survey sentences (rounded pebbles, native vegetation, drainage), the taxonomic class in plain words, channels today, claims with their source ids, PRISM climate. Each says what is measured and what is illustrated. The soil column outlines the layers of the current step and adds them during that step.
+- Color key: section (hatched rock below, SIM 2956 unit codes split into valley-floor and hill units, soil, water, channel marker) and map (12 surface colours, the ones shown in the current step lit). Unit names are a gap: the SIM 2956 pamphlet host is unreachable from the sandbox.
+- Map timings matched to the step ends (soil 0.76–0.88, vines 0.88–0.955, today 0.96–1; channels stay until the fan step ends); vine blocks fade in instead of popping.
+- Checks: all 19 `scripts/test_*.py` OK; `python3 scripts/validate.py` PASS; headless Chromium (swiftshader, three r128 from a local checkout) screenshots at every step end and mid-step at 1400×900 and phone width. Not tested: real hardware, Safari.
+- Next smallest action: owner review at `?loc=corison`.
+
 ## L1 hand-off queue, Workflow H (branch `freellmapi-handoff`) — 2026-10-01
 - Owner asked how FreeLLMAPI can keep going when Claude reaches its usage limit, and chose the GitHub Actions version. Design: /mnt/project-files/governance/freellmapi-handoff-proposal.md (project files).
 - New `queue/` (README.md, card.schema.json, cards/): task cards marked L1 or L2. New `scripts/l1_runner.py` drafts ready L1 cards through FreeLLMAPI into `data/drafts/l1/` (untrusted, with a `.meta.json`), checks JSON/schema/length, refuses hidden files, `data/raw/`, uploads and paths outside the repo. New `.github/workflows/l1-runner.yml` runs on pushes that touch `queue/cards/` (never the default branch), starts FreeLLMAPI from pinned commit dbf3a84 on 127.0.0.1 with Groq/Cerebras/Mistral keys from Actions secrets, and commits drafts back to the same branch.
