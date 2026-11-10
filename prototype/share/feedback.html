@@ -51,7 +51,7 @@
     const q = new URLSearchParams(location.search);
     return {
       age: txt("age"), era: txt("era"), card: txt("cTitle"), scale: txt("scaleChip"),
-      layers: on.join(", ") || "none", region: q.get("region") || "napa_valley", place: q.get("loc") || "",
+      layers: on.join(", ") || "none", region: (document.querySelector('meta[name="ttm-location"]') || {}).content || q.get("region") || "napa_valley", place: q.get("loc") || "",
       screen: innerWidth + "x" + innerHeight
     };
   }

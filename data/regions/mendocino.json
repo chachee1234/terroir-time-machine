@@ -1,0 +1,37 @@
+{
+  "id": "mendocino",
+  "name": "Mendocino",
+  "description": "Mendocino AVA bounding box (UC Davis AVA Project, CC0) padded by 2 km; ~58 x 63 km. Frame for the viewer, not a geological boundary.",
+  "epsg": 26910,
+  "utm_zone": 10,
+  "bbox_utm": [
+    443100.0,
+    4296800.0,
+    501600.0,
+    4359400.0
+  ],
+  "anchor": {
+    "utm": [
+      472348.0,
+      4328102.5
+    ],
+    "kind": "computed",
+    "note": "centre of the Mendocino AVA bounding box (UC Davis outline); a frame reference, not a named feature"
+  },
+  "cell_m": 30,
+  "browser_cells": 449,
+  "assets_dir": "prototype/assets/regions/mendocino",
+  "boundary": "data/ava/mendocino_avas.geojson",
+  "ava_viewer": "prototype/assets/regions/mendocino/ava.json",
+  "parents": [
+    "mendocino"
+  ],
+  "ava_rule": "the parent AVA, every current AVA nested in it, and every current AVA whose bounding box lies inside the frame",
+  "close_ups": [],
+  "frame_cut_avas": [
+    "mendocino_ridge"
+  ],
+  "frame_note": "Mendocino Ridge (nested; scattered ridge-top parcels) is kept whole but runs about 3.7 km past the west edge and 4.7 km past the south edge, and is cut at the frame edge in the viewer.",
+  "pit_floor_m": -100,
+  "pit_note": "Along the shoreline at the frame's west edge the terrain tiles have narrow pits, down to about -4,800 m, where land and sea data meet. In this frame the tiles put the whole sea at 0 m (no bathymetry), and no land lies below sea level, so tile pixels below -100 m are treated as pits and set to 0 m. The count is recorded in data/manifest.json."
+}

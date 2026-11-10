@@ -1,0 +1,12 @@
+{
+  "id": "gibraltar",
+  "name": "Strait of Gibraltar and the Mediterranean",
+  "description": "First location outside California: the Messinian Salinity Crisis (about 5.97-5.33 Ma) and the Zanclean flood through the Strait of Gibraltar (about 5.33 Ma). Frames are for the viewer, not geological boundaries.",
+  "crs": "EPSG:4326 (grid cells equally spaced in longitude and latitude)",
+  "zoom_note": "Terrain Tiles zoom picked so that tile pixels are finer than the output cells.",
+  "assets_dir": "prototype/assets/locations/gibraltar",
+  "frames": [
+    {"id": "med", "name": "Mediterranean", "bbox_lonlat": [-9.5, 29.8, 36.5, 46.0], "cols": 1200, "zoom": 7},
+    {"id": "strait", "name": "Strait of Gibraltar", "bbox_lonlat": [-6.6, 35.35, -4.4, 36.55], "cols": 720, "zoom": 10}
+  ]
+}

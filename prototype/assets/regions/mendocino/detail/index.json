@@ -1,0 +1,217 @@
+{
+ "region": "mendocino",
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "locations": [
+  {
+   "id": "potter_valley",
+   "name": "Potter Valley",
+   "kind": "ava",
+   "file": "detail/potter_valley",
+   "bbox_utm": [
+    483566.8,
+    4340761.2,
+    501600.0,
+    4358846.6
+   ],
+   "ava_bbox_utm": [
+    486949.8,
+    4342261.2,
+    498269.2,
+    4357346.6
+   ],
+   "cols": 511,
+   "rows": 512,
+   "cell_m": 35.359
+  },
+  {
+   "id": "redwood_valley",
+   "name": "Redwood Valley",
+   "kind": "ava",
+   "file": "detail/redwood_valley",
+   "bbox_utm": [
+    474339.5,
+    4341476.9,
+    491708.1,
+    4358845.5
+   ],
+   "ava_bbox_utm": [
+    477414.2,
+    4342976.9,
+    488633.5,
+    4357345.5
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 33.989
+  },
+  {
+   "id": "eagle_peak_mendocino_county",
+   "name": "Eagle Peak Mendocino County",
+   "kind": "ava",
+   "file": "detail/eagle_peak_mendocino_county",
+   "bbox_utm": [
+    463686.4,
+    4340055.5,
+    481963.0,
+    4358332.2
+   ],
+   "ava_bbox_utm": [
+    466601.9,
+    4341555.5,
+    479047.5,
+    4356832.2
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 35.766
+  },
+  {
+   "id": "comptche",
+   "name": "Comptche",
+   "kind": "ava",
+   "file": "detail/comptche",
+   "bbox_utm": [
+    446385.5,
+    4343577.8,
+    453692.4,
+    4350884.7
+   ],
+   "ava_bbox_utm": [
+    447885.5,
+    4345130.7,
+    452192.4,
+    4349331.8
+   ],
+   "cols": 488,
+   "rows": 488,
+   "cell_m": 15.004
+  },
+  {
+   "id": "anderson_valley",
+   "name": "Anderson Valley",
+   "kind": "ava",
+   "file": "detail/anderson_valley",
+   "bbox_utm": [
+    443608.0,
+    4307554.1,
+    476376.8,
+    4340322.9
+   ],
+   "ava_bbox_utm": [
+    445108.0,
+    4312294.1,
+    474876.8,
+    4335583.0
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 64.127
+  },
+  {
+   "id": "mendocino_ridge",
+   "name": "Mendocino Ridge",
+   "kind": "ava",
+   "file": "detail/mendocino_ridge",
+   "bbox_utm": [
+    443100.0,
+    4296800.0,
+    478399.1,
+    4335746.4
+   ],
+   "ava_bbox_utm": [
+    439384.9,
+    4292068.7,
+    472235.6,
+    4334246.4
+   ],
+   "cols": 464,
+   "rows": 512,
+   "cell_m": 76.24
+  },
+  {
+   "id": "cole_ranch",
+   "name": "Cole Ranch",
+   "kind": "ava",
+   "file": "detail/cole_ranch",
+   "bbox_utm": [
+    477586.6,
+    4320523.8,
+    483586.6,
+    4326523.8
+   ],
+   "ava_bbox_utm": [
+    479668.1,
+    4322975.6,
+    481505.1,
+    4324072.0
+   ],
+   "cols": 401,
+   "rows": 401,
+   "cell_m": 15.0
+  },
+  {
+   "id": "benmore_valley",
+   "name": "Benmore Valley",
+   "kind": "ava",
+   "file": "detail/benmore_valley",
+   "bbox_utm": [
+    494949.2,
+    4314726.6,
+    501321.0,
+    4321098.4
+   ],
+   "ava_bbox_utm": [
+    496449.2,
+    4316404.6,
+    499821.0,
+    4319420.4
+   ],
+   "cols": 426,
+   "rows": 426,
+   "cell_m": 14.992
+  },
+  {
+   "id": "yorkville_highlands",
+   "name": "Yorkville Highlands",
+   "kind": "ava",
+   "file": "detail/yorkville_highlands",
+   "bbox_utm": [
+    469068.0,
+    4296800.0,
+    496098.9,
+    4319837.3
+   ],
+   "ava_bbox_utm": [
+    470568.0,
+    4298845.1,
+    494598.9,
+    4313798.7
+   ],
+   "cols": 512,
+   "rows": 437,
+   "cell_m": 52.898
+  },
+  {
+   "id": "mcdowell_valley",
+   "name": "McDowell Valley",
+   "kind": "ava",
+   "file": "detail/mcdowell_valley",
+   "bbox_utm": [
+    492251.0,
+    4309303.5,
+    500303.3,
+    4317355.8
+   ],
+   "ava_bbox_utm": [
+    494376.5,
+    4310803.5,
+    498177.8,
+    4315855.8
+   ],
+   "cols": 512,
+   "rows": 512,
+   "cell_m": 15.758
+  }
+ ]
+}

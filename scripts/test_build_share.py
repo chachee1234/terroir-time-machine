@@ -11,6 +11,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_share as bs  # noqa: E402
 
+# Files the viewer fetches only when present: the daily weather may be left out of a copy (it is large), so the
+# viewer asks for it only when the regions index lists the "daily" layer. When committed it is embedded like
+# any other file.
+OPTIONAL_DATA = {"prototype/assets/regions/napa_valley/daily/index.json"}   # PRISM daily weather
+
 
 class ShareBuildTest(unittest.TestCase):
     def test_int16_coding_round_trips(self):
@@ -30,6 +35,11 @@ class ShareBuildTest(unittest.TestCase):
         self.assertTrue(literal)
         for u in literal:
             path = os.path.normpath(os.path.join("prototype", u)).replace(os.sep, "/")
+            if path in OPTIONAL_DATA and not (bs.ROOT / path).exists():
+                # absent from this copy: the viewer must not ask for it (no 404) and must cope if it does
+                self.assertIn('(nv.layers||[]).includes("daily")', page, u)
+                self.assertIn(f'fetch("{u}").then(r=>{{ if(!r.ok) throw 0;', page, u)
+                continue
             self.assertIn(path, embedded, u)
         self.assertFalse([p for p in embedded if p.endswith(".geolibre.json")])
 
@@ -55,6 +65,23 @@ class ShareBuildTest(unittest.TestCase):
         self.assertIn('id="fbBtn"', html)
         self.assertIn("built 2026-01-01", html)
         self.assertNotIn("__COMMIT__", html)
+        self.assertIn("(review copy)</title>", html)
+
+    def test_location_pages_get_their_own_file(self):
+        napa = {p.relative_to(bs.ROOT).as_posix() for p in bs.collect()}
+        self.assertFalse([p for p in napa if p.startswith("prototype/assets/locations/")])
+        gib = {p.relative_to(bs.ROOT).as_posix() for p in bs.collect(page="gibraltar")}
+        self.assertIn("prototype/assets/locations/gibraltar/terrain.json", gib)
+        self.assertTrue(all(p.startswith("prototype/assets/locations/gibraltar/") for p in gib))
+        with tempfile.TemporaryDirectory() as d:
+            out, listing, _ = bs.build(out=Path(d) / "g.html", built="2026-01-01", page="gibraltar")
+            html = out.read_text(encoding="utf-8")
+            napa_out, _, _ = bs.build(out=Path(d) / "n.html", built="2026-01-01")
+            napa_html = napa_out.read_text(encoding="utf-8")
+        self.assertEqual(len(listing), len(gib))
+        self.assertIn('https://ttm.local/prototype/gibraltar.html', html)
+        self.assertIn('href="terroir-time-machine.html"', html)          # the Napa link points at the other review copy
+        self.assertIn('href="terroir-time-machine-gibraltar.html"', napa_html)
         self.assertIn("(review copy)</title>", html)
 
 

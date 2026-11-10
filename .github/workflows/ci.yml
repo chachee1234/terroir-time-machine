@@ -1,0 +1,79 @@
+name: CI gates
+
+# Every pull request and every push to main must pass all four gates: unit, lint, security,
+# browser (functional + integration + browser security). Free GitHub-hosted runners only, no
+# secrets, read-only token. See tests/README.md for running the same checks locally.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit:
+    name: Unit tests and content validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - run: python3 -m pip install --disable-pip-version-check -r requirements.txt -r requirements-dev.txt
+      - run: python3 scripts/validate.py
+      - run: python3 -m unittest discover -s scripts -p 'test_*.py'
+
+  lint:
+    name: Lint (Python and inline JavaScript)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - run: python3 -m compileall -q scripts
+      - run: python3 -m pip install --disable-pip-version-check pyflakes==3.2.0
+      - run: python3 -m pyflakes scripts
+      - run: node tests/lint_js.mjs
+
+  security:
+    name: Security pass
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Secrets, workflows, pages, scripts, CDN integrity hashes
+        run: python3 scripts/security_check.py --online
+      - run: python3 -m pip install --disable-pip-version-check bandit==1.8.6 pip-audit==2.9.0
+      - name: Bandit (Python static analysis, medium severity and up)
+        run: python3 -m bandit -q -r scripts -x 'scripts/test_*.py' --severity-level medium --confidence-level medium
+      - name: Known vulnerabilities in Python dependencies
+        run: python3 -m pip_audit -r requirements.txt -r requirements-dev.txt --progress-spinner off
+
+  browser:
+    name: Browser tests (functional, integration, security)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: three.js r128 (the build the pages load from cdnjs/jsdelivr), served locally to the tests
+        run: |
+          git clone --depth 1 --branch r128 --filter=blob:none --sparse https://github.com/mrdoob/three.js "$RUNNER_TEMP/three-r128"
+          git -C "$RUNNER_TEMP/three-r128" sparse-checkout set --no-cone /build/three.min.js /examples/js/controls/OrbitControls.js
+      - name: Playwright and Chromium
+        run: |
+          npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Run browser tests
+        env:
+          THREE_DIR: ${{ runner.temp }}/three-r128
+        run: node --test --test-reporter=spec 'tests/browser/*.test.mjs'
