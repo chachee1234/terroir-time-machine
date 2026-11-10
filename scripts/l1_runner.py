@@ -21,6 +21,9 @@ import urllib.request
 
 import jsonschema
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from net import open_url  # noqa: E402
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CARDS_DIR = os.path.join("queue", "cards")
 CARD_SCHEMA = os.path.join("queue", "card.schema.json")
@@ -106,7 +109,7 @@ def call_model(base_url, key, messages, timeout=180):
     req = urllib.request.Request(
         base_url.rstrip("/") + "/v1/chat/completions", data=body, method="POST",
         headers={"Content-Type": "application/json", "Authorization": f"Bearer {key}"})
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
+    with open_url(req, timeout=timeout) as resp:
         data = json.load(resp)
     return data["choices"][0]["message"]["content"] or "", data.get("model", "unknown")
 
