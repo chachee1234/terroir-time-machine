@@ -1,0 +1,7 @@
+# 2026-10-08 · quality-gates
+
+- Added four CI gates in `.github/workflows/ci.yml` (free runners, read-only token, no secrets): unit, lint, security, browser. How to run each locally: `tests/README.md`.
+- Reviewed with the Engineering roles from msitarzewski/agency-agents read as review lenses (Frontend Developer, Data Engineer, DevOps Automator, Code Reviewer, Minimal Change Engineer) plus that collection's Test Automation Engineer and AppSec Engineer. No plugin or hooks installed.
+- New tests: browser functional (every page and region loads clean; timeline, play, keyboard, deep links, mobile layout, reduced motion, no-WebGL), integration (share build runs from a bare file), browser security (script injection and junk in every URL parameter), `scripts/security_check.py` with its own unit tests.
+- Fixes found by the tests: main's unit suite was red (viewer asks for the PRISM daily index before its data PR lands; test now requires the viewer to guard it and to embed it once committed); an unknown `?region=` now shows a notice instead of silently showing another frame; CropScape download links are checked before following (urlopen also opens file://); three.js CDN scripts now carry Subresource Integrity hashes, verified against the CDNs in CI.
+- Check: `python3 -m unittest discover -s scripts -p 'test_*.py'` (164 tests), `node --test "tests/browser/*.test.mjs"`, `python3 scripts/security_check.py`, `node tests/lint_js.mjs`.

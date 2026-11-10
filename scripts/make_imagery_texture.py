@@ -35,10 +35,10 @@ import json
 import math
 import re
 import struct
-import sys
 import urllib.request
 import zlib
 from pathlib import Path
+from net import open_url
 
 ROOT = Path(__file__).resolve().parent.parent
 BUCKET = "https://sentinel-cogs.s3.us-west-2.amazonaws.com"
@@ -81,7 +81,7 @@ def http(url, rng=None, timeout=60):
     req = urllib.request.Request(url, headers={"Range": f"bytes={rng[0]}-{rng[1]}"} if rng else {})
     for attempt in range(4):
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as r:
+            with open_url(req, timeout=timeout) as r:
                 return r.read()
         except Exception:
             if attempt == 3:

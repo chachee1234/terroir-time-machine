@@ -23,6 +23,8 @@ grids: cols x rows points from bbox corner to corner, so ~8 to 50 m instead of t
 detail/<id>.geology.png plus detail/geology.json (units per close-up). Colours come from the frame's
 geology_legend.json so a unit keeps its colour when you zoom in; units the frame grid missed get new ones.
 The map is still 1:100,000: finer cells show its contacts more smoothly, not more precisely.
+In the Napa Valley frame, scripts/make_quaternary_texture.py then redraws these with the USGS 1:24,000 young
+deposits on top; run it after --closeups, or the close-ups go back to SIM 2956 alone.
 
 Tier 0, standard library only (GDAL is not installed; no dependency added).
 Usage: make_geology_texture.py data/raw/eswn-geol.e00                          # the 30 km block (?region=mt_st_helena)

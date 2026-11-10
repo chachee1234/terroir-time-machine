@@ -1,0 +1,35 @@
+{
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 13,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "fetched": "2026-10-07",
+ "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+ "encoding": "Int16 little-endian, row 0 = north",
+ "scale": 0.1,
+ "resampling": "bilinear from the tile mosaic at each UTM cell centre",
+ "product": "sub-AVA close-up",
+ "region": "mendocino",
+ "ava_id": "mcdowell_valley",
+ "name": "McDowell Valley",
+ "bbox_utm": [
+  492251.0,
+  4309303.5,
+  500303.3,
+  4317355.8
+ ],
+ "ava_bbox_utm": [
+  494376.5,
+  4310803.5,
+  498177.8,
+  4315855.8
+ ],
+ "cols": 512,
+ "rows": 512,
+ "cell_m": 15.758,
+ "range_m": [
+  136.77,
+  883.65
+ ],
+ "sha256": "9f35323c1b558c5277347fdab51f4e54ee3e7590a21e4bb8614393b27970320e"
+}

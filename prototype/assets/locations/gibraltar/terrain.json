@@ -1,0 +1,52 @@
+{
+ "location": "gibraltar",
+ "name": "Strait of Gibraltar and the Mediterranean",
+ "units": "m",
+ "dtype": "int16le",
+ "row0": "north",
+ "grid": "equal steps in longitude and latitude, cell centres",
+ "source": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "built": "2026-09-29",
+ "frames": [
+  {
+   "id": "med",
+   "name": "Mediterranean",
+   "file": "med.bin",
+   "cols": 1200,
+   "rows": 536,
+   "bbox_lonlat": [
+    -9.5,
+    29.8,
+    36.5,
+    46.0
+   ],
+   "cell_km": 3.367,
+   "zoom": 7,
+   "tiles": 190,
+   "tile_digest": "93c3d0c7de82cb7f9b7b38867c5c516ac5359077c894ed8bb710c8fcd15cbfe7",
+   "min_m": -5230,
+   "max_m": 4056,
+   "sha256": "f5eb3c89bbfbcf3fa85a03471ba22c2d538f2075b04063f16d22fe9df2846342"
+  },
+  {
+   "id": "strait",
+   "name": "Strait of Gibraltar",
+   "file": "strait.bin",
+   "cols": 720,
+   "rows": 485,
+   "bbox_lonlat": [
+    -6.6,
+    35.35,
+    -4.4,
+    36.55
+   ],
+   "cell_km": 0.275,
+   "zoom": 10,
+   "tiles": 63,
+   "tile_digest": "ff4aa357d54fe6d1cd08142b2361da4a6010ef7dffe21747d094e02e147458cc",
+   "min_m": -1501,
+   "max_m": 1905,
+   "sha256": "8c24dba6e0d2f0f2324d34aac893c68123af9438762bceaf8193813a7fc13ea0"
+  }
+ ]
+}

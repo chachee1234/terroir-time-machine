@@ -29,7 +29,7 @@ import math
 import re
 import struct
 import sys
-import urllib.request
+import urllib.parse
 import zlib
 from pathlib import Path
 
@@ -37,6 +37,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_terrain import utm_from_geographic  # noqa: E402
 from fetch_tiles import geographic_from_utm  # noqa: E402
+from net import open_url  # noqa: E402
 
 API = "https://nassgeodata.gmu.edu/axis2/services/CDLService/GetCDLFile?year={year}&bbox={bbox}"
 CACHE = ROOT / "data" / "raw" / "cdl"
@@ -72,6 +73,16 @@ def envelope(region):
     return [math.floor(min(xs)) - 60, math.floor(min(ys)) - 60, math.ceil(max(xs)) + 60, math.ceil(max(ys)) + 60]
 
 
+def cdl_file_url(url):
+    """The download link CropScape returned, only if it points back at CropScape over http(s).
+
+    urlopen also opens file:// and other schemes, so a tampered response must not choose them."""
+    u = urllib.parse.urlsplit(url)
+    if u.scheme not in ("https", "http") or u.hostname != urllib.parse.urlsplit(API).hostname:
+        raise SystemExit(f"CropScape returned an unexpected download link: {url!r}")
+    return url
+
+
 def fetch(region, year, offline=False):
     CACHE.mkdir(parents=True, exist_ok=True)
     path = CACHE / f"cdl_{region['id']}_{year}.tif"
@@ -79,12 +90,13 @@ def fetch(region, year, offline=False):
         if offline:
             raise SystemExit(f"{path} missing and --offline set")
         bbox = ",".join(str(v) for v in envelope(region))
-        with urllib.request.urlopen(API.format(year=year, bbox=bbox), timeout=300) as r:
+        with open_url(API.format(year=year, bbox=bbox), timeout=300) as r:
             m = re.search(rb"<returnURL>([^<]+)</returnURL>", r.read())
         if not m:
             raise SystemExit(f"CropScape gave no file for {year}")
-        print(f"downloading {m.group(1).decode()}", file=sys.stderr)
-        with urllib.request.urlopen(m.group(1).decode(), timeout=600) as r:
+        url = cdl_file_url(m.group(1).decode())
+        print(f"downloading {url}", file=sys.stderr)
+        with open_url(url, timeout=600) as r:
             path.write_bytes(r.read())
     return path
 

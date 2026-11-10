@@ -1,0 +1,35 @@
+{
+ "source": "AWS Open Data Terrain Tiles, Terrarium encoding",
+ "tile_template": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+ "zoom": 13,
+ "rights": "AWS Open Data Terrain Tiles (Mapzen/Tilezen). United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey; global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration. Public domain sources in this area; attribution per https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+ "fetched": "2026-10-07",
+ "horizontal_crs": "EPSG:26910 (NAD83 / UTM zone 10N); tiles are WGS84 Web Mercator, datum shift (~1 m) ignored",
+ "encoding": "Int16 little-endian, row 0 = north",
+ "scale": 0.1,
+ "resampling": "bilinear from the tile mosaic at each UTM cell centre",
+ "product": "sub-AVA close-up",
+ "region": "mendocino",
+ "ava_id": "cole_ranch",
+ "name": "Cole Ranch",
+ "bbox_utm": [
+  477586.6,
+  4320523.8,
+  483586.6,
+  4326523.8
+ ],
+ "ava_bbox_utm": [
+  479668.1,
+  4322975.6,
+  481505.1,
+  4324072.0
+ ],
+ "cols": 401,
+ "rows": 401,
+ "cell_m": 15.0,
+ "range_m": [
+  188.37,
+  844.35
+ ],
+ "sha256": "a237a848a4e3d527c04263f46451f1be5b49b697dbd23d4dfd369bda699c7a8b"
+}
