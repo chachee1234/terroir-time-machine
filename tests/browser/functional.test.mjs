@@ -177,3 +177,52 @@ test("Soils chip drapes the soil survey, and the section column shows the survey
   await context.close();
   assert.deepEqual(problems(log), []);
 });
+
+test("How it formed: the tour steps through the region's chapters and ends on the soil summary", { timeout: 600000 }, async () => {
+  const { page, context, log } = await open(browser, srv.base + `${TM}?t=0&debug`, { viewport: { width: 900, height: 600 }, settle: 6000 });
+  await page.waitForFunction(() => window.TTM && TTM.SOIL.ok, null, { timeout: 180000 });
+  assert.equal(await page.isHidden("#story"), true);
+  await page.click("#stBtn");
+  assert.equal(await page.getAttribute("#stBtn", "aria-pressed"), "true");
+  assert.deepEqual(await page.$$eval("#stDots button", bs => bs.map(b => b.textContent)),
+    ["Subduction", "Seafloor", "Faults", "Volcanoes", "Volcano", "Caldera", "Valleys", "Soils"]);
+  assert.equal(await page.textContent("#stN"), "Step 8 of 8");
+  // the last step: soil map coloured by texture, shares that add up, and the survey's own soil names
+  await page.waitForFunction(() => !document.getElementById("stSoil").hidden && /Bressa/.test(document.getElementById("stSoil").textContent), null, { timeout: 120000 });
+  assert.equal(await page.getAttribute("#soilBtn", "aria-pressed"), "true");
+  assert.equal(await page.getAttribute('#soilMode [data-m="texture"]', "aria-pressed"), "true");
+  const shares = await page.evaluate(() => ({ tx: TTM.soilShares("texture"), dp: TTM.soilShares("depth"),
+    all: TTM.SOIL.meta.units.reduce((a, u) => a + (u.area_pct || 0), 0) }));
+  for (const k of ["tx", "dp"]) assert.ok(Math.abs(shares[k].reduce((a, b) => a + b, 0) - shares.all) < 0.01, k + " shares cover every map unit once");
+  assert.match(await page.textContent("#soilLb"), /^Topsoil texture/);
+  // Back leaves the soil step for the one before it; the step marker follows
+  await page.click("#stPrev");
+  await page.waitForFunction(() => document.querySelector('#stDots [aria-current="step"]')?.textContent === "Valleys", null, { timeout: 240000, polling: 1000 });
+  assert.equal(await page.isHidden("#stSoil"), true);
+  await page.click("#stX");
+  assert.equal(await page.isHidden("#story"), true);
+  await context.close();
+  assert.deepEqual(problems(log), []);
+});
+
+// Data-driven, so it keeps holding as the autopilot fills a region's gaps and adds its soil survey.
+test("How it formed: a region strikes out the steps its file lists as gaps, and says so when it has no soil survey", { timeout: 300000 }, async () => {
+  const id = "northern_sonoma";
+  const own = JSON.parse(readFileSync(path.join(ROOT, "data/regions", id, "scenes.json"), "utf8"));
+  const layers = JSON.parse(readFileSync(path.join(ROOT, "prototype/assets/regions/index.json"), "utf8")).regions.find(r => r.id === id).layers;
+  const NAME = { ch_250ma: "Subduction", ch_150ma: "Seafloor", ch_28ma: "Faults", ch_8ma: "Volcanoes", ch_3_0ma: "Volcano", ch_2_85ma: "Caldera", ch_1ma: "Valleys", today: "Soils" };
+  const { page, context, log } = await open(browser, srv.base + `${TM}?region=${id}&t=0`, { viewport: { width: 900, height: 600 }, settle: 6000 });
+  await page.waitForFunction(() => document.querySelectorAll("#stDots button").length > 2, null, { timeout: 120000 });
+  await page.click("#stBtn");
+  const steps = await page.$$eval("#stDots button", bs => bs.map(b => ({ t: b.textContent, off: b.disabled, why: b.title })));
+  for (const g of (own.gaps || []).filter(g => NAME[g.id])) {
+    const st = steps.find(s => s.t === NAME[g.id]);
+    assert.ok(st && st.off, `${g.id} is listed as a gap, so its step is struck out`);
+    assert.equal(st.why, "Not yet written for this region: " + g.reason);
+  }
+  assert.equal(steps.find(s => s.t === "Soils").off, false);
+  await page.waitForFunction(() => !document.getElementById("stSoil").hidden, null, { timeout: 120000 });
+  if (!layers.includes("soils")) assert.match(await page.textContent("#stSoil"), /not loaded for this region yet/);
+  await context.close();
+  assert.deepEqual(problems(log), []);
+});

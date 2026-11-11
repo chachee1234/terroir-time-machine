@@ -6,18 +6,20 @@ Owner instruction (2026-09-27): "compose prompt to autonomously keep expanding t
 Change `ON` to `OFF` (a one-line commit on `main`, or on the Start-from branch) and every run stops before doing anything. The routine can also be paused or deleted at claude.ai → Code → Routines.
 
 **Start from:** `main` (PR #9 and #12 merged 2026-09-28)
-**Working branch:** `globe-showcase` (one PR, never merged by the routine). Until the owner restarts region work, runs work the Globe showcase queue below on this branch; the `autopilot` branch is idle.
+**Working branch:** `region-stories` (one PR at a time, never merged by the routine; created from the latest `main` whenever its last PR has been merged). Runs work the Region stories queue below. `globe-showcase` and `autopilot` are idle; the routine reads this file from `main`, never from an old working branch.
+
+**Owner goal, 2026-11-10:** "the end result is for each wine region to have a clear visual of how the region was formed and the soil composition", with faster progress and better-looking, more educational animations. This replaces the 2026-10-08 globe focus as the first priority: region work is restarted, and the Globe showcase queue waits behind the Region stories queue.
 
 **Owner decision, 2026-10-08:** pause Napa/AVA detail and region work (R4, D1–D3 below are "paused by owner"). Focus: a whole-globe plate showcase. Reference look, style only, no copied frames: a plate-coloured world map with boundary lines, and 3D cut-away blocks for ridge, subduction, collision and transform.
 
 ## Rules for each run
 1. Read AGENTS.md, STATUS.md, the newest files in `status/`, this file, and only the sections of ROADMAP_REGIONS.md, SCIENCE_RULES.md and SOURCES.md the step needs. AGENTS.md and GOVERNANCE.md win over this file. This cloud routine does not use the FreeLLMAPI pool (GOVERNANCE.md §2a); that pool runs locally or inside the Workflow F and G jobs, and only the §2a checkable subtasks may go to it. Once Workflow F is built and two weekly PRs have merged, this routine is proposed for retirement (GOVERNANCE.md §6), with owner approval.
-2. If the switch is OFF, or the working branch's PR already holds 5 unreviewed steps (checked items below marked `[x]` with no owner "reviewed" note since the last merge), stop and write nothing.
-3. Do the first unchecked step only. One bounded step per run; two repair attempts at most, then mark the step `[!] blocked: <reason>` and stop.
+2. If the switch is OFF, or the working branch's PR already holds 12 unreviewed steps (checked items below marked `[x]` with no owner "reviewed" note since the last merge), stop and write nothing. (Was 5 until 2026-11-10; the owner reviews about once a week, and 12 is about one region's story.)
+3. First, CI: read the checks on the working branch's last commit (`gh api repos/chachee1234/terroir-time-machine/commits/<sha>/check-runs`). If a gate is red, fixing it is this run's first step. Then do up to three unchecked steps in order, each finished, checked and committed before the next starts (owner rule 2026-11-10; it was one step per run). Stop early at a blocked step: two repair attempts at most, then mark it `[!] blocked: <reason>` and go on to the next step that does not depend on it. A step that waits on the owner's Mac or an owner decision is skipped the same way, never waited on.
    Owner rule 2026-10-21: if a step is too big for one run, split it into numbered sub-steps (for example G3a, G3b, G3c) written under the step, then finish, test and commit the first sub-step in the same run. A run may end without a code commit only when the step is truly blocked (missing data, licence or an owner decision), never because the step is large.
 4. Data: only open-licensed sources already listed in SOURCES.md or in "Allowed sources" below, fetched with the repo's Tier 0 scripts. At most 600 terrain tiles or 150 MB per run. Raw downloads stay in git-ignored `data/raw/`. Record every new dataset in SOURCES.md (licence, URL, date) and `data/manifest.json`.
 5. Science: no invented facts, ages, rates or licences. Anything not backed by a listed source is a labelled gap or schematic (SCIENCE_RULES.md).
-6. Check: `python3 -m unittest discover -s scripts -p 'test_*.py'` passes, and a headless Chromium run of every page touched shows no console errors. Never mark an untested check as passed.
+6. Check, every step: `python3 scripts/validate.py`, `python3 -m unittest discover -s scripts -p 'test_*.py'`, `node tests/lint_js.mjs`, `python3 scripts/security_check.py`, a headless Chromium load of every page touched with no console errors, and the browser tests that cover what the step touched (`node --test --test-name-pattern="<words from the test names>" tests/browser/<file>.test.mjs`; add a test when the step adds behaviour). three.js r128 for the browser tests is in `tests/vendor/three-r128/`, so no download is needed. The full browser suites take 40 minutes or more under software WebGL: do not run them in the routine. CI runs all of them on every push to the PR, and rule 3 reads the result at the start of the next run. Tick a step `[x]` when its own checks pass and write "full suites: CI" in the status note; never write that a suite passed unless you ran it or read its CI result. Never mark an untested check as passed.
 7. Commit to the working branch only; push; open the PR if none is open (base: the Start-from branch), else update its description. Never merge, never push to `main`, never force-push.
 8. Tick the step here, write a `status/<YYYY-MM-DD>-<working branch>.md` entry (not STATUS.md) with the exact commands and the next action, and end with a short summary of what changed and what the owner should look at.
 
@@ -25,6 +27,7 @@ Change `ON` to `OFF` (a one-line commit on `main`, or on the Start-from branch) 
 - AWS Open Data Terrain Tiles (G19), UC Davis AVA Project (CC0), USGS UCERF3 via GEM (CC BY-SA 4.0), USGS/CGS geologic maps (public domain), USDA NRCS SSURGO via Soil Data Access (public domain), California DWR/Land IQ crop mapping (check the dataset's stated licence first), Sentinel-2 L2A via Earth Search STAC (Copernicus open licence, attribution required), USDA NAIP (public domain).
 - Approved by the owner 2026-10-05 (weekly audit #34): `sentinel-cogs.s3.us-west-2.amazonaws.com` (Sentinel-2 COGs, G23), `prd-tnm.s3.amazonaws.com` (USGS NHD, public domain, G26), `services.nacse.org` (PRISM 800 m normals, credit PRISM Climate Group, G29), `nassgeodata.gmu.edu` (USDA NASS CDL via CropScape, public domain, G30), `raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/` (USDA-NRCS Official Series Descriptions, G28). Viewer runtime, same date: three.js r128 from `cdn.jsdelivr.net` and fonts from `fonts.googleapis.com`.
 - Approved by the owner 2026-10-08: PRISM daily data (AN81d 4 km tmax/tmin/ppt) from `services.nacse.org`, credit PRISM Climate Group (G41).
+- Approved by the owner 2026-11-10, on condition that step E2's licence check passes: the USGS State Geologic Map Compilation (SGMC, USGS Data Series 1052) from USGS hosts (`mrdata.usgs.gov`, `www.sciencebase.gov`, `pubs.usgs.gov`).
 - Not allowed (owner decision 2026-10-05): SFEI data (GPL v3). Any other GPL-licensed source needs an owner instruction first.
 - Not allowed without an owner instruction: Esri imagery, commercial basemaps, county parcel data, any source needing an account or a key.
 
@@ -34,8 +37,51 @@ The owner maps sources in GeoLibre and saves them as `data/geolibre/<region_id>.
 ## Region order (owner rule, 2026-09-27)
 Sonoma first, then branch out to the next AVA that touches a mapped one; when nothing touches, move to the closest AVA. `python3 scripts/region_order.py` computes the list into `prototype/assets/regions/order.json` from the UC Davis AVA outlines. A frame-sized parent AVA is mapped before its members (Northern Sonoma before Russian River Valley and Alexander Valley), and AVAs nested in a mapped frame become its close-ups. Re-run the script whenever a region is finished (pass all finished ids with `--mapped`) and take the first entry.
 
-## Queue: Globe showcase (owner, 2026-10-08)
-One step per run, in order, on `globe-showcase`. Every step keeps these owner rules:
+## Queue: Region stories (owner goal, 2026-11-10) — first priority
+The viewer now has a guided tour, the "How it formed" chip (`STORY` in `prototype/timemachine.html`). Its steps are the region's own chapters; a step listed under `gaps` in `data/regions/<id>/scenes.json` shows struck out with the reason; the last step shows the soil map by texture and a soil summary when `assets/regions/<id>/soils.json` exists. So a region's story is finished by adding data and sourced chapters, not viewer code. A region is **story-complete** when the tour has no struck-out step and its last step shows the soil summary.
+
+State on 2026-11-10: Napa–Sonoma is story-complete. Petaluma Gap, Northern Sonoma and West Sonoma Coast have terrain, outlines, faults and a "Today" card, but no soils, no geology and five or six struck-out steps each. Mendocino has data but no live page.
+
+Every step keeps these rules:
+- A visual-class label is always on screen. Chapter text follows SCIENCE_RULES.md: every statement about this frame's rocks, ages or soils cites an entry in SOURCES.md; what cannot be sourced stays in `gaps` with the reason. Never copy Napa's chapter text into another region.
+- Napa and the 30 km block keep working as they do now.
+- Per-region data stays under 12 MB in `prototype/assets/regions/<id>/` for the files these steps add.
+
+Engine steps, once (do E1 and E2 first; E3–E6 between regions, whenever a region step is blocked):
+- [ ] E1. Soil parent material. Extend `scripts/ssurgo_layers.py` to read each component's parent material (`copmgrp.pmgroupname`) and landform (`cogeomordesc.geomfname`) from Soil Data Access into `soils.json`; show "Formed in: …" in the section column and in the tour's soil summary, and add a fourth soil colouring, "Parent material", grouped into at most six plain classes (for example alluvium, volcanic rock, sandstone and shale, serpentinite; the classes come from the survey's own words). This is the link between how the region formed and its soils. Rebuild Napa. Unit test with a recorded fixture.
+- [ ] E2. Statewide geology source for frames outside USGS SIM 2956. Verify the licence and download URL of the USGS State Geologic Map Compilation (SGMC, USGS Data Series 1052; expected US public domain) on its USGS page, record it in SOURCES.md, and make `scripts/make_geology_texture.py` accept it (`--source sgmc`, unit names and ages from its own attribute table). If the licence or URL does not check out, mark this step blocked with what you found and ask the owner; do not substitute another source.
+- [ ] E3. Tour cues. Each tour step opens the panel that explains it (the plate cross-section for Subduction, Seafloor and Faults; the mountain-building section for Volcanoes, Volcano and Valleys; the soil section at the frame's most widespread soil for Soils) and shows one "Watch for" line naming what is on screen. The lines describe the picture only; they add no geological facts.
+- [ ] E4. Ancient ground that reads at a glance. Before today the block is a flat green slab in every region. Colour each stage by what the chapter says the ground is (sea floor, scraped-up rock, lava and ash, river gravel), with a four-entry legend, labelled Illustration; bring the camera in to about a third of the frame for Volcano and Caldera so the eruption fills the view.
+- [ ] E5. Globe relief. Shade the continents with the relief already in `assets/globe/` so land is not one flat colour; label inland seas or stop drawing them as dark holes.
+- [ ] E6. Soil section readability. Draw each layer's sand, silt and clay as a bar beside the column (as the tour summary does) and cut the note under it to two lines, with the rest behind a "More" toggle.
+- [ ] E7 (owner's Mac, skip in cloud runs): at 150 Ma press Plates on the globe and check that the cut-away block is not a plain brown box (seen in software WebGL on 2026-11-10; may be a headless artefact). Check 60 fps with the tour running.
+
+Per region, in this order: Petaluma Gap, Northern Sonoma, West Sonoma Coast, Mendocino, then the next entry of `prototype/assets/regions/order.json`. Four steps each, written `S1 <region>` and so on:
+- S1. Soils: `python3 scripts/ssurgo_layers.py --frame data/regions/<id>.json --areas <survey areas>` (the areas are the soil survey areas that overlap the frame; get them from Soil Data Access, do not guess), add `"soils"` to the region's `layers` in `prototype/assets/regions/index.json`, record the surveys and their version dates in SOURCES.md. Check the Soils chip, the section column at two points and the tour's last step. Parts of the frame with no survey stay a labelled gap.
+- S2. Geology (needs E2 outside SIM 2956): `make_geology_texture.py` for the frame, add `"geology"` to `layers`, check the Geology chip and that the section column names the unit under the soil.
+- S3. Formation chapters: for each id under `gaps` in the region's `scenes.json`, write the region's own chapter from the units S2 mapped in the frame and from cited USGS or CGS publications, with `visual_class` and a SOURCES.md entry, and remove it from `gaps`. One chapter per sub-step if needed (S3a, S3b…). A chapter with no source stays a gap; say in the status note what source is missing.
+- S4. Check and show: for Mendocino first finish R4.3 (live page, index, globe marker). Play the tour from the first step to the last in headless Chromium, attach one screenshot per step to the PR, and write "story-complete" or the list of remaining gaps in the status note and in the region's `index.json` entry (`"story": "complete"` or `"gaps": [...]`).
+
+- [ ] S1 Petaluma Gap
+- [ ] S2 Petaluma Gap
+- [ ] S3 Petaluma Gap
+- [ ] S4 Petaluma Gap
+- [ ] S1 Northern Sonoma
+- [ ] S2 Northern Sonoma
+- [ ] S3 Northern Sonoma
+- [ ] S4 Northern Sonoma
+- [ ] S1 West Sonoma Coast
+- [ ] S2 West Sonoma Coast
+- [ ] S3 West Sonoma Coast
+- [ ] S4 West Sonoma Coast
+- [ ] S1 Mendocino
+- [ ] S2 Mendocino
+- [ ] S3 Mendocino
+- [ ] S4 Mendocino
+- [ ] Then: the next region from `order.json`, R4 steps 1–3 followed by S1–S4, and so on.
+
+## Queue: Globe showcase (owner, 2026-10-08) — second priority since 2026-11-10
+Resumes when the four regions above are story-complete, or when a run finds every Region stories step blocked. One step per run, in order, on the working branch. Every step keeps these owner rules:
 - A visual-class label is always on screen: Reconstruction, Illustration or Measured.
 - Globe additions stay under 6 MB in total (page weight added since G0, measured on the built files).
 - 60 fps on an M1 MacBook Air. Headless Chromium uses software WebGL, so it cannot prove this; keep per-frame work light and say in the PR that the owner's check on the Mac is pending.
@@ -49,7 +95,7 @@ One step per run, in order, on `globe-showcase`. Every step keeps these owner ru
 - Owner decision 2026-10-21 (replaces the 2026-10-18 hand-drawn plan): build G3 on the real `topologies.json` (0–250 Ma), labelled Reconstruction (Müller et al. 2019). No hand-drawn `showcase_boundaries.json`. Before 250 Ma, boundaries are not drawn (the stylized globe stays as it is). Sub-steps (owner, 2026-10-21; reference look: `prototype/san-andreas-30ma.html`, the owner's favourite, reuse its stripe, offset and colour code where it fits): G3a draw the moving boundary lines on the globe (ridges double line, trenches with teeth, transforms). G3b moving sea-floor stripes in the San Andreas film's style, spreading away from every ridge in `topologies.json` and disappearing into trenches. G3c relative plate-motion arrows on each plate, and offset markers that slide apart along transforms (Pinnacles–Neenach on the San Andreas first). G3d zoom-based exaggeration so plate motion is visible at any zoom: height ×40–80 on the whole globe, ×10–15 at region scale (as in the film), ×1–2 in close-ups, eased smoothly between; stripes and arrows move at a constant on-screen speed whatever the zoom, with true direction and relative speed; an always-visible label states the settings (for example "height ×12 · motion speed not to scale"). Napa, the regions and the 30 km block keep their current look unless the label and exaggeration are shown.
   - [~] G3. Motion from above, San Andreas film style (G3a–G3d above): boundaries, moving sea-floor stripes, motion arrows and transform offsets, visible at any zoom.
     - [x] G3a (2026-10-22): boundary lines from topologies.json (0–250 Ma), ridges double, trenches, rifts and transforms in colour. Browser suites pass on the fixed code (functional 25, security 14, integration 2, motion 5). Teeth and dashed transforms are not yet drawn; those belong to G3c.
-    - [ ] G3b1 (owner rule 2026-10-21, split): sea-floor stripe geometry. For each MidOceanRidge in `topologies.json` at the current age, build stripes parallel to the ridge at spacing set by half-rate, each carrying its age, and drop any stripe that has reached a trench. Draw them static at the current age, shaded as the San Andreas film does (`prototype/san-andreas-30ma.html`). No motion yet.
+    - [x] G3b1 (ticked 2026-11-10 on CI evidence: on `main` with this code, CI run 42749341898 passed the functional, integration and security browser tests; its one failure was the click time-out in the motion suite that the 2026-11-10 harness change fixes): sea-floor stripe geometry. For each MidOceanRidge in `topologies.json` at the current age, build stripes parallel to the ridge at spacing set by half-rate, each carrying its age, and drop any stripe that has reached a trench. Draw them static at the current age, shaded as the San Andreas film does (`prototype/san-andreas-30ma.html`). No motion yet.
     - [ ] G3b2: animate the stripes so they spread from each ridge at a constant on-screen speed and vanish into trenches.
     - [ ] G3c: motion arrows and transform offsets.
     - [ ] G3d: zoom exaggeration with the on-screen label.
@@ -69,7 +115,7 @@ One step per run, in order, on `globe-showcase`. Every step keeps these owner ru
 
 - [ ] G1b (optional, owner's Mac only, do not attempt in a cloud run): export the 250–410 Ma topologies with the Young et al. 2019 rotations and append them to `topologies.json`. Skip this item; it is done only when the owner runs it.
 
-## Queue: regions (paused by owner, 2026-10-08)
+## Queue: regions (paused by owner 2026-10-08; restarted 2026-11-10 through the Region stories queue above)
 Region work came first until the 2026-10-08 owner decision above. Each region takes three steps; any engine change a step needs is done inside that step, keeping Napa and the 30 km block unchanged.
 - [x] R1–R3. Sonoma Valley: done by owner request on 2026-09-28 (branch `napa-sonoma-frame`), not as its own region. Sonoma Valley already lay inside the Napa frame, so the frame (`data/regions/napa_valley.json`, id kept) was widened into a joint Napa–Sonoma frame with `parents` [napa_valley, sonoma_valley]; its terrain, close-ups for the AVAs inside it, outlines, faults, towns, geology drape, live globe marker and Places entries are in place. Separate region files, `faults.json`, `places.json` and per-region `scenes.json` (ROADMAP_REGIONS.md items 1–3) are still to do and belong to R4.
 - [ ] R4+. (paused by owner, 2026-10-08) Next region from `prototype/assets/regions/order.json` (Petaluma Gap done 2026-09-30; Northern Sonoma done 2026-10-03; West Sonoma Coast done 2026-10-06; Mendocino in progress with Russian River Valley and Alexander Valley as close-ups), three steps each: (1) region file with anchor and UTM zone (ROADMAP_REGIONS.md items 1 and 4), `fetch_tiles.py --frame-grid` terrain and close-ups, `ava_extract.py --region` outlines, `make_imagery_texture.py --region` satellite texture; (2) faults, towns and generic chapters as region data (items 2 and 3); (3) live marker, Places list, headless check, and `geolibre_export.py` with the region's id added to `--regions`; add the region to `prototype/assets/regions/index.json` with its `layers`. Re-run `region_order.py --mapped` with every AVA id in `prototype/assets/ava.json` plus the finished region's.
@@ -86,6 +132,6 @@ Region work came first until the 2026-10-08 owner decision above. Each region ta
   - [x] R4.2 Mendocino step 2 (2026-10-08): `faults.json` (3 UCERF3 traces via GEM: Maacama, San Andreas North Coast, Wight Way), `places.json` (Ukiah; other towns a labelled gap), `data/regions/mendocino/scenes.json` (six shared chapters, Napa-specific ones listed as gaps or not applicable, a sourced "Today" card). SOURCES G40.
   - [ ] R4.3 Mendocino step 3: live page, index, globe marker, GeoLibre export. (paused by owner, 2026-10-08)
 Present-day detail, done between regions when a region step is blocked (all paused by owner, 2026-10-08):
-- [ ] D1. (paused by owner) Soils: SSURGO map units for the section column and a "Today" soils drape (Soil Data Access query script, cached).
+- [x] D1. Soils: done for the Napa–Sonoma frame on 2026-10-22 (branch `soil-section`); other regions are the S1 steps above.
 - [ ] D2. (paused by owner) Vineyards: replace the schematic vine tint with mapped vineyards (DWR/Land IQ, if its licence allows; else NASS CDL, public domain).
 - [ ] D3. (paused by owner) Globe: raise California to z9 (≈1 km), keeping page weight under 8 MB.

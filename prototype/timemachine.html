@@ -70,6 +70,26 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .prof dd small{color:var(--muted)}
 .prof a{color:inherit}
 .card.min .prof{display:none}
+.story{margin:-2px 0 10px;padding:0 0 8px;border:0;border-bottom:1px solid var(--line)}
+.story[hidden],.ssum[hidden]{display:none}
+.story .shead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:0 28px 6px 0;font-size:12px;color:var(--muted)}
+.story .shead b{color:var(--ink);font-weight:600}
+.story ol button:disabled{opacity:.4;cursor:help;text-decoration:line-through}
+.story .row{margin-top:6px;justify-content:space-between}
+.card.min .story .row,.card.min .story ol,.card.min .ssum{display:none}
+.ssum{margin:10px 0 0;font-size:12.5px;color:#d7d1c4;max-height:min(40vh,330px);overflow:auto}
+.ssum h3{margin:8px 0 3px;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ssum .sbar{display:flex;height:14px;border-radius:3px;overflow:hidden;background:rgba(255,255,255,.08)}
+.ssum .sbar i{display:block;height:100%;background:var(--c)}
+.ssum .skey{display:flex;flex-wrap:wrap;gap:2px 10px;margin-top:3px;font-size:11px;color:var(--muted)}
+.ssum .skey em{font-style:normal;display:flex;align-items:center;gap:4px}
+.ssum .skey em::before{content:"";width:9px;height:9px;border-radius:2px;background:var(--c)}
+.ssum table{width:100%;border-collapse:collapse;font-size:12px}
+.ssum td{padding:2px 6px 2px 0;vertical-align:middle;white-space:nowrap}
+.ssum td.w{width:42%}.ssum td.n{color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.ssum p{font-size:11.5px;color:var(--muted);margin-top:6px}
+@media (max-width:640px){.ssum{max-height:30vh}}
+.card.soilsum #cBody{display:none}   /* the soil summary takes the chapter text's place on the tour's last step */
 .card .cls{margin-top:10px;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
 .card .cls b{color:var(--c);font-weight:600}
 .pin{position:absolute;z-index:2;transform:translate(-50%,-100%);pointer-events:none;font-size:12px;white-space:nowrap;text-align:center;text-shadow:0 1px 6px rgba(0,0,0,.9)}
@@ -109,6 +129,9 @@ html,body{height:100%;margin:0;background:var(--void);color:var(--ink);font:15px
 .legend .lgGeo em{font-style:normal;display:flex;align-items:center;gap:4px;justify-content:flex-end}
 .legend .lgGeo em::before{content:"";width:10px;height:10px;border-radius:2px;background:var(--c)}
 .legend #soilSw{grid-template-columns:repeat(2,auto);font-family:inherit}
+.legend #soilMode{display:flex;gap:4px;pointer-events:auto}
+.legend #soilMode button{background:rgba(12,15,17,.7);border:1px solid var(--line);color:var(--muted);font:inherit;font-size:10.5px;min-height:24px;padding:0 8px;border-radius:4px;cursor:pointer}
+.legend #soilMode button[aria-pressed="true"]{border-color:var(--magma);color:var(--ink)}
 .scalebar{position:absolute;z-index:2;right:16px;bottom:calc(114px + env(safe-area-inset-bottom,0px));font:11px var(--mono);color:var(--ink);text-align:center;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.9)}
 .scalebar div{height:5px;border:1.5px solid var(--ink);border-top:0;margin-top:2px}
 .plc{position:absolute;z-index:2;transform:translate(-5px,-50%);pointer-events:none;font-size:11.5px;white-space:nowrap;color:#f3eee4;text-shadow:0 1px 5px rgba(0,0,0,.95),0 0 2px rgba(0,0,0,.9);letter-spacing:.03em}
@@ -234,6 +257,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   <div class="chips">
     <span class="chip" id="scaleChip">Planet</span>
     <span class="chip" id="clsChip"><i></i><span>Reconstruction</span></span>
+    <button class="chip tog" id="stBtn" aria-pressed="false" aria-controls="story" title="A guided tour, step by step: how this region's ground formed, ending with its soils">How it formed</button>
     <button class="chip tog lc" id="avaBtn" aria-pressed="true">AVAs</button>
     <button class="chip tog lc" id="geoBtn" aria-pressed="false" title="Mapped geologic units on today's terrain (USGS SIM 2956)" hidden>Geology</button>
     <button class="chip tog lc" id="soilBtn" aria-pressed="false" title="Soil series on today's terrain (USDA SSURGO soil survey, 1:24,000)" hidden>Soils</button>
@@ -274,7 +298,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   <div id="lgAva"><i style="--c:#ffd27a"></i>AVA boundary</div>
   <div id="lgSat" hidden>Satellite image · <span id="satLb">Sentinel-2</span></div>
   <div id="lgGeo" class="lgGeo" hidden><b>Geologic units · USGS SIM 2956, 1:100,000</b><span id="geoSw"></span></div>
-  <div id="lgSoil" class="lgGeo" hidden><b>Soil series · USDA SSURGO 1:24,000</b><span id="soilSw"></span></div>
+  <div id="lgSoil" class="lgGeo" hidden><b id="soilLb">Soil series · USDA SSURGO 1:24,000</b><nav id="soilMode" aria-label="Colour the soil map by"><button data-m="series" aria-pressed="true">Series</button><button data-m="texture" aria-pressed="false" title="Texture of the top mineral layer of each map unit's main soil">Texture</button><button data-m="depth" aria-pressed="false" title="Depth to bedrock or another layer roots cannot pass">Depth</button></nav><span id="soilSw"></span></div>
   <div id="lgTopo"><i style="--c:#5a3d22;height:1.5px"></i>Contours, 50 m (10 m close up)</div>
 </div>
 <div class="scalebar" id="scalebar" hidden><span id="sbKm">5 km</span><div id="sbar"></div></div>
@@ -325,10 +349,16 @@ body.pl-open .compass,body.pl-open .legend{display:none}
 
 <article class="card" id="card" aria-live="polite">
   <button class="cmin" id="cMin" aria-label="Minimize the description" aria-expanded="true" title="Minimize">–</button>
+  <div class="xsteps story" id="story" hidden>
+    <div class="shead"><b id="stT">How it formed</b><span id="stN"></span></div>
+    <ol id="stDots" aria-label="Steps in how this region formed"></ol>
+    <div class="row"><button class="nav" id="stPrev">◂ Back</button><button class="nav" id="stX">End tour</button><button class="nav go" id="stNext">Next ▸</button></div>
+  </div>
   <div class="eyebrow" id="cEye"></div>
   <h2 id="cTitle"></h2>
   <p id="cBody"></p>
   <dl class="prof" id="cProf" hidden></dl>
+  <div class="ssum" id="stSoil" hidden></div>
   <div class="cls" id="cCls"></div>
   <div class="cact" id="cAct" hidden></div>
 </article>
@@ -1610,12 +1640,48 @@ const SOIL={on:false, ok:false, meta:null, idx:null, W:0, H:0};
     const t=new THREE.DataTexture(rgba,W,Hh,THREE.RGBAFormat); t.magFilter=t.minFilter=THREE.NearestFilter; t.generateMipmaps=false; t.needsUpdate=true;
     const b=m.grid.bbox_utm;                                     // row 0 north, like the other drapes
     lUni.uSoilsExt.value.set((b[0]-GNIS_UTM[0])/1000, -(b[3]-GNIS_UTM[1])/1000, (b[2]-b[0])/1000, (b[3]-b[1])/1000); lUni.uSoils.value=t;
-    Object.assign(SOIL,{ok:true, meta:m, idx, W, H:Hh}); $("soilBtn").hidden=false;
-    const at=t=>String(t||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-    $("soilSw").innerHTML=m.series.slice(0,12).map(s=>`<em style="--c:${s.color}" title="${at(s.name)}: ${s.area_pct} % of the surveyed frame">${at(s.name)}</em>`).join("")
-      +(m.series.length>12?`<em style="--c:transparent">+${m.series.length-12} more</em>`:"");
+    Object.assign(SOIL,{ok:true, meta:m, idx, W, H:Hh, tex:{series:t}, mode:"series"}); $("soilBtn").hidden=false;
+    soilLegend();
+    try{ if(STORY.soil){ STORY.soil=false; storySoil(true); } }catch(e){ /* tour not set up yet */ }
   }catch(e){ /* no soil survey for this region */ }
 })();
+/* Three ways to colour the same soil map. Series is the survey's own soil names. Texture and Depth read each map
+   unit's main soil (its largest component with layers): the texture of its top mineral layer, grouped into four
+   plain classes, and the depth to bedrock or another layer the survey lists as restricting roots. All three are
+   map-unit averages from the survey, not measurements at a spot. */
+const SOIL_TX=[["Clay","#8a4636"],["Clay loam","#b8744a"],["Loam or silt loam","#cdaa62"],["Sandy loam or sand","#e6d79a"],["Rock, marsh or no layer data","#7b7f88"]];
+const SOIL_DP=[["Under 50 cm","#d9c9a3"],["50 to 100 cm","#b08d57"],["100 cm or more","#7a5632"],["No limit listed","#3f2d1c"],["No layer data","#7b7f88"]];
+function soilMain(u){ let best=null; (u.components||[]).forEach(c=>{ if((c.horizons||[]).length&&(!best||c.pct>best.pct)) best=c; }); return best; }
+function soilTopLayer(c){ return c ? (c.horizons.find(h=>h.clay_pct!=null&&!/plant material|bedrock/i.test(h.texture||""))||null) : null; }
+function soilTxClass(u){ const h=soilTopLayer(soilMain(u)), t=((h&&h.texture)||"").toLowerCase();
+  return !h ? 4 : /clay loam/.test(t) ? 1 : /clay/.test(t) ? 0 : /sand/.test(t) ? 3 : /loam|silt/.test(t) ? 2 : 4; }
+function soilDpClass(u){ const c=soilMain(u); if(!c||!soilTopLayer(c)) return 4; const d=c.restriction&&c.restriction.depth_cm;
+  return d==null ? 3 : d<50 ? 0 : d<100 ? 1 : 2; }
+function soilTexture(mode){
+  if(SOIL.tex[mode]) return SOIL.tex[mode];
+  const cls=mode==="texture"?soilTxClass:soilDpClass, pal=(mode==="texture"?SOIL_TX:SOIL_DP).map(q=>[1,3,5].map(k=>parseInt(q[1].slice(k,k+2),16)));
+  const per=SOIL.meta.units.map(u=>pal[cls(u)]), n=SOIL.W*SOIL.H, rgba=new Uint8Array(n*4);
+  for(let i=0;i<n;i++){ const v=SOIL.idx[i]; if(!v) continue; const q=per[v-1]; rgba[i*4]=q[0]; rgba[i*4+1]=q[1]; rgba[i*4+2]=q[2]; rgba[i*4+3]=255; }
+  const t=new THREE.DataTexture(rgba,SOIL.W,SOIL.H,THREE.RGBAFormat); t.magFilter=t.minFilter=THREE.NearestFilter; t.generateMipmaps=false; t.needsUpdate=true;
+  return SOIL.tex[mode]=t;
+}
+// share of the surveyed frame in each class of a mode (map-unit area shares from soils.json)
+function soilShares(mode){ const cls=mode==="texture"?soilTxClass:soilDpClass, out=[0,0,0,0,0]; SOIL.meta.units.forEach(u=>{ out[cls(u)]+=u.area_pct||0; }); return out; }
+function soilLegend(){
+  const m=SOIL.meta, at=t=>String(t||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  if(SOIL.mode==="series"){
+    $("soilLb").textContent="Soil series · USDA SSURGO 1:24,000";
+    $("soilSw").innerHTML=m.series.slice(0,12).map(s=>`<em style="--c:${s.color}" title="${at(s.name)}: ${s.area_pct} % of the surveyed frame">${at(s.name)}</em>`).join("")
+      +(m.series.length>12?`<em style="--c:transparent">+${m.series.length-12} more</em>`:"");
+  } else {
+    const L=SOIL.mode==="texture"?SOIL_TX:SOIL_DP, sh=soilShares(SOIL.mode);
+    $("soilLb").textContent=(SOIL.mode==="texture"?"Topsoil texture":"Depth to rock or a root-limiting layer")+" · USDA SSURGO 1:24,000, map-unit averages";
+    $("soilSw").innerHTML=L.map((q,i)=>sh[i]>=0.05?`<em style="--c:${q[1]}">${q[0]} · ${sh[i].toFixed(sh[i]<10?1:0)} %</em>`:"").join("");
+  }
+  [...$("soilMode").children].forEach(b=>b.setAttribute("aria-pressed",b.dataset.m===SOIL.mode));
+}
+function soilSetMode(mode){ if(!SOIL.ok||!/^(series|texture|depth)$/.test(mode)) return; SOIL.mode=mode; lUni.uSoils.value=soilTexture(mode); soilLegend(); }
+$("soilMode").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) soilSetMode(b.dataset.m); });
 // the map unit under a scene point (km east, km south of the summit), or null outside the surveys
 function soilAt(x,z){
   if(!SOIL.ok) return null; const gd=SOIL.meta.grid, b=gd.bbox_utm, E=GNIS_UTM[0]+x*1000, N=GNIS_UTM[1]-z*1000;
@@ -2254,7 +2320,7 @@ Promise.all([fetch("../SCENES.json").then(r=>r.ok?r.json():Promise.reject(r.stat
   let list=m.chapters||[];
   if(own){ const keep=new Set((own.shared&&own.shared.ids)||[]); list=list.filter(c=>keep.has(c.id)).concat(own.chapters||[]).sort((x,y)=>y.age_ma-x.age_ma); }
   if(list.length<2 || list.some(c=>!VC2CLS[c.visual_class] || typeof c.age_ma!=="number")) throw "unusable chapters";
-  CH.splice(0,CH.length,...list.map(toCh)); prepChapters(); renderTicks(); declutterTicks(); lastCh=-1; DATA.chapters=own?"SCENES.json + data/regions/"+REG.id+"/scenes.json":"SCENES.json";
+  CH.splice(0,CH.length,...list.map(toCh)); prepChapters(); renderTicks(); declutterTicks(); lastCh=-1; DATA.chapters=own?"SCENES.json + data/regions/"+REG.id+"/scenes.json":"SCENES.json"; DATA.gaps=(own&&own.gaps)||[]; try{ storyBuild(); }catch(e){ /* the tour is set up further down and builds itself then */ }
 }).catch(()=>{});
 fetch("../data/plates/stylized.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{
   const L=d.plates||[];
@@ -2266,6 +2332,7 @@ $("ticks").addEventListener("click",e=>{ const b=e.target.closest(".tick"); if(b
 
 function showCard(i){
   if(i===lastCh||RGN.sel) return;
+  storySync(i>=IL0?-1:i);
   if(i>=IL0){ lastCh=i; showInterlude(i-IL0); return; }
   if(SITE.cur&&i===CH.length-1&&SITE.card){ lastCh=i; placeCaption(i); document.querySelectorAll(".tick").forEach((t,j)=>t.classList.toggle("on",j===i)); return; }
   if(AVAP.cur&&i===CH.length-1){ lastCh=i; placeCaption(i); document.querySelectorAll(".tick").forEach((t,j)=>t.classList.toggle("on",j===i)); return; }
@@ -2833,6 +2900,73 @@ function drawSiteSection(){
   if($("xsNote").textContent!==note) $("xsNote").textContent=note;
 }
 
+/* =================================================================== REGION STORY: "How it formed"
+   A guided tour for every region: the chapters in which this ground was made, as numbered steps that stop so each
+   can be read, ending on the soils. It adds no facts of its own: each step is one of the region's chapters
+   (SCENES.json, or data/regions/<id>/scenes.json), and a step the region's file lists under "gaps" is shown struck
+   through with the file's reason, so what is not yet sourced stays visible. The last step turns on the soil map
+   coloured by texture and sums up the survey for the frame (soils.json, USDA SSURGO map-unit averages). */
+const STORY_DEF=[["ch_250ma","Subduction"],["ch_150ma","Seafloor"],["ch_28ma","Faults"],["ch_8ma","Volcanoes"],
+                 ["ch_3_0ma","Volcano"],["ch_2_85ma","Caldera"],["ch_1ma","Valleys"],["today","Soils"]];
+const STORY={on:false, steps:[], cur:-1, soil:false};
+function storyBuild(){
+  const gaps=new Map((DATA.gaps||[]).map(g=>[g.id,g.reason||""]));
+  STORY.steps=STORY_DEF.map(([id,name])=>({id, name, i:CH.findIndex(c=>c.id===id), gap:gaps.get(id)})).filter(s=>s.i>=0||s.gap!=null);
+  const ol=$("stDots"); ol.textContent="";
+  STORY.steps.forEach((s,k)=>{ const li=document.createElement("li"), b=document.createElement("button"); b.textContent=s.name;
+    if(s.i<0){ b.disabled=true; b.title="Not yet written for this region: "+s.gap; b.setAttribute("aria-label",s.name+", not yet written for this region"); }
+    else { b.title=CH[s.i].tag+" · "+CH[s.i].t; b.onclick=()=>storyGo(k); }
+    li.appendChild(b); ol.appendChild(li); });
+  $("stT").textContent="How "+REG_SHORT+" formed";
+  $("stBtn").hidden=STORY.steps.filter(s=>s.i>=0).length<2;
+  STORY.cur=-2; if(STORY.on) storySync(chapterIndex(p));
+}
+function storyStepOf(i){ let k=-1; STORY.steps.forEach((s,j)=>{ if(s.i>=0&&s.i<=i) k=j; }); return k; }
+function storyNext(k,d){ for(k+=d; k>=0&&k<STORY.steps.length; k+=d) if(STORY.steps[k].i>=0) return k; return -1; }
+function storyGo(k){ const s=STORY.steps[k]; if(!s||s.i<0) return; setPlaying(false); if(RGN.sel) return; goTo(s.i); }
+function storySync(i){
+  if(!STORY.on) return;
+  if(tween&&STORY.steps.some(s=>s.i===tween.ch)) i=tween.ch;                // on the way to a step: show where we are going
+  const k=i<0?STORY.cur:storyStepOf(i); if(k===STORY.cur) return; STORY.cur=k;
+  [...$("stDots").children].forEach((li,j)=>{ const b=li.firstChild; b.classList.toggle("done",j<k); if(j===k) b.setAttribute("aria-current","step"); else b.removeAttribute("aria-current"); });
+  const live=STORY.steps.filter(s=>s.i>=0), n=live.indexOf(STORY.steps[k]);
+  $("stN").textContent=n<0?"":`Step ${n+1} of ${live.length}`;
+  $("stPrev").disabled=storyNext(k,-1)<0; $("stNext").textContent=storyNext(k,1)<0?"Start over":"Next ▸";
+  storySoil(k>=0&&STORY.steps[k].id==="today");
+}
+// the last step: the soil map by texture, and what the survey says the frame is made of
+function storySoil(on){
+  if(on===STORY.soil) return; STORY.soil=on; const el=$("stSoil"); el.hidden=!on; $("card").classList.toggle("soilsum",on&&SOIL.ok); if(!on) return;
+  const at=t=>String(t==null?"":t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  if(!SOIL.ok){ el.innerHTML="<h3>Soils</h3><p>The USDA soil survey is not loaded for this region yet, so there is no soil map or soil summary here. This is a gap, not a finding.</p>"; return; }
+  if(!SOIL.on) $("soilBtn").click(); soilSetMode("texture");
+  const bar=(L,sh)=>`<div class="sbar" role="img" aria-label="${at(L.map((q,i)=>q[0]+" "+sh[i].toFixed(0)+" %").join(", "))}">${L.map((q,i)=>`<i style="--c:${q[1]};width:${sh[i].toFixed(2)}%"></i>`).join("")}</div>`
+    +`<div class="skey">${L.map((q,i)=>sh[i]>=0.5?`<em style="--c:${q[1]}">${at(q[0])} ${sh[i].toFixed(0)} %</em>`:"").join("")}</div>`;
+  const m=SOIL.meta, PSC=[["sand","#e6d79a"],["silt","#b9a37a"],["clay","#8a4636"]];
+  const rows=m.series.slice(0,6).map((s,si)=>{
+    let u=null; m.units.forEach(q=>{ if(q.series===si&&(!u||q.area_pct>u.area_pct)) u=q; });
+    const c=u&&soilMain(u), h=soilTopLayer(c), d=c&&c.restriction&&c.restriction.depth_cm;
+    const mix=h&&h.sand_pct!=null ? `<div class="sbar" title="Top mineral layer of ${at(c.name)}: sand ${h.sand_pct} %, silt ${h.silt_pct} %, clay ${h.clay_pct} %">${PSC.map(q=>`<i style="--c:${q[1]};width:${h[q[0]+"_pct"]}%"></i>`).join("")}</div>` : "";
+    return `<tr><td>${at(s.name)}</td><td class="n">${s.area_pct} %</td><td class="w">${mix}</td><td class="n">${h?at(h.texture):""}${d!=null?` · ${d} cm to ${/bedrock/i.test(c.restriction.kind||"")?"rock":"a limiting layer"}`:""}</td></tr>`; }).join("");
+  el.innerHTML=`<h3>Topsoil texture, share of the surveyed frame</h3>${bar(SOIL_TX,soilShares("texture"))}`
+    +`<h3>Depth to rock or a root-limiting layer</h3>${bar(SOIL_DP,soilShares("depth"))}`
+    +`<h3>Most widespread soils · sand, silt, clay of the top layer</h3><table>${rows}</table>`
+    +`<div class="skey">${PSC.map(q=>`<em style="--c:${q[1]}">${q[0]}</em>`).join("")}</div>`
+    +`<p>${at(m.label||"USDA SSURGO")}: ${at(m.note||"map-unit averages")} The survey covers ${at(m.grid.covered_pct)} % of this frame. Open Section and click the map for the layers under a point.</p>`;
+}
+function storyToggle(on){
+  STORY.on=on; $("story").hidden=!on; $("stBtn").setAttribute("aria-pressed",on);
+  if(on){ if($("card").classList.contains("min")) $("cMin").click();
+    let k=storyStepOf(chapterIndex(p)); if(k<0) k=storyNext(-1,1);          // the step we are in, or the first one
+    const c=CH[STORY.steps[k].i]; STORY.cur=-2; storySync(STORY.steps[k].i);
+    if(Math.abs(c.p-p)>0.002&&!(c.span&&ageOf(p)<=c.span[0]&&ageOf(p)>=c.span[1])) storyGo(k); }
+  else storySoil(false);
+}
+$("stBtn").onclick=()=>storyToggle(!STORY.on); $("stX").onclick=()=>storyToggle(false);
+$("stNext").onclick=()=>{ const k=storyNext(STORY.cur,1); storyGo(k<0?storyNext(-1,1):k); };
+$("stPrev").onclick=()=>{ const k=storyNext(STORY.cur,-1); if(k>=0) storyGo(k); };
+storyBuild();
+
 /* =================================================================== SHARE A MOMENT
    The Share chip copies a link that reopens this exact view: the age (t, millions of years), the close-up (loc)
    and, once you have moved the camera yourself, the camera (cam: position and target, scene km). */
@@ -3115,7 +3249,7 @@ const PLAB=[{x:X0+Math.min(3,SX*0.06), z:Z1-Math.min(3,SZ*0.06), t:a=>a>8?"Faral
 function placeLab(q,show,op){ let hh=0; for(let k=0;k<6;k++) hh+=lUni[k<3?"uWa":"uWb"].value.getComponent(k%3)*H[k][q.i];
   pl3.set(q.x,Math.max(hh,0)*VE+0.25,q.z).project(lCam); const vis=show&&pl3.z<1; q.el.hidden=!vis;
   if(vis){ q.el.style.opacity=op.toFixed(2); q.el.style.left=((pl3.x+1)/2*innerWidth)+"px"; q.el.style.top=((1-pl3.y)/2*innerHeight)+"px"; } }
-if((new URLSearchParams(location.search)).has("debug")) window.TTM={lCam,lCtl,gCam,gUni,lUni,DATA,CH,PLATES,SITE,RIV,GEO,SOIL,soilAt,geoAt,xsSet,LOC,PM,MV,TOPO,STRIPE,WX,markerDir,get st(){ return {p,autoCam}; }};
+if((new URLSearchParams(location.search)).has("debug")) window.TTM={lCam,lCtl,gCam,gUni,lUni,DATA,CH,PLATES,SITE,RIV,GEO,SOIL,STORY,soilAt,soilShares,geoAt,xsSet,LOC,PM,MV,TOPO,STRIPE,WX,markerDir,get st(){ return {p,autoCam}; }};
 /* The compass, legend and Places panel sit just under the chip rows, however many rows the chips wrap to. */
 function placeHud(){ const b=document.querySelector(".top .chips").getBoundingClientRect().bottom, cs=$("compass").offsetHeight||64, st=document.body.style;
   st.setProperty("--cmp",Math.round(b+8)+"px"); st.setProperty("--lgd",Math.round(b+16+cs)+"px"); }
