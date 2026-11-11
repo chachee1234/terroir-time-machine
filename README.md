@@ -18,6 +18,10 @@ today. It runs in any modern web browser, with nothing to install.
   ago to today. The time axis is logarithmic, so the recent past gets the room it needs.
 - **Watch the planet, then land.** Deep time is shown on a globe with moving continents (Müller et al. 2019
   plate model back to 410 million years). Around 28 million years ago the view dives to the ground.
+- **Take the tour.** "How it formed" walks through the steps that made a region's ground, one at a time,
+  and ends on its soils: what share is clay, loam or sand, how deep the soil is, and the most widespread
+  soil series. A step a region has no sourced text for yet is shown struck out, not filled in.
+- **Read the soils.** Colour the USDA soil survey by soil series, by topsoil texture or by depth to rock.
 - **Explore regions.** Open the Regions view to see which wine regions are mapped and fly into one.
 - **Zoom into close-ups.** Every American Viticultural Area (AVA) in a mapped frame has a sharper close-up,
   down to 10 m terrain and satellite imagery.

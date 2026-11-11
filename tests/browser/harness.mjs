@@ -2,8 +2,8 @@
 //
 // Serves the repo root on 127.0.0.1 so pages load exactly as they do from GitHub Pages
 // (prototype/timemachine.html fetches ../SCENES.json and ../data/...). External hosts are never
-// contacted: three.js r128 is answered from a local copy (THREE_DIR, a checkout of three.js tag
-// r128, see tests/README.md), fonts are aborted, and any other host is recorded as a violation.
+// contacted: three.js r128 is answered from a local copy (THREE_DIR, default tests/vendor/three-r128,
+// the files of three.js tag r128, see tests/README.md), fonts are aborted, and any other host is recorded as a violation.
 import { createServer } from "node:http";
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -44,7 +44,7 @@ export const ALLOWED_HOSTS = ["cdnjs.cloudflare.com", "cdn.jsdelivr.net", "fonts
 // daily weather) is only requested when assets/regions/index.json lists it, so any 404 is a real fault.
 export const OPTIONAL = [];
 
-const THREE_DIR = process.env.THREE_DIR || path.join(ROOT, "..", "three-r128");
+const THREE_DIR = process.env.THREE_DIR || path.join(ROOT, "tests", "vendor", "three-r128");
 const THREE_FILES = {
   "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js": "build/three.min.js",
   "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js": "examples/js/controls/OrbitControls.js",
@@ -60,6 +60,9 @@ export async function launch(extraArgs = []) {
 export async function open(browser, url, { viewport = { width: 1440, height: 900 }, reducedMotion, settle = 2500 } = {}) {
   const context = await browser.newContext({ viewport, reducedMotion });
   const page = await context.newPage();
+  // Software WebGL can leave the page busy for many seconds at a time, so a click can wait longer than
+  // Playwright's 30 s default for the element to settle. Each test still fails at its own node:test timeout.
+  page.setDefaultTimeout(180000);
   const log = { pageErrors: [], consoleErrors: [], missing: [], foreign: [], dialogs: [] };
   page.on("pageerror", e => log.pageErrors.push(e.message));
   page.on("dialog", d => { log.dialogs.push(d.message()); d.dismiss().catch(() => {}); });
