@@ -73,7 +73,9 @@ test("before the volcanoes the panel opens on the plate view", async () => {
 test("reaching a mountain-building chapter opens the section by itself", { timeout: 600000 }, async () => {
   const { page, context, log } = await open(browser, srv.base + TM + "&t=9", { viewport: { width: 800, height: 500 } });
   const before = await page.isHidden("#sub");
-  await page.click("#next");
+  // click through the DOM: Playwright's "stable" check waits on two rendered frames, which takes
+  // over 30 s in software WebGL when the suites run in parallel (CI timed out here before the click)
+  await page.evaluate(() => document.getElementById("next").click());
   await page.waitForFunction(() => !document.getElementById("sub").hidden, null, { timeout: 480000, polling: 1000 });
   const head = await page.textContent("#sdHead");
   await context.close();
