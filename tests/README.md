@@ -11,17 +11,15 @@ Every pull request runs `.github/workflows/ci.yml`. All four gates must be green
 
 ## Browser tests on your Mac
 
-The tests never touch the network. three.js r128 comes from a local copy:
+The tests never touch the network. three.js r128 comes from the copy in `tests/vendor/three-r128/` (MIT, see its README), so nothing needs cloning:
 
 ```
-git clone --depth 1 --branch r128 --filter=blob:none --sparse https://github.com/mrdoob/three.js ../three-r128
-git -C ../three-r128 sparse-checkout set --no-cone /build/three.min.js /examples/js/controls/OrbitControls.js
 npm install --no-save --no-package-lock playwright@1.56.1
 npx playwright install chromium
 node --test "tests/browser/*.test.mjs"
 ```
 
-The default location for the copy is `../three-r128` next to the repo; set `THREE_DIR` to use another.
+Set `THREE_DIR` to use another copy of three.js r128 (same `build/` and `examples/js/controls/` layout).
 
 ## Rules
 

@@ -159,14 +159,17 @@ test("Soils chip drapes the soil survey, and the section column shows the survey
   const { page, context, log } = await open(browser, srv.base + `${TM}?t=0&debug`, { settle: 6000 });
   await page.waitForFunction(() => window.TTM && TTM.SOIL.ok, null, { timeout: 120000 });
   assert.equal(await page.isVisible("#soilBtn"), true);
-  await page.click("#geoBtn"); await page.click("#soilBtn");          // one map at a time
+  // clicks go through the DOM: at 1440x900 with a drape on, one software-WebGL frame takes seconds, and Playwright's
+  // click waits on rendered frames (it timed out in "performing click action" here); the assertions are unchanged
+  const tap = id => page.evaluate(id => document.getElementById(id).click(), id);
+  await tap("geoBtn"); await tap("soilBtn");          // one map at a time
   assert.equal(await page.getAttribute("#soilBtn", "aria-pressed"), "true");
   assert.equal(await page.getAttribute("#geoBtn", "aria-pressed"), "false");
   await page.waitForFunction(() => !document.getElementById("lgSoil").hidden, null, { timeout: 60000 });
   assert.match(await page.textContent("#soilSw"), /Bressa/);
   // Corison winery (38.484983, -122.44736): SSURGO map unit 170, Pleasanton loam
   await page.evaluate(() => TTM.xsSet(16.307, 20.358));
-  await page.click("#xsBtn");
+  await tap("xsBtn");
   await page.waitForFunction(() => /Pleasanton loam/.test(document.getElementById("xsNote").textContent), null, { timeout: 60000 });
   const note = await page.textContent("#xsNote");
   assert.match(note, /^USDA SSURGO 1:24,000, map unit average, not a pit at this spot\./);
