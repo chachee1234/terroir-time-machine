@@ -50,7 +50,7 @@ One step per run, in order, on `globe-showcase`. Every step keeps these owner ru
   - [~] G3. Motion from above, San Andreas film style (G3a–G3d above): boundaries, moving sea-floor stripes, motion arrows and transform offsets, visible at any zoom.
     - [x] G3a (2026-10-22): boundary lines from topologies.json (0–250 Ma), ridges double, trenches, rifts and transforms in colour. Browser suites pass on the fixed code (functional 25, security 14, integration 2, motion 5). Teeth and dashed transforms are not yet drawn; those belong to G3c.
     - [ ] G3b1 (owner rule 2026-10-21, split): sea-floor stripe geometry. For each MidOceanRidge in `topologies.json` at the current age, build stripes parallel to the ridge at spacing set by half-rate, each carrying its age, and drop any stripe that has reached a trench. Draw them static at the current age, shaded as the San Andreas film does (`prototype/san-andreas-30ma.html`). No motion yet.
-    - [ ] G3b2: animate the stripes so they spread from each ridge at a constant on-screen speed and vanish into trenches.
+    - [x] G3b2 (2026-11-20): stripes spread from each ridge in the vertex shader (one spacing per cycle, rate scaled by camera height so on-screen speed stays about constant), fade in at the ridge and out at the edge, and vanish where the sea floor reaches a trench. Still with reduced motion. Owner check of 60 fps on the Mac pending.
     - [ ] G3c: motion arrows and transform offsets.
     - [ ] G3d: zoom exaggeration with the on-screen label.
 - Owner decision 2026-10-21: build G4 on the real `topologies.json` boundaries; the cut-away blocks themselves are labelled Illustration.
