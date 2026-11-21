@@ -270,7 +270,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   <div id="lgSut"><i style="--c:#ff5a3c"></i>Collision zone / margin</div>
   <div id="lgStream"><i style="--c:#6fb6e8"></i>Streams, from terrain</div>
   <div id="lgRiv" hidden><i style="--c:#3f8fd0"></i>Rivers and creeks today · USGS NHD</div>
-  <div id="lgMove" hidden><i style="--c:#ffeebd;height:4px;border-radius:2px"></i>Plates coloured by region; streaks show each plate's direction of motion (speed exaggerated)</div>
+  <div id="lgMove" hidden><i style="--c:#ffeebd;height:4px;border-radius:2px"></i>Plates coloured by region; arrows and streaks show each plate's direction of motion (speed exaggerated, not to scale)</div>
   <div id="lgAva"><i style="--c:#ffd27a"></i>AVA boundary</div>
   <div id="lgSat" hidden>Satellite image · <span id="satLb">Sentinel-2</span></div>
   <div id="lgGeo" class="lgGeo" hidden><b>Geologic units · USGS SIM 2956, 1:100,000</b><span id="geoSw"></span></div>
@@ -635,17 +635,34 @@ function topoFill(frame){                  // one age's boundaries as line segme
   }
   return n;
 }
-/* G3b1: sea-floor stripes. Each mid-ocean ridge gets stripes parallel to it on both sides, one every 0.7 degree out to
-   STRIPE.n, alternating light and dark. A stripe is dropped where it reaches a trench (that sea floor has been subducted).
-   Static at the current age; they move in G3b2. */
-const STRIPE={n:6, ds:0.012, pos:null, col:null, geo:null, pts:null};
+/* G3b1/G3b2: sea-floor stripes. Each mid-ocean ridge gets stripes parallel to it on both sides, alternating light and dark,
+   STRIPE.ds radians (0.7 degree) apart out to STRIPE.n. G3b2: they spread away from the ridge, a new stripe fading in at
+   the ridge as the outermost fades out, and a stripe vanishes where it reaches a trench (that sea floor is subducted).
+   The motion runs in the vertex shader (uPh, 0..1 of one spacing); the CPU only rebuilds when the age changes.
+   uPh advances in proportion to the camera's height, so the stripes cross the screen at about the same speed at any zoom.
+   Speed is not to scale. With reduced motion they stay still, where G3b1 drew them. */
+const STRIPE={n:6, ds:0.012, pos:null, tan:null, j:null, lim:null, geo:null, pts:null, ph:1, par:0, last:0};
 const STRIPE_COL=[[0.36,0.50,0.56],[0.20,0.29,0.34]];
+const stripeMat=new THREE.ShaderMaterial({transparent:true, depthWrite:false,
+  uniforms:{uPh:{value:1}, uPar:{value:0}, uDs:{value:STRIPE.ds}, uN:{value:STRIPE.n}, uOn:{value:1},
+    uC0:{value:new THREE.Vector3(...STRIPE_COL[0])}, uC1:{value:new THREE.Vector3(...STRIPE_COL[1])}},
+  vertexShader:`attribute vec3 aTan; attribute float aJ, aLim; uniform float uPh, uPar, uDs, uN, uOn; uniform vec3 uC0, uC1;
+    varying float vA; varying vec3 vC;
+    void main(){ float j=abs(aJ), o=(j-1.0+uPh)*uDs, sd=sign(aJ)*o;
+      // rotate the ridge point about the ridge direction: it moves straight across the ridge
+      vec3 p=(position*cos(sd)+cross(aTan,position)*sin(sd))*1.004;
+      vC=mod(j+uPar,2.0)<0.5?uC0:uC1;
+      vA=0.85*uOn*smoothstep(0.0,uDs,o)*(1.0-smoothstep(uN*uDs,(uN+1.0)*uDs,o))*(1.0-smoothstep(aLim-0.4*uDs,aLim,o));
+      gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0); }`,
+  fragmentShader:`varying float vA; varying vec3 vC; void main(){ if(vA<0.01) discard; gl_FragColor=vec4(vC,vA); }`});
 function stripeLoad(d){
-  let m=0; for(const fr of d.frames){ let s=0; for(const f of fr) if(d.types[f[0]]==="MidOceanRidge") s+=f[1].length*2*STRIPE.n; m=Math.max(m,s); }
-  STRIPE.pos=new Float32Array(m*3); STRIPE.col=new Float32Array(m*3);
-  STRIPE.geo=new THREE.BufferGeometry();
-  STRIPE.geo.setAttribute("position",new THREE.BufferAttribute(STRIPE.pos,3)); STRIPE.geo.setAttribute("color",new THREE.BufferAttribute(STRIPE.col,3));
-  STRIPE.pts=new THREE.LineSegments(STRIPE.geo,new THREE.LineBasicMaterial({vertexColors:true, transparent:true, opacity:0.85, depthWrite:false}));
+  const S=STRIPE.n+1;                    // one spare slot, filled as the stripes move out
+  let m=0; for(const fr of d.frames){ let s=0; for(const f of fr) if(d.types[f[0]]==="MidOceanRidge") s+=f[1].length*4*S; m=Math.max(m,s); }
+  STRIPE.pos=new Float32Array(m*3); STRIPE.tan=new Float32Array(m*3); STRIPE.j=new Float32Array(m); STRIPE.lim=new Float32Array(m);
+  const g=STRIPE.geo=new THREE.BufferGeometry();
+  g.setAttribute("position",new THREE.BufferAttribute(STRIPE.pos,3)); g.setAttribute("aTan",new THREE.BufferAttribute(STRIPE.tan,3));
+  g.setAttribute("aJ",new THREE.BufferAttribute(STRIPE.j,1)); g.setAttribute("aLim",new THREE.BufferAttribute(STRIPE.lim,1));
+  STRIPE.pts=new THREE.LineSegments(g,stripeMat);
   STRIPE.pts.frustumCulled=false; STRIPE.pts.visible=false; gScene.add(STRIPE.pts);
 }
 function topoCell(p){ return Math.round(Math.asin(clamp(p.z,-1,1))/D2R/2)+","+Math.round(Math.atan2(p.y,p.x)/D2R/2); }
@@ -662,37 +679,95 @@ function nearTrench(p,h){                 // within about 1.7 degrees of a trenc
   for(let i=-1;i<=1;i++) for(let j=-1;j<=1;j++){ const b=h.get((la+i)+","+(lo+j)); if(b) for(const t of b) if(t.dot(p)>cut) return true; }
   return false;
 }
+const stQ=new THREE.Vector3(), stC=new THREE.Vector3();
+function trenchLim(v,tan,sd,h){           // how far (radians) sea floor can travel from ridge point v before it meets a trench
+  const top=(STRIPE.n+1)*STRIPE.ds, step=STRIPE.ds/2;
+  for(let o=step;o<=top;o+=step){ stQ.copy(v).multiplyScalar(Math.cos(o)).addScaledVector(stC.crossVectors(tan,v),Math.sin(sd*o)); if(nearTrench(stQ,h)) return o; }
+  return 9;
+}
 function stripeFill(frame){
-  const P=STRIPE.pos, C=STRIPE.col, T=TOPO.d.types, h=trenchHash(frame), tan=new THREE.Vector3(), c=new THREE.Vector3(), qw=new THREE.Vector3(), qv=new THREE.Vector3(); let n=0;
-  for(const [ti,arr] of frame){ if(T[ti]!=="MidOceanRidge") continue; let la=0, lo=0, w=null;
+  const P=STRIPE.pos, TN=STRIPE.tan, J=STRIPE.j, L=STRIPE.lim, T=TOPO.d.types, h=trenchHash(frame), S=STRIPE.n+1, tan=new THREE.Vector3(); let n=0;
+  for(const [ti,arr] of frame){ if(T[ti]!=="MidOceanRidge") continue; let la=0, lo=0, w=null; const lp=[0,0];
     for(let k=0;k<arr.length;k+=2){ la+=arr[k]; lo+=arr[k+1]; const x=la/100*D2R, y=lo/100*D2R;
       const v=pmE2V([Math.cos(x)*Math.cos(y),Math.cos(x)*Math.sin(y),Math.sin(x)], new THREE.Vector3());
       if(w){ tan.subVectors(v,w).normalize();
-        for(let sd=-1;sd<=1;sd+=2) for(let j=1;j<=STRIPE.n;j++){
-          const o=sd*j*STRIPE.ds, cs=Math.cos(o), sn=Math.sin(o), col=STRIPE_COL[j%2];
-          // rotate each end about the ridge direction: that moves it across the ridge, at the same distance on both ends
-          qw.copy(w).multiplyScalar(cs).addScaledVector(c.crossVectors(tan,w),sn);
-          qv.copy(v).multiplyScalar(cs).addScaledVector(c.crossVectors(tan,v),sn);
-          if(nearTrench(qw,h)||nearTrench(qv,h)) continue;
-          for(const q of [qw,qv]){ P[3*n]=q.x*1.004; P[3*n+1]=q.y*1.004; P[3*n+2]=q.z*1.004; C[3*n]=col[0]; C[3*n+1]=col[1]; C[3*n+2]=col[2]; n++; }
-        } }
+        for(let sd=-1;sd<=1;sd+=2){ const si=(sd+1)/2, lw=k>2?lp[si]:trenchLim(w,tan,sd,h), lv=lp[si]=trenchLim(v,tan,sd,h);   // a vertex's reach is shared by its two segments
+          for(let j=1;j<=S;j++) for(const [q,l] of [[w,lw],[v,lv]]){
+            P[3*n]=q.x; P[3*n+1]=q.y; P[3*n+2]=q.z; TN[3*n]=tan.x; TN[3*n+1]=tan.y; TN[3*n+2]=tan.z; J[n]=sd*j; L[n]=l; n++; } } }
       w=v; }
   }
   return n;
 }
+function stripeTick(){                    // per frame: spread the stripes (one spacing every 1/rate seconds)
+  const now=performance.now(), dt=Math.min(0.05,(now-(STRIPE.last||now))/1000); STRIPE.last=now;
+  if(reduce){ STRIPE.ph=1; STRIPE.par=0; }
+  else { const rate=clamp(0.25*(gCam.position.length()-1),0.03,1.2);
+    STRIPE.ph+=dt*rate; if(STRIPE.ph>=1){ STRIPE.ph-=Math.floor(STRIPE.ph); STRIPE.par=1-STRIPE.par; } }
+  stripeMat.uniforms.uPh.value=STRIPE.ph; stripeMat.uniforms.uPar.value=STRIPE.par;
+}
 function topoUpdate(a,on){
   if(!TOPO.pts||!STRIPE.pts) return;      // topologies.json not loaded yet
   TOPO.pts.visible = STRIPE.pts.visible = on>0.01 && a<=250;
-  if(!TOPO.pts.visible) return;
+  if(!TOPO.pts.visible){ STRIPE.last=0; return; }
+  stripeTick(); stripeMat.uniforms.uOn.value=Math.min(1,on);
   const f=Math.max(0,Math.min(TOPO.d.frames.length-1,Math.round(a)));
   if(f===TOPO.cur) return;
   TOPO.cur=f; const frame=TOPO.d.frames[f];
   TOPO.geo.setDrawRange(0,topoFill(frame));
   TOPO.geo.attributes.position.needsUpdate=true; TOPO.geo.attributes.color.needsUpdate=true;
   STRIPE.geo.setDrawRange(0,stripeFill(frame));
-  STRIPE.geo.attributes.position.needsUpdate=true; STRIPE.geo.attributes.color.needsUpdate=true;
+  ["position","aTan","aJ","aLim"].forEach(k=>STRIPE.geo.attributes[k].needsUpdate=true);
 }
 fetch("assets/plates/topologies.json").then(r=>r.ok?r.json():Promise.reject(r.status)).then(topoLoad).catch(()=>{});
+
+/* G3c1: plate-motion arrows, one per plate, drawn at the plate's centre (the middle of its present-day coastlines, carried
+   by its rotation to the age shown). The arrow points the way the plate is moving, toward today: the direction of its
+   centre over the 1 Myr around the age. Length follows the speed, but the scale is not true: the label says so.
+   Plates that do not exist at the age shown get no arrow. Rebuilt when the age changes. */
+const ARROW={pts:null, geo:null, pos:null, a:-99, q:[0,0,0,0], q1:[0,0,0,0], q2:[0,0,0,0], keys:[]};
+const ARROW_MAX=64;                           // most arrows drawn at once; the plate list is about 40
+function arrowLoad(){
+  ARROW.pos=new Float32Array(ARROW_MAX*3*6);    // per arrow 3 segments (shaft and two head barbs), 2 vertices of 3 floats each
+  ARROW.geo=new THREE.BufferGeometry(); ARROW.geo.setAttribute("position",new THREE.BufferAttribute(ARROW.pos,3));
+  ARROW.pts=new THREE.LineSegments(ARROW.geo,new THREE.LineBasicMaterial({color:0xffe9a8, transparent:true, opacity:0.85, depthWrite:false}));
+  ARROW.pts.frustumCulled=false; ARROW.pts.visible=false; gScene.add(ARROW.pts);
+  ARROW.keys=Object.keys(PM.cen).map(Number);
+}
+function arrowUpdate(a,on){
+  if(!PM.ok) return;
+  if(!ARROW.pts){ arrowLoad(); }
+  ARROW.pts.visible = on>0.01 && a<=250;
+  if(!ARROW.pts.visible) return;
+  ARROW.pts.material.opacity=0.85*Math.min(1,on);
+  if(Math.abs(a-ARROW.a)<0.02) return;
+  ARROW.a=a;
+  const alive=new Set(); for(const P of PM.polys) if(a<=P.from && a>=P.to) alive.add(P.pi);
+  const P=ARROW.pos, c=[0,0,0], p0=[0,0,0], p1=[0,0,0], p2=[0,0,0], a1=Math.max(0,a-0.5), a2=a+0.5, b=new THREE.Vector3(), t=new THREE.Vector3(), nn=new THREE.Vector3();
+  const e=(v)=>pmE2V(v,new THREE.Vector3()), o=new THREE.Vector3(), h1=new THREE.Vector3(); let n=0, arrows=0;   // n counts segments
+  for(const k of ARROW.keys){
+    if(!alive.has(k)||arrows>=ARROW_MAX) continue;
+    const cen=PM.cen[k]; c[0]=cen[0]; c[1]=cen[1]; c[2]=cen[2];
+    pmRot(pmQuat(k,a,ARROW.q),c[0],c[1],c[2],p0);
+    pmRot(pmQuat(k,a1,ARROW.q1),c[0],c[1],c[2],p1);
+    pmRot(pmQuat(k,a2,ARROW.q2),c[0],c[1],c[2],p2);
+    // tangent toward today: from the older position p2 to the newer one p1, projected onto the surface at p0
+    let tx=p1[0]-p2[0], ty=p1[1]-p2[1], tz=p1[2]-p2[2];
+    const dot=tx*p0[0]+ty*p0[1]+tz*p0[2]; tx-=dot*p0[0]; ty-=dot*p0[1]; tz-=dot*p0[2];
+    const sp=Math.hypot(p1[0]-p2[0],p1[1]-p2[1],p1[2]-p2[2]), tl=Math.hypot(tx,ty,tz);
+    if(tl<1e-9) continue;                         // not moving (the pole, or no motion yet)
+    const L=clamp(40*sp,0.012,0.12), R=1.012;     // globe units; length is exaggerated, not to scale
+    b.copy(e(p0)).multiplyScalar(R); t.copy(e([tx/tl,ty/tl,tz/tl])); nn.crossVectors(b.clone().normalize(),t).normalize();
+    o.copy(b); h1.copy(b).addScaledVector(t,L);                          // shaft: base to tip
+    const seg=[[o,h1]];
+    const back=h1.clone().addScaledVector(t,-0.35*L);
+    seg.push([h1.clone(),back.clone().addScaledVector(nn,0.2*L)]);       // barbs
+    seg.push([h1.clone(),back.clone().addScaledVector(nn,-0.2*L)]);
+    for(const [u,w] of seg){ P[6*n]=u.x; P[6*n+1]=u.y; P[6*n+2]=u.z; P[6*n+3]=w.x; P[6*n+4]=w.y; P[6*n+5]=w.z; n++; }
+    arrows++;
+  }
+  ARROW.geo.setDrawRange(0,n*2);
+  ARROW.geo.attributes.position.needsUpdate=true;
+}
 
 const gUni = {
   uC:{value:PLATES.map(()=>new THREE.Vector3())}, uR:{value:PLATES.map(p=>p.r)},
@@ -2027,6 +2102,7 @@ function apply(a,p){
     gUni.uPlOn.value = sm(A_DIVE-4,A_DIVE+6,a);                // plate colours, outlines and motion: deep time only
     mvUpdate(a,mk,gUni.uPlOn.value,gUni.uTime.value);
     topoUpdate(a,gUni.uPlOn.value);
+    arrowUpdate(a,gUni.uPlOn.value);
     if(mk>0){ pmDraw(a);
       PLATES.forEach((pl,i)=>{ const pi=PM.pid[PM.LAB[i]]; if(pi===undefined) return;
         if(i===0){ // Laurentia: centre the margin "blob" so its west edge sits on the trench off today's Napa coast (38.6 N, 125.5 W), carried by the North American plate
