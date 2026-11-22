@@ -83,3 +83,22 @@ test("reaching a mountain-building chapter opens the section by itself", { timeo
   assert.match(head, /Mountain building/);
   assert.deepEqual(problems(log), []);
 });
+
+test("G3b2: sea-floor stripes spread from the ridges while paused, and stay still with reduced motion", async () => {
+  const { page, context, log } = await open(browser, srv.base + TM + "&t=100", { viewport: { width: 800, height: 500 } });
+  await page.waitForFunction(() => TTM.STRIPE.pts && TTM.STRIPE.pts.visible && TTM.STRIPE.geo.drawRange.count > 0, null, { timeout: 120000 });
+  const u = () => page.evaluate(() => [TTM.STRIPE.pts.material.uniforms.uPh.value, TTM.STRIPE.pts.material.uniforms.uPar.value]);
+  const s0 = await u(); await frames(page, 15); const s1 = await u();
+  const lim = await page.evaluate(() => { const L = TTM.STRIPE.lim, n = TTM.STRIPE.geo.drawRange.count; let cut = 0; for (let i = 0; i < n; i++) if (L[i] < 1) cut++; return [cut, n]; });
+  await context.close();
+  assert.ok(s0[0] !== s1[0] || s0[1] !== s1[1], "stripes did not move");
+  assert.ok(lim[0] > 0 && lim[0] < lim[1], `trench clip on ${lim[0]} of ${lim[1]} vertices`);
+  assert.deepEqual(problems(log), []);
+  const r = await open(browser, srv.base + TM + "&t=100", { viewport: { width: 800, height: 500 }, reducedMotion: "reduce" });
+  await r.page.waitForFunction(() => TTM.STRIPE.pts && TTM.STRIPE.pts.visible, null, { timeout: 120000 });
+  await frames(r.page, 10);
+  const still = await r.page.evaluate(() => TTM.STRIPE.pts.material.uniforms.uPh.value);
+  await r.context.close();
+  assert.equal(still, 1);
+  assert.deepEqual(problems(r.log), []);
+});
