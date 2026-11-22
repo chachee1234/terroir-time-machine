@@ -60,6 +60,9 @@ export async function launch(extraArgs = []) {
 export async function open(browser, url, { viewport = { width: 1440, height: 900 }, reducedMotion, settle = 2500 } = {}) {
   const context = await browser.newContext({ viewport, reducedMotion });
   const page = await context.newPage();
+  // Software WebGL can leave the page busy for many seconds at a time, so a click can wait longer than
+  // Playwright's 30 s default for the element to settle. Each test still fails at its own node:test timeout.
+  page.setDefaultTimeout(180000);
   const log = { pageErrors: [], consoleErrors: [], missing: [], foreign: [], dialogs: [] };
   page.on("pageerror", e => log.pageErrors.push(e.message));
   page.on("dialog", d => { log.dialogs.push(d.message()); d.dismiss().catch(() => {}); });
