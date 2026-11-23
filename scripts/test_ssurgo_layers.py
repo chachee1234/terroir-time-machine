@@ -10,21 +10,47 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import ssurgo_layers as sl  # noqa: E402
 
-# two Soil Data Access rows as they come back: one map unit, one component, two layers
+# Soil Data Access rows as they come back: one map unit (Pleasanton, 458994), two layers of its major component, and
+# a minor component. The parent material and landform are recorded from SDA for mukey 458994 (copmgrp, cogeomordesc);
+# the cokey values are placeholders in these fixtures, the text is real.
 ROWS = [
     ["458994", "170", "Pleasanton loam, 0 to 2 percent slopes, MLRA 14", "CA055", "Napa County, California", "9/16/2026 12:00:00 AM",
      "1", "Pleasanton", "85", "Yes", "Series", "Well drained", "Fine-loamy, mixed, superactive, thermic Mollic Haploxeralfs",
-     "11", "Ap", "0", "13", "40", "40", "20", "0.75", "6.5", "0.17", "8.46", "5", "Loam"],
+     "11", "Ap", "0", "13", "40", "40", "20", "0.75", "6.5", "0.17", "8.46", "5", "Loam", "alluvium derived from sedimentary rock", "alluvial fans"],
     ["458994", "170", "Pleasanton loam, 0 to 2 percent slopes, MLRA 14", "CA055", "Napa County, California", "9/16/2026 12:00:00 AM",
      "1", "Pleasanton", "85", "Yes", "Series", "Well drained", "Fine-loamy, mixed, superactive, thermic Mollic Haploxeralfs",
-     "12", "Bt2", "58", "112", "33", "34", "33", "0.5", "7", "0.15", "2.82", None, None],
+     "12", "Bt2", "58", "112", "33", "34", "33", "0.5", "7", "0.15", "2.82", None, None, "alluvium derived from sedimentary rock", "alluvial fans"],
     ["458994", "170", "Pleasanton loam, 0 to 2 percent slopes, MLRA 14", "CA055", "Napa County, California", "9/16/2026 12:00:00 AM",
      "2", "Cortina", "3", "No", "Series", "Somewhat excessively drained", None,
-     None, None, None, None, None, None, None, None, None, None, None, None, None],
+     None, None, None, None, None, None, None, None, None, None, None, None, None,
+     "gravelly alluvium derived from metamorphic and sedimentary rock", "flood plains"],
 ]
 
 
 class Layers(unittest.TestCase):
+    def test_parent_material_classes(self):
+        self.assertEqual(sl.parent_class("alluvium derived from sedimentary rock"), "alluvium and colluvium")
+        self.assertEqual(sl.parent_class("organic material over alluvium and/or loess"), "alluvium and colluvium")
+        self.assertEqual(sl.parent_class("loess"), "loess and eolian sand")
+        self.assertEqual(sl.parent_class("tuff and volcanic ash"), "volcanic rock and ash")
+        self.assertEqual(sl.parent_class("sandstone and shale"), "sedimentary rock")
+        self.assertEqual(sl.parent_class("serpentinite"), "serpentinite and ultramafic rock")
+        self.assertEqual(sl.parent_class("residuum weathered from granite"), "igneous, metamorphic or residual bedrock")
+        self.assertEqual(sl.parent_class("residuum weathered from sandstone and shale"), "sedimentary rock")
+        self.assertEqual(sl.parent_class("residuum"), "igneous, metamorphic or residual bedrock")
+        self.assertIsNone(sl.parent_class("marine deposits"))
+        self.assertIsNone(sl.parent_class(""))
+        self.assertIsNone(sl.parent_class(None))
+
+    def test_parent_material_and_landform_parsed(self):
+        mu = sl.parse_layers(ROWS)["458994"]
+        major = next(c for c in mu["components"] if c["major"])
+        self.assertEqual(major["parent_material"], "alluvium derived from sedimentary rock")
+        self.assertEqual(major["parent_class"], "alluvium and colluvium")
+        self.assertEqual(major["landform"], "alluvial fans")
+        minor = next(c for c in mu["components"] if not c["major"])
+        self.assertEqual(minor["parent_class"], "alluvium and colluvium")
+
     def test_texture_triangle(self):
         self.assertEqual(sl.texture_class(40, 40, 20), "loam")
         self.assertEqual(sl.texture_class(33, 34, 33), "clay loam")
