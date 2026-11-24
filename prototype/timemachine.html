@@ -298,7 +298,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   <div id="lgAva"><i style="--c:#ffd27a"></i>AVA boundary</div>
   <div id="lgSat" hidden>Satellite image · <span id="satLb">Sentinel-2</span></div>
   <div id="lgGeo" class="lgGeo" hidden><b>Geologic units · USGS SIM 2956, 1:100,000</b><span id="geoSw"></span></div>
-  <div id="lgSoil" class="lgGeo" hidden><b id="soilLb">Soil series · USDA SSURGO 1:24,000</b><nav id="soilMode" aria-label="Colour the soil map by"><button data-m="series" aria-pressed="true">Series</button><button data-m="texture" aria-pressed="false" title="Texture of the top mineral layer of each map unit's main soil">Texture</button><button data-m="depth" aria-pressed="false" title="Depth to bedrock or another layer roots cannot pass">Depth</button></nav><span id="soilSw"></span></div>
+  <div id="lgSoil" class="lgGeo" hidden><b id="soilLb">Soil series · USDA SSURGO 1:24,000</b><nav id="soilMode" aria-label="Colour the soil map by"><button data-m="series" aria-pressed="true">Series</button><button data-m="texture" aria-pressed="false" title="Texture of the top mineral layer of each map unit's main soil">Texture</button><button data-m="depth" aria-pressed="false" title="Depth to bedrock or another layer roots cannot pass">Depth</button><button data-m="parent" aria-pressed="false" title="The rock or sediment the main soil formed in, as the survey names it">Parent material</button></nav><span id="soilSw"></span></div>
   <div id="lgTopo"><i style="--c:#5a3d22;height:1.5px"></i>Contours, 50 m (10 m close up)</div>
 </div>
 <div class="scalebar" id="scalebar" hidden><span id="sbKm">5 km</span><div id="sbar"></div></div>
@@ -1726,22 +1726,28 @@ const SOIL={on:false, ok:false, meta:null, idx:null, W:0, H:0};
    map-unit averages from the survey, not measurements at a spot. */
 const SOIL_TX=[["Clay","#8a4636"],["Clay loam","#b8744a"],["Loam or silt loam","#cdaa62"],["Sandy loam or sand","#e6d79a"],["Rock, marsh or no layer data","#7b7f88"]];
 const SOIL_DP=[["Under 50 cm","#d9c9a3"],["50 to 100 cm","#b08d57"],["100 cm or more","#7a5632"],["No limit listed","#3f2d1c"],["No layer data","#7b7f88"]];
+// Parent material of the main soil: the survey's words for what it formed in (soils.json parent_class, six classes)
+const SOIL_PM=[["Alluvium and colluvium","#d8c07a"],["Loess and eolian sand","#ece2b8"],["Volcanic rock and ash","#9a4a3c"],["Sedimentary rock","#b99a7a"],["Serpentinite and ultramafic rock","#5f8a57"],["Igneous, metamorphic or residual bedrock","#6b6f7a"],["Not recorded","#7b7f88"]];
+const SOIL_PM_KEYS=SOIL_PM.map(q=>q[0].toLowerCase());
 function soilMain(u){ let best=null; (u.components||[]).forEach(c=>{ if((c.horizons||[]).length&&(!best||c.pct>best.pct)) best=c; }); return best; }
 function soilTopLayer(c){ return c ? (c.horizons.find(h=>h.clay_pct!=null&&!/plant material|bedrock/i.test(h.texture||""))||null) : null; }
 function soilTxClass(u){ const h=soilTopLayer(soilMain(u)), t=((h&&h.texture)||"").toLowerCase();
   return !h ? 4 : /clay loam/.test(t) ? 1 : /clay/.test(t) ? 0 : /sand/.test(t) ? 3 : /loam|silt/.test(t) ? 2 : 4; }
+function soilPmClass(u){ const c=soilMain(u), k=SOIL_PM_KEYS.indexOf(String((c&&c.parent_class)||"").toLowerCase()); return k<0 ? SOIL_PM.length-1 : k; }
+function soilClass(mode){ return mode==="texture"?soilTxClass : mode==="parent"?soilPmClass : soilDpClass; }
+function soilPalette(mode){ return mode==="texture"?SOIL_TX : mode==="parent"?SOIL_PM : SOIL_DP; }
 function soilDpClass(u){ const c=soilMain(u); if(!c||!soilTopLayer(c)) return 4; const d=c.restriction&&c.restriction.depth_cm;
   return d==null ? 3 : d<50 ? 0 : d<100 ? 1 : 2; }
 function soilTexture(mode){
   if(SOIL.tex[mode]) return SOIL.tex[mode];
-  const cls=mode==="texture"?soilTxClass:soilDpClass, pal=(mode==="texture"?SOIL_TX:SOIL_DP).map(q=>[1,3,5].map(k=>parseInt(q[1].slice(k,k+2),16)));
+  const cls=soilClass(mode), pal=soilPalette(mode).map(q=>[1,3,5].map(k=>parseInt(q[1].slice(k,k+2),16)));
   const per=SOIL.meta.units.map(u=>pal[cls(u)]), n=SOIL.W*SOIL.H, rgba=new Uint8Array(n*4);
   for(let i=0;i<n;i++){ const v=SOIL.idx[i]; if(!v) continue; const q=per[v-1]; rgba[i*4]=q[0]; rgba[i*4+1]=q[1]; rgba[i*4+2]=q[2]; rgba[i*4+3]=255; }
   const t=new THREE.DataTexture(rgba,SOIL.W,SOIL.H,THREE.RGBAFormat); t.magFilter=t.minFilter=THREE.NearestFilter; t.generateMipmaps=false; t.needsUpdate=true;
   return SOIL.tex[mode]=t;
 }
 // share of the surveyed frame in each class of a mode (map-unit area shares from soils.json)
-function soilShares(mode){ const cls=mode==="texture"?soilTxClass:soilDpClass, out=[0,0,0,0,0]; SOIL.meta.units.forEach(u=>{ out[cls(u)]+=u.area_pct||0; }); return out; }
+function soilShares(mode){ const cls=soilClass(mode), out=new Array(soilPalette(mode).length).fill(0); SOIL.meta.units.forEach(u=>{ out[cls(u)]+=u.area_pct||0; }); return out; }
 function soilLegend(){
   const m=SOIL.meta, at=t=>String(t||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   if(SOIL.mode==="series"){
@@ -1749,13 +1755,13 @@ function soilLegend(){
     $("soilSw").innerHTML=m.series.slice(0,12).map(s=>`<em style="--c:${s.color}" title="${at(s.name)}: ${s.area_pct} % of the surveyed frame">${at(s.name)}</em>`).join("")
       +(m.series.length>12?`<em style="--c:transparent">+${m.series.length-12} more</em>`:"");
   } else {
-    const L=SOIL.mode==="texture"?SOIL_TX:SOIL_DP, sh=soilShares(SOIL.mode);
-    $("soilLb").textContent=(SOIL.mode==="texture"?"Topsoil texture":"Depth to rock or a root-limiting layer")+" · USDA SSURGO 1:24,000, map-unit averages";
+    const L=soilPalette(SOIL.mode), sh=soilShares(SOIL.mode);
+    $("soilLb").textContent=({texture:"Topsoil texture",parent:"Parent material of the main soil",depth:"Depth to rock or a root-limiting layer"})[SOIL.mode]+" · USDA SSURGO 1:24,000, map-unit averages";
     $("soilSw").innerHTML=L.map((q,i)=>sh[i]>=0.05?`<em style="--c:${q[1]}">${q[0]} · ${sh[i].toFixed(sh[i]<10?1:0)} %</em>`:"").join("");
   }
   [...$("soilMode").children].forEach(b=>b.setAttribute("aria-pressed",b.dataset.m===SOIL.mode));
 }
-function soilSetMode(mode){ if(!SOIL.ok||!/^(series|texture|depth)$/.test(mode)) return; SOIL.mode=mode; lUni.uSoils.value=soilTexture(mode); soilLegend(); }
+function soilSetMode(mode){ if(!SOIL.ok||!/^(series|texture|depth|parent)$/.test(mode)) return; SOIL.mode=mode; lUni.uSoils.value=soilTexture(mode); soilLegend(); }
 $("soilMode").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) soilSetMode(b.dataset.m); });
 // the map unit under a scene point (km east, km south of the summit), or null outside the surveys
 function soilAt(x,z){
@@ -2615,6 +2621,7 @@ function soilNote(su,geo){
   return "USDA SSURGO 1:24,000, map unit average, not a pit at this spot. "
     +`Map unit ${su.musym}, ${su.name} (${sv.name||su.survey}, survey of ${sv.version||"?"})`
     +(comp?`: ${comp.name} ${Math.round(comp.pct)} %${others.length?", with "+others.slice(0,4).join(", ")+(others.length>4?" and others":""):""}. `
+          +(comp.parent_material?`Formed in ${comp.parent_material}${comp.landform?`, on ${comp.landform}`:""}. `:"")
           +`${comp.drainage?comp.drainage+"; ":""}${rd?`${rd.kind.toLowerCase()} at ${rd.depth_cm} cm`:"no restrictive layer within the described depth"}; `
           +(awc>=1?`about ${Math.round(awc)} cm of plant-available water in the top 150 cm`:"no plant-available water recorded")+". Layers drawn at true depth, with the survey's typical values."
          :": no soil layers in the survey.")
@@ -3025,6 +3032,7 @@ function storySoil(on){
     const mix=h&&h.sand_pct!=null ? `<div class="sbar" title="Top mineral layer of ${at(c.name)}: sand ${h.sand_pct} %, silt ${h.silt_pct} %, clay ${h.clay_pct} %">${PSC.map(q=>`<i style="--c:${q[1]};width:${h[q[0]+"_pct"]}%"></i>`).join("")}</div>` : "";
     return `<tr><td>${at(s.name)}</td><td class="n">${s.area_pct} %</td><td class="w">${mix}</td><td class="n">${h?at(h.texture):""}${d!=null?` · ${d} cm to ${/bedrock/i.test(c.restriction.kind||"")?"rock":"a limiting layer"}`:""}</td></tr>`; }).join("");
   el.innerHTML=`<h3>Topsoil texture, share of the surveyed frame</h3>${bar(SOIL_TX,soilShares("texture"))}`
+    +`<h3>Formed in, share of the surveyed frame</h3>${bar(SOIL_PM,soilShares("parent"))}`
     +`<h3>Depth to rock or a root-limiting layer</h3>${bar(SOIL_DP,soilShares("depth"))}`
     +`<h3>Most widespread soils · sand, silt, clay of the top layer</h3><table>${rows}</table>`
     +`<div class="skey">${PSC.map(q=>`<em style="--c:${q[1]}">${q[0]}</em>`).join("")}</div>`
