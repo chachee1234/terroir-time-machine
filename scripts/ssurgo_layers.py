@@ -120,7 +120,9 @@ def layers(mukeys, offline=False):
  ch.chkey, ch.hzname, ch.hzdept_r, ch.hzdepb_r, ch.sandtotal_r, ch.silttotal_r, ch.claytotal_r,
  ch.om_r, ch.ph1to1h2o_r, ch.awc_r, ch.ksat_r,
  (SELECT SUM(f.fragvol_r) FROM chfrags f WHERE f.chkey=ch.chkey) AS frag,
- (SELECT TOP 1 t.texdesc FROM chtexturegrp t WHERE t.chkey=ch.chkey AND t.rvindicator='Yes') AS tex
+ (SELECT TOP 1 t.texdesc FROM chtexturegrp t WHERE t.chkey=ch.chkey AND t.rvindicator='Yes') AS tex,
+ (SELECT TOP 1 g.pmgroupname FROM copmgrp g WHERE g.cokey=c.cokey AND g.rvindicator='Yes') AS pm,
+ (SELECT TOP 1 f.geomfname FROM cogeomordesc f WHERE f.cokey=c.cokey AND f.rvindicator='Yes') AS landform
 FROM mapunit mu JOIN legend l ON l.lkey=mu.lkey LEFT JOIN sacatalog sc ON sc.areasymbol=l.areasymbol
 JOIN component c ON c.mukey=mu.mukey LEFT JOIN chorizon ch ON ch.cokey=c.cokey
 WHERE mu.mukey IN ({",".join(keys)})
@@ -128,19 +130,47 @@ ORDER BY mu.mukey, c.comppct_r DESC, c.cokey, ch.hzdept_r""", offline)
     return parse_layers(rows)
 
 
+# Parent material: the survey's own words (copmgrp.pmgroupname) grouped into six plain classes. A name is put in the
+# class of the material it names first ("organic material over alluvium" is alluvium). Names with no keyword stay None.
+PARENT_CLASSES = [
+    ("alluvium and colluvium", ("alluvi", "colluvi", "fluvi", "outwash", "lacustrine")),
+    ("loess and eolian sand", ("loess", "eolian", "aeolian", "dune")),
+    ("volcanic rock and ash", ("volcan", "tuff", "ash", "basalt", "andesit", "rhyolit", "lava", "pyroclas")),
+    ("sedimentary rock", ("sandstone", "shale", "siltstone", "mudstone", "conglomerate", "claystone", "sedimentary", "limestone", "greywacke")),
+    ("serpentinite and ultramafic rock", ("serpentin", "ultramafic", "peridotite")),
+    ("igneous, metamorphic or residual bedrock", ("granit", "diorite", "gabbro", "schist", "gneiss", "phyllite", "metamorph", "igneous", "residuum", "bedrock")),
+]
+
+
+def parent_class(name):
+    """The plain class of a survey parent-material name, or None when no keyword matches."""
+    if not name:
+        return None
+    low = name.lower().replace("residuum weathered from ", "").replace("residuum from ", "")   # residue takes its parent rock
+    best = None
+    for cls, words in PARENT_CLASSES:
+        for w in words:
+            i = low.find(w)
+            if i >= 0 and (best is None or i < best[0]):
+                best = (i, cls)
+    return best[1] if best else None
+
+
 def parse_layers(rows, keep_keys=False):
     """keep_keys: leave each component's "cokey" and each layer's "chkey" in place (frame mode joins on them)."""
     out = {}
     for r in rows:
         (mukey, musym, muname, area, areaname, saverest, cokey, comp, pct, major, kind, drain, tax,
-         chkey, hz, top, bot, sand, silt, clay, om, ph, awc, ksat, frag, tex) = r
+         chkey, hz, top, bot, sand, silt, clay, om, ph, awc, ksat, frag, tex, pm, landform) = r
         mu = out.setdefault(str(mukey), {"mukey": str(mukey), "musym": musym, "muname": muname,
                                          "survey": f"{areaname} ({area})" if areaname else area,
                                          "survey_version": (saverest or "").split(" ")[0] or None, "components": []})
         comps = mu["components"]
         if not comps or comps[-1]["cokey"] != str(cokey):
             comps.append({"cokey": str(cokey), "name": comp, "pct": num(pct, 0), "major": major == "Yes",
-                          "kind": kind, "drainage": drain, "taxonomic_class": tax, "horizons": []})
+                          "kind": kind, "drainage": drain, "taxonomic_class": tax,
+                          "parent_material": pm or None, "parent_class": parent_class(pm),
+                          "landform": landform or None, "horizons": []})
         if chkey is None or top is None or bot is None:
             continue
         s, si, c = num(sand), num(silt), num(clay)
@@ -279,7 +309,9 @@ def frame_details(mukeys, offline=False):
  ch.chkey, ch.hzname, ch.hzdept_r, ch.hzdepb_r, ch.sandtotal_r, ch.silttotal_r, ch.claytotal_r,
  ch.om_r, ch.ph1to1h2o_r, ch.awc_r, ch.ksat_r,
  (SELECT SUM(f.fragvol_r) FROM chfrags f WHERE f.chkey=ch.chkey) AS frag,
- (SELECT TOP 1 t.texdesc FROM chtexturegrp t WHERE t.chkey=ch.chkey AND t.rvindicator='Yes') AS tex
+ (SELECT TOP 1 t.texdesc FROM chtexturegrp t WHERE t.chkey=ch.chkey AND t.rvindicator='Yes') AS tex,
+ (SELECT TOP 1 g.pmgroupname FROM copmgrp g WHERE g.cokey=c.cokey AND g.rvindicator='Yes') AS pm,
+ (SELECT TOP 1 f.geomfname FROM cogeomordesc f WHERE f.cokey=c.cokey AND f.rvindicator='Yes') AS landform
 FROM mapunit mu JOIN legend l ON l.lkey=mu.lkey LEFT JOIN sacatalog sc ON sc.areasymbol=l.areasymbol
 JOIN component c ON c.mukey=mu.mukey LEFT JOIN chorizon ch ON ch.cokey=c.cokey
 WHERE mu.mukey IN ({sql})
@@ -358,7 +390,8 @@ def build_frame(region_path, areas=FRAME_AREAS, offline=False):
         surveys[area] = {"areasymbol": area, "name": mu["survey"].rsplit(" (", 1)[0], "version": mu["survey_version"]}
         units.append({"mukey": k, "musym": mu["musym"], "name": mu["muname"], "slope_class": slope_class(mu["muname"]),
                       "survey": area, "series": names.index(m["name"]), "area_pct": round(100 * counts[index[k]] / covered, 2),
-                      "components": [{kk: c[kk] for kk in ("name", "pct", "major", "kind", "drainage", "slope_pct", "restriction")}
+                      "components": [{kk: c[kk] for kk in ("name", "pct", "major", "kind", "drainage", "slope_pct", "restriction",
+                                                                      "parent_material", "parent_class", "landform")}
                                      | {"horizons": [{kk: h[kk] for kk in ("name", "top_cm", "bottom_cm", "texture", "sand_pct", "silt_pct",
                                                                             "clay_pct", "gravel_pct", "rock_frag_pct", "om_pct", "pH", "awc")}
                                                      for h in c["horizons"]]}

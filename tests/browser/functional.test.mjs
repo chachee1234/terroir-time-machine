@@ -194,10 +194,15 @@ test("How it formed: the tour steps through the region's chapters and ends on th
   await page.waitForFunction(() => !document.getElementById("stSoil").hidden && /Bressa/.test(document.getElementById("stSoil").textContent), null, { timeout: 120000 });
   assert.equal(await page.getAttribute("#soilBtn", "aria-pressed"), "true");
   assert.equal(await page.getAttribute('#soilMode [data-m="texture"]', "aria-pressed"), "true");
-  const shares = await page.evaluate(() => ({ tx: TTM.soilShares("texture"), dp: TTM.soilShares("depth"),
+  const shares = await page.evaluate(() => ({ tx: TTM.soilShares("texture"), dp: TTM.soilShares("depth"), pm: TTM.soilShares("parent"),
     all: TTM.SOIL.meta.units.reduce((a, u) => a + (u.area_pct || 0), 0) }));
-  for (const k of ["tx", "dp"]) assert.ok(Math.abs(shares[k].reduce((a, b) => a + b, 0) - shares.all) < 0.01, k + " shares cover every map unit once");
+  for (const k of ["tx", "dp", "pm"]) assert.ok(Math.abs(shares[k].reduce((a, b) => a + b, 0) - shares.all) < 0.01, k + " shares cover every map unit once");
   assert.match(await page.textContent("#soilLb"), /^Topsoil texture/);
+  // the fourth colouring, Parent material, switches the legend and the map
+  await page.click('#soilMode [data-m="parent"]');
+  assert.equal(await page.getAttribute('#soilMode [data-m="parent"]', "aria-pressed"), "true");
+  assert.match(await page.textContent("#soilLb"), /^Parent material of the main soil/);
+  await page.click('#soilMode [data-m="texture"]');
   // Back leaves the soil step for the one before it; the step marker follows
   await page.click("#stPrev");
   await page.waitForFunction(() => document.querySelector('#stDots [aria-current="step"]')?.textContent === "Valleys", null, { timeout: 240000, polling: 1000 });
