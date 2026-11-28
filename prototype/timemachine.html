@@ -299,6 +299,7 @@ body.pl-open .compass,body.pl-open .legend{display:none}
   <div id="lgSat" hidden>Satellite image · <span id="satLb">Sentinel-2</span></div>
   <div id="lgGeo" class="lgGeo" hidden><b>Geologic units · USGS SIM 2956, 1:100,000</b><span id="geoSw"></span></div>
   <div id="lgSoil" class="lgGeo" hidden><b id="soilLb">Soil series · USDA SSURGO 1:24,000</b><nav id="soilMode" aria-label="Colour the soil map by"><button data-m="series" aria-pressed="true">Series</button><button data-m="texture" aria-pressed="false" title="Texture of the top mineral layer of each map unit's main soil">Texture</button><button data-m="depth" aria-pressed="false" title="Depth to bedrock or another layer roots cannot pass">Depth</button><button data-m="parent" aria-pressed="false" title="The rock or sediment the main soil formed in, as the survey names it">Parent material</button></nav><span id="soilSw"></span></div>
+  <div id="lgStage" class="lgGeo" hidden><b>Illustration · ground by stage</b><span><em style="--c:#444d52">Sea floor</em><em style="--c:#705c46">Scraped-up rock</em><em style="--c:#857f76">Lava and ash</em><em style="--c:#9b9075">River gravel</em></span></div>
   <div id="lgTopo"><i style="--c:#5a3d22;height:1.5px"></i>Contours, 50 m (10 m close up)</div>
 </div>
 <div class="scalebar" id="scalebar" hidden><span id="sbKm">5 km</span><div id="sbar"></div></div>
@@ -1388,7 +1389,7 @@ const terrainMat = new THREE.ShaderMaterial({
   uniforms:lUni, extensions:{derivatives:true},
   vertexShader:TERRAIN_VS.replace("attribute float aTop;","attribute float aFlow,aDist; varying float vFlow; varying float vDist;").replace("aTop>0.5","true").replace("vS=aTop;","vS=1.0; vFlow=aFlow; vDist=aDist;"),
   fragmentShader:GLSL_NOISE+FAULT_GLSL+`
-  uniform vec3 uSun,uSunCol,uFog,uWb; uniform float uVE,uVolc,uLava,uAsh,uVines,uGold,uTime,uErode,uTopo;
+  uniform vec3 uSun,uSunCol,uFog,uWa,uWb; uniform float uVE,uVolc,uLava,uAsh,uVines,uGold,uTime,uErode,uTopo;
   uniform sampler2D uDem,uAva,uGeo,uSat,uRiv,uWx,uSoils; uniform float uDemOn,uAvaOn,uGeoOn,uSatOn,uRivOn,uWxOn,uSoilsOn; uniform vec4 uGeoExt,uSatExt,uWxExt,uSoilsExt; uniform vec2 uDemTexel,uDemCell; uniform vec4 uExt,uDemExt,uHole;
   uniform float uSiteOn,uSiteHere,uSiteT,uSiteFront; uniform vec2 uSiteP; uniform vec4 uSiteExt; uniform sampler2D uSiteA; uniform vec3 uSoilC;
   varying vec3 vW; varying float vH; varying float vS; varying float vR; varying float vFlow; varying float vDist;
@@ -1413,6 +1414,11 @@ const terrainMat = new THREE.ShaderMaterial({
     vec3 grass=mix(vec3(0.70,0.58,0.34),vec3(0.58,0.50,0.30),n2);
     vec3 veg=mix(scrub,grass,uGold*smoothstep(0.55,0.35,n1)*smoothstep(0.9,0.3,vH));
     vec3 col=mix(veg,rock,smoothstep(0.16,0.34,slope+n2*0.08));
+    // older stages are coloured by what the ground was (E4a): seafloor, scraped-up rock, lava and ash.
+    // Weights come from localWeights(); the modern stage (uWb.z) keeps its vegetation and gravel below.
+    float wSea=uWa.x, wScr=uWa.y+uWa.z, wAsh=uWb.x+uWb.y, wAnc=wSea+wScr+wAsh;
+    vec3 ancC=(wSea*vec3(0.26,0.29,0.31)+wScr*vec3(0.44,0.36,0.28)+wAsh*vec3(0.52,0.49,0.46))/max(wAnc,1e-4);
+    col=mix(col,ancC*(0.86+0.28*n1)*mix(1.0,0.84,smoothstep(0.12,0.4,slope)),clamp(wAnc,0.0,1.0)*0.92);
     col=mix(col,vec3(0.40,0.37,0.33),smoothstep(0.05,-0.05,vH)); // shoreline sand / sediment
     // vineyards on flat valley floors, today
     if(uVines>0.0){
@@ -3466,7 +3472,8 @@ function frame(now){
     const lg=lUni.uGeoOn.value>0.05; $("lgGeo").hidden=!lg; const lsat=lUni.uSatOn.value>0.05; $("lgSat").hidden=!lsat; if(lsat&&SAT.label){ const t=SAT.patchLabel||SAT.label; if($("satLb").textContent!==t) $("satLb").textContent=t; }
     if(lg) geoLegend(LOC.mesh&&GEO.patch?GEO.patch:null);
     const lr=lUni.uRivOn.value>0.05; $("lgRiv").hidden=!lr; const lso=lUni.uSoilsOn.value>0.05; $("lgSoil").hidden=!lso;
-    $("lgFault").hidden=!lf; $("lgStream").hidden=!ls; $("lgTopo").hidden=!lt; legend.style.opacity=(lf||lh||ls||lt||lg||lsat||lr||lso)?1:0;
+    const lst=st.local; $("lgStage").hidden=!lst;
+    $("lgFault").hidden=!lf; $("lgStream").hidden=!ls; $("lgTopo").hidden=!lt; legend.style.opacity=(lf||lh||ls||lt||lg||lsat||lr||lso||lst)?1:0;
     // 5 km scale bar measured at the summit, across the screen
     camR.setFromMatrixColumn(lCam.matrixWorld,0); camR.y=0; camR.normalize();
     cv0.copy(lCtl.target).project(lCam); cv1.copy(lCtl.target).addScaledVector(camR,1).project(lCam);
